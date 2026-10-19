@@ -44,9 +44,23 @@ class University(BaseModel):
     mappings: tuple[Mapping, ...] = Field(exclude=True)
 
 
+class DegreeOption(BaseModel):
+    name: str
+    degree: str
+
+
+class UniversityOption(BaseModel):
+    name: str
+    country: str
+
+
 class CatalogResponse(BaseModel):
-    degrees: list[dict[str, str]]
-    universities: list[dict[str, str]]
+    degrees: list[DegreeOption]
+    universities: list[UniversityOption]
+
+
+class ErrorResponse(BaseModel):
+    detail: str
 
 
 class Recommendation(BaseModel):

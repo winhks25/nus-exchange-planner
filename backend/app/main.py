@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .catalog import DATA_ROOT, MANIFEST, CatalogUnavailable, load_catalog
 from .matching import compare_rows
-from .models import CatalogResponse, MappingResponse, RecommendationsResponse
+from .models import CatalogResponse, ErrorResponse, MappingResponse, RecommendationsResponse
 from .recommendations import rank_universities
 
 
@@ -24,7 +24,7 @@ def create_app(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> FastAP
             raise HTTPException(status_code=503, detail="Catalog data is unavailable. Please try again later.")
         return catalog
 
-    @app.get("/api/v1/catalog", response_model=CatalogResponse, responses={503: {"description": "Catalog unavailable"}})
+    @app.get("/api/v1/catalog", response_model=CatalogResponse, responses={503: {"model": ErrorResponse, "description": "Catalog unavailable"}})
     def get_catalog():
         data = available()
         return CatalogResponse(
@@ -32,7 +32,7 @@ def create_app(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> FastAP
             universities=[{"name": item.name, "country": item.country} for item in data.universities],
         )
 
-    @app.get("/api/v1/recommendations", response_model=RecommendationsResponse, responses={404: {"description": "Unknown degree"}, 503: {"description": "Catalog unavailable"}})
+    @app.get("/api/v1/recommendations", response_model=RecommendationsResponse, responses={404: {"model": ErrorResponse, "description": "Unknown degree"}, 503: {"model": ErrorResponse, "description": "Catalog unavailable"}})
     def recommendations(degree: str):
         data = available()
         try:
@@ -40,7 +40,7 @@ def create_app(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> FastAP
         except KeyError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
 
-    @app.get("/api/v1/mappings", response_model=MappingResponse, response_model_exclude_none=True, responses={404: {"description": "Unknown degree or university"}, 503: {"description": "Catalog unavailable"}})
+    @app.get("/api/v1/mappings", response_model=MappingResponse, response_model_exclude_none=True, responses={404: {"model": ErrorResponse, "description": "Unknown degree or university"}, 503: {"model": ErrorResponse, "description": "Catalog unavailable"}})
     def mappings(degree: str, uni: str):
         data = available()
         try:
