@@ -1,0 +1,482 @@
+{
+  "partner_university": {
+    "name": "Korea University",
+    "edurec_id": "E0000000544"
+  },
+  "source": {
+    "file": "korea.pdf",
+    "system": "NUS EduRec Course Mappings Search",
+    "retrieved_at": "2026-10-14"
+  },
+  "mapping_count": 36,
+  "mappings": [
+    {
+      "partner_course": {
+        "code": "COSE101",
+        "title": "Computer Programming I",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS1010E",
+        "title": "Programming Methodology"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS 216",
+        "title": "Business Analytics I (English)",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT1101",
+        "title": "Introduction to Business A"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE211",
+        "title": "Discrete Mathematics",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS1231",
+        "title": "Discrete Structures"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE 342",
+        "title": "Computer Network",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE 362",
+        "title": "Machine Learning",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "KECE443",
+        "title": "Object-Oriented Programming and Laboratory",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2030",
+        "title": "Programming Methodology"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE 213",
+        "title": "Data Structures",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2040C",
+        "title": "Data Structures and Algor"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE341",
+        "title": "Operating Systems",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2106",
+        "title": "Introduction to Operating"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE361",
+        "title": "Artificial Intelligence (English)",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE371",
+        "title": "Databases",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IT2002",
+        "title": "Database Technology and"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE474",
+        "title": "Deep Learning",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS5242",
+        "title": "Neural Networks and Deep"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "KECE345",
+        "title": "\" MACHINE LEARNING AND INTELLIGENCE FOR ELECTRICAL ENGINEERS(English)\"",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS217",
+        "title": "Business Analytics II",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT4240",
+        "title": "Machine Learning for Pred"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "KECE421",
+        "title": "INFORMATION AND CODING THEORY",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3236",
+        "title": "Introduction to Informatio"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE214",
+        "title": "ALORITHMS",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3230",
+        "title": "Design and Analysis of Alg"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS475",
+        "title": "Internet Marketing",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS3150",
+        "title": "Digital Media Marketing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE389",
+        "title": "ENTREPRENEURSHIP & LEADERSHIP",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS3103",
+        "title": "Digital Transformation and"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE461",
+        "title": "NATURAL LANGUAGE PROCESSING",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4248",
+        "title": "Introduction to Large Lang"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE215",
+        "title": "THEORY OF COMPUTATION",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3231",
+        "title": "Theory of Computation"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE331",
+        "title": "COMPUTER GRAPHICS",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3241",
+        "title": "Computer Graphics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE212",
+        "title": "PROGRAMMING LANGUAGES",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2104",
+        "title": "Programming Language C"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BNCS411",
+        "title": "INTRODUCTION TO BRAIN AND MACHINE LEARNING",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS316",
+        "title": "Operations Analytics (English)",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT4240",
+        "title": "Machine Learning for Pred"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "SMRT336",
+        "title": "AI Security II (English)",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS4246",
+        "title": "Smart Systems and AI Go"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STAT346",
+        "title": "Statistical Data Science I (English)\"",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT4221",
+        "title": "Advanced Analytics with B"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS305",
+        "title": "Artificial Intelligence for Business (English)\"",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS4246",
+        "title": "Smart Systems and AI Go"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "KHPM410",
+        "title": "Data Science in Healthcare",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT4222",
+        "title": "Mining Web Data for Busin"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE432",
+        "title": "HUMAN COMPUTER INTERACTION",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3240",
+        "title": "Interaction Design"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE342",
+        "title": "Computer Network",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS317",
+        "title": "Social Media Analytics",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT4222",
+        "title": "Mining Web Data for Busin"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS410",
+        "title": "Technological Innovation Management: A Pre-requisite for Successful Entrepreneurship",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS4261",
+        "title": "Designing AI-driven Busin"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE442",
+        "title": "Wireless Communications",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4222",
+        "title": "Wireless Networking"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "COSE436",
+        "title": "Interactive Visualization",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3241",
+        "title": "Computer Graphics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "KECE470",
+        "title": "Pattern Recognition",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT4240",
+        "title": "Machine Learning for Pred"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS215",
+        "title": "INTRODUCTION TO MANAGEMENT INFORMATION SYSTEMS(English)",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS3103",
+        "title": "Digital Transformation and"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BUSS317",
+        "title": "Social Media Analytics",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS4241",
+        "title": "Social Media Network Ana"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    }
+  ]
+}

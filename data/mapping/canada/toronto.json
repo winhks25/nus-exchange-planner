@@ -1,0 +1,729 @@
+{
+  "partner_university": {
+    "name": "University of Toronto",
+    "edurec_id": "E0000000684"
+  },
+  "source": {
+    "file": "toronto.pdf",
+    "system": "NUS EduRec Course Mappings Search",
+    "retrieved_at": "2026-10-14"
+  },
+  "mapping_count": 55,
+  "mappings": [
+    {
+      "partner_course": {
+        "code": "ECE344H1",
+        "title": "Operating Systems",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2106",
+        "title": "Introduction to Operating"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC444H1",
+        "title": "Software Engineering",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2103",
+        "title": "Software Engineering"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC326H1",
+        "title": "Programming Languages",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2104",
+        "title": "Programming Language C"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC404H1",
+        "title": "Introduction to Video Game Design",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3247",
+        "title": "Game Development"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ROB313H1",
+        "title": "Introduction to Learning from Data",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC428H1-S",
+        "title": "Human-Computer Interaction",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4249",
+        "title": "Quantitative Methods of H"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC420H1",
+        "title": "Introduction to Image Understanding",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4243",
+        "title": "Computer Vision and Patte"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC413H1",
+        "title": "\" Neural Networks and Deep Learning\"",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS5242",
+        "title": "Neural Networks and Deep"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC309H1",
+        "title": "Programming on the Web",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "BT3103",
+        "title": "Application Systems Deve"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC412",
+        "title": "Probabilistic Learning and Reasoning",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "BT3102",
+        "title": "Computational Methods fo"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC443H1",
+        "title": "Database System Technology",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "IS3107",
+        "title": "Data Engineering"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC311H1",
+        "title": "Introduction to Machine Learning",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3264",
+        "title": "Foundations of Machine Le"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC401H1",
+        "title": "Natural Language Computing",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4248",
+        "title": "Introduction to Large Lang"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC302H1",
+        "title": "Engineering Large Software Systems",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3213",
+        "title": "Software Requirements Sp"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC384H1",
+        "title": "Introduction to Artificial Intelligence",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3263",
+        "title": "Foundations of Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC3465H1",
+        "title": "Formal Methods in Software Design",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4211",
+        "title": "Formal Methods for Softwa"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC369H1",
+        "title": "Operating Systems",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2106",
+        "title": "Introduction to Operating"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ECO375H1",
+        "title": "Foundations of Econometrics",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "BT2101",
+        "title": "Econometrics Modeling for"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BCB420H1",
+        "title": "Computational Systems Biology",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4220",
+        "title": "Knowledge Discovery Meth"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ECE352",
+        "title": "Computer Organization",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2100",
+        "title": "Computer Organisation"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ECE358",
+        "title": "Foundations of Computing",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3230",
+        "title": "Design and Analysis of Alg"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC322H5",
+        "title": "Introduction to Algebraic Cryptography",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4236",
+        "title": "Cryptography in Practice:"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC358H1",
+        "title": "Principles of Computer Networks",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ECE568H1",
+        "title": "Computer Security",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3235",
+        "title": "Computer Security"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC311H1",
+        "title": "Introduction to Machine Learning",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC410",
+        "title": "Software Verification and Testing",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4218",
+        "title": "Software Testing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC488",
+        "title": "Compilers and Interpreters",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4212",
+        "title": "Compiler Design"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC469",
+        "title": "Operating Systems Design and Implementation",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3221",
+        "title": "Operating Systems Design"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC367H1",
+        "title": "Parallel Programming",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3210",
+        "title": "Parallel Computing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "MIE369H1",
+        "title": "Introduction to Artificial Intelligence",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ROB311H1",
+        "title": "Artificial Intellgence",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "RSM434",
+        "title": "Financial Trading Strategies",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "IS4226",
+        "title": "Systematic Trading Strate"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ACT350",
+        "title": "Applied Probability for Actuarial Science",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "BT3102",
+        "title": "Computational Methods fo"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC373H1",
+        "title": "Algorithm Design, Analysis & Complexity",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3230",
+        "title": "Design and Analysis of Alg"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC384H1",
+        "title": "Introduction to Artificial Intelligence",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC343H1",
+        "title": "Introduction to Databases",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2102",
+        "title": "Database Systems"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC324H1",
+        "title": "Principles of Programming Languages",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2104",
+        "title": "Programming Language C"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC373H",
+        "title": "Algorithm Design and Analysis",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3230",
+        "title": "Design and Analysis of Alg"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC317H1",
+        "title": "Computer Graphics",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3241",
+        "title": "Computer Graphics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC485H1",
+        "title": "Computational Linguistics",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4248",
+        "title": "Introduction to Large Lang"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "APS360H1",
+        "title": "Applied Fundamentals of Deep Learning",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "BT4240",
+        "title": "Machine Learning for Pred"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC465",
+        "title": "Formal Methods in Software Design",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS4211",
+        "title": "Formal Methods for Softwa"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC457H1",
+        "title": "Principles of Computer Networks",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC301H1",
+        "title": "Introduction to Software Engineering",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS2103",
+        "title": "Software Engineering"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC411H1",
+        "title": "Machine Learning and Data Mining",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ECE421",
+        "title": "Introduction to Machine Learning",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ROB311",
+        "title": "Artificial Intelligence",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ECE521",
+        "title": "Inference Algorithms and Machine Learning",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSC207H1",
+        "title": "Software Design",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "Software Engineering",
+        "title": null
+      },
+      "faculty": "School of Computing",
+      "source_page": 2
+    },
+    {
+      "partner_course": {
+        "code": "CSC165H1",
+        "title": "Mathematical Expression and Reasoning for Computer Science",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "Discrete Structures",
+        "title": null
+      },
+      "faculty": "School of Computing",
+      "source_page": 2
+    },
+    {
+      "partner_course": {
+        "code": "CSCC11H3",
+        "title": "Introduction to Machine Learning and Data Mining",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "Foundations of Machine Le",
+        "title": null
+      },
+      "faculty": "School of Computing",
+      "source_page": 2
+    },
+    {
+      "partner_course": {
+        "code": "MSE403H1",
+        "title": "Data Sciences and Analytics for Materials Engineers",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "Machine Learning for Pred",
+        "title": null
+      },
+      "faculty": "School of Computing",
+      "source_page": 2
+    },
+    {
+      "partner_course": {
+        "code": "CSC343H1",
+        "title": "Introduction to Databases",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "Database Technology and",
+        "title": null
+      },
+      "faculty": "School of Computing",
+      "source_page": 2
+    },
+    {
+      "partner_course": {
+        "code": "108H1F",
+        "title": "Introduction to Computer Programming",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "Programming Methodology",
+        "title": null
+      },
+      "faculty": "School of Computing",
+      "source_page": 2
+    },
+    {
+      "partner_course": {
+        "code": "ECE243H1",
+        "title": "Computer Organization",
+        "units": 0.5
+      },
+      "nus_course": {
+        "code": "Computer Organisation",
+        "title": null
+      },
+      "faculty": "School of Computing",
+      "source_page": 2
+    }
+  ]
+}

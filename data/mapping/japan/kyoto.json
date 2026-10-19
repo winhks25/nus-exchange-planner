@@ -1,0 +1,105 @@
+{
+  "partner_university": {
+    "name": "Kyoto University",
+    "edurec_id": "E0000000326"
+  },
+  "source": {
+    "file": "kyoto.pdf",
+    "system": "NUS EduRec Course Mappings Search",
+    "retrieved_at": "2026-10-14"
+  },
+  "mapping_count": 7,
+  "mappings": [
+    {
+      "partner_course": {
+        "code": "ENG39098",
+        "title": "Databases",
+        "units": 2.0
+      },
+      "nus_course": {
+        "code": "CS2102",
+        "title": "Database Systems"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ENG39116",
+        "title": "Artificial Intelligence",
+        "units": 2.0
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ENG39128",
+        "title": "Implementation of Programming Languages",
+        "units": 2.0
+      },
+      "nus_course": {
+        "code": "CS4215",
+        "title": "Programming Language Im"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "T019001",
+        "title": "Information Network-E2",
+        "units": 2.0
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "T057001",
+        "title": "Fundamentals of Artificial Intelligence- E2",
+        "units": 2.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "T57002",
+        "title": "Fundamentals of Artificial Intelligence- E2",
+        "units": 2.0
+      },
+      "nus_course": {
+        "code": "CS2109S",
+        "title": "Introduction to AI and Mac"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "U-LAS30 20044 LE10",
+        "title": "Introduction to Formal Languages-E2",
+        "units": 2.0
+      },
+      "nus_course": {
+        "code": "CS3231",
+        "title": "Theory of Computation"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    }
+  ]
+}

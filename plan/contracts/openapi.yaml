@@ -1,0 +1,127 @@
+openapi: 3.1.0
+info:
+  title: NUS Exchange Planner API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /catalog:
+    get:
+      summary: List selectable degrees and partner universities
+      responses:
+        '200':
+          description: Catalog options
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [degrees, universities]
+                properties:
+                  degrees:
+                    type: array
+                    items:
+                      type: object
+                      required: [name, degree]
+                      properties:
+                        name: { type: string }
+                        degree: { type: string }
+                  universities:
+                    type: array
+                    items:
+                      type: object
+                      required: [name, country]
+                      properties:
+                        name: { type: string }
+                        country: { type: string }
+        '503': { $ref: '#/components/responses/CatalogUnavailable' }
+  /recommendations:
+    get:
+      summary: Rank every partner university for a degree
+      parameters:
+        - in: query
+          name: degree
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Sorted rankings, including zero-count universities
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [degree, recommendations]
+                properties:
+                  degree: { type: string }
+                  recommendations:
+                    type: array
+                    items:
+                      type: object
+                      required: [university, country, module_count]
+                      properties:
+                        university: { type: string }
+                        country: { type: string }
+                        module_count: { type: integer, minimum: 0 }
+        '404': { $ref: '#/components/responses/UnknownSelection' }
+        '503': { $ref: '#/components/responses/CatalogUnavailable' }
+  /mappings:
+    get:
+      summary: List all qualifying mapping rows for a pair
+      parameters:
+        - in: query
+          name: degree
+          required: true
+          schema: { type: string }
+        - in: query
+          name: uni
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Sorted mapping rows; empty array when the valid pair has no matches
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [degree, university, distinct_nus_module_count, mappings]
+                properties:
+                  degree: { type: string }
+                  university: { type: string }
+                  distinct_nus_module_count: { type: integer, minimum: 0 }
+                  mappings:
+                    type: array
+                    items:
+                      type: object
+                      required: [nus_course, partner_course]
+                      properties:
+                        nus_course: { $ref: '#/components/schemas/Course' }
+                        partner_course: { $ref: '#/components/schemas/Course' }
+        '404': { $ref: '#/components/responses/UnknownSelection' }
+        '503': { $ref: '#/components/responses/CatalogUnavailable' }
+components:
+  schemas:
+    Course:
+      type: object
+      required: [code]
+      properties:
+        code: { type: string }
+        title: { type: string }
+        units: { type: number }
+  responses:
+    UnknownSelection:
+      description: Unknown degree or university
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [detail]
+            properties:
+              detail: { type: string }
+    CatalogUnavailable:
+      description: Source data missing or malformed; no partial results
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [detail]
+            properties:
+              detail: { type: string }

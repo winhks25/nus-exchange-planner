@@ -1,0 +1,144 @@
+{
+  "institution": "National University of Singapore",
+  "school": "School of Computing",
+  "academic_year": "AY2026/27 website snapshot",
+  "source_index": "https://www.comp.nus.edu.sg/programmes/",
+  "notes": [
+    "Includes six standalone SoC computing majors with curriculum pages: Artificial Intelligence, Business Analytics, Business Artificial Intelligence Systems, Computer Science, Information Systems, and Information Security. Computer Engineering is a joint programme with CDE; Geospatial Intelligence is offered by CHS.",
+    "The pages contain cohort-specific/advisory material; check the linked official curriculum before planning enrolment. Common Curriculum and unrestricted electives are summarized separately from major programme requirements.",
+    "Modules listed under elective lists are the complete prescribed lists shown on the source pages; selection and unit/level constraints apply. Titles follow the NUS pages where available."
+  ],
+  "majors": [
+    {
+      "name": "Artificial Intelligence",
+      "degree": "Bachelor of Computing (Artificial Intelligence)",
+      "code": "BComp(AI)",
+      "curriculum_url": "https://www.comp.nus.edu.sg/programmes/ug/ai/curr/",
+      "degree_units": 160,
+      "common_curriculum_units": 40,
+      "unrestricted_elective_units": 40,
+      "programme_requirements_units": 80,
+      "required": {
+        "computing_foundations": ["CS2030S", "CS2040S", "CS2101", "CS2103T", "CS3230"],
+        "ai_foundations": ["CS2109S", "CS3263", "CS3264", "CS3268"],
+        "perception_choose_one": ["CS4243", "CS4248"],
+        "mathematics_foundations": ["CS1231S", "CS2251", "MA1521", "MA1522", "ST2334"]
+      },
+      "electives": {
+        "ai_technical_electives_choose_min_12_units": ["CS4220", "CS4225", "CS4240", "CS4244", "CS4246", "CS4261", "CS4262", "CS4347", "CS4277", "CS4278"],
+        "breadth_depth": "20 units total; at least 12 units at level 4000 or above; industrial experience 6–12 units (eligible students may replace with CP4101 dissertation); other constraints apply."
+      },
+      "source_detail": "CS2101/CS2103T are a twinned pair."
+    },
+    {
+      "name": "Business Analytics",
+      "degree": "Bachelor of Science (Business Analytics)",
+      "code": "BSc(BA)",
+      "curriculum_url": "https://www.comp.nus.edu.sg/programmes/ug/ba/curr/",
+      "degree_units": 160,
+      "common_curriculum_units": 40,
+      "unrestricted_elective_units": 40,
+      "programme_requirements_units": 80,
+      "required": {
+        "core": ["MA1521", "MA1522", "BT2101", "BT2102", "CS2030", "CS2040", "IS2101", "ST2334", "BT3103", "IS3103", "BT4103", "BT4101 or Industrial Experience Requirement"]
+      },
+      "electives": {
+        "programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded": {
+          "business_applications": ["IE3120", "IS3150", "IS3240", "BT4013", "BT4016", "BT4211", "BT4212", "DBA4811", "IS4241", "IS4242", "IS4250", "IS4262"],
+          "methodological_analytics": ["BT3017", "BT3102", "BT3104", "CP3100", "CS3243", "CS3244", "CS4248", "BT4012", "BT4015", "BT4221", "BT4222", "BT4240", "BT4241", "IS4241", "ST4245"],
+          "digital_and_it": ["IS3107", "IS3221", "BT4014", "BT4301", "IS4226", "IS4228", "IS4234", "IS4246", "IS4302", "IS4303"]
+        },
+        "specialisations": {
+          "Financial Analytics": ["BT3102", "BT4012", "BT4013", "BT4016", "BT4221", "IS4226", "IS4228", "IS4234", "IS4302", "IS4303"],
+          "Machine Learning-based Analytics": ["BT3017", "BT4012", "BT4014", "BT4221", "BT4222", "BT4240", "BT4241", "BT4301", "CS3243", "CS4248", "IS4246"],
+          "Marketing Analytics": ["BT3017", "BT4014", "BT4015", "BT4211", "BT4212", "BT4222", "IS3150", "IS4241", "IS4262"]
+        }
+      },
+      "source_detail": "Specialisations are optional; five programme electives remain required."
+    },
+    {
+      "name": "Business Artificial Intelligence Systems",
+      "degree": "Bachelor of Computing (Business Artificial Intelligence Systems)",
+      "code": "BComp(BAIS)",
+      "curriculum_url": "https://www.comp.nus.edu.sg/programmes/ug/bais/curr/",
+      "degree_units": 160,
+      "common_curriculum_units": 40,
+      "unrestricted_elective_units": 40,
+      "programme_requirements_units": 80,
+      "required": {
+        "core": ["BT2102", "CS2030", "CS2040", "IS2101", "IS2108", "IS2109", "IS3103", "Industry Experience Requirement or CP4101", "IS4108", "MA1521", "MA1522", "ST2334"]
+      },
+      "electives": {
+        "programme_electives_choose_5_20_units_at_least_3_level_4000": ["IS3150", "IS3240", "IS4262", "IS4226", "IS4228", "IS4302", "IS4303", "CS2105", "IS2102", "IS3108", "IS3221", "IS4100", "IS4234", "IS4236", "IS4243", "IS4248", "IS4250", "IS4301", "BT3017", "BT4014", "BT4221", "BT4301", "IS3107", "IS3109", "IS4151", "IS4246", "IS4400", "IS4401", "IS4402", "IS4403", "CP3100", "IS3251", "IS4152", "IS4241", "IS4261", "CS2107", "IFS4101", "IS4231", "IS4233", "IS4238"],
+        "specialisations": {
+          "AI Governance and Management": "See official curriculum page for prescribed course list.",
+          "Digital Product and Platform Management": "See official curriculum page for prescribed course list.",
+          "Financial Technology": "See official curriculum page for prescribed course list."
+        }
+      },
+      "source_detail": "NUS describes this as formerly the Bachelor of Computing in Information Systems; it is listed as its own current programme. The elective page groups options under specialisation headings."
+    },
+    {
+      "name": "Computer Science",
+      "degree": "Bachelor of Computing (Computer Science)",
+      "code": "BComp(CS)",
+      "curriculum_url": "https://www.comp.nus.edu.sg/programmes/ug/cs/curr/",
+      "degree_units": 160,
+      "common_curriculum_units": 40,
+      "unrestricted_elective_units": 40,
+      "programme_requirements_units": 80,
+      "required": {
+        "computer_science_foundation": ["CS1231S", "CS2030S", "CS2040S", "CS2100", "CS2101", "CS2103T", "CS2106", "CS2109S", "CS3230"],
+        "mathematics_and_sciences": ["MA1521", "MA1522", "ST2334"]
+      },
+      "electives": {
+        "breadth_depth": "32 units of computing courses; satisfy one Focus Area through 3 Area Primary courses (at least one level 4000+), at least 12 units level 4000+, and 6–12 units Industry Experience (eligible students may replace with CP4101 dissertation). CS/IFS/CP coding constraints apply.",
+        "focus_areas": ["Algorithms & Theory", "Artificial Intelligence", "Computer Graphics and Games", "Computer Security", "Database Systems", "Multimedia Information Retrieval", "Networking and Distributed Systems", "Parallel Computing", "Programming Languages", "Software Engineering"],
+        "all_electives": "The complete course-by-course Area Primaries/elective catalog is linked from the curriculum page (Focus Areas details); use that live catalog because offerings change."
+      },
+      "source_detail": "CS2101 and CS2103T must be taken in the same semester."
+    },
+    {
+      "name": "Information Systems",
+      "degree": "Bachelor of Computing (Information Systems)",
+      "code": "BComp(IS)",
+      "curriculum_url": "https://www.comp.nus.edu.sg/programmes/ug/is/curr/",
+      "degree_units": 160,
+      "common_curriculum_units": 40,
+      "unrestricted_elective_units": 40,
+      "programme_requirements_units": 80,
+      "required": {
+        "core": ["BT2102 or CS2102", "CS2030", "CS2040", "IS2101", "IS2102", "IS2103", "IS3103", "IS3106", "CP4101 or Industrial Experience Requirement", "IS4103", "MA1521", "ST2334"]
+      },
+      "electives": {
+        "programme_electives_choose_5_20_units_at_least_3_level_4000": ["IS3150", "IS3240", "IS4151", "IS4262", "IS4226", "IS4228", "IS4302", "IS4303", "CS2105", "BT3017", "CS3240", "CS3243", "IS3107", "IS3221", "BT4014", "IS4100", "IS4234", "IS4236", "IS4243", "IS4246", "IS4248", "IS4250", "IS4301", "IS3251", "IS4152", "IS4241", "IS4242", "IS4261", "CS2107", "IFS4101", "IS4231", "IS4233", "IS4238"],
+        "specialisations": {
+          "Digital Product and Platform Management": "Optional; consult official specialisation list.",
+          "Financial Technology": "Optional; consult official specialisation list.",
+          "Intelligent Systems Solutioning": "Optional; consult official specialisation list."
+        }
+      },
+      "source_detail": "IS and BAIS have distinct published programme pages; confirm applicable cohort because BAIS is described as the successor/renamed programme."
+    },
+    {
+      "name": "Information Security",
+      "degree": "Bachelor of Computing (Information Security)",
+      "code": "BComp(InfoSec)",
+      "curriculum_url": "https://www.comp.nus.edu.sg/programmes/ug/isc/curr/",
+      "degree_units": 160,
+      "common_curriculum_units": 40,
+      "unrestricted_elective_units": 36,
+      "programme_requirements_units": 84,
+      "required": {
+        "computing_foundation": ["CS1231S", "CS2030", "CS2040C", "CS2100", "CS2101", "CS2103T", "CS2105", "CS2106"],
+        "information_security": ["CS2107", "CS3235", "IFS4205 or (CS4238 and IFS4103)", "IS4231"],
+        "mathematics": ["MA1521", "MA1522", "ST2334"],
+        "computing_requirement": "12 units CS/IS/CP-coded; CS- and IS-coded courses must be level 3000+; at least 6 units must be industrial experience."
+      },
+      "electives": {
+        "information_security_electives_choose_8_units": ["CS4230", "CS4236 or MA4261", "CS4238", "CS4239", "CS4257", "CS4276", "CS5231", "CS5321", "CS5322", "CS5331", "CS5332", "IFS4101", "IFS4102", "IFS4103", "IS4204", "IS4233", "IS4234", "IS4238", "IS4302", "other level-4000+ courses approved by SoC UG Office"],
+        "industry_experience": ["CP3880", "IS4010", "TR3202", "CP3200", "CP3202", "CP3107", "CP3110"]
+      }
+    }
+  ]
+}

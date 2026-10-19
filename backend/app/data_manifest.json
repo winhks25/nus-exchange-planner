@@ -1,0 +1,10 @@
+{
+  "files": [
+    "majors/nus_soc_majors.json",
+    "mapping/australia/west-au.json",
+    "mapping/canada/toronto.json",
+    "mapping/japan/kyoto.json",
+    "mapping/korea/korea.json",
+    "mapping/korea/yonsei.json"
+  ]
+}

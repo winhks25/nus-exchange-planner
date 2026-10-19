@@ -1,0 +1,430 @@
+{
+  "partner_university": {
+    "name": "University of Western Australia, The",
+    "edurec_id": "E0000000618"
+  },
+  "source": {
+    "file": "west-au.pdf",
+    "system": "NUS EduRec Course Mappings Search",
+    "retrieved_at": "2026-10-14"
+  },
+  "mapping_count": 32,
+  "mappings": [
+    {
+      "partner_course": {
+        "code": "BUSN5001",
+        "title": "Blockchain and Distributed Ledger Technologies in Business",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "IS4302",
+        "title": "Blockchain and Distributed"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS1402",
+        "title": "Relational Database Management Systems",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS2102",
+        "title": "Database Systems"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS2200",
+        "title": "Data Structures and Algorithms",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS2040",
+        "title": "Data Structures and Algor"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS3001",
+        "title": "Algorithms, Agents and Artificial Intelligence",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4014",
+        "title": "Analytics Driven Design of"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS3001",
+        "title": "Algorithms, Agents and Artificial Intelligence",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS3002",
+        "title": "Computer Networks",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS3004",
+        "title": "Cybersecurity",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS3235",
+        "title": "Computer Security"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS3006",
+        "title": "Penetration Testing",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "IFS4103",
+        "title": "Penetration Testing Practic"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS3007",
+        "title": "Secure Coding",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS4239",
+        "title": "Software Security"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS3301",
+        "title": "Software Requirements and Design",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS3213",
+        "title": "Software Requirements Sp"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS4009",
+        "title": "Computational Data Analysis",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4014",
+        "title": "Analytics Driven Design of"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS4404",
+        "title": "Artificial Intelligence and Adaptive Systems",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4014",
+        "title": "Analytics Driven Design of"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS4404",
+        "title": "Artificial Intelligence and Adaptive Systems",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS4404",
+        "title": "Artificial Intelligence and Adaptive Systems",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "IS4242",
+        "title": "Intelligent Systems and Te"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS4419",
+        "title": "Mobile and Wireless Computing",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS4222",
+        "title": "Wireless Networking"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS5503",
+        "title": "Cloud Computing",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS5224",
+        "title": "Cloud Computing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS5506",
+        "title": "The Internet of Things",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS3237",
+        "title": "Introduction to Internet of"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CITS5507",
+        "title": "High Performance Computing",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS3210",
+        "title": "Parallel Computing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CTIS2005",
+        "title": "Object Oriented Programming",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "CS2030",
+        "title": "Programming Methodology"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ENVT4411",
+        "title": "Geographic Information Systems Applications",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4015",
+        "title": "Geospatial Analytics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ENVT5566",
+        "title": "Advanced Spatial and Environmental Modelling",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4015",
+        "title": "Geospatial Analytics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "FINA4491",
+        "title": "Capital Markets Research",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4013",
+        "title": "Analytics for Capital Marke"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "GEOG2201",
+        "title": "Geographic Information Systems",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4015",
+        "title": "Geospatial Analytics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "GEOG3300",
+        "title": "Advanced Spatial Analysis",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4015",
+        "title": "Geospatial Analytics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "MATH3002",
+        "title": "Network Science",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "IS4241",
+        "title": "Social Media Network Ana"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "MKTG2305",
+        "title": "Marketing Research",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4211",
+        "title": "Data-Driven Marketing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "MKTG3307",
+        "title": "Digital Marketing",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4211",
+        "title": "Data-Driven Marketing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "MKTG3308",
+        "title": "Marketing Analytics",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4211",
+        "title": "Data-Driven Marketing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "MKTG5504",
+        "title": "Big Data in Marketing",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4211",
+        "title": "Data-Driven Marketing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STAT3063",
+        "title": "Spatial Statistics and Modeling",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4015",
+        "title": "Geospatial Analytics"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STAT3406",
+        "title": "Applied Statistics and Data Visualisation",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4240",
+        "title": "Machine Learning for Pred"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STAT4064",
+        "title": "Applied Predictive Modeling",
+        "units": 6.0
+      },
+      "nus_course": {
+        "code": "BT4240",
+        "title": "Machine Learning for Pred"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    }
+  ]
+}

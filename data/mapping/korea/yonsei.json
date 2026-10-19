@@ -1,0 +1,326 @@
+{
+  "partner_university": {
+    "name": "Yonsei University",
+    "edurec_id": "E0000000548"
+  },
+  "source": {
+    "file": "yonsei.pdf",
+    "system": "NUS EduRec Course Mappings Search",
+    "retrieved_at": "2026-10-14"
+  },
+  "mapping_count": 24,
+  "mappings": [
+    {
+      "partner_course": {
+        "code": "CSI4120",
+        "title": "MACHINE LEARNING",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "AIC2120",
+        "title": "INTRODUCTION TO AI AND ITS APPLICATIONS",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IT1244",
+        "title": "Artificial Intelligence: Tech"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSI4116",
+        "title": "Computer Vision",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4243",
+        "title": "Computer Vision and Patte"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "MAT2106",
+        "title": "DISCRETE MATHEMATICS",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS1231",
+        "title": "Discrete Structures"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSI4108",
+        "title": "Artificial Intelligence",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3243",
+        "title": "Introduction to Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CAS3116",
+        "title": "COMPUTER VISION",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4243",
+        "title": "Computer Vision and Patte"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STA4123",
+        "title": "INTRODUCTION TO OPTIMIZATION FOR DATA SCIENCE",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "BT3104",
+        "title": "Optimization Methods for"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CAS3120-01",
+        "title": "MACHINE LEARNING",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSI3109",
+        "title": "AUTOMATA AND FORMAL LANGUAGES",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3231",
+        "title": "Theory of Computation"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "BIZ3189-04",
+        "title": "MANAGEMENT INFORMATION SYSTEMS",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS3103",
+        "title": "Digital Transformation and"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "EEE7501",
+        "title": "NEURAL NETWORK",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS5242",
+        "title": "Neural Networks and Deep"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "ISM6011",
+        "title": "Global IT Management",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "IS3103",
+        "title": "Digital Transformation and"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSI4106",
+        "title": "Computer Networks",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "EEE3450",
+        "title": "COMMUNICATION NETWORKS",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2105",
+        "title": "Introduction to Computer"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "EEE3314",
+        "title": "INTRODUCTION ARTIFICIAL INTELLIGENCE",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STA3141",
+        "title": "MATHEMATICS FOR MACHINE LEARNING",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STA3142",
+        "title": "STATISTICAL MACHINE LEARNING",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3244",
+        "title": "Machine Learning"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "EE4624",
+        "title": "WIRELESS AND MOBILE NETWORKS",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4222",
+        "title": "Wireless Networking"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "EEE3314",
+        "title": "INTRODUCTION ARTIFICIAL INTELLIGENCE",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3263",
+        "title": "Foundations of Artificial In"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "PHY4125",
+        "title": "QUANTUM COMPUTER",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS4268",
+        "title": "Quantum Computing"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSI2103",
+        "title": "Data Structures",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2040",
+        "title": "Data Structures and Algor"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "CSI4109",
+        "title": "Information Security",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS2107",
+        "title": "Introduction to Informatio"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STA3142",
+        "title": "STATISTICAL MACHINE LEARNING",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS3264",
+        "title": "Foundations of Machine Le"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    },
+    {
+      "partner_course": {
+        "code": "STA9131",
+        "title": "DEEP LEARNING FOR VISUAL RECOGNITION",
+        "units": 3.0
+      },
+      "nus_course": {
+        "code": "CS5242",
+        "title": "Neural Networks and Deep"
+      },
+      "faculty": "School of Computing",
+      "source_page": 1
+    }
+  ]
+}
