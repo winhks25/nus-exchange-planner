@@ -12,6 +12,12 @@ Companion to `plan/overview.md`. This spec is self-contained: no other doc or mo
 - **NUS module count** for a degree–university pair — the number of **distinct NUS module codes** among those same qualifying mappings.
 - **Mapping count** for a degree–university pair — the number of qualifying mapping rows. One NUS module may have multiple partner mappings, so this can exceed the NUS module count. A partner module may also appear in multiple rows, so the mapping count can exceed the partner module count. Derive this from the filtered `mappings` array, never the source file's `mapping_count` field.
 
+### Shared UI components
+
+- One shared **typable picker** component serves both degree fields (Recommend and Compare) and the Compare partner field. It keeps a native text input wrapped in a labeled combobox/listbox, supports clicking or focusing to reveal every option, case-insensitive partial filtering, mouse selection, clearing, and the keyboard behavior specified under Page 1.
+- University cards and mapping rows use the shadcn/ui **Base UI** `Card` primitives. Reusable shadcn primitives live under `frontend/components/ui/`; domain components stay in `frontend/components/`.
+- These presentation rules do not change the API contract, ranking, URL format, or responsive layout rules.
+
 ## Data rules
 
 ### Degree module list
@@ -35,13 +41,14 @@ Companion to `plan/overview.md`. This spec is self-contained: no other doc or mo
 
 ### 1. Degree picker
 
-Searchable combobox.
+Searchable, typable combobox using the shared picker component (the same component is used for Compare's degree and partner fields).
 
 - Each option shows the major name (for example, "Computer Science") and the full degree title beneath or beside it. The stored value used for filtering and selection is the major name.
 - Focusing or clicking the field shows the full degree list before any typing.
 - Typing filters the list, case-insensitive, by partial match against both the major name and the full degree title.
 - ArrowUp/ArrowDown move the highlight; Home/End jump to the first/last option. The highlighted option is exposed to assistive technology through the combobox's active-descendant mechanism.
-- Enter selects the highlighted option, or the first filtered match when nothing is highlighted. Escape closes the list without changing the selection.
+- Enter selects the highlighted option, or the first filtered match when nothing is highlighted. Escape closes the list without changing the selection. Clearing the text clears the selection.
+- The listbox is labeled by the field's visible label.
 - If nothing matches, show "Program not available. Check the degree list." and select nothing.
 
 ### 2. Search behavior
@@ -59,18 +66,21 @@ Searchable combobox.
 
 ### 4. University cards
 
-Each card shows:
+Each card is a shadcn/ui Base UI `Card` and shows:
 
-- Partner university display name.
+- A visible rank number (`#1`, `#2`, and so on) for the card's position in the ranked list.
+- The partner university display name as a prominent card title, visually larger than the supporting text.
 - Country name.
 - Mappable partner module count for this degree as the primary number.
-- Distinct NUS module count and mapping count for this degree as separate secondary numbers. Label all three values explicitly so the number of rows behind View Mappings is predictable.
-- A **View Mappings** link → navigates to `/compare` with this degree and this university preselected.
+- Distinct NUS module count and mapping count for this degree as separate secondary numbers. Label all three values explicitly so the number of rows behind View Mapping is predictable.
+- A **View Mapping** action → navigates to `/compare` with this degree and this university preselected.
+
+Every card, including a count = 0 card, exposes the same fields and action.
 
 Layout rules:
 
 - At desktop width, rank #1 renders alone and spans the full card-grid width. Ranks #2 and #3 each occupy half that width on one row. Every remaining card (including count = 0) occupies one third of the rank #1 width, in rank order. On narrow screens, cards stack at full available width without overflow and keep their rank order.
-- A count = 0 card stays visible and clickable; View Mappings opens Compare's empty state for that pair.
+- A count = 0 card stays visible and clickable; View Mapping opens Compare's empty state for that pair.
 
 ### 5. Consistency rule
 
@@ -84,21 +94,22 @@ Regression checks must cover the Toronto 9 partner/6 NUS/9 row example, the West
 
 ### 1. Pickers
 
-- Two pickers: degree (same searchable combobox as Recommend, same filtering and keyboard behavior) and partner university.
-- Partner university picker: plain dropdown listing all partner universities by display name; placeholder reads "select a partner university".
-- URL deep link: `/compare?degree=<major-name>&uni=<university-display-name>`. On load, pickers are set from the URL when the values are valid; invalid values fall back to empty with a note. Recommend's View Mappings links use this deep link.
+- Two typable pickers built from the shared picker component: degree (same filtering, clearing, and keyboard behavior as Recommend) and partner university.
+- Partner university picker: lists all partner universities by display name, filters by partial name, and keeps the placeholder "select a partner university".
+- URL deep link: `/compare?degree=<major-name>&uni=<university-display-name>`. On load, pickers are set from the URL when the values are valid; invalid values fall back to empty with a note. Recommend's View Mapping actions use this deep link.
 - While either picker is unset: show no rows.
 - Changing either picker clears old rows and shows mappings for the new pair.
 
 ### 2. Mapping rows
 
-Show only mappings whose NUS module code appears in the selected degree's module list. One row per mapping:
+Show only mappings whose NUS module code appears in the selected degree's module list. One row per mapping, each rendered as a shadcn/ui Base UI `Card`:
 
 - NUS module on the left, partner module on the right. Each side shows code, name, and units.
 - Sorted by NUS module code, ascending; ties keep file order.
-- A module with multiple mappings appears in multiple rows: the rows are per-mapping, not per-module.
+- A module with multiple mappings appears in multiple rows: the rows are per-mapping, not per-module. Repeated NUS codes remain separate cards.
 - Above the rows, show the distinct partner module count, distinct NUS module count, and mapping-row count with the same labels used on Recommend. Explain briefly that one NUS module can have several partner mappings and one partner module may appear in more than one mapping row.
 - Show only the fields present in the data. Details absent from the source stay blank.
+- Keep the card layout readable and free of horizontal overflow on narrow screens.
 
 Units rule:
 

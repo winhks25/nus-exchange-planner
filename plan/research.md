@@ -25,6 +25,14 @@
 - **Rationale:** The core risks are parsing, distinct counts, keyboard selection, URL state, and stale results.
 - **Alternatives considered:** Snapshot-only tests; they do not establish count consistency or accessibility behavior.
 
+## shadcn/ui Base UI setup
+
+- **Decision:** Use the shadcn/ui Base UI style (`base-nova`) on the existing Next.js 16 App Router project, with Tailwind CSS v4, `class-variance-authority`, `clsx`, `tailwind-merge`, `@base-ui/react`, and the `shadcn` Tailwind utility stylesheet. Keep `components.json` style `base-nova`, the `@/*` TypeScript alias, and the CSS variables in `frontend/app/globals.css`.
+- **Rationale:** Matches the requested Base UI variant without starting a new app; Tailwind v4's CSS-first configuration avoids a `tailwind.config` file. Reusable primitives live in `frontend/components/ui/` and domain components remain in `frontend/components/`. Mapping shadcn color tokens to the existing palette preserves the current visual design while the old component CSS is migrated incrementally.
+- **Files:** `frontend/components.json`, `frontend/postcss.config.mjs`, `frontend/package.json`, `frontend/package-lock.json`, `frontend/app/globals.css`, `frontend/lib/utils.ts`, and the generated `frontend/components/ui/{card,button,input}.tsx`.
+- **Alternatives considered:** Radix or React Aria variants (rejected by the task), a fresh shadcn scaffold (would discard the existing pages and styles), and keeping an unmanaged CSS-in-JS approach (would not provide the requested shadcn primitives).
+- **Consequences:** The custom `.card`, `.mapping-row`, and native-select rules continue to apply during the migration phases, so the shadcn primitives are available without forcing a visual rewrite in the same change.
+
 ## Unresolved questions
 
 None blocking. Backend hosting was clarified as Vercel. Exact package versions should be selected and locked when implementation begins because framework support changes over time.
