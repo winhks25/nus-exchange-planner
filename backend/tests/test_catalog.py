@@ -27,6 +27,13 @@ def test_current_catalog_and_consistency():
         assert rankings == sorted(
             rankings, key=lambda item: (-item.partner_module_count, item.university)
         )
+        recommendations_response = client.get(
+            "/api/v1/recommendations", params={"degree": degree.name}
+        )
+        assert recommendations_response.status_code == 200
+        assert recommendations_response.json()["recommendations"] == [
+            item.model_dump() for item in rankings
+        ]
         for item in rankings:
             pair = pair_mappings(catalog, degree.name, item.university)
             rows = compare_rows(catalog, degree.name, item.university)
@@ -64,7 +71,7 @@ def test_current_catalog_and_consistency():
             len(toronto["mappings"])) == (9, 6, 9)
     western = client.get(
         "/api/v1/mappings",
-        params={"degree": "Business Analytics", "uni": "University of Western Australia"},
+        params={"degree": "Business Analytics", "uni": "University of Western Australia, The"},
     ).json()
     assert western["partner_module_count"] == 19
     assert len(western["mappings"]) == 22
@@ -123,13 +130,13 @@ def test_partner_code_deduplication_ties_and_zero_pairs(tmp_path: Path):
     (data / "majors").mkdir(parents=True)
     (data / "mapping" / "japan").mkdir(parents=True)
     manifest = tmp_path / "manifest.json"
-    files = ["majors/one.json"] + [f"mapping/japan/{name}.json" for name in ("a", "b", "z")]
+    files = ["majors/one.json"] + [f"mapping/japan/{name}.json" for name in ("a", "b", "c", "z")]
     manifest.write_text(json.dumps({"files": files}))
     (data / "majors" / "one.json").write_text(json.dumps({
         "majors": [{"name": "Test", "degree": "Full title", "required": ["CS2102"]}]
     }))
     for name, partner_codes in (("A", ["same", "SAME"]), ("B", ["OTHER"]),
-                                ("Z", [])):
+                                ("C", ["ONE", "TWO"]), ("Z", [])):
         rows = [
             {"nus_course": {"code": "CS2102"}, "partner_course": {"code": code}}
             for code in partner_codes
@@ -139,9 +146,9 @@ def test_partner_code_deduplication_ties_and_zero_pairs(tmp_path: Path):
         }))
     catalog = load_catalog(data, manifest)
     ranked = rank_universities(catalog, "Test")
-    assert [item.university for item in ranked] == ["A", "B", "Z"]
+    assert [item.university for item in ranked] == ["C", "A", "B", "Z"]
     assert [(item.partner_module_count, item.distinct_nus_module_count, item.mapping_count)
-            for item in ranked] == [(1, 1, 2), (1, 1, 1), (0, 0, 0)]
+            for item in ranked] == [(2, 1, 2), (1, 1, 2), (1, 1, 1), (0, 0, 0)]
     client = TestClient(create_app(data, manifest))
     assert client.get("/api/v1/mappings", params={"degree": "Test", "uni": "Z"}).json() == {
         "degree": "Test", "university": "Z", "partner_module_count": 0,

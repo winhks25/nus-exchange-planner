@@ -50,6 +50,7 @@ def create_app(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> FastAP
         return MappingResponse(
             degree=degree,
             university=uni,
+            partner_module_count=len({row.partner_course.code.upper() for row in rows}),
             distinct_nus_module_count=len({row.nus_course.code.upper() for row in rows}),
             mappings=rows,
         )

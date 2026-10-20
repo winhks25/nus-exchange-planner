@@ -56,11 +56,13 @@ paths:
                     type: array
                     items:
                       type: object
-                      required: [university, country, module_count]
+                      required: [university, country, partner_module_count, distinct_nus_module_count, mapping_count]
                       properties:
                         university: { type: string }
                         country: { type: string }
-                        module_count: { type: integer, minimum: 0 }
+                        partner_module_count: { type: integer, minimum: 0 }
+                        distinct_nus_module_count: { type: integer, minimum: 0 }
+                        mapping_count: { type: integer, minimum: 0 }
         '404': { $ref: '#/components/responses/UnknownSelection' }
         '503': { $ref: '#/components/responses/CatalogUnavailable' }
         '422': { $ref: '#/components/responses/InvalidQuery' }
@@ -83,10 +85,11 @@ paths:
             application/json:
               schema:
                 type: object
-                required: [degree, university, distinct_nus_module_count, mappings]
+                required: [degree, university, partner_module_count, distinct_nus_module_count, mappings]
                 properties:
                   degree: { type: string }
                   university: { type: string }
+                  partner_module_count: { type: integer, minimum: 0 }
                   distinct_nus_module_count: { type: integer, minimum: 0 }
                   mappings:
                     type: array

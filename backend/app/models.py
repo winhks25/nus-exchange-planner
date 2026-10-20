@@ -66,7 +66,9 @@ class ErrorResponse(BaseModel):
 class Recommendation(BaseModel):
     university: str
     country: str
-    module_count: int
+    partner_module_count: int
+    distinct_nus_module_count: int
+    mapping_count: int
 
 
 class RecommendationsResponse(BaseModel):
@@ -77,5 +79,6 @@ class RecommendationsResponse(BaseModel):
 class MappingResponse(BaseModel):
     degree: str
     university: str
+    partner_module_count: int
     distinct_nus_module_count: int
     mappings: list[Mapping]
