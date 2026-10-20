@@ -18,20 +18,20 @@ Date: 2026-10-20 (Asia/Singapore). Local checkout; production deployment was out
 
 | Check | Result |
 | --- | --- |
-| `uv run --directory backend pytest -q` | 6 passed; one upstream Starlette `httpx` deprecation warning |
-| `uv run --directory backend ruff check .` | Passed |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache uv run --directory backend pytest -q` | 6 passed; one upstream Starlette `httpx` deprecation warning |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache uv run --directory backend ruff check .` | Passed |
 | `npm run lint --prefix frontend` | Passed |
 | `npm run typecheck --prefix frontend` | Passed |
 | `npm run build --prefix frontend` | Passed; `/` and `/compare` statically prerendered |
-| `npm run test:e2e --prefix frontend` | 7 passed |
-| Warmed Recommend selection to five rendered cards | 136.2 ms in the final Chromium run, under one second |
-| Cold backend Python process import and catalog startup | 0.29 s real time via `/usr/bin/time -p uv run --directory backend python -c 'from app.main import app; print(len(app.openapi()["paths"]))'` |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache npm run test:e2e --prefix frontend` | 7 passed |
+| Warmed Recommend selection to five rendered cards | 113.9 ms in Chromium, under one second |
+| Cold backend Python process import, catalog startup, and schema access | 0.49 s real time via `/usr/bin/time -p env UV_CACHE_DIR=/private/tmp/nus-uv-cache uv run --directory backend python -c 'from app.main import app; print(len(app.openapi()["paths"]))'` |
 
 The warmed figure is a local development-browser measurement, not a production latency guarantee. The cold figure measures backend process startup and schema access, not a deployed Vercel cold request. Production timings require deployment.
 
 ## OpenAPI contract comparison
 
-`backend/tests/test_contract.py` checks the generated FastAPI schema against `plan/contracts/openapi.yaml`: the contract's `/api/v1` server prefix resolves to the generated path names; required query parameters, 200 response fields, and 404/503 `detail` bodies match. FastAPI also generates 422 responses for missing required query parameters. Optional `title` and `units` course fields stay optional in the schema and are omitted at runtime when absent.
+`backend/tests/test_contract.py` checks the generated FastAPI schema against `plan/contracts/openapi.yaml`: the contract's `/api/v1` server prefix resolves to the generated path names; required query parameters, all response status codes, top-level and nested 200 response fields, and 404/503 `detail` bodies match. The contract now records FastAPI's generated 422 response for missing required query parameters. Optional `title` and `units` course fields stay optional in the schema and are omitted at runtime when absent. The generated schema permits null for those fields, but successful responses omit null fields through `response_model_exclude_none=True`.
 
 ## Dependency note
 

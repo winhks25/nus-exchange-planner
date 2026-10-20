@@ -52,9 +52,9 @@ Complete before either user story. These tasks establish one validated dataset a
 
 - [X] T023 Verify the current source files against the implemented loader and both endpoints; record representative pair counts, zero-count cases, source-order tie behavior, and Recommend-to-Compare distinct-code equality in `plan/validation-results.md`.
 - [X] T024 Validate browser behavior against every scenario in `plan/quickstart.md`, including combobox keyboard/active-descendant behavior, invalid deep links, zero-count navigation, absent partner units, stale-request clearing, and malformed-data error state; record outcomes in `plan/validation-results.md`.
-- [ ] T025 Run lint, typecheck, Python checks, and a warmed under-one-second rendering measurement for the current dataset; record commands, results, and separately measured cold-start time in `plan/validation-results.md`.
-- [ ] T026 Document exact local run commands, Vercel backend-first deployment, repository-root backend project, `frontend/` frontend project, API URL/CORS environment settings, preview API strategy, and data-change redeploy process in `README.md`.
-- [ ] T027 Compare the generated FastAPI `/openapi.json` with `plan/contracts/openapi.yaml`, reconcile path prefixes, response fields, required query parameters, and 404/503 behavior in `backend/app/main.py` or the contract file, then record the result in `plan/validation-results.md`.
+- [X] T025 Run lint, typecheck, Python checks, and a warmed under-one-second rendering measurement for the current dataset; record commands, results, and separately measured cold-start time in `plan/validation-results.md`.
+- [X] T026 Document exact local run commands, Vercel backend-first deployment, repository-root backend project, `frontend/` frontend project, API URL/CORS environment settings, preview API strategy, and data-change redeploy process in `README.md`.
+- [X] T027 Compare the generated FastAPI `/openapi.json` with `plan/contracts/openapi.yaml`, reconcile path prefixes, response fields, required query parameters, and 404/503 behavior in `backend/app/main.py` or the contract file, then record the result in `plan/validation-results.md`.
 
 ## Dependencies
 

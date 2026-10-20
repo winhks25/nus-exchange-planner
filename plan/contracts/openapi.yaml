@@ -63,6 +63,7 @@ paths:
                         module_count: { type: integer, minimum: 0 }
         '404': { $ref: '#/components/responses/UnknownSelection' }
         '503': { $ref: '#/components/responses/CatalogUnavailable' }
+        '422': { $ref: '#/components/responses/InvalidQuery' }
   /mappings:
     get:
       summary: List all qualifying mapping rows for a pair
@@ -97,6 +98,7 @@ paths:
                         partner_course: { $ref: '#/components/schemas/Course' }
         '404': { $ref: '#/components/responses/UnknownSelection' }
         '503': { $ref: '#/components/responses/CatalogUnavailable' }
+        '422': { $ref: '#/components/responses/InvalidQuery' }
 components:
   schemas:
     Course:
@@ -106,7 +108,27 @@ components:
         code: { type: string }
         title: { type: string }
         units: { type: number }
+    ValidationError:
+      type: object
+      required: [loc, msg, type]
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf: [{ type: string }, { type: integer }]
+        msg: { type: string }
+        type: { type: string }
   responses:
+    InvalidQuery:
+      description: Required query parameter missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: array
+                items: { $ref: '#/components/schemas/ValidationError' }
     UnknownSelection:
       description: Unknown degree or university
       content:
