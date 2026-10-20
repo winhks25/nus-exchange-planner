@@ -4,7 +4,7 @@ Source documents: `plan/featureSpecs.md`, `plan/implementation-plan.md`, `plan/d
 
 This checkout has no `.specify/` directory, so the Spec Kit setup script and template are unavailable. This file follows the specified phase and checklist format under the existing `plan/` directory. The spec defines two user stories, ordered by page priority: **US1 Recommend** and **US2 Compare**. The original MVP spec did not request TDD tasks; the count repair explicitly requires regression checks in T028 and T032.
 
-T001–T027 document the completed MVP implementation. The count repair in T028–T033 supersedes the old distinct-NUS ranking metric described in completed T013 and its original acceptance checks; the completed tasks remain as implementation history. The revised spec explicitly requires count regression checks.
+T001–T027 document the completed MVP implementation. T028–T033 document the completed count repair. The new Recommend change in T034–T038 supersedes partner-count ranking in completed T028–T029 and the original compact-grid layout in completed T016; completed tasks remain as implementation history. The revised spec explicitly requires ranking and layout regression checks.
 
 ## Phase 1: Setup
 
@@ -86,6 +86,21 @@ Complete before the new card and Compare labels. This phase corrects the ranking
 - [X] T032 Add a Playwright scenario in `frontend/tests/flows.spec.ts` that selects Artificial Intelligence, checks Toronto's 9 partner/6 NUS/9 mapping card labels and ranking, follows View Mappings, checks the matching Compare summary and nine visible rows, then checks a zero-count pair.
 - [X] T033 Run the backend tests, frontend lint/typecheck, and Playwright suite; record the commands, results, the Toronto 9/6/9 evidence, and the Western Australia 19-partner/22-row evidence in `plan/validation-results.md`.
 
+## Phase 10: User Story 1 — Recommend NUS ranking and card sizes (P1)
+
+**Goal:** A student sees partners ordered by how many distinct NUS modules they map, with card widths that follow rank: #1 full grid width, #2–#3 half width each, and all later cards one third width each at desktop size. Keep the three existing count labels; the primary displayed partner count does not determine rank.
+
+**Independent check:** Select a degree where partner-module and NUS-module ordering differ; the cards follow distinct NUS count descending, then university name ascending for ties, with zero-count partners last. At desktop width #1 spans six grid tracks, #2 and #3 span three each, and #4 onward span two each. At narrow width all cards stack in rank order without horizontal overflow, and every View Mappings link remains usable.
+
+- [X] T034 [US1] Update ranking regression cases in `backend/tests/test_catalog.py`: assert all current degree–university recommendations sort by `(-distinct_nus_module_count, university)`, add a synthetic pair where partner counts and NUS counts imply opposite orders, keep an alphabetical tie and a zero-match case, and verify duplicate mapping rows for one NUS code do not raise its rank.
+- [X] T035 [US1] Change the sort key in `backend/app/recommendations.py` to `(-distinct_nus_module_count, university)` while retaining `partner_module_count`, `distinct_nus_module_count`, and `mapping_count` from the shared qualifying rows and including zero-count universities; make T034 pass without changing the API response fields.
+- [X] T036 [P] [US1] Update the Recommend grid in `frontend/app/globals.css` and rank classes in `frontend/components/UniversityCards.tsx` so desktop cards span six, three, and two tracks for rank #1, ranks #2–#3, and rank #4 onward respectively; make the narrow-screen layout one column with no overflow and preserve readable count labels and clickable links.
+- [X] T037 [US1] Update `frontend/tests/flows.spec.ts` to assert Recommend follows distinct NUS count order, preserves the three count labels and Compare deep link, and measures rank #2/#3 and later card widths against rank #1 at desktop viewport with grid-gap tolerance; also assert stacked cards and no horizontal overflow at a narrow viewport.
+
+## Phase 11: Recommend change validation
+
+- [X] T038 Run backend pytest, frontend lint/typecheck, and the focused Recommend Playwright flows; record commands, results, one degree where partner and NUS rank order differ, and desktop/mobile card-width evidence in `plan/validation-results.md`.
+
 ## Dependencies
 
 ```text
@@ -98,11 +113,16 @@ Setup T001–T004
   -> US1 count clarity T030
   -> US2 count clarity T031
   -> Count validation T032–T033
+  -> US1 NUS ranking T034–T035
+  -> US1 rank card widths T036
+  -> Recommend validation T037–T038
 ```
 
 US2 reuses the shared pair filter created in US1. T010 and T011 can proceed while backend catalog/API tasks are underway after setup. T023–T025 require both stories; T026 can be drafted earlier and finalized after deployment configuration is known.
 
 T028 defines the count regression before T029 changes the API. T030 and T031 depend on T029 and can be implemented in parallel because they touch separate page components. T032 requires both pages; T033 requires every repair task.
+
+T034 defines the new ranking regression before T035 changes the sort key. T036 touches separate frontend files and can proceed in parallel with T034–T035. T037 requires both the API order and layout; T038 follows all new tasks. This phase supersedes the historical partner-count rank rule without changing count meanings or Compare.
 
 ## Parallel examples
 
@@ -111,9 +131,12 @@ T028 defines the count regression before T029 changes the API. T030 and T031 dep
 - **US1:** After T014 fixes the endpoint behavior, T015 page state and T016 cards touch separate files; integrate them before the independent check.
 - **US2:** After T018 fixes the endpoint behavior, T019 URL/selectors and T021 row display touch separate files; T020 integrates their request lifecycle.
 - **Count repair:** After T029, T030 Recommend card labels and T031 Compare summary labels touch separate files and can proceed in parallel.
+- **Recommend change:** T034 backend ranking tests and T036 frontend card grid touch separate files and can proceed in parallel; T037 follows both T035 and T036.
 
 ## Implementation strategy
 
 Build a working vertical slice for US1 first: validated catalog → recommendations endpoint → degree picker → cards and deep links. This is the smallest useful MVP increment. Then add US2 using the same pair filter; Compare makes the displayed counts auditable and completes the two-page MVP. Finish with cross-page checks and Vercel deployment documentation. Do not add accounts, a database, planning advice, approval status, timetable logic, credit conversion, or JSON editing.
 
 For the count repair, rank by distinct mappable partner modules as defined in `plan/overview.md`, expose distinct NUS modules and qualifying mapping rows beside it, then verify all three numbers on Recommend and Compare. The first independently useful increment is the Toronto 9/6/9 card and matching deep link; complete the all-pair regression checks before marking the repair done.
+
+For the new Recommend increment, use distinct NUS modules as the ranking key while retaining all three count values, then apply the six-track card grid and verify desktop proportions and narrow-screen stacking. The completed count repair above is historical; `plan/featureSpecs.md` now defines the active ranking and layout acceptance rules.

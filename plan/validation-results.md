@@ -53,6 +53,36 @@ Count evidence from the catalog and both endpoints:
 - Business Analytics–University of Western Australia, The: **19 mappable partner modules**, **11 distinct NUS modules**, **22 mapping rows**, matching the required 19-partner/22-row regression example.
 - The new Playwright scenario selects Artificial Intelligence by keyboard, asserts Toronto is rank #1 with the 9/6/9 card labels, follows View Mappings, checks the 9/6/9 Compare summary and nine rows, then selects the zero-count partner and checks the 0/0/0 summary and empty state.
 
+## NUS ranking and card-size validation
+
+T038 was run on 2026-10-20 after T034–T037. No API response fields changed; only the ordering and card layout changed.
+
+| Check | Result |
+| --- | --- |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache uv run --directory backend pytest -q` | 8 passed; one upstream Starlette `httpx` deprecation warning |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache uv run --directory backend ruff check .` | Passed |
+| `npm run lint --prefix frontend` | Passed |
+| `npm run typecheck --prefix frontend` | Passed |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache npm run test:e2e --prefix frontend` | 9 passed in Chromium |
+
+Ranking evidence:
+
+- Business Analytics rank order differs between the old partner-count key and the active NUS-count key. Partner order is Western Australia (19), Toronto (18), Korea (17), Yonsei (10), Kyoto (2); NUS order is Korea (11), Western Australia (11), Toronto (9), Yonsei (5), Kyoto (2). The Korea/Western Australia tie at 11 resolves by display name, and the Recommendation API returns that order.
+- Information Security also differs: NUS order is Western Australia (6), Toronto (5), Korea (4), Yonsei (2), Kyoto (1), while partner order is Toronto (7), Western Australia (6), Korea (5), Yonsei (3), Kyoto (1).
+- The synthetic regression fixture proves the keys oppose each other: partner counts rank A first while distinct NUS counts rank B, C, then A. Three mapping rows for one NUS code leave that partner's NUS count at 2, and a zero-match partner stays last.
+- Artificial Intelligence and Computer Science retain their previous card order because NUS and partner counts agree for those degrees.
+
+Card-size evidence from the Playwright Recommend scenario at the 1280×720 desktop viewport (content width 1052 px with a 16 px grid gap):
+
+| Rank | Width | Share of rank #1 |
+| --- | --- | --- |
+| #1 | 1052.0 px | 1.000 |
+| #2 | 518.0 px | 0.492 |
+| #3 | 518.0 px | 0.492 |
+| #4 | 340.0 px | 0.323 |
+
+Ranks #2 and #3 share a row. At the 390×844 narrow viewport all five cards are 342.0 px wide at x = 24 and stack in rank order; the document has no horizontal overflow. Rank #1 remains Korea University with 17 mappable partner modules, 11 distinct NUS modules, and 18 mappings, and its View Mappings link targets the encoded Compare deep link.
+
 ## Dependency note
 
 Next.js was updated to 16.4.2 after npm audit identified a critical issue in 16.2.0. The remaining five npm audit high findings are in the development-only `eslint-config-next` dependency chain (`fast-glob`, `micromatch`, and `braces`); npm audit does not offer a compatible fix for the current Next.js lint config. Production app dependencies have no remaining audit finding in this run.
