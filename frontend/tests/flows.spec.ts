@@ -32,6 +32,36 @@ test("Recommend keyboard search, ranking, zero card, and Compare deep link", asy
   await expect(page.locator(".mapping-row")).toHaveCount(6);
 });
 
+test("Artificial Intelligence counts reconcile from Recommend to Compare", async ({ page }) => {
+  await page.goto("/");
+  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  await picker.click();
+  await picker.fill("Artificial Intelligence");
+  await picker.press("Enter");
+  const cards = page.getByRole("article");
+  await expect(cards).toHaveCount(5);
+  const toronto = cards.first();
+  await expect(toronto.locator(".rank")).toHaveText("#1");
+  await expect(toronto).toContainText("University of Toronto");
+  await expect(toronto.locator(".card-count")).toHaveText("9mappable partner modules");
+  await expect(toronto.locator(".card-secondary-counts")).toContainText("distinct NUS modules6");
+  await expect(toronto.locator(".card-secondary-counts")).toContainText("mappings9");
+  await toronto.getByRole("link", { name: /View Mappings/ }).click();
+  await expect(page).toHaveURL(/degree=Artificial%20Intelligence&uni=University%20of%20Toronto/);
+  const summary = page.locator(".result-count");
+  await expect(summary).toContainText("9 mappable partner modules");
+  await expect(summary).toContainText("6 distinct NUS modules");
+  await expect(summary).toContainText("9 mappings");
+  await expect(page.getByText(/One NUS module can have several partner mappings/)).toBeVisible();
+  await expect(page.locator(".mapping-row")).toHaveCount(9);
+  await page.getByLabel("Partner university").selectOption("University of Western Australia, The");
+  await expect(summary).toContainText("0 mappable partner modules");
+  await expect(summary).toContainText("0 distinct NUS modules");
+  await expect(summary).toContainText("0 mappings");
+  await expect(page.locator(".mapping-row")).toHaveCount(0);
+  await expect(page.getByText(/No qualifying mappings/)).toBeVisible();
+});
+
 test("clearing selection, invalid link, and zero match", async ({ page }) => {
   await page.goto("/compare?degree=bad&uni=University%20of%20Toronto");
   await expect(page.getByText(/unknown degree or partner university/)).toBeVisible();
