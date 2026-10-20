@@ -16,7 +16,7 @@ export default defineConfig({
       env: { CORS_ORIGINS: "http://127.0.0.1:18766" },
     },
     {
-      command: "npm run dev -- --webpack --hostname 127.0.0.1 --port 18766",
+      command: "npm run dev -- --hostname 127.0.0.1 --port 18766",
       url: "http://127.0.0.1:18766",
       reuseExistingServer: false,
       timeout: 30000,
