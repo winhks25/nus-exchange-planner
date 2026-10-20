@@ -21,12 +21,18 @@ def test_current_catalog_and_consistency():
     client = TestClient(create_app())
     assert len(catalog.degrees) == 6
     assert len(catalog.universities) == 5
+    partner_order_differs = False
     for degree in catalog.degrees:
         rankings = rank_universities(catalog, degree.name)
         assert len(rankings) == 5
         assert rankings == sorted(
+            rankings, key=lambda item: (-item.distinct_nus_module_count, item.university)
+        )
+        partner_order = sorted(
             rankings, key=lambda item: (-item.partner_module_count, item.university)
         )
+        if [item.university for item in rankings] != [item.university for item in partner_order]:
+            partner_order_differs = True
         recommendations_response = client.get(
             "/api/v1/recommendations", params={"degree": degree.name}
         )
@@ -62,6 +68,7 @@ def test_current_catalog_and_consistency():
         == (0, 0, 0)
         for item in rank_universities(catalog, "Computer Science")
     )
+    assert partner_order_differs, "expected a degree whose NUS and partner rank orders differ"
 
     toronto = client.get(
         "/api/v1/mappings",
@@ -146,11 +153,49 @@ def test_partner_code_deduplication_ties_and_zero_pairs(tmp_path: Path):
         }))
     catalog = load_catalog(data, manifest)
     ranked = rank_universities(catalog, "Test")
-    assert [item.university for item in ranked] == ["C", "A", "B", "Z"]
+    assert [item.university for item in ranked] == ["A", "B", "C", "Z"]
     assert [(item.partner_module_count, item.distinct_nus_module_count, item.mapping_count)
-            for item in ranked] == [(2, 1, 2), (1, 1, 2), (1, 1, 1), (0, 0, 0)]
+            for item in ranked] == [(1, 1, 2), (1, 1, 1), (2, 1, 2), (0, 0, 0)]
     client = TestClient(create_app(data, manifest))
     assert client.get("/api/v1/mappings", params={"degree": "Test", "uni": "Z"}).json() == {
         "degree": "Test", "university": "Z", "partner_module_count": 0,
         "distinct_nus_module_count": 0, "mappings": [],
     }
+
+
+def test_nus_ranking_opposes_partner_count_and_dedupes_duplicate_rows(tmp_path: Path):
+    data = tmp_path / "data"
+    (data / "majors").mkdir(parents=True)
+    (data / "mapping" / "japan").mkdir(parents=True)
+    manifest = tmp_path / "manifest.json"
+    files = ["majors/one.json"] + [f"mapping/japan/{name}.json" for name in ("a", "b", "c", "z")]
+    manifest.write_text(json.dumps({"files": files}))
+    (data / "majors" / "one.json").write_text(json.dumps({
+        "majors": [{
+            "name": "Test", "degree": "Full title",
+            "required": ["CS2102", "CS2103", "CS2104", "CS2105"],
+        }]
+    }))
+    rows_by_partner = {
+        "A": [("CS2102", "P1"), ("CS2102", "P2"), ("CS2102", "P3")],
+        "B": [("CS2103", "Q1"), ("CS2103", "Q2"), ("CS2104", "Q3")],
+        "C": [("CS2103", "R1"), ("CS2105", "R2")],
+        "Z": [],
+    }
+    for name, pairs in rows_by_partner.items():
+        rows = [
+            {"nus_course": {"code": nus}, "partner_course": {"code": partner}}
+            for nus, partner in pairs
+        ]
+        (data / "mapping" / "japan" / f"{name.lower()}.json").write_text(json.dumps({
+            "partner_university": {"name": name}, "mapping_count": 999, "mappings": rows
+        }))
+    catalog = load_catalog(data, manifest)
+    ranked = rank_universities(catalog, "Test")
+    assert [item.university for item in ranked] == ["B", "C", "A", "Z"]
+    assert [(item.partner_module_count, item.distinct_nus_module_count, item.mapping_count)
+            for item in ranked] == [(3, 2, 3), (2, 2, 2), (3, 1, 3), (0, 0, 0)]
+    partner_order = sorted(
+        ranked, key=lambda item: (-item.partner_module_count, item.university)
+    )
+    assert [item.university for item in partner_order] == ["A", "B", "C", "Z"]
