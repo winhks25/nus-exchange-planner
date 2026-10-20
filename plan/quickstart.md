@@ -29,7 +29,7 @@ The implementation should provide corresponding `uv run pytest`, `npm run lint`,
 1. Focus the degree picker: all six SoC degrees appear. Type a substring of a major or full title; keyboard navigation and Enter select it. Escape closes without changing selection.
 2. Select Computer Science. Every partner appears, sorted by count then name; zero-count partners remain clickable. The top partner has the prominent card.
 3. Open any card's View Mappings. `/compare` contains encoded `degree` and `uni` query parameters, both pickers are preselected, and rows show NUS code/name/4 units and partner fields from source.
-4. Count distinct NUS codes on Compare and verify it equals the originating card count. Repeated NUS codes may have multiple rows.
+4. Verify each card's partner-module, NUS-module, and mapping counts match Compare's distinct partner codes, distinct NUS codes, and row count. Artificial Intelligence at Toronto is 9/6/9; Business Analytics at Western Australia is 19 partner modules across 22 rows. Repeated course codes may have multiple rows.
 5. Clear or invalidate either picker; old results disappear immediately. A valid pair with no mappings shows the empty state and a route back to Recommend.
 6. Load `/compare` with invalid query values; selectors remain empty as appropriate and a note explains the invalid link.
 7. Temporarily remove or corrupt a data file in a local test copy; API returns 503 and the UI shows an error without partial cards or rows. Restore the file.

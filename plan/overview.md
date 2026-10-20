@@ -6,12 +6,12 @@ An open source web app for NUS students planning exchange.
 
 It answers two questions:
 
-1. "Which partner universities have the most modules that map to my degree programme?" — answered by the **Recommend** page.
+1. "Which partner universities have the most partner modules that map to my degree programme?" — answered by the **Recommend** page.
 2. "Which NUS modules map to which modules at this partner university?" — answered by the **Compare** page.
 
 ## The two pages
 
-- **Recommend** (`/`): the student picks their degree programme. The app ranks every partner university by the number of the degree's modules that have at least one mapping there.
+- **Recommend** (`/`): the student picks their degree programme. The app ranks every partner university by the number of distinct partner modules that map to a module in that degree. Cards also show the distinct NUS modules and mapping rows behind the result.
 - **Compare** (`/compare`): the student picks a degree and a partner university. The app lists every mapping between them, one per row (NUS module on the left, partner module on the right).
 
 ## Data for the MVP

@@ -16,7 +16,7 @@ The MVP persists only source JSON. API models are read-only projections.
 | --- | --- | --- |
 | DegreeCourseSet | degree major name, unique uppercase course codes | Regex `(?<![A-Za-z0-9])[A-Z]{2,3}[0-9]{4}[A-Z]?(?![A-Za-z0-9])`, applied case-insensitively to list strings; normalize matches to uppercase. |
 | PairMappings | degree name, university name, mapping rows | Keep all mappings whose normalized NUS code is in DegreeCourseSet. Stable sort by NUS code; ties retain file order. |
-| UniversityRanking | degree name, university name, country, module count | Count distinct NUS codes in PairMappings. Include zero counts. Sort descending count, then ascending university display name. |
+| UniversityRanking | degree name, university name, country, partner module count, NUS module count, mapping count | Count distinct normalized partner codes, distinct normalized NUS codes, and all rows in PairMappings. Include zero counts. Sort descending partner module count, then ascending university display name. Never use source `mapping_count`. |
 
 ## Display rules
 

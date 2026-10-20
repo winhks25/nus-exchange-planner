@@ -2,7 +2,9 @@
 
 Source documents: `plan/featureSpecs.md`, `plan/implementation-plan.md`, `plan/data-model.md`, `plan/contracts/openapi.yaml`, and `plan/quickstart.md`.
 
-This checkout has no `.specify/` directory, so the Spec Kit setup script and template are unavailable. This file follows the specified phase and checklist format under the existing `plan/` directory. The spec defines two user stories, ordered by page priority: **US1 Recommend** and **US2 Compare**. The spec does not request TDD or automated test tasks; independent checks below are acceptance criteria. Add the automated checks described in the implementation plan during implementation if desired.
+This checkout has no `.specify/` directory, so the Spec Kit setup script and template are unavailable. This file follows the specified phase and checklist format under the existing `plan/` directory. The spec defines two user stories, ordered by page priority: **US1 Recommend** and **US2 Compare**. The original MVP spec did not request TDD tasks; the count repair explicitly requires regression checks in T028 and T032.
+
+T001–T027 document the completed MVP implementation. The count repair in T028–T033 supersedes the old distinct-NUS ranking metric described in completed T013 and its original acceptance checks; the completed tasks remain as implementation history. The revised spec explicitly requires count regression checks.
 
 ## Phase 1: Setup
 
@@ -56,6 +58,34 @@ Complete before either user story. These tasks establish one validated dataset a
 - [X] T026 Document exact local run commands, Vercel backend-first deployment, repository-root backend project, `frontend/` frontend project, API URL/CORS environment settings, preview API strategy, and data-change redeploy process in `README.md`.
 - [X] T027 Compare the generated FastAPI `/openapi.json` with `plan/contracts/openapi.yaml`, reconcile path prefixes, response fields, required query parameters, and 404/503 behavior in `backend/app/main.py` or the contract file, then record the result in `plan/validation-results.md`.
 
+## Phase 6: Foundational count consistency repair
+
+Complete before the new card and Compare labels. This phase corrects the ranking metric to distinct partner modules and makes all three counts available from the same qualifying pair filter.
+
+- [X] T028 Add regression assertions in `backend/tests/test_catalog.py` and `backend/tests/test_contract.py` for all three filtered counts, partner-count ranking and tie order, all current degree–university pairs, duplicate partner-code rows, and zero-match pairs; assert Artificial Intelligence–Toronto is 9 partner/6 NUS/9 rows and Business Analytics–Western Australia is 19 partner/22 rows; require the revised fields in the API contract comparison.
+- [X] T029 Replace the ambiguous recommendation `module_count` with `partner_module_count` and add `distinct_nus_module_count` and `mapping_count` in `backend/app/models.py`, `backend/app/recommendations.py`, `plan/contracts/openapi.yaml`, and `frontend/lib/types.ts`; add `partner_module_count` to Compare in `backend/app/models.py` and `backend/app/main.py`; calculate distinct uppercase partner codes, distinct uppercase NUS codes, and `len(pair_mappings(...))` from qualifying rows, rank by partner count descending then name, make T028 pass, and never use source JSON `mapping_count`.
+
+## Phase 7: User Story 1 — Recommend count clarity (P1)
+
+**Goal:** A student sees the actual number of distinct mappable partner modules and can distinguish it from NUS modules and mapping entries before opening Compare.
+
+**Independent check:** Select Artificial Intelligence on `/`; the University of Toronto card shows 9 mappable partner modules, 6 distinct NUS modules, and 9 mappings with unambiguous labels. Its place in the ranking follows the partner-module count. A zero-match card shows 0 for all three.
+
+- [X] T030 [US1] Update `frontend/components/UniversityCards.tsx` and `frontend/app/globals.css` to display `partner_module_count` as the primary “mappable partner modules” value, with `distinct_nus_module_count` and `mapping_count` as separately labeled secondary values on every card, including zero-count cards and the prominent first card.
+
+## Phase 8: User Story 2 — Compare count clarity (P2)
+
+**Goal:** A student can reconcile the partner-module, NUS-module, and mapping-row counts with the Compare list.
+
+**Independent check:** Open the Toronto card's View Mappings link; Compare shows 9 distinct partner modules, 6 distinct NUS modules, 9 mappings, and a short explanation of repeated course codes while all 9 rows remain visible.
+
+- [ ] T031 [US2] Update the result summary in `frontend/app/compare/page.tsx` to use the same partner-module, NUS-module, and mapping labels as Recommend and explain repeated course codes; consume the API's `partner_module_count` and `distinct_nus_module_count`, use `result.mappings.length` for the row label, and preserve every row in `frontend/components/MappingRows.tsx`.
+
+## Phase 9: Count regression validation
+
+- [ ] T032 Add a Playwright scenario in `frontend/tests/flows.spec.ts` that selects Artificial Intelligence, checks Toronto's 9 partner/6 NUS/9 mapping card labels and ranking, follows View Mappings, checks the matching Compare summary and nine visible rows, then checks a zero-count pair.
+- [ ] T033 Run the backend tests, frontend lint/typecheck, and Playwright suite; record the commands, results, the Toronto 9/6/9 evidence, and the Western Australia 19-partner/22-row evidence in `plan/validation-results.md`.
+
 ## Dependencies
 
 ```text
@@ -64,9 +94,15 @@ Setup T001–T004
   -> US1 T012–T016
   -> US2 T017–T022
   -> Polish T023–T027
+  -> Count foundation T028–T029
+  -> US1 count clarity T030
+  -> US2 count clarity T031
+  -> Count validation T032–T033
 ```
 
 US2 reuses the shared pair filter created in US1. T010 and T011 can proceed while backend catalog/API tasks are underway after setup. T023–T025 require both stories; T026 can be drafted earlier and finalized after deployment configuration is known.
+
+T028 defines the count regression before T029 changes the API. T030 and T031 depend on T029 and can be implemented in parallel because they touch separate page components. T032 requires both pages; T033 requires every repair task.
 
 ## Parallel examples
 
@@ -74,7 +110,10 @@ US2 reuses the shared pair filter created in US1. T010 and T011 can proceed whil
 - **Foundation:** After API response shapes are fixed, T010 API client and T011 combobox touch separate frontend files and can proceed alongside backend catalog work.
 - **US1:** After T014 fixes the endpoint behavior, T015 page state and T016 cards touch separate files; integrate them before the independent check.
 - **US2:** After T018 fixes the endpoint behavior, T019 URL/selectors and T021 row display touch separate files; T020 integrates their request lifecycle.
+- **Count repair:** After T029, T030 Recommend card labels and T031 Compare summary labels touch separate files and can proceed in parallel.
 
 ## Implementation strategy
 
 Build a working vertical slice for US1 first: validated catalog → recommendations endpoint → degree picker → cards and deep links. This is the smallest useful MVP increment. Then add US2 using the same pair filter; Compare makes the displayed counts auditable and completes the two-page MVP. Finish with cross-page checks and Vercel deployment documentation. Do not add accounts, a database, planning advice, approval status, timetable logic, credit conversion, or JSON editing.
+
+For the count repair, rank by distinct mappable partner modules as defined in `plan/overview.md`, expose distinct NUS modules and qualifying mapping rows beside it, then verify all three numbers on Recommend and Compare. The first independently useful increment is the Toronto 9/6/9 card and matching deep link; complete the all-pair regression checks before marking the repair done.

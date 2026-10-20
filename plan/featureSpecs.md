@@ -8,7 +8,9 @@ Companion to `plan/overview.md`. This spec is self-contained: no other doc or mo
 - **NUS module** — a module in the degree's list, identified by course code (for example, `CS2102`).
 - **Partner university** — one JSON file under `data/mapping/<country>/`. Its **country** comes from the folder name under `data/mapping/`, mapped to a display name (e.g., `korea` → "South Korea", `australia` → "Australia"). Maintain an explicit folder-name → display-name list; do not title-case the folder name automatically. Its display **name** comes from the `partner_university.name` field inside the file.
 - **Mapping** — one `mappings` entry in a mapping file.
-- **Module count** for a degree–university pair — the number of **distinct NUS module codes** in that university's mappings that appear in the degree's module list.
+- **Mappable partner module count** for a degree–university pair — the number of **distinct partner-university module codes** among qualifying mappings whose NUS code appears in the degree's module list. This is the card's primary count and ranking metric.
+- **NUS module count** for a degree–university pair — the number of **distinct NUS module codes** among those same qualifying mappings.
+- **Mapping count** for a degree–university pair — the number of qualifying mapping rows. One NUS module may have multiple partner mappings, so this can exceed the NUS module count. A partner module may also appear in multiple rows, so the mapping count can exceed the partner module count. Derive this from the filtered `mappings` array, never the source file's `mapping_count` field.
 
 ## Data rules
 
@@ -52,7 +54,7 @@ Searchable combobox.
 
 ### 3. Ranking
 
-- Rank by module count, highest first. All universities appear, including count = 0 at the bottom.
+- Rank by mappable partner module count, highest first. All universities appear, including count = 0 at the bottom.
 - Ties: sort by university display name, A → Z. (Two universities can tie at the same rank position; the name order fixes the display order.)
 
 ### 4. University cards
@@ -61,7 +63,8 @@ Each card shows:
 
 - Partner university display name.
 - Country name.
-- Module count for this degree.
+- Mappable partner module count for this degree as the primary number.
+- Distinct NUS module count and mapping count for this degree as separate secondary numbers. Label all three values explicitly so the number of rows behind View Mappings is predictable.
 - A **View Mappings** link → navigates to `/compare` with this degree and this university preselected.
 
 Layout rules:
@@ -72,7 +75,9 @@ Layout rules:
 
 ### 5. Consistency rule
 
-A card's module count must exactly equal the number of distinct NUS modules shown for the same pair in Compare, on the same dataset. Both pages compute from the same mapping data; Recommend adds nothing extra.
+A card's partner module count must equal the number of distinct partner course codes shown for the same pair in Compare. Its NUS module count must equal Compare's distinct NUS code count, and its mapping count must equal the number of Compare rows. Both pages compute from the same filtered mapping data. For Artificial Intelligence at University of Toronto, the current dataset has 9 distinct partner modules, 6 distinct NUS modules, and 9 mapping rows; three `CS3230` rows and two `CS4248` rows explain the difference. A mapping row is not necessarily a unique partner module: Business Analytics at University of Western Australia has 19 distinct partner modules across 22 rows. Zero-match pairs show 0 for all three values.
+
+Regression checks must cover the Toronto 9 partner/6 NUS/9 row example, the Western Australia 19 partner/22 row example, all current degree–university pairs, duplicate mapping rows, zero-match pairs, the API response contract, and the Recommend-to-Compare browser deep link.
 
 ## Page 2: Compare (`/compare`)
 
@@ -93,6 +98,7 @@ Show only mappings whose NUS module code appears in the selected degree's module
 - NUS module on the left, partner module on the right. Each side shows code, name, and units.
 - Sorted by NUS module code, ascending; ties keep file order.
 - A module with multiple mappings appears in multiple rows: the rows are per-mapping, not per-module.
+- Above the rows, show the distinct partner module count, distinct NUS module count, and mapping-row count with the same labels used on Recommend. Explain briefly that one NUS module can have several partner mappings and one partner module may appear in more than one mapping row.
 - Show only the fields present in the data. Details absent from the source stay blank.
 
 Units rule:
