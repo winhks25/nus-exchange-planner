@@ -17,6 +17,20 @@ def resolve(schema: dict, document: dict) -> dict:
 def test_generated_openapi_matches_contract():
     contract = yaml.safe_load((Path(__file__).resolve().parents[2] / "plan/contracts/openapi.yaml").read_text())
     generated = app.openapi()
+    recommendation_fields = {
+        "university", "country", "partner_module_count",
+        "distinct_nus_module_count", "mapping_count",
+    }
+    mapping_fields = {
+        "degree", "university", "partner_module_count",
+        "distinct_nus_module_count", "mappings",
+    }
+    recommendation_contract = contract["paths"]["/recommendations"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]["properties"]["recommendations"]["items"]
+    mapping_contract = contract["paths"]["/mappings"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]
+    assert set(recommendation_contract["required"]) == recommendation_fields
+    assert set(recommendation_contract["properties"]) == recommendation_fields
+    assert set(mapping_contract["required"]) == mapping_fields
+    assert set(mapping_contract["properties"]) == mapping_fields
     prefix = contract["servers"][0]["url"]
     for path, item in contract["paths"].items():
         actual = generated["paths"][prefix + path]["get"]
@@ -49,10 +63,13 @@ def test_generated_openapi_matches_contract():
     for model, expected in {
         "DegreeOption": {"name", "degree"},
         "UniversityOption": {"name", "country"},
-        "Recommendation": {"university", "country", "module_count"},
+        "Recommendation": recommendation_fields,
+        "MappingResponse": mapping_fields,
         "Mapping": {"nus_course", "partner_course"},
         "Course": {"code", "title", "units"},
     }.items():
         actual = generated["components"]["schemas"][model]
         assert set(actual["properties"]) == expected
+        if model in {"Recommendation", "MappingResponse"}:
+            assert set(actual["required"]) == expected
     assert generated["components"]["schemas"]["Course"]["required"] == ["code"]
