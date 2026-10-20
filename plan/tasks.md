@@ -79,7 +79,7 @@ Complete before the new card and Compare labels. This phase corrects the ranking
 
 **Independent check:** Open the Toronto card's View Mappings link; Compare shows 9 distinct partner modules, 6 distinct NUS modules, 9 mappings, and a short explanation of repeated course codes while all 9 rows remain visible.
 
-- [ ] T031 [US2] Update the result summary in `frontend/app/compare/page.tsx` to use the same partner-module, NUS-module, and mapping labels as Recommend and explain repeated course codes; consume the API's `partner_module_count` and `distinct_nus_module_count`, use `result.mappings.length` for the row label, and preserve every row in `frontend/components/MappingRows.tsx`.
+- [X] T031 [US2] Update the result summary in `frontend/app/compare/page.tsx` to use the same partner-module, NUS-module, and mapping labels as Recommend and explain repeated course codes; consume the API's `partner_module_count` and `distinct_nus_module_count`, use `result.mappings.length` for the row label, and preserve every row in `frontend/components/MappingRows.tsx`.
 
 ## Phase 9: Count regression validation
 

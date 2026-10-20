@@ -46,7 +46,13 @@ function CompareContent() {
     {note && <p role="status" className="note">{note}</p>}
     {state === "loading" && <p role="status">Loading mappings…</p>}
     {state === "error" && <p role="alert">The mapping service is unavailable. Please try again.</p>}
-    {state === "idle" && result && <section><p className="result-count">{result.distinct_nus_module_count} distinct NUS modules · {result.mappings.length} mapping rows</p>{result.mappings.length ? <MappingRows mappings={result.mappings}/> : <CompareEmptyState/>}</section>}
+    {state === "idle" && result && <section>
+      <div className="result-summary" role="group" aria-label="Mapping counts">
+        <p className="result-count"><strong>{result.partner_module_count}</strong> mappable partner modules · <strong>{result.distinct_nus_module_count}</strong> distinct NUS modules · <strong>{result.mappings.length}</strong> mappings</p>
+        <p className="result-note">One NUS module can have several partner mappings, and one partner module may appear in more than one mapping row.</p>
+      </div>
+      {result.mappings.length ? <MappingRows mappings={result.mappings}/> : <CompareEmptyState/>}
+    </section>}
   </main>;
 }
 export default function ComparePage() { return <Suspense fallback={<p>Loading choices…</p>}><CompareContent/></Suspense>; }
