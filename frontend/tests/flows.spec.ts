@@ -15,7 +15,7 @@ test("Recommend keyboard search, ranking, zero card, and Compare deep link", asy
   const cards = page.getByRole("article");
   await expect(cards).toHaveCount(5);
   await expect(cards.first()).toContainText("University of Toronto");
-  await expect(cards.first()).toContainText("3");
+  await expect(cards.first()).toContainText("6mappable modules");
   await expect(cards.filter({ hasText: "0mappable modules" })).toHaveCount(2);
   await cards.first().getByRole("link", { name: /View Mappings/ }).click();
   await expect(page).toHaveURL(/compare\?degree=Computer%20Science&uni=University%20of%20Toronto/);
