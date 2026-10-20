@@ -9,7 +9,8 @@ def pair_mappings(catalog: Catalog, degree_name: str, university_name: str) -> t
     if degree is None or university is None:
         raise KeyError("Unknown degree or university")
     return tuple(
-        row for row in university.mappings
+        row
+        for row in university.mappings
         if normalized_course_code(row.nus_course.code) in degree.codes
     )
 

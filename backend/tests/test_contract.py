@@ -15,18 +15,30 @@ def resolve(schema: dict, document: dict) -> dict:
 
 
 def test_generated_openapi_matches_contract():
-    contract = yaml.safe_load((Path(__file__).resolve().parents[2] / "plan/contracts/openapi.yaml").read_text())
+    contract = yaml.safe_load(
+        (Path(__file__).resolve().parents[2] / "plan/contracts/openapi.yaml").read_text()
+    )
     generated = app.openapi()
     recommendation_fields = {
-        "university", "country", "partner_module_count",
-        "distinct_nus_module_count", "mapping_count",
+        "university",
+        "country",
+        "partner_module_count",
+        "distinct_nus_module_count",
+        "mapping_count",
     }
     mapping_fields = {
-        "degree", "university", "partner_module_count",
-        "distinct_nus_module_count", "mappings",
+        "degree",
+        "university",
+        "partner_module_count",
+        "distinct_nus_module_count",
+        "mappings",
     }
-    recommendation_contract = contract["paths"]["/recommendations"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]["properties"]["recommendations"]["items"]
-    mapping_contract = contract["paths"]["/mappings"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]
+    recommendation_contract = contract["paths"]["/recommendations"]["get"]["responses"]["200"][
+        "content"
+    ]["application/json"]["schema"]["properties"]["recommendations"]["items"]
+    mapping_contract = contract["paths"]["/mappings"]["get"]["responses"]["200"]["content"][
+        "application/json"
+    ]["schema"]
     assert set(recommendation_contract["required"]) == recommendation_fields
     assert set(recommendation_contract["properties"]) == recommendation_fields
     assert set(mapping_contract["required"]) == mapping_fields
@@ -41,23 +53,27 @@ def test_generated_openapi_matches_contract():
         }
         for parameter in specified.get("parameters", []):
             assert any(
-                p["name"] == parameter["name"]
-                and p["in"] == "query"
-                and p["required"]
+                p["name"] == parameter["name"] and p["in"] == "query" and p["required"]
                 for p in actual["parameters"]
             )
         for status, response in specified["responses"].items():
             assert status in actual["responses"]
             if status == "200":
                 expected = response["content"]["application/json"]["schema"]
-                got = resolve(actual["responses"][status]["content"]["application/json"]["schema"], generated)
+                got = resolve(
+                    actual["responses"][status]["content"]["application/json"]["schema"], generated
+                )
                 assert set(got["required"]) == set(expected["required"])
                 assert set(got["properties"]) == set(expected["properties"])
             elif status in {"404", "503"}:
-                got = resolve(actual["responses"][status]["content"]["application/json"]["schema"], generated)
+                got = resolve(
+                    actual["responses"][status]["content"]["application/json"]["schema"], generated
+                )
                 assert "detail" in got["required"]
             elif status == "422":
-                got = resolve(actual["responses"][status]["content"]["application/json"]["schema"], generated)
+                got = resolve(
+                    actual["responses"][status]["content"]["application/json"]["schema"], generated
+                )
                 assert "detail" in got["properties"]
 
     for model, expected in {

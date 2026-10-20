@@ -43,10 +43,46 @@ def write_manifest(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> No
     manifest.write_text(json.dumps({"files": discover_files(data_root)}, indent=2) + "\n")
 
 
+def _parse_degree(item: dict) -> Degree:
+    name, title = item["name"], item["degree"]
+    if (
+        not isinstance(name, str)
+        or not name.strip()
+        or not isinstance(title, str)
+        or not title.strip()
+    ):
+        raise ValueError("Degree name and full title are required")
+    return Degree(name=name, degree=title, codes=extract_course_codes(item))
+
+
+def _parse_university(raw: object, relative: str) -> University:
+    country_key = Path(relative).parts[1]
+    if country_key not in COUNTRIES:
+        raise ValueError(f"Unknown country folder: {country_key}")
+
+    source = SourceUniversity.model_validate(raw)
+    name = source.partner_university["name"]
+    if not name.strip():
+        raise ValueError(f"Blank or duplicate university: {name}")
+
+    valid_mappings = []
+    for mapping in source.mappings:
+        if normalized_course_code(mapping.nus_course.code) is None:
+            LOG.warning("Skipping invalid NUS code %r in %s", mapping.nus_course.code, relative)
+            continue
+        valid_mappings.append(mapping)
+
+    return University(name=name, country=COUNTRIES[country_key], mappings=tuple(valid_mappings))
+
+
 def load_catalog(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> Catalog:
     try:
         expected = json.loads(manifest.read_text())["files"]
-        if not isinstance(expected, list) or not expected or any(not isinstance(p, str) for p in expected):
+        if (
+            not isinstance(expected, list)
+            or not expected
+            or any(not isinstance(p, str) for p in expected)
+        ):
             raise ValueError("Invalid expected-file manifest")
         actual = discover_files(data_root)
         if sorted(expected) != actual:
@@ -62,29 +98,17 @@ def load_catalog(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> Cata
             if relative.startswith("majors/"):
                 source = SourceMajors.model_validate(raw)
                 for item in source.majors:
-                    name, title = item["name"], item["degree"]
-                    if not isinstance(name, str) or not name.strip() or not isinstance(title, str) or not title.strip():
-                        raise ValueError("Degree name and full title are required")
-                    if name in degree_names:
-                        raise ValueError(f"Duplicate degree: {name}")
-                    degree_names.add(name)
-                    degrees.append(Degree(name=name, degree=title, codes=extract_course_codes(item)))
+                    degree = _parse_degree(item)
+                    if degree.name in degree_names:
+                        raise ValueError(f"Duplicate degree: {degree.name}")
+                    degree_names.add(degree.name)
+                    degrees.append(degree)
             elif relative.startswith("mapping/"):
-                country_key = Path(relative).parts[1]
-                if country_key not in COUNTRIES:
-                    raise ValueError(f"Unknown country folder: {country_key}")
-                source = SourceUniversity.model_validate(raw)
-                name = source.partner_university["name"]
-                if not name.strip() or name in university_names:
-                    raise ValueError(f"Blank or duplicate university: {name}")
-                university_names.add(name)
-                valid = []
-                for mapping in source.mappings:
-                    if normalized_course_code(mapping.nus_course.code) is None:
-                        LOG.warning("Skipping invalid NUS code %r in %s", mapping.nus_course.code, relative)
-                        continue
-                    valid.append(mapping)
-                universities.append(University(name=name, country=COUNTRIES[country_key], mappings=tuple(valid)))
+                university = _parse_university(raw, relative)
+                if university.name in university_names:
+                    raise ValueError(f"Blank or duplicate university: {university.name}")
+                university_names.add(university.name)
+                universities.append(university)
             else:
                 raise ValueError(f"Unexpected source path: {relative}")
         if not degrees or not universities:
