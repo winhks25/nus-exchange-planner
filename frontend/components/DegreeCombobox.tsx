@@ -1,11 +1,11 @@
 "use client";
-import TypeableCombobox from "@/components/TypeableCombobox";
+import TypableDropdown from "@/components/ui/typable-dropdown";
 import type { Degree } from "@/lib/types";
 
 type Props = { degrees: Degree[]; selected: Degree | null; onSelect: (degree: Degree | null) => void; label?: string };
 
 export default function DegreeCombobox({ degrees, selected, onSelect, label = "Degree programme" }: Props) {
-  return <TypeableCombobox
+  return <TypableDropdown
     options={degrees}
     value={selected}
     onSelect={onSelect}

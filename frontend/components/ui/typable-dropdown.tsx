@@ -2,7 +2,7 @@
 import { useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 
-export type TypeableComboboxProps<T> = {
+export type TypableDropdownProps<T> = {
   options: T[];
   value: T | null;
   onSelect: (value: T | null) => void;
@@ -14,7 +14,7 @@ export type TypeableComboboxProps<T> = {
   emptyMessage?: string;
 };
 
-export default function TypeableCombobox<T>({
+export default function TypableDropdown<T>({
   options,
   value,
   onSelect,
@@ -24,7 +24,7 @@ export default function TypeableCombobox<T>({
   getOptionValue,
   renderOption,
   emptyMessage = "No matching options.",
-}: TypeableComboboxProps<T>) {
+}: TypableDropdownProps<T>) {
   const id = useId().replace(/:/g, "");
   const inputId = `${id}-input`;
   const labelId = `${id}-label`;
