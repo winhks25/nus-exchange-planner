@@ -15,8 +15,15 @@ test("Recommend keyboard search, ranking, zero card, and Compare deep link", asy
   const cards = page.getByRole("article");
   await expect(cards).toHaveCount(5);
   await expect(cards.first()).toContainText("University of Toronto");
-  await expect(cards.first()).toContainText("6mappable modules");
-  await expect(cards.filter({ hasText: "0mappable modules" })).toHaveCount(2);
+  await expect(cards.first().locator(".card-count")).toHaveText("6mappable partner modules");
+  await expect(cards.first().locator(".card-secondary-counts")).toContainText("distinct NUS modules3");
+  await expect(cards.first().locator(".card-secondary-counts")).toContainText("mappings6");
+  const zeroCards = cards.filter({ hasText: "0mappable partner modules" });
+  await expect(zeroCards).toHaveCount(2);
+  for (const card of await zeroCards.all()) {
+    await expect(card.locator(".card-secondary-counts")).toContainText("distinct NUS modules0");
+    await expect(card.locator(".card-secondary-counts")).toContainText("mappings0");
+  }
   await cards.first().getByRole("link", { name: /View Mappings/ }).click();
   await expect(page).toHaveURL(/compare\?degree=Computer%20Science&uni=University%20of%20Toronto/);
   await expect(page.getByRole("combobox", { name: "Degree programme" })).toHaveValue("Computer Science");
@@ -67,7 +74,7 @@ test("keyboard boundaries, Escape, and zero-count navigation", async ({ page }) 
   await expect(picker).toHaveValue("Computer Science");
   await expect(picker).toHaveAttribute("aria-expanded", "false");
   const zero = page.getByRole("article").filter({ hasText: "Yonsei University" });
-  await expect(zero).toContainText("0mappable modules");
+  await expect(zero.locator(".card-count")).toHaveText("0mappable partner modules");
   await zero.getByRole("link", { name: /View Mappings/ }).click();
   await expect(page.getByText(/No qualifying mappings/)).toBeVisible();
 });
