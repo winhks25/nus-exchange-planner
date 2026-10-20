@@ -16,4 +16,4 @@ def rank_universities(catalog: Catalog, degree_name: str) -> list[Recommendation
             distinct_nus_module_count=len({row.nus_course.code.upper() for row in rows}),
             mapping_count=len(rows),
         ))
-    return sorted(ranked, key=lambda item: (-item.partner_module_count, item.university))
+    return sorted(ranked, key=lambda item: (-item.distinct_nus_module_count, item.university))
