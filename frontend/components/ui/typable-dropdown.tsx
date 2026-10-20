@@ -1,4 +1,5 @@
 "use client";
+
 import { useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 
@@ -35,7 +36,10 @@ export default function TypableDropdown<T>({
   const [active, setActive] = useState(-1);
   const committed = useRef<T | null>(value);
   const filtered = useMemo(
-    () => options.filter(option => searchText(option).toLowerCase().includes(filter.toLowerCase())),
+    () =>
+      options.filter(option =>
+        searchText(option).toLowerCase().includes(filter.toLowerCase())
+      ),
     [options, searchText, filter]
   );
   const displayed = input ?? (value ? getOptionValue(value) : "");
@@ -64,7 +68,9 @@ export default function TypableDropdown<T>({
 
   function keyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Escape") {
-      if (input !== null) onSelect(committed.current);
+      if (input !== null) {
+        onSelect(committed.current);
+      }
       setInput(null);
       setFilter("");
       close();
@@ -96,13 +102,17 @@ export default function TypableDropdown<T>({
     }
     if (event.key === "Enter" && open) {
       event.preventDefault();
-      if (filtered.length) choose(filtered[active >= 0 ? active : 0]);
+      if (filtered.length) {
+        choose(filtered[active >= 0 ? active : 0]);
+      }
     }
   }
 
   return (
     <div className="combo-wrap">
-      <label id={labelId} htmlFor={inputId}>{label}</label>
+      <label id={labelId} htmlFor={inputId}>
+        {label}
+      </label>
       <Input
         id={inputId}
         role="combobox"
@@ -128,23 +138,29 @@ export default function TypableDropdown<T>({
         }}
         onChange={event => change(event.target.value)}
         onKeyDown={keyDown}
-        onBlur={() => { window.setTimeout(close, 100); }}
+        onBlur={() => {
+          window.setTimeout(close, 100);
+        }}
       />
       {open && (
         <div id={listId} role="listbox" aria-labelledby={labelId} className="combo-list">
-          {filtered.length ? filtered.map((option, index) => (
-            <div
-              key={`${index}-${getOptionValue(option)}`}
-              id={`${id}-option-${index}`}
-              role="option"
-              aria-selected={index === active}
-              className={index === active ? "active" : ""}
-              onMouseDown={event => event.preventDefault()}
-              onClick={() => choose(option)}
-            >
-              {renderOption(option)}
-            </div>
-          )) : <p className="no-match">{emptyMessage}</p>}
+          {filtered.length ? (
+            filtered.map((option, index) => (
+              <div
+                key={`${index}-${getOptionValue(option)}`}
+                id={`${id}-option-${index}`}
+                role="option"
+                aria-selected={index === active}
+                className={index === active ? "active" : ""}
+                onMouseDown={event => event.preventDefault()}
+                onClick={() => choose(option)}
+              >
+                {renderOption(option)}
+              </div>
+            ))
+          ) : (
+            <p className="no-match">{emptyMessage}</p>
+          )}
         </div>
       )}
     </div>
