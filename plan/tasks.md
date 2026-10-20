@@ -4,7 +4,7 @@ Source documents: `plan/featureSpecs.md`, `plan/implementation-plan.md`, `plan/d
 
 This checkout has no `.specify/` directory, so the Spec Kit setup script and template are unavailable. This file follows the specified phase and checklist format under the existing `plan/` directory. The spec defines two user stories, ordered by page priority: **US1 Recommend** and **US2 Compare**. The original MVP spec did not request TDD tasks; the count repair explicitly requires regression checks in T028 and T032.
 
-T001–T027 document the completed MVP implementation. T028–T033 document the completed count repair. The new Recommend change in T034–T038 supersedes partner-count ranking in completed T028–T029 and the original compact-grid layout in completed T016; completed tasks remain as implementation history. The revised spec explicitly requires ranking and layout regression checks.
+T001–T027 document the completed MVP implementation. T028–T033 document the completed count repair. T034–T038 document the completed Recommend ranking and layout change; these supersede partner-count ranking in completed T028–T029 and the original compact-grid layout in completed T016. Completed tasks remain as implementation history. T039–T052 are the pending frontend component work requested after those changes. The existing spec explicitly requires browser regression checks; T039 updates it for the new picker and card requirements.
 
 ## Phase 1: Setup
 
@@ -101,6 +101,45 @@ Complete before the new card and Compare labels. This phase corrects the ranking
 
 - [X] T038 Run backend pytest, frontend lint/typecheck, and the focused Recommend Playwright flows; record commands, results, one degree where partner and NUS rank order differ, and desktop/mobile card-width evidence in `plan/validation-results.md`.
 
+## Phase 12: Setup — shadcn/ui and updated requirements
+
+- [X] T039 Update `plan/featureSpecs.md` and `plan/implementation-plan.md` to require a visible rank number, prominent university name, country, distinct NUS and distinct partner module counts, and a **View Mapping** action on every Recommend card; specify a shared typable picker for both degree fields and the Compare partner field, shadcn/ui Base UI Card for university and mapping cards, and preservation of the existing mapping-row count, ranking, URL, and responsive rules.
+- [X] T040 Configure shadcn/ui for the existing Next.js app using the Base UI variant in `frontend/components.json`, `frontend/package.json`, `frontend/package-lock.json`, `frontend/postcss.config.mjs`, and `frontend/app/globals.css`: add the required Tailwind CSS pipeline and theme tokens while preserving the existing `@/*` alias, six-track card layout, and narrow-screen behavior; document the chosen setup in `plan/research.md`.
+
+## Phase 13: Foundation — reusable frontend primitives
+
+Complete before either new story phase. Keep `frontend/components/ui/` for reusable shadcn primitives and `frontend/components/` for domain components.
+
+- [X] T041 [P] Add the shadcn/ui Base UI `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter` primitives in `frontend/components/ui/card.tsx`, plus the shadcn `Button` and `Input` primitives in `frontend/components/ui/button.tsx` and `frontend/components/ui/input.tsx`; add the shared class-name utility in `frontend/lib/utils.ts` and keep the installed variants identifiable as shadcn components.
+- [X] T042 Build a controlled, generic typable picker in `frontend/components/TypeableCombobox.tsx` using the shared `Input`: accept typed options, value, label, placeholder, search text, display content, and empty message; support click/focus to show all options, case-insensitive filtering, mouse selection, clearing, ArrowUp/Down, Home/End, Enter, Escape, `aria-activedescendant`, and a labeled listbox without selecting unmatched text.
+- [X] T043 Refactor `frontend/components/DegreeCombobox.tsx` into a thin adapter over `frontend/components/TypeableCombobox.tsx`, preserving the major-name stored value, major/full-degree search, full title in each option, exact no-match message, and existing selection callback used by both pages.
+
+## Phase 14: User Story 1 — complete Recommend university cards (P1)
+
+**Goal:** Every ranked university card uses shadcn/ui Card and clearly presents the rank, large university name, country, distinct NUS module count, distinct partner module count, mapping-row count, and View Mapping action.
+
+**Independent check:** Select Artificial Intelligence on `/`. Toronto appears at rank #1 with 6 distinct NUS modules, 9 distinct partner modules, and 9 mappings. All five cards expose the same fields, including zero-count cards; View Mapping opens the encoded Compare deep link. Desktop rank widths and narrow-screen stacking remain intact.
+
+- [ ] T044 [US1] Extract one reusable `UniversityCard` in `frontend/components/UniversityCard.tsx` composed from `frontend/components/ui/card.tsx` and a Button-styled Next.js link: show `#<position>`, a visibly larger `CardTitle` for the university name, country, separately labeled `distinct_nus_module_count`, `partner_module_count`, and `mapping_count`, and the **View Mapping** action with the existing encoded `/compare?degree=...&uni=...` link.
+- [ ] T045 [US1] Make `frontend/components/UniversityCards.tsx` map API-ordered recommendations to `UniversityCard` and update `frontend/app/globals.css` so the shadcn Card keeps rank #1 full width, #2–#3 half width, later cards one-third width on desktop, and one column without overflow on narrow screens; keep card order, zero-count visibility, readable labels, and keyboard-visible action focus.
+- [ ] T046 [US1] Update Recommend assertions in `frontend/tests/flows.spec.ts` for all required university-card fields, prominent title, shadcn Card composition, exact View Mapping link/action, Toronto 9/6/9 counts, zero-count cards, and existing rank order and responsive widths.
+
+## Phase 15: User Story 2 — typable Compare partner and mapping cards (P2)
+
+**Goal:** Compare uses the same typable picker for both selectors, and each mapping row is a shadcn/ui Card while preserving the one-row-per-mapping view.
+
+**Independent check:** Open a Recommend View Mapping link; both pickers prefill from the URL. Type part of a partner name, choose it by mouse or keyboard, and confirm the URL and mapping list update. Invalid URL values and unmatched text leave the affected selector empty with a note. Every qualifying mapping remains a separate Card, including repeated NUS codes and absent partner units.
+
+- [ ] T047 [P] [US2] Create `frontend/components/UniversityCombobox.tsx` as a thin adapter over `frontend/components/TypeableCombobox.tsx`: sort partners by display name, filter partial names case-insensitively, retain the `select a partner university` placeholder, and use the university name as the selected value.
+- [ ] T048 [US2] Replace the native partner `<select>` in `frontend/app/compare/page.tsx` with `UniversityCombobox`; use the shared picker for the degree field through `DegreeCombobox`, preserve URL prefill/validation and encoded URL updates, clear stale results immediately on edits, and retain loading, empty, and service-error states.
+- [ ] T049 [P] [US2] Refactor `frontend/components/MappingRows.tsx` so each mapping is composed from shadcn `Card` sections; extract reusable course-side markup into `frontend/components/CourseDetails.tsx`, keep NUS left and partner right, preserve code/title/units, NUS display units of 4, absent partner units as blank, sorted order, and duplicate rows; adapt `frontend/app/globals.css` for small screens.
+- [ ] T050 [US2] Update Compare flows in `frontend/tests/flows.spec.ts` to select a partner by typing, mouse, and keyboard; verify URL prefill, invalid/unmatched input, stale-request clearing, zero-match state, and mapping Card rows with repeated NUS codes, source titles, and absent partner units.
+
+## Phase 16: Polish and cross-cutting validation
+
+- [ ] T051 Refactor repeated page-level presentation in `frontend/app/page.tsx`, `frontend/app/compare/page.tsx`, and `frontend/components/ResultState.tsx` into small shared components for loading/error/empty messages where the behavior is identical; remove obsolete `.card`, `.mapping-row`, and native-select styling from `frontend/app/globals.css` while retaining page-specific layout and avoiding new API/count logic in the frontend.
+- [ ] T052 Run `npm run lint`, `npm run typecheck`, `npm run build`, and the focused Playwright Recommend/Compare flows from `frontend/`; record outcomes and any accessibility or responsive limitations in `plan/validation-results.md`.
+
 ## Dependencies
 
 ```text
@@ -116,6 +155,11 @@ Setup T001–T004
   -> US1 NUS ranking T034–T035
   -> US1 rank card widths T036
   -> Recommend validation T037–T038
+  -> Frontend requirements and shadcn setup T039–T040
+  -> Shared primitives and picker T041–T043
+  -> US1 university cards T044–T046
+  -> US2 Compare picker and mapping cards T047–T050
+  -> Frontend polish and validation T051–T052
 ```
 
 US2 reuses the shared pair filter created in US1. T010 and T011 can proceed while backend catalog/API tasks are underway after setup. T023–T025 require both stories; T026 can be drafted earlier and finalized after deployment configuration is known.
@@ -123,6 +167,8 @@ US2 reuses the shared pair filter created in US1. T010 and T011 can proceed whil
 T028 defines the count regression before T029 changes the API. T030 and T031 depend on T029 and can be implemented in parallel because they touch separate page components. T032 requires both pages; T033 requires every repair task.
 
 T034 defines the new ranking regression before T035 changes the sort key. T036 touches separate frontend files and can proceed in parallel with T034–T035. T037 requires both the API order and layout; T038 follows all new tasks. This phase supersedes the historical partner-count rank rule without changing count meanings or Compare.
+
+For the pending frontend work, T039 fixes the acceptance rules and T040 installs the existing-project shadcn setup. T041 makes Card/Button/Input available; T042 builds the generic picker and T043 adapts degree selection. T044–T045 depend on Card and Button, while T046 follows the completed Recommend UI. T047 depends on T042, T048 on T043 and T047, and T049 on Card. T050 follows T048–T049. T051 follows both page phases; T052 follows every pending task. No backend or API contract change is needed because both distinct counts and the mapping-row count already exist in `frontend/lib/types.ts`.
 
 ## Parallel examples
 
@@ -132,6 +178,7 @@ T034 defines the new ranking regression before T035 changes the sort key. T036 t
 - **US2:** After T018 fixes the endpoint behavior, T019 URL/selectors and T021 row display touch separate files; T020 integrates their request lifecycle.
 - **Count repair:** After T029, T030 Recommend card labels and T031 Compare summary labels touch separate files and can proceed in parallel.
 - **Recommend change:** T034 backend ranking tests and T036 frontend card grid touch separate files and can proceed in parallel; T037 follows both T035 and T036.
+- **Frontend components:** After T040, T041 can be completed before the shared picker and either card. Once T041–T043 finish, T044 `UniversityCard` and T047 `UniversityCombobox` touch separate files and can proceed in parallel. T049 mapping cards can proceed alongside T047–T048 because it touches separate components; T046 and T050 follow their respective UI work.
 
 ## Implementation strategy
 
@@ -140,3 +187,5 @@ Build a working vertical slice for US1 first: validated catalog → recommendati
 For the count repair, rank by distinct mappable partner modules as defined in `plan/overview.md`, expose distinct NUS modules and qualifying mapping rows beside it, then verify all three numbers on Recommend and Compare. The first independently useful increment is the Toronto 9/6/9 card and matching deep link; complete the all-pair regression checks before marking the repair done.
 
 For the new Recommend increment, use distinct NUS modules as the ranking key while retaining all three count values, then apply the six-track card grid and verify desktop proportions and narrow-screen stacking. The completed count repair above is historical; `plan/featureSpecs.md` now defines the active ranking and layout acceptance rules.
+
+For the pending frontend increment, configure shadcn/ui for this existing app, build one accessible typable picker, and complete the Recommend cards first as the smallest independently useful slice. Then use the same picker in Compare and render each mapping row with shadcn Card. Finish by consolidating repeated presentation and validating both flows; keep counts and rank order sourced from the existing API.
