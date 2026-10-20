@@ -62,6 +62,52 @@ test("Artificial Intelligence counts reconcile from Recommend to Compare", async
   await expect(page.getByText(/No qualifying mappings/)).toBeVisible();
 });
 
+test("Recommend ranks by NUS modules and sizes cards by rank", async ({ page }) => {
+  await page.goto("/");
+  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  await picker.click();
+  await picker.fill("Business Analytics");
+  await picker.press("Enter");
+  const cards = page.getByRole("article");
+  await expect(cards).toHaveCount(5);
+  await expect(cards.nth(0)).toContainText("Korea University");
+  await expect(cards.nth(1)).toContainText("University of Western Australia, The");
+  await expect(cards.nth(2)).toContainText("University of Toronto");
+  await expect(cards.nth(3)).toContainText("Yonsei University");
+  await expect(cards.nth(4)).toContainText("Kyoto University");
+  await expect(cards.nth(0).locator(".rank")).toHaveText("#1");
+  await expect(cards.nth(1).locator(".rank")).toHaveText("#2");
+  await expect(cards.nth(0).locator(".card-count")).toHaveText("17mappable partner modules");
+  await expect(cards.nth(0).locator(".card-secondary-counts")).toContainText("distinct NUS modules11");
+  await expect(cards.nth(0).locator(".card-secondary-counts")).toContainText("mappings18");
+  await expect(cards.nth(0).getByRole("link", { name: /View Mappings/ })).toHaveAttribute(
+    "href", "/compare?degree=Business%20Analytics&uni=Korea%20University"
+  );
+  const boxes = await Promise.all([0, 1, 2, 3, 4].map(index => cards.nth(index).boundingBox()));
+  const [first, second, third, fourth] = boxes;
+  if (!first || !second || !third || !fourth) throw new Error("Expected card boxes");
+  expect(second.width / first.width).toBeGreaterThan(0.45);
+  expect(second.width / first.width).toBeLessThan(0.51);
+  expect(third.width / first.width).toBeGreaterThan(0.45);
+  expect(third.width / first.width).toBeLessThan(0.51);
+  expect(fourth.width / first.width).toBeGreaterThan(0.29);
+  expect(fourth.width / first.width).toBeLessThan(0.35);
+  expect(Math.abs(second.y - third.y)).toBeLessThan(1);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const narrowBoxes = await Promise.all([0, 1, 2, 3, 4].map(index => cards.nth(index).boundingBox()));
+  const narrow = narrowBoxes.filter((box): box is NonNullable<typeof box> => box !== null);
+  expect(narrow).toHaveLength(5);
+  for (const box of narrow.slice(1)) {
+    expect(Math.abs(box.x - narrow[0].x)).toBeLessThan(1);
+    expect(Math.abs(box.width - narrow[0].width)).toBeLessThan(1);
+    expect(box.y).toBeGreaterThan(narrow[0].y);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await expect(cards.nth(0)).toContainText("Korea University");
+  await expect(cards.nth(0).getByRole("link", { name: /View Mappings/ })).toBeVisible();
+});
+
 test("clearing selection, invalid link, and zero match", async ({ page }) => {
   await page.goto("/compare?degree=bad&uni=University%20of%20Toronto");
   await expect(page.getByText(/unknown degree or partner university/)).toBeVisible();
