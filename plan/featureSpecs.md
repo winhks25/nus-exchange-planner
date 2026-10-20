@@ -8,7 +8,7 @@ Companion to `plan/overview.md`. This spec is self-contained: no other doc or mo
 - **NUS module** — a module in the degree's list, identified by course code (for example, `CS2102`).
 - **Partner university** — one JSON file under `data/mapping/<country>/`. Its **country** comes from the folder name under `data/mapping/`, mapped to a display name (e.g., `korea` → "South Korea", `australia` → "Australia"). Maintain an explicit folder-name → display-name list; do not title-case the folder name automatically. Its display **name** comes from the `partner_university.name` field inside the file.
 - **Mapping** — one `mappings` entry in a mapping file.
-- **Mappable partner module count** for a degree–university pair — the number of **distinct partner-university module codes** among qualifying mappings whose NUS code appears in the degree's module list. This is the card's primary count and ranking metric.
+- **Mappable partner module count** for a degree–university pair — the number of **distinct partner-university module codes** among qualifying mappings whose NUS code appears in the degree's module list. This is the card's primary displayed count.
 - **NUS module count** for a degree–university pair — the number of **distinct NUS module codes** among those same qualifying mappings.
 - **Mapping count** for a degree–university pair — the number of qualifying mapping rows. One NUS module may have multiple partner mappings, so this can exceed the NUS module count. A partner module may also appear in multiple rows, so the mapping count can exceed the partner module count. Derive this from the filtered `mappings` array, never the source file's `mapping_count` field.
 
@@ -54,7 +54,7 @@ Searchable combobox.
 
 ### 3. Ranking
 
-- Rank by mappable partner module count, highest first. All universities appear, including count = 0 at the bottom.
+- Rank by distinct NUS module count, highest first. Count unique normalized NUS codes among qualifying mapping rows, so repeated mappings for one NUS code contribute one to the rank. All universities appear, including count = 0 at the bottom.
 - Ties: sort by university display name, A → Z. (Two universities can tie at the same rank position; the name order fixes the display order.)
 
 ### 4. University cards
@@ -69,15 +69,14 @@ Each card shows:
 
 Layout rules:
 
-- Rank #1 renders alone as a full-width prominent card.
-- All other cards (including count = 0) render in the standard compact grid.
+- At desktop width, rank #1 renders alone and spans the full card-grid width. Ranks #2 and #3 each occupy half that width on one row. Every remaining card (including count = 0) occupies one third of the rank #1 width, in rank order. On narrow screens, cards stack at full available width without overflow and keep their rank order.
 - A count = 0 card stays visible and clickable; View Mappings opens Compare's empty state for that pair.
 
 ### 5. Consistency rule
 
 A card's partner module count must equal the number of distinct partner course codes shown for the same pair in Compare. Its NUS module count must equal Compare's distinct NUS code count, and its mapping count must equal the number of Compare rows. Both pages compute from the same filtered mapping data. For Artificial Intelligence at University of Toronto, the current dataset has 9 distinct partner modules, 6 distinct NUS modules, and 9 mapping rows; three `CS3230` rows and two `CS4248` rows explain the difference. A mapping row is not necessarily a unique partner module: Business Analytics at University of Western Australia has 19 distinct partner modules across 22 rows. Zero-match pairs show 0 for all three values.
 
-Regression checks must cover the Toronto 9 partner/6 NUS/9 row example, the Western Australia 19 partner/22 row example, all current degree–university pairs, duplicate mapping rows, zero-match pairs, the API response contract, and the Recommend-to-Compare browser deep link.
+Regression checks must cover the Toronto 9 partner/6 NUS/9 row example, the Western Australia 19 partner/22 row example, all current degree–university pairs, duplicate mapping rows, zero-match pairs, NUS-count ranking with name tie breaks, the API response contract, the Recommend-to-Compare browser deep link, and the card-width proportions at desktop and narrow widths.
 
 ## Page 2: Compare (`/compare`)
 

@@ -27,7 +27,7 @@ The implementation should provide corresponding `uv run pytest`, `npm run lint`,
 ## End-to-end checks
 
 1. Focus the degree picker: all six SoC degrees appear. Type a substring of a major or full title; keyboard navigation and Enter select it. Escape closes without changing selection.
-2. Select Computer Science. Every partner appears, sorted by count then name; zero-count partners remain clickable. The top partner has the prominent card.
+2. Select Computer Science. Every partner appears, sorted by distinct NUS module count descending then name; zero-count partners remain clickable. At desktop width rank #1 spans the grid, ranks #2–#3 each span half, and later cards each span one third. At narrow width they stack without overflow.
 3. Open any card's View Mappings. `/compare` contains encoded `degree` and `uni` query parameters, both pickers are preselected, and rows show NUS code/name/4 units and partner fields from source.
 4. Verify each card's partner-module, NUS-module, and mapping counts match Compare's distinct partner codes, distinct NUS codes, and row count. Artificial Intelligence at Toronto is 9/6/9; Business Analytics at Western Australia is 19 partner modules across 22 rows. Repeated course codes may have multiple rows.
 5. Clear or invalidate either picker; old results disappear immediately. A valid pair with no mappings shows the empty state and a route back to Recommend.
