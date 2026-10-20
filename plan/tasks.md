@@ -84,7 +84,7 @@ Complete before the new card and Compare labels. This phase corrects the ranking
 ## Phase 9: Count regression validation
 
 - [X] T032 Add a Playwright scenario in `frontend/tests/flows.spec.ts` that selects Artificial Intelligence, checks Toronto's 9 partner/6 NUS/9 mapping card labels and ranking, follows View Mappings, checks the matching Compare summary and nine visible rows, then checks a zero-count pair.
-- [ ] T033 Run the backend tests, frontend lint/typecheck, and Playwright suite; record the commands, results, the Toronto 9/6/9 evidence, and the Western Australia 19-partner/22-row evidence in `plan/validation-results.md`.
+- [X] T033 Run the backend tests, frontend lint/typecheck, and Playwright suite; record the commands, results, the Toronto 9/6/9 evidence, and the Western Australia 19-partner/22-row evidence in `plan/validation-results.md`.
 
 ## Dependencies
 

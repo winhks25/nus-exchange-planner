@@ -12,7 +12,7 @@ Date: 2026-10-20 (Asia/Singapore). Local checkout; production deployment was out
 
 ## Browser scenarios
 
-`UV_CACHE_DIR=/private/tmp/nus-uv-cache npm run test:e2e --prefix frontend`: **7 passed** in Chromium on 2026-10-20. The scenarios cover initial blank Recommend, six option display, case-insensitive search, ArrowDown/Home/End/Enter/Escape and active-descendant behavior, zero-count card navigation, deep-link selection and invalid values, result clearing, empty pair, 503 service state, delayed stale Compare response, source-title preservation, and blank absent partner units. The 503 browser state uses a mocked catalog response; the Python test checks an actual malformed and missing source file against the API. The browser test uses port-isolated frontend and backend servers with matching CORS settings. Deployed-URL smoke checks in quickstart step 8 remain pending deployment.
+`UV_CACHE_DIR=/private/tmp/nus-uv-cache npm run test:e2e --prefix frontend`: **7 passed** in Chromium in the earlier run; **8 passed** after the count-clarity scenario was added on 2026-10-20 (see below). The scenarios cover initial blank Recommend, six option display, case-insensitive search, ArrowDown/Home/End/Enter/Escape and active-descendant behavior, zero-count card navigation, deep-link selection and invalid values, result clearing, empty pair, 503 service state, delayed stale Compare response, source-title preservation, and blank absent partner units. The 503 browser state uses a mocked catalog response; the Python test checks an actual malformed and missing source file against the API. The browser test uses port-isolated frontend and backend servers with matching CORS settings. Deployed-URL smoke checks in quickstart step 8 remain pending deployment.
 
 ## Checks and timing
 
@@ -32,6 +32,26 @@ The warmed figure is a local development-browser measurement, not a production l
 ## OpenAPI contract comparison
 
 `backend/tests/test_contract.py` checks the generated FastAPI schema against `plan/contracts/openapi.yaml`: the contract's `/api/v1` server prefix resolves to the generated path names; required query parameters, all response status codes, top-level and nested 200 response fields, and 404/503 `detail` bodies match. The contract now records FastAPI's generated 422 response for missing required query parameters. Optional `title` and `units` course fields stay optional in the schema and are omitted at runtime when absent. The generated schema permits null for those fields, but successful responses omit null fields through `response_model_exclude_none=True`.
+
+## Count clarity regression validation
+
+T033 was run on 2026-10-20 after T031 and T032.
+
+| Check | Result |
+| --- | --- |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache uv run --directory backend pytest -q` | 7 passed; one upstream Starlette `httpx` deprecation warning |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache uv run --directory backend ruff check .` | Passed |
+| `npm run lint --prefix frontend` | Passed |
+| `npm run typecheck --prefix frontend` | Passed |
+| `UV_CACHE_DIR=/private/tmp/nus-uv-cache npm run test:e2e --prefix frontend` | 8 passed in Chromium |
+
+Count evidence from the catalog and both endpoints:
+
+- Artificial Intelligence–University of Toronto: **9 mappable partner modules**, **6 distinct NUS modules**, **9 mapping rows**. The browser card shows all three labels and values, Compare's summary repeats them, and all nine `.mapping-row` elements remain visible. `CS3230` appears three times and `CS4248` twice, which the short summary explanation calls out.
+- Artificial Intelligence–Yonsei University: 4 partner modules, 3 NUS modules, 4 mappings.
+- Artificial Intelligence–University of Western Australia, The: 0/0/0. The Compare summary shows zero for all three values and the no-qualifying-mappings empty state appears.
+- Business Analytics–University of Western Australia, The: **19 mappable partner modules**, **11 distinct NUS modules**, **22 mapping rows**, matching the required 19-partner/22-row regression example.
+- The new Playwright scenario selects Artificial Intelligence by keyboard, asserts Toronto is rank #1 with the 9/6/9 card labels, follows View Mappings, checks the 9/6/9 Compare summary and nine rows, then selects the zero-count partner and checks the 0/0/0 summary and empty state.
 
 ## Dependency note
 
