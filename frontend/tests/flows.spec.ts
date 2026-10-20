@@ -54,7 +54,8 @@ test("Artificial Intelligence counts reconcile from Recommend to Compare", async
   await expect(summary).toContainText("9 mappings");
   await expect(page.getByText(/One NUS module can have several partner mappings/)).toBeVisible();
   await expect(page.locator(".mapping-row")).toHaveCount(9);
-  await page.getByLabel("Partner university").selectOption("University of Western Australia, The");
+  await page.getByRole("combobox", { name: "Partner university" }).fill("Western Australia");
+  await page.getByRole("combobox", { name: "Partner university" }).press("Enter");
   await expect(summary).toContainText("0 mappable partner modules");
   await expect(summary).toContainText("0 distinct NUS modules");
   await expect(summary).toContainText("0 mappings");
@@ -119,7 +120,9 @@ test("clearing selection, invalid link, and zero match", async ({ page }) => {
   await picker.fill("");
   await expect(page.locator(".mapping-row")).toHaveCount(0);
   await picker.fill("Computer Science"); await picker.press("Enter");
-  await page.getByLabel("Partner university").selectOption("Yonsei University");
+  const partner = page.getByRole("combobox", { name: "Partner university" });
+  await partner.click();
+  await page.getByRole("option", { name: /Yonsei University/ }).click();
   await expect(page.getByText(/No qualifying mappings/)).toBeVisible();
   await expect(page.getByRole("link", { name: "Back to Recommend" })).toBeVisible();
 });
@@ -162,7 +165,10 @@ test("Compare ignores a delayed response for an old pair", async ({ page }) => {
   });
   await page.goto("/compare?degree=Computer%20Science&uni=University%20of%20Toronto");
   await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
-  await page.getByLabel("Partner university").selectOption("Kyoto University");
+  const partner = page.getByRole("combobox", { name: "Partner university" });
+  await partner.fill("Kyoto");
+  await partner.press("ArrowDown");
+  await partner.press("Enter");
   await expect(page.getByText("1 distinct NUS modules")).toBeVisible();
   await page.waitForTimeout(1000);
   await expect(page.getByText("1 distinct NUS modules")).toBeVisible();

@@ -2,6 +2,7 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import DegreeCombobox from "@/components/DegreeCombobox";
+import UniversityCombobox from "@/components/UniversityCombobox";
 import MappingRows from "@/components/MappingRows";
 import CompareEmptyState from "@/components/CompareEmptyState";
 import { getCatalog, getMappings } from "@/lib/api";
@@ -42,7 +43,7 @@ function CompareContent() {
     router.replace(`/compare${next.size ? `?${next.toString()}` : ""}`, { scroll: false });
   }
   return <main><div className="hero"><p className="eyebrow">SIDE BY SIDE</p><h1>Compare module mappings.</h1><p>Explore qualifying NUS and partner courses for one degree and university.</p></div>
-    {state === "loading-catalog" ? <p role="status">Loading choices…</p> : catalog && <div className="selectors"><DegreeCombobox degrees={catalog.degrees} selected={degree} onSelect={value => update(value, university)}/><div><label htmlFor="university">Partner university</label><select id="university" value={university?.name || ""} onChange={event => update(degree, catalog.universities.find(item => item.name === event.target.value) || null)}><option value="">select a partner university</option>{[...catalog.universities].sort((a,b) => a.name.localeCompare(b.name)).map(item => <option key={item.name} value={item.name}>{item.name}</option>)}</select></div></div>}
+    {state === "loading-catalog" ? <p role="status">Loading choices…</p> : catalog && <div className="selectors"><DegreeCombobox degrees={catalog.degrees} selected={degree} onSelect={value => update(value, university)}/><UniversityCombobox universities={catalog.universities} selected={university} onSelect={value => update(degree, value)}/></div>}
     {note && <p role="status" className="note">{note}</p>}
     {state === "loading" && <p role="status">Loading mappings…</p>}
     {state === "error" && <p role="alert">The mapping service is unavailable. Please try again.</p>}
