@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Recommendation } from "@/lib/types";
 export default function UniversityCards({ degree, recommendations }: { degree: string; recommendations: Recommendation[] }) {
   return <section aria-label="Ranked partner universities" className="cards">
-    {recommendations.map((item, index) => <article className={`card ${index === 0 ? "top-card" : ""}`} key={item.university}>
+    {recommendations.map((item, index) => <article className={`card ${index === 0 ? "top-card" : index < 3 ? "half-card" : "third-card"}`} key={item.university}>
       <div className="rank">#{index + 1}</div>
       <div><h2>{item.university}</h2><p>{item.country}</p></div>
       <div className="card-count"><strong>{item.partner_module_count}</strong><span>mappable partner modules</span></div>
