@@ -10,17 +10,11 @@ Install Python 3.12+, [uv](https://docs.astral.sh/uv/), Node.js 20.9+, and npm. 
 
 ```sh
 uv sync --directory backend
-CORS_ORIGINS=http://localhost:3000 uv run --directory backend uvicorn app.main:app --reload --port 8000
-```
-
-In a second terminal:
-
-```sh
 npm ci --prefix frontend
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 npm run dev --prefix frontend
+./dev
 ```
 
-Open `http://localhost:3000` and `http://localhost:3000/compare`. The backend schema is at `http://localhost:8000/openapi.json`. Copy the `.env.example` files if you prefer persistent local variables; the example values match these commands. `CORS_ORIGINS` is a comma-separated list of exact frontend origins without trailing slashes. `NEXT_PUBLIC_API_BASE_URL` is the backend origin, without `/api/v1`.
+After the first install, run only `./dev`. It starts both servers and stops the API when the frontend exits. Open `http://localhost:3000` and `http://localhost:3000/compare`; the backend schema is at `http://localhost:8001/openapi.json`. Local settings are saved in ignored `backend/.env` and `frontend/.env.local`. Port 8001 avoids the other local server using port 8000. `CORS_ORIGINS` is a comma-separated list of exact frontend origins without trailing slashes. `NEXT_PUBLIC_API_BASE_URL` is the backend origin, without `/api/v1`.
 
 ## Checks
 

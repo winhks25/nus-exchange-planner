@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+
+cd "$(dirname "$0")"
+
+set -a
+. backend/.env
+. frontend/.env.local
+set +a
+
+uv run --directory backend uvicorn app.main:app --reload --port "$API_PORT" &
+api_pid=$!
+
+cleanup() {
+  kill "$api_pid" 2>/dev/null || true
+  wait "$api_pid" 2>/dev/null || true
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+npm run dev --prefix frontend -- --port "$FRONTEND_PORT"
