@@ -1,89 +1,145 @@
-/* Recommend-only hero: exact heading copy plus a decorative plane. */
-
-/* Reserved whitespace keeps the planned hero region instead of letting the
-   smaller source type collapse it; the picker label then starts at y370. */
+/* Positions follow the approved draggable mockup, relative to the content column. */
 .hero {
-  min-height: 296px;
+  --hero-blue: #71b6f3;
+  --illustration-outline: #a9d7fa;
+  --illustration-fill: #368bcb;
+  --map-fill: #294658;
+  container-type: inline-size;
+  font-family: var(--font-system);
 }
 
-/* Heading anchor x417/y193 at the 1888px reference canvas; source hero role
-   2.5rem weight 500 line-height 1.2. */
+.composition {
+  position: relative;
+  height: clamp(296px, 46.2cqw, 486px);
+}
+
 .heading {
-  position: absolute;
-  top: 193px;
-  left: 417px;
   margin: 0;
-  font-size: 2.5rem;
+  font: inherit;
   font-weight: 500;
   line-height: 1.2;
   color: var(--card-foreground);
+}
+
+.intro,
+.title {
+  position: absolute;
   white-space: nowrap;
 }
 
-/* Plane near x1422/y172 sized 116x115; decoration only. */
-.plane {
+.intro {
+  left: 21.06%;
+  top: 36.09%;
+  font-size: clamp(1.125rem, 5.6cqw, 3.682rem);
+  line-height: 1.1;
+}
+
+.title {
+  left: 5.72%;
+  top: 49.9%;
+  font-size: clamp(1.5rem, 8cqw, 5.26rem);
+  color: var(--hero-blue);
+}
+
+.underline {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 9px;
+}
+
+.flight,
+.destination {
   position: absolute;
-  top: 172px;
-  left: 1422px;
-  width: 116px;
-  height: 115px;
-  color: var(--card-foreground);
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
   pointer-events: none;
 }
 
-/* Fold detail uses the tracked accent token instead of the sketch blue. */
-.planeDetail {
-  stroke: var(--primary);
+.flight svg,
+.destination svg {
+  position: absolute;
+  stroke: var(--illustration-outline);
+  fill: var(--illustration-fill);
+  stroke-width: 1.2;
 }
 
-/* Below the reference canvas: narrower gaps before any overflow. */
-@media (max-width: 1556px) {
-  .plane {
-    left: auto;
-    right: 66px;
-    width: 84px;
-    height: 83px;
-  }
+.flight {
+  left: 60.71%;
+  top: 51.04%;
+  width: 23%;
+  aspect-ratio: 1 / 0.65;
+  transform: rotate(-6deg);
 }
 
-@media (min-width: 1024px) and (max-width: 1140px) {
-  /* Clear the shared rail while keeping the heading single-lined. */
-  .heading {
-    left: 305px;
-  }
+.plane {
+  right: 0;
+  top: 0;
+  width: 39%;
+  height: 58%;
+  transform: rotate(24deg);
 }
 
-@media (max-width: 1023px) {
-  .heading {
-    left: 24px;
-  }
+.flightLoop,
+.flightTail {
+  position: absolute;
+  border-color: var(--illustration-fill);
+  border-style: dashed;
+  border-width: 0;
 }
 
-/* Phones: fluid flow so the heading wraps naturally. */
-@media (max-width: 800px) {
-  .hero {
-    min-height: 0;
-    padding: 34px 0 0;
-  }
-
-  .heading {
-    position: static;
-    white-space: normal;
-  }
-
-  .plane {
-    position: static;
-    width: 72px;
-    height: 71px;
-    margin-top: 26px;
-  }
+.flightLoop {
+  left: 7%;
+  top: 27%;
+  width: 35%;
+  height: 48%;
+  border-width: 2px;
+  border-radius: 50%;
+  transform: rotate(-20deg);
 }
 
-@media (max-width: 650px) {
-  .heading {
-    font-size: 2rem;
-  }
+.flightTail {
+  left: 18%;
+  top: 30%;
+  width: 58%;
+  height: 50%;
+  border-bottom-width: 2px;
+  border-radius: 0 0 60% 50%;
+  transform: rotate(-34deg);
+}
+
+.destination {
+  left: 74.69%;
+  top: 18.18%;
+  width: 19%;
+  aspect-ratio: 1 / 0.78;
+  transform: rotate(4deg);
+}
+
+.destination .map {
+  left: 5%;
+  bottom: 0;
+  width: 90%;
+  height: 80%;
+  fill: var(--map-fill);
+  transform: skewX(-12deg);
+}
+
+.pin {
+  left: 47%;
+  top: 0;
+  width: 39%;
+  height: 65%;
+}
+
+.pin circle {
+  fill: var(--map-fill);
+}
+
+.rays {
+  position: absolute;
+  right: 0;
+  top: 10%;
+  width: 14%;
+  height: 23%;
+  border-top: 3px solid var(--illustration-fill);
+  border-right: 3px solid var(--illustration-fill);
+  transform: rotate(-25deg);
 }

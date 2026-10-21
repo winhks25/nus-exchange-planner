@@ -1,22 +1,27 @@
+import { Map, MapPin, Plane } from "lucide-react";
 import styles from "./recommend.module.css";
 
-// Recommend hero: the exact agreed heading plus a decorative paper plane.
 export default function RecommendHero() {
   return (
-    <div className={styles.hero}>
-      <h1 className={styles.heading}>Ready to study abroad?</h1>
-      <svg
-        viewBox="0 0 116 115"
-        fill="none"
-        stroke="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        className={styles.plane}
-      >
-        {/* Outlined paper plane, lucide-style send geometry at 116/115 scale. */}
-        <path d="M106 9.7 72.5 106.3 52 62.8 9.7 43.5 106 9.7Z" />
-        <path className={styles.planeDetail} d="M106 9.7 52 62.8" />
-      </svg>
+    <div className={styles.hero} data-testid="recommend-hero">
+      <div className={styles.composition}>
+        <h1 className={styles.heading}>
+          <span className={styles.intro}>Ready to</span>{" "}
+          <span className={styles.title}>Study <span className={styles.underline}>Abroad?</span></span>
+        </h1>
+
+        <div className={styles.flight} aria-hidden="true" data-testid="hero-flight">
+          <span className={styles.flightLoop} />
+          <span className={styles.flightTail} />
+          <Plane className={styles.plane} aria-hidden="true" />
+        </div>
+
+        <div className={styles.destination} aria-hidden="true" data-testid="hero-destination">
+          <Map className={styles.map} aria-hidden="true" />
+          <MapPin className={styles.pin} aria-hidden="true" />
+          <span className={styles.rays} />
+        </div>
+      </div>
     </div>
   );
 }

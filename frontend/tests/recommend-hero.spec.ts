@@ -5,7 +5,7 @@ import { catalogWith } from "./fixtures/recommendations";
 import { mockCatalog } from "./helpers/recommendation-fixtures";
 
 // Exact hero copy from the UI contract.
-const HERO_TEXT = "Ready to study abroad?";
+const HERO_TEXT = "Ready to Study Abroad?";
 
 // Old hero copy that must disappear from Recommend (main scope keeps the
 // header's brand link out of the comparison).
@@ -32,83 +32,52 @@ const compareMappings: MappingResult = {
   ],
 };
 
-test("the Recommend hero shows only the agreed heading and a decorative plane", async ({ page }) => {
+test("the approved hero uses the project font and decorative travel illustrations", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("combobox", { name: "Degree programme" })).toBeVisible();
-
-  // One h1 with the exact contracted text.
   const heading = page.getByRole("heading", { level: 1 });
   await expect(heading).toHaveCount(1);
   await expect(heading).toHaveText(HERO_TEXT);
-
-  // Old eyebrow, headline and supporting copy are gone from Recommend only.
+  expect(await computedStyle(page, "h1", "font-family")).toBe(
+    await computedStyle(page, "body", "font-family"),
+  );
+  expect(await computedStyle(page, "h1", "font-weight")).toBe("500");
+  const hero = page.getByTestId("recommend-hero");
+  expect(await hero.evaluate(el => getComputedStyle(el).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+  expect(await hero.evaluate(el => getComputedStyle(el).borderWidth)).toBe("0px");
+  for (const id of ["hero-flight", "hero-destination"]) {
+    const illustration = page.getByTestId(id);
+    await expect(illustration).toBeVisible();
+    await expect(illustration).toHaveAttribute("aria-hidden", "true");
+    expect(await illustration.evaluate(el => getComputedStyle(el).pointerEvents)).toBe("none");
+    await expect(illustration.locator("a, button, [tabindex]")).toHaveCount(0);
+  }
   for (const copy of REMOVED_COPY) {
     await expect(page.locator("main").getByText(copy, { exact: true })).toHaveCount(0);
   }
-
-  // The plane stays decorative and can never take focus.
-  const plane = page.locator("main svg").first();
-  await expect(plane).toHaveCount(1);
-  await expect(plane).toHaveAttribute("aria-hidden", "true");
-  expect(await plane.evaluate(el => el.matches("a, button, [tabindex]"))).toBe(false);
-  expect(await plane.evaluate(el => getComputedStyle(el).pointerEvents)).toBe("none");
-
-  // Source hero role sizes on desktop (tier 2.5rem/500/1.2).
-  expect(await computedStyle(page, "h1", "font-size")).toBe("40px");
-  expect(await computedStyle(page, "h1", "font-weight")).toBe("500");
-  expect(await computedStyle(page, "h1", "line-height")).toBe("48px");
 });
 
-test("the hero matches the reference anchors at 1888x1337", async ({ page }) => {
-  await page.setViewportSize({ width: 1888, height: 1337 });
-  await page.goto("/");
-  await expect(page.getByRole("combobox", { name: "Degree programme" })).toBeVisible();
-
-  const near = (actual: number, target: number, tolerance = 8) =>
-    expect(Math.abs(actual - target)).toBeLessThanOrEqual(tolerance);
-
-  // Heading anchor x417/y193 and a single line at the reference width.
-  const headingBox = await page.getByRole("heading", { level: 1 }).boundingBox();
-  near(headingBox!.x, 417);
-  near(headingBox!.y, 193);
-  near(headingBox!.height, 48);
-
-  // Plane near x1422/y172 sized 116x115.
-  const planeBox = await page.locator("main svg").first().boundingBox();
-  near(planeBox!.x, 1422);
-  near(planeBox!.y, 172);
-  near(planeBox!.width, 116);
-  near(planeBox!.height, 115);
-});
-
-test.describe("narrow viewport", () => {
-  test.use({ viewport: { width: 390, height: 844 } });
-
-  test("mobile keeps readable hero type and no horizontal overflow", async ({ page }) => {
+for (const width of [320, 390, 768, 1024, 1888]) {
+  test(`hero composition stays inside its column at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
     await page.goto("/");
-    await expect(page.getByRole("combobox", { name: "Degree programme" })).toBeVisible();
-
-    // 390px maps the hero to the 2rem source scale with natural wrapping.
-    const heading = page.getByRole("heading", { level: 1 });
-    await expect(heading).toBeVisible();
-    expect(await computedStyle(page, "h1", "font-size")).toBe("32px");
-    expect(await computedStyle(page, "h1", "font-weight")).toBe("500");
-
-    const plane = page.locator("main svg").first();
-    await expect(plane).toBeVisible();
-    await expect(plane).toHaveAttribute("aria-hidden", "true");
-    expect(await plane.evaluate(el => getComputedStyle(el).pointerEvents)).toBe("none");
-
-    for (const copy of REMOVED_COPY) {
-      await expect(page.locator("main").getByText(copy, { exact: true })).toHaveCount(0);
+    const hero = await page.getByTestId("recommend-hero").boundingBox();
+    const intro = page.getByRole("heading", { level: 1 }).locator(":scope > span").first();
+    const title = page.getByRole("heading", { level: 1 }).locator(":scope > span").last();
+    for (const element of [intro, title, page.getByTestId("hero-flight"), page.getByTestId("hero-destination")]) {
+      const box = await element.boundingBox();
+      expect(box!.x).toBeGreaterThanOrEqual(hero!.x);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(hero!.x + hero!.width);
+      expect(box!.y + box!.height).toBeLessThanOrEqual(hero!.y + hero!.height);
     }
-
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    );
-    expect(overflow).toBeLessThanOrEqual(0);
+    const introBox = await intro.boundingBox();
+    const titleBox = await title.boundingBox();
+    expect(introBox!.y + introBox!.height).toBeLessThanOrEqual(titleBox!.y);
+    const map = await page.getByTestId("hero-destination").boundingBox();
+    const flight = await page.getByTestId("hero-flight").boundingBox();
+    expect(map!.y + map!.height / 2).toBeLessThan(flight!.y + flight!.height / 2);
+    expect(await page.getByTestId("recommend-hero").evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(0);
   });
-});
+}
 
 test("Compare keeps its own hero copy when the Recommend hero ships", async ({ page }) => {
   await mockCatalog(
