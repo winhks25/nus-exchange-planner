@@ -8,6 +8,7 @@ export default function RecommendHero() {
       <svg
         viewBox="0 0 116 115"
         fill="none"
+        stroke="currentColor"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         className={styles.plane}
