@@ -38,6 +38,8 @@ export default function RecommendPage() {
 
     getRecommendations(selected.name, controller.signal)
       .then(data => {
+        // Ignore responses superseded by a newer selection.
+        if (controller.signal.aborted) return;
         setResults(data.recommendations);
         setState("idle");
       })
@@ -70,7 +72,10 @@ export default function RecommendPage() {
           onSelect={select}
         />
       )}
-      {state === "loading" && <p role="status">Finding partner universities…</p>}
+      {/* Result loading keeps the hero and degree selector available. */}
+      {state === "loading" && (
+        <LoadingState variant="results" label="Finding partner universities…" />
+      )}
       {state === "error" && (
         <p role="alert">The mapping service is unavailable. Please try again.</p>
       )}
