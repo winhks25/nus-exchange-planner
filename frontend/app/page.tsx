@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import RecommendDegreeField from "@/components/recommend/RecommendDegreeField";
 import RecommendHero from "@/components/recommend/RecommendHero";
+import LoadingState from "@/components/loading/LoadingState";
 import UniversityCards from "@/components/UniversityCards";
 import { getCatalog, getRecommendations } from "@/lib/api";
 import type { Catalog, Degree, Recommendation } from "@/lib/types";
@@ -58,8 +59,9 @@ export default function RecommendPage() {
     <main>
       <RecommendHero />
 
+      {/* Catalog loading replaces page content but keeps the hero visible. */}
       {state === "loading-catalog" ? (
-        <p role="status">Loading degree programmes…</p>
+        <LoadingState label="Loading degree programmes…" />
       ) : catalog && (
         // The page owns degree state; the field only presents it.
         <RecommendDegreeField
