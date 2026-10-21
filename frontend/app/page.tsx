@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import DegreeCombobox from "@/components/DegreeCombobox";
+import RecommendHero from "@/components/recommend/RecommendHero";
 import UniversityCards from "@/components/UniversityCards";
 import { getCatalog, getRecommendations } from "@/lib/api";
 import type { Catalog, Degree, Recommendation } from "@/lib/types";
@@ -55,11 +56,7 @@ export default function RecommendPage() {
 
   return (
     <main>
-      <div className="hero">
-        <p className="eyebrow">NUS Exchange Planner</p>
-        <h1>Find where your modules can take you.</h1>
-        <p>Choose a degree to rank partner universities by available module mappings.</p>
-      </div>
+      <RecommendHero />
 
       {state === "loading-catalog" ? (
         <p role="status">Loading degree programmes…</p>
