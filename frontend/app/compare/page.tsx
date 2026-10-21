@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import CompareEmptyState from "@/components/CompareEmptyState";
 import DegreeCombobox from "@/components/DegreeCombobox";
+import LoadingState from "@/components/loading/LoadingState";
 import MappingRows from "@/components/MappingRows";
 import UniversityCombobox from "@/components/UniversityCombobox";
 import { getCatalog, getMappings } from "@/lib/api";
@@ -99,8 +100,9 @@ function CompareContent() {
         <p>Explore qualifying NUS and partner courses for one degree and university.</p>
       </div>
 
+      {/* Catalog loading replaces page content until the selectors are ready. */}
       {state === "loading-catalog" ? (
-        <p role="status">Loading choices…</p>
+        <LoadingState label="Loading choices…" />
       ) : catalog && (
         <div className="selectors">
           <DegreeCombobox
@@ -145,8 +147,15 @@ function CompareContent() {
 }
 
 export default function ComparePage() {
+  // The Suspense fallback owns a single main landmark while the page suspends.
   return (
-    <Suspense fallback={<p>Loading choices…</p>}>
+    <Suspense
+      fallback={
+        <main>
+          <LoadingState label="Loading choices…" />
+        </main>
+      }
+    >
       <CompareContent />
     </Suspense>
   );

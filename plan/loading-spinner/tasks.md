@@ -24,7 +24,7 @@ Workflow adaptation: `.specify/` and its setup script/template/constitution/hook
 
 - [X] T003 [P] [US1] Add frontend/app/loading.tsx using the page variant of LoadingState inside one main landmark; verify frontend/app/layout.tsx keeps the fallback under its existing AppShell so header/sidebar persist and all descendant routes share the fallback.
 - [X] T004 [P] [US1] Update frontend/app/page.tsx to render page-variant LoadingState with “Loading degree programmes…” while loading-catalog, replacing page content inside main until catalog success/error; retain the existing ready/error paths and request cleanup.
-- [ ] T005 [P] [US1] Update frontend/app/compare/page.tsx to render page-variant LoadingState with “Loading choices…” for loading-catalog and the existing Suspense fallback; ensure each rendered branch has one main landmark, preserve URL initialization and existing catalog errors, and avoid simultaneous duplicate loading indicators.
+- [X] T005 [P] [US1] Update frontend/app/compare/page.tsx to render page-variant LoadingState with “Loading choices…” for loading-catalog and the existing Suspense fallback; ensure each rendered branch has one main landmark, preserve URL initialization and existing catalog errors, and avoid simultaneous duplicate loading indicators.
 
 **Checkpoint:** US1 can ship as the MVP; result-fetch loading remains the existing status text until US2.
 
