@@ -13,7 +13,7 @@
   --card-foreground: #dddddd;
   --popover: #222324;
   --popover-foreground: #dddddd;
-  --primary: 	#00c5ff;
+  --primary: #71b6f3;
   --primary-foreground: #ffffff;
   --secondary: #292929;
   --secondary-foreground: #dddddd;
@@ -24,7 +24,7 @@
   --destructive: #b71c1c;
   --border: #484848;
   --input: #484848;
-  --ring: 	#00f9ff;
+  --ring: 	#a9d7fa;
   --placeholder: #aeb1b5;
   --radius: 0.35rem;
 }
@@ -147,6 +147,13 @@ input:focus,select:focus {
   position: relative;
   max-width: 600px;
 }
+
+.label-text {
+  
+  font-weight: 700;
+  font-size: large;
+}
+
 .combo-list {
   position: absolute;
   z-index: 5;

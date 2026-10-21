@@ -110,7 +110,7 @@ export default function TypableDropdown<T>({
 
   return (
     <div className="combo-wrap">
-      <label id={labelId} htmlFor={inputId}>
+      <label id={labelId} htmlFor={inputId} className="label-text">
         {label}
       </label>
       <Input

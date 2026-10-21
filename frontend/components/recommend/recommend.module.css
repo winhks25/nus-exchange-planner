@@ -1,7 +1,5 @@
 /* Keep the approved arrangement within the compact hero height. */
 .hero {
-  --hero-blue: #71b6f3;
-  --illustration-outline: #a9d7fa;
   --illustration-fill: #368bcb;
   --map-fill: #294658;
   container-type: inline-size;
@@ -38,7 +36,7 @@
   left: 5.72%;
   top: 50%;
   font-size: clamp(1.5rem, 6cqw, 3.945rem);
-  color: var(--hero-blue);
+  color: var(--primary);
 }
 
 .underline {
@@ -56,7 +54,7 @@
 .flight svg,
 .destination svg {
   position: absolute;
-  stroke: var(--illustration-outline);
+  stroke: var(--ring);
   fill: var(--illustration-fill);
   stroke-width: 1.2;
 }
