@@ -1,6 +1,6 @@
 # Tasks: Recommend layout with NUSMods theme and shared application shell
 
-Generated: 2026-10-21. Status: Phases 1–6 complete (baseline, fixtures, US1 theme, US2 shell/header, US3 sidebar, US4 hero); later phases pending.
+Generated: 2026-10-21. Status: Phases 1–7 complete (baseline, fixtures, US1 theme, US2 shell/header, US3 sidebar, US4 hero, US5 picker); later phases pending.
 
 ## Execution contract
 
@@ -115,11 +115,11 @@ Each story's test can run independently once its listed prerequisites exist; ind
 
 **Independent acceptance:** The field matches 526×60 reference bounds, uses exact wording, and search/select/clear/keyboard/stale-request behavior remains correct.
 
-- [ ] T026 [P] [US5] Add picker checks in frontend/tests/recommend-picker.spec.ts for label Degree Programme, placeholder Choose your degree programme, full-list focus, filtering by major/full title, arrows/Home/End/Enter/Escape, no-match and clearing. Check Compare retains Degree programme and Search degree programmes. Include delayed old recommendation response and catalog/error/loading states.
-- [ ] T027 [P] [US5] Extend frontend/components/DegreeCombobox.tsx with an optional placeholder prop defaulting to Search degree programmes; retain default label Degree programme and shared TypableDropdown semantics. Preserve the model constraint: "Selection uses name; filtering searches both." Do not implement a second picker.
-- [ ] T028 [US5] Create frontend/components/recommend/RecommendDegreeField.tsx as a presentation wrapper passing Degree Programme and Choose your degree programme. In frontend/components/recommend/recommend.module.css position the label near x990/y370 and field atx726/y405, width 526 height 60 at 1888px; use white surface, 16px type, source border/focus and .25rem radius. Use fluid width and visible listbox overflow on narrow screens.
-- [ ] T029 [US5] Integrate RecommendDegreeField in frontend/app/page.tsx without moving catalog/selection/results state into the wrapper. Preserve "Untouched idle with no degree → hero and picker only, no cards." and "Degree change → cancel obsolete request and clear old cards immediately." Update only Recommend accessible-label lookups in frontend/tests/flows.spec.ts, retaining Compare lookups.
-- [ ] T030 [US5] Run frontend/tests/recommend-picker.spec.ts plus relevant keyboard/error cases in frontend/tests/flows.spec.ts; record results in plan/recommend-sketch/validation-results.md. Check dropdown overlays later content, focus remains visible, clearing removes results and no fixture cards appear on first load.
+- [X] T026 [P] [US5] Add picker checks in frontend/tests/recommend-picker.spec.ts for label Degree Programme, placeholder Choose your degree programme, full-list focus, filtering by major/full title, arrows/Home/End/Enter/Escape, no-match and clearing. Check Compare retains Degree programme and Search degree programmes. Include delayed old recommendation response and catalog/error/loading states.
+- [X] T027 [P] [US5] Extend frontend/components/DegreeCombobox.tsx with an optional placeholder prop defaulting to Search degree programmes; retain default label Degree programme and shared TypableDropdown semantics. Preserve the model constraint: "Selection uses name; filtering searches both." Do not implement a second picker.
+- [X] T028 [US5] Create frontend/components/recommend/RecommendDegreeField.tsx as a presentation wrapper passing Degree Programme and Choose your degree programme. In frontend/components/recommend/recommend.module.css position the label near x990/y370 and field atx726/y405, width 526 height 60 at 1888px; use white surface, 16px type, source border/focus and .25rem radius. Use fluid width and visible listbox overflow on narrow screens.
+- [X] T029 [US5] Integrate RecommendDegreeField in frontend/app/page.tsx without moving catalog/selection/results state into the wrapper. Preserve "Untouched idle with no degree → hero and picker only, no cards." and "Degree change → cancel obsolete request and clear old cards immediately." Update only Recommend accessible-label lookups in frontend/tests/flows.spec.ts, retaining Compare lookups.
+- [X] T030 [US5] Run frontend/tests/recommend-picker.spec.ts plus relevant keyboard/error cases in frontend/tests/flows.spec.ts; record results in plan/recommend-sketch/validation-results.md. Check dropdown overlays later content, focus remains visible, clearing removes results and no fixture cards appear on first load.
 
 ## Phase 8: US6 — build and integrate one reusable university card
 

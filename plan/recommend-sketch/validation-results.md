@@ -586,3 +586,74 @@ width. At 390: 32px heading wraps in flow, plane 72x71, overflow 0.
 Captures (fixed env) in `reference/hero/`: `recommend-idle-1888.png`,
 `compare-loaded-1888.png` (CS x Toronto, 6 mapping rows), and
 `recommend-idle-390.png` (full page), reviewed against the anchors above.
+
+## Phase 7 — US5: restyle and position the degree picker
+
+### T026 — Picker acceptance checks
+`frontend/tests/recommend-picker.spec.ts` adds seven API-mocked checks:
+- Recommend exposes the exact label `Degree Programme`, placeholder
+  `Choose your degree programme`, no cards on first load, and the reference
+  field bounds. At 1888x1337 the field is asserted within 8px of x726/y405 and
+  526x60; the label text centre is asserted within 8px of x990.
+- Focus opens the full degree list; filtering matches both the major name and
+  the full degree title; no-match keeps the existing message.
+- ArrowDown/ArrowUp, Home, End, Enter and Escape preserve selection semantics.
+- Clearing removes rendered results immediately and restores the placeholder.
+- A delayed Computer Science response cannot replace a newer AI selection.
+- Catalog loading and error states remain explicit and keep the picker absent on
+  failure.
+- Compare retains `Degree programme` and `Search degree programmes`.
+
+TDD ordering confirmed: the spec ran 1 passed / 6 failed before implementation
+and 7/7 after.
+
+### T027 — Shared picker placeholder override
+`frontend/components/DegreeCombobox.tsx` accepts an optional `placeholder` prop
+defaulting to `Search degree programmes`; the default label stays
+`Degree programme`. Compare therefore keeps its original copy and shared
+TypableDropdown semantics, including name-based selection and title/name search.
+No second picker was added.
+
+### T028/T029 — Wrapper, scoped styles and page integration
+- `frontend/components/recommend/RecommendDegreeField.tsx` is a presentation
+  wrapper passing `Degree Programme` and `Choose your degree programme`; the page
+  continues to own catalog, selection, abortable requests and status state.
+- `frontend/components/recommend/recommend.module.css` sets a fluid
+  `min(526px, 100%)` frame, 53px top spacing at the reference width (clamped to
+  24px on phones), 60px field height, 16px type, centred label/value, `.25rem`
+  radius and the pinned focus ring. Above 1600px the frame keeps the reference's
+  slightly left-of-centre anchor; it centres naturally at smaller widths.
+- The field uses the committed dark `--card` surface, not the earlier white
+  surface wording in T028: the user's dark-theme override in
+  `contracts/nusmods-theme.md` supersedes that colour while the geometry, border
+  and focus treatment remain as specified.
+- `frontend/app/page.tsx` mounts `RecommendDegreeField` in the existing catalog
+  branch without moving state. Recommend label lookups in
+  `frontend/tests/flows.spec.ts` now use `Degree Programme`; Compare lookups stay
+  `Degree programme`. Theme/app-shell lookups need no change because Playwright
+  role-name matching is case-insensitive.
+
+### T030 — Validation (macOS, Playwright 1.56.1 Chromium)
+
+| Check (from frontend/) | Result |
+| --- | --- |
+| `npx playwright test tests/recommend-picker.spec.ts` | PASS 7/7 |
+| `npx playwright test tests/recommend-picker.spec.ts tests/flows.spec.ts tests/theme.spec.ts tests/app-shell.spec.ts --workers=1` | 23 passed / 10 failed — no phase-7 regression: 5 inherited app-shell failures (brand casing, header/sidebar geometry), 4 stale `.card-count` flows failures owned by US6, and 1 inherited theme failure from the user's hero restyle (48px expected, 44px rendered). |
+| `npm run lint` | PASS |
+| `npm run typecheck` | PASS |
+
+Phase-7 relevant flows cases: `no match and service error have clear states` and
+`Compare ignores a delayed response for an old pair` pass; `keyboard boundaries,
+Escape, and zero-count navigation` completes End/Home/Escape successfully and
+fails only at the US6-owned `.card-count` selector.
+
+Interaction checks: the open listbox starts above the first card and
+`document.elementFromPoint` inside it resolves to the listbox; focus keeps the
+cyan border and `0 0 0 3.2px` ring; clearing removes cards; the idle page renders
+no fixture cards. Measured field: 526x60 at x726/y405 and label centre x990
+(1888); at 390 the field is 342x60 with no horizontal overflow and the listbox
+stays within the viewport.
+
+Captures in `reference/picker/` (fixed environment):
+`recommend-idle-1888.png`, `recommend-dropdown-1888.png` (listbox over the first
+card), `recommend-idle-390.png`, and `recommend-dropdown-390.png`.
