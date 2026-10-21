@@ -1,0 +1,89 @@
+/* Recommend-only hero: exact heading copy plus a decorative plane. */
+
+/* Reserved whitespace keeps the planned hero region instead of letting the
+   smaller source type collapse it; the picker label then starts at y370. */
+.hero {
+  min-height: 296px;
+}
+
+/* Heading anchor x417/y193 at the 1888px reference canvas; source hero role
+   2.5rem weight 500 line-height 1.2. */
+.heading {
+  position: absolute;
+  top: 193px;
+  left: 417px;
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--card-foreground);
+  white-space: nowrap;
+}
+
+/* Plane near x1422/y172 sized 116x115; decoration only. */
+.plane {
+  position: absolute;
+  top: 172px;
+  left: 1422px;
+  width: 116px;
+  height: 115px;
+  color: var(--card-foreground);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* Fold detail uses the tracked accent token instead of the sketch blue. */
+.planeDetail {
+  stroke: var(--primary);
+}
+
+/* Below the reference canvas: narrower gaps before any overflow. */
+@media (max-width: 1556px) {
+  .plane {
+    left: auto;
+    right: 66px;
+    width: 84px;
+    height: 83px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1140px) {
+  /* Clear the shared rail while keeping the heading single-lined. */
+  .heading {
+    left: 305px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .heading {
+    left: 24px;
+  }
+}
+
+/* Phones: fluid flow so the heading wraps naturally. */
+@media (max-width: 800px) {
+  .hero {
+    min-height: 0;
+    padding: 34px 0 0;
+  }
+
+  .heading {
+    position: static;
+    white-space: normal;
+  }
+
+  .plane {
+    position: static;
+    width: 72px;
+    height: 71px;
+    margin-top: 26px;
+  }
+}
+
+@media (max-width: 650px) {
+  .heading {
+    font-size: 2rem;
+  }
+}
