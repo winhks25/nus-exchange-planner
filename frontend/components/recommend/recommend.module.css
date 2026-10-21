@@ -175,3 +175,239 @@
   background: var(--card);
   border-radius: .25rem;
 }
+
+/* Temporary collection grid; US7 replaces it with final tier rows. */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.cards > .cardFeatured {
+  grid-column: span 6;
+  justify-self: center;
+}
+
+.cards > .cardSecondary {
+  grid-column: span 3;
+}
+
+.cards > .cardCompact {
+  grid-column: span 2;
+}
+
+/* Shared card shell; tier classes add footprint and type size. */
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 18px;
+  padding: 22px;
+  color: var(--card-foreground);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: .35rem;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* Reference footprints stay as max widths so long content can grow. */
+.cardFeatured {
+  width: min(100%, 634px);
+  min-height: 270px;
+  padding: 30px;
+}
+
+.cardSecondary {
+  width: min(100%, 505px);
+  min-height: 214px;
+  padding: 24px;
+}
+
+.cardCompact {
+  width: min(100%, 355px);
+  min-height: 151px;
+  padding: 20px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 0;
+}
+
+.cardHeading {
+  min-width: 0;
+}
+
+.cardRank {
+  flex: 0 0 40px;
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.cardFeatured .cardRank {
+  font-size: 1.25rem;
+}
+
+.cardTitle {
+  min-width: 0;
+}
+
+.cardTitle h2 {
+  margin: 0;
+  color: var(--card-foreground);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.cardFeatured .cardTitle h2 {
+  font-size: 2rem;
+}
+
+.cardSecondary .cardTitle h2 {
+  font-size: 1.5rem;
+}
+
+.cardCountry {
+  width: fit-content;
+  height: auto;
+  margin-top: 10px;
+  padding: .125rem .5rem;
+  overflow: visible;
+  color: var(--foreground);
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: .25rem;
+  font-size: .75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.cardContent {
+  padding: 0 0 0 55px;
+}
+
+.cardNus {
+  margin: 0;
+  color: var(--card-foreground);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.cardFeatured .cardNus {
+  font-size: 1.5rem;
+}
+
+.cardSecondary .cardNus {
+  font-size: 1.25rem;
+}
+
+.cardNus strong,
+.cardPartner strong {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.cardPartner {
+  margin: 8px 0 0;
+  color: var(--foreground);
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.cardAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: .375rem .75rem;
+  color: var(--primary);
+  background: var(--card);
+  border: 1px solid var(--primary);
+  border-radius: .25rem;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: background-color .15s ease;
+}
+
+.cardAction:hover {
+  background: var(--muted);
+}
+
+.cardAction:focus-visible {
+  outline: .2rem solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Phones keep readable type and 44px hit targets in one column. */
+@media (max-width: 650px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .cards > .cardFeatured,
+  .cards > .cardSecondary,
+  .cards > .cardCompact {
+    grid-column: auto;
+    justify-self: stretch;
+  }
+
+  .cardFeatured,
+  .cardSecondary,
+  .cardCompact {
+    width: 100%;
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .cardFeatured .cardRank,
+  .cardSecondary .cardRank,
+  .cardCompact .cardRank {
+    font-size: 1rem;
+  }
+
+  .cardFeatured .cardTitle h2,
+  .cardSecondary .cardTitle h2,
+  .cardCompact .cardTitle h2 {
+    font-size: 1.5rem;
+  }
+
+  .cardFeatured .cardNus,
+  .cardSecondary .cardNus,
+  .cardCompact .cardNus {
+    font-size: 1.25rem;
+  }
+
+  .cardCountry,
+  .cardPartner,
+  .cardAction {
+    font-size: .875rem;
+  }
+
+  .cardAction {
+    min-height: 44px;
+  }
+}
