@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 import type { Recommendation } from "../lib/types";
 import {
-  fixtureDegree,
   longNameRecommendations,
   recommendationResultVariants,
 } from "./fixtures/recommendations";
