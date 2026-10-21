@@ -79,7 +79,7 @@ for (const width of [320, 390, 768, 1024, 1888]) {
   });
 }
 
-test("Compare keeps its own hero copy when the Recommend hero ships", async ({ page }) => {
+test("Mappings keeps its own hero copy when the Recommend hero ships", async ({ page }) => {
   await mockCatalog(
     page,
     catalogWith([{ name: "University of Toronto", country: "Canada" }]),
@@ -93,16 +93,18 @@ test("Compare keeps its own hero copy when the Recommend hero ships", async ({ p
   );
 
   await page.goto(
-    `/compare?degree=${encodeURIComponent("Computer Science")}&uni=${encodeURIComponent("University of Toronto")}`,
+    `/mappings?degree=${encodeURIComponent("Computer Science")}&uni=${encodeURIComponent("University of Toronto")}`,
   );
 
-  // Compare content and copy are untouched: no selector leakage from the hero.
+  // Mappings content and copy are untouched: no selector leakage from the hero.
   const heading = page.getByRole("heading", { level: 1 });
   await expect(heading).toHaveCount(1);
-  await expect(heading).toHaveText("Compare module mappings.");
-  await expect(page.getByText("SIDE BY SIDE")).toHaveCount(1);
+  await expect(heading).toHaveText("Module mappings.");
+  await expect(page.getByText("SIDE BY SIDE")).toHaveCount(0);
   await expect(
-    page.getByText("Explore qualifying NUS and partner courses for one degree and university."),
+    page.getByText(
+      "Explore qualifying NUS and partner course mappings for your degree and your preferred university.",
+    ),
   ).toHaveCount(1);
   await expect(page.getByRole("combobox", { name: "Degree programme" })).toBeVisible();
   await expect(page.getByRole("combobox", { name: "Partner university" })).toBeVisible();

@@ -1,5 +1,5 @@
 from .catalog import Catalog
-from .matching import pair_mappings
+from .matching import count_distinct_nus_modules, count_partner_modules, pair_mappings
 from .models import Recommendation
 
 
@@ -13,8 +13,8 @@ def rank_universities(catalog: Catalog, degree_name: str) -> list[Recommendation
             Recommendation(
                 university=university.name,
                 country=university.country,
-                partner_module_count=len({row.partner_course.code.upper() for row in rows}),
-                distinct_nus_module_count=len({row.nus_course.code.upper() for row in rows}),
+                partner_module_count=count_partner_modules(rows),
+                distinct_nus_module_count=count_distinct_nus_modules(rows),
                 mapping_count=len(rows),
             )
         )

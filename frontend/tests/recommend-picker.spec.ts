@@ -12,7 +12,7 @@ import { installRecommendationFixtures, mockCatalog } from "./helpers/recommenda
 // Exact Recommend picker copy from the UI contract.
 const RECOMMEND_LABEL = "Degree Programme";
 const RECOMMEND_PLACEHOLDER = "Choose your degree programme";
-// Compare keeps its original wording after the Recommend restyle.
+// Mappings keeps its original wording after the Recommend restyle.
 const COMPARE_LABEL = "Degree programme";
 const COMPARE_PLACEHOLDER = "Search degree programmes";
 
@@ -204,9 +204,9 @@ test("catalog loading and error keep the picker state explicit", async ({ page }
   await expect(page.getByRole("combobox")).toHaveCount(0);
 });
 
-test("Compare retains its original degree label and placeholder", async ({ page }) => {
+test("Mappings retains its original degree label and placeholder", async ({ page }) => {
   await mockCatalog(page, catalogWith());
-  await page.goto("/compare");
+  await page.goto("/mappings");
 
   const picker = page.getByRole("combobox", { name: COMPARE_LABEL, exact: true });
   await expect(picker).toBeVisible();

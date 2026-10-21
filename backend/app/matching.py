@@ -1,6 +1,16 @@
+from collections.abc import Iterable
+
 from .catalog import Catalog
 from .course_codes import normalized_course_code
 from .models import Mapping
+
+
+def count_partner_modules(rows: Iterable[Mapping]) -> int:
+    return len({row.partner_course.code.upper() for row in rows})
+
+
+def count_distinct_nus_modules(rows: Iterable[Mapping]) -> int:
+    return len({row.nus_course.code.upper() for row in rows})
 
 
 def pair_mappings(catalog: Catalog, degree_name: str, university_name: str) -> tuple[Mapping, ...]:

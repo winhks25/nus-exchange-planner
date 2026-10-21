@@ -17,26 +17,35 @@
   font-weight: 500;
   line-height: 1.1;
   color: var(--card-foreground);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .intro,
 .title {
-  position: absolute;
-  white-space: nowrap;
+  position: static;
+  transform: none;
+  line-height: 1;
+  margin-top: 40px;
 }
 
 .intro {
-  left: 16%;
-  top: 24%;
+  left: 5%;
+  transform: none;
   font-size: clamp(1.125rem, 4cqw, 2.63rem);
   line-height: 1.1;
+  top: 24%;
 }
 
 .title {
-  left: 5.72%;
-  top: 50%;
-  font-size: clamp(1.5rem, 6cqw, 3.945rem);
+  left: 5%;
+  transform: none;
+  top: 5%;
+  font-size: clamp(3rem, 6cqw, 3.945rem);
   color: var(--primary);
+  text-align: center;
 }
 
 .underline {
@@ -60,7 +69,7 @@
 }
 
 .flight {
-  left: 60.71%;
+  left: 80%;
   top: 48%;
   width: clamp(60px, 14cqw, 147px);
   aspect-ratio: 1 / 0.65;
@@ -104,7 +113,7 @@
 }
 
 .destination {
-  left: 74.69%;
+  left: 84%;
   top: 9%;
   width: clamp(44px, 11.5cqw, 121px);
   aspect-ratio: 1 / 0.78;
@@ -144,16 +153,12 @@
 
 /* Degree picker: reference field 526x60 at x726/y405 on the 1888px canvas. */
 .degreeField {
-  width: min(526px, 100%);
+  display: flex;
+  flex-direction: column;
+  width: min(580px, 100%);
   margin: clamp(24px, 2.81vw, 53px) auto 0;
-}
-
-/* Wide screens keep the reference's slightly left-of-centre field. */
-@media (min-width: 1600px) {
-  .degreeField {
-    margin-left: calc(50% - 307px);
-    margin-right: auto;
-  }
+  gap: 15px;
+  text-align: center;
 }
 
 /* Flatten the shared picker wrapper so the field fills this frame. */
@@ -176,12 +181,12 @@
   border-radius: .25rem;
 }
 
-/* Ordered collection: one featured, a secondary pair, then compact rows. */
+/* Centre the collection; incomplete compact rows retain their left-hand columns. */
 .cards {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin-top: clamp(30px, 2.33vw, 44px);
+  width: min(1208px, 100%);
+  margin: clamp(30px, 2.33vw, 44px) auto 0;
 }
 
 .featuredRow {
@@ -190,109 +195,42 @@
 }
 
 .secondaryRow {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
-  margin-top: 45px;
+  width: min(1075px, 100%);
+  margin: 45px auto 0;
 }
 
-/* Compact chunks flatten into the parent layout at some breakpoints. */
+.secondaryRow > .cardSecondary {
+  width: 100%;
+}
+
 .compactRows {
-  display: contents;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 45px;
 }
 
 .compactRow {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 24px;
-  margin-top: 45px;
+  display: contents;
 }
 
-/* Reference row widths at the 1888px canvas. */
-@media (min-width: 1700px) {
-  .cards {
-    width: 1208px;
-    margin-left: calc(50% - 642px);
-  }
-
-  .secondaryRow {
-    display: grid;
-    grid-template-columns: repeat(2, 505px);
-    justify-content: space-between;
-    width: 1075px;
-    margin: 56px 0 0 49px;
-  }
-
-  .compactRow {
-    flex-wrap: nowrap;
-    width: 1208px;
-    gap: 0;
-    justify-content: space-between;
-  }
-
-  .secondaryRow > .cardSecondary {
-    width: 505px;
-  }
-
-  .compactRow > .cardCompact {
-    width: 355px;
-  }
-
-  /* The reference's compact row is slightly asymmetric. */
-  .compactRow > :nth-child(2) {
-    margin-left: 35px;
-  }
-
-  /* Partial rows keep their columns and stay anchored to the left. */
-  .compactRow[data-count="1"],
-  .compactRow[data-count="2"] {
-    justify-content: flex-start;
-  }
-
-  .compactRow[data-count="2"] > :nth-child(2) {
-    margin-left: 89px;
-  }
+.compactRow > .cardCompact {
+  width: 100%;
 }
 
-/* Three fluid compact cards before the reference canvas width. */
-@media (min-width: 1440px) and (max-width: 1699px) {
-  .compactRow {
-    flex-wrap: nowrap;
-  }
-
-  .compactRow > .cardCompact {
-    width: calc((100% - 48px) / 3);
-  }
-}
-
-/* Medium desktops keep the featured card and continue in pairs. */
 @media (min-width: 1024px) and (max-width: 1439px) {
-  .secondaryRow > .cardSecondary {
-    width: min(505px, calc((100% - 24px) / 2));
-  }
-
   .compactRows {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 24px;
-    margin-top: 45px;
-  }
-
-  .compactRow {
-    display: contents;
-  }
-
-  .compactRow > .cardCompact {
-    width: min(355px, calc((100% - 24px) / 2));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 /* Phones and tablets stack every result in order. */
 @media (max-width: 1023px) {
   .secondaryRow {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 16px;

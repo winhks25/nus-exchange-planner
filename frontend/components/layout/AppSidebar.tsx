@@ -21,7 +21,7 @@ function RecommendIcon() {
   );
 }
 
-function CompareIcon() {
+function MappingsIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -42,7 +42,7 @@ function CompareIcon() {
 
 const NAV_ITEMS = [
   { href: "/", label: "Recommend", Icon: RecommendIcon },
-  { href: "/compare", label: "Compare", Icon: CompareIcon },
+  { href: "/mappings", label: "Mappings", Icon: MappingsIcon },
 ];
 
 export default function AppSidebar() {

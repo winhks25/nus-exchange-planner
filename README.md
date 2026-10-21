@@ -1,6 +1,6 @@
 # NUS Exchange Planner
 
-A read-only tool for NUS School of Computing students to find exchange partners with module mappings. **Recommend** (`/`) ranks every partner by the number of distinct degree modules with a mapping. **Compare** (`/compare`) shows every qualifying mapping row for a degree and partner, including repeated NUS codes.
+A read-only tool for NUS School of Computing students to find exchange partners with module mappings. **Recommend** (`/`) ranks every partner by the number of distinct degree modules with a mapping. **Mappings** (`/mappings`) shows every qualifying mapping row for a degree and partner, including repeated NUS codes.
 
 The source of truth is the checked-in JSON in `data/`. The API validates the complete catalog at startup. A missing or malformed file makes all three endpoints return 503; invalid NUS mapping codes are logged and skipped. Module titles are shown exactly as stored, including truncated titles.
 
@@ -14,7 +14,7 @@ npm ci --prefix frontend
 ./dev
 ```
 
-After the first install, run only `./dev`. It starts both servers and stops the API when the frontend exits. Open `http://localhost:3000` and `http://localhost:3000/compare`; the backend schema is at `http://localhost:8001/openapi.json`. Local settings are saved in ignored `backend/.env` and `frontend/.env.local`. Port 8001 avoids the other local server using port 8000. `CORS_ORIGINS` is a comma-separated list of exact frontend origins without trailing slashes. `NEXT_PUBLIC_API_BASE_URL` is the backend origin, without `/api/v1`.
+After the first install, run only `./dev`. It starts both servers and stops the API when the frontend exits. Open `http://localhost:3000` and `http://localhost:3000/mappings`; the backend schema is at `http://localhost:8001/openapi.json`. Local settings are saved in ignored `backend/.env` and `frontend/.env.local`. Port 8001 avoids the other local server using port 8000. `CORS_ORIGINS` is a comma-separated list of exact frontend origins without trailing slashes. `NEXT_PUBLIC_API_BASE_URL` is the backend origin, without `/api/v1`.
 
 ## Checks
 

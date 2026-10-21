@@ -1,3 +1,5 @@
+export type PageState = "loading-catalog" | "idle" | "loading" | "error";
+
 export type Degree = {
   name: string;
   degree: string;

@@ -101,12 +101,12 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   // Brand renders in the accent since the rounded-header restyle.
   expect(brand.color).toBe(ACCENT);
 
-  const navLink = page.getByRole("navigation").getByRole("link", { name: "Compare" });
+  const navLink = page.getByRole("navigation").getByRole("link", { name: "Mappings" });
   const nav = await computed(navLink, ["font-size", "font-weight", "color"]);
   expect(nav["font-size"]).toBe("16px");
   expect(nav["font-weight"]).toBe("400");
   expect(nav.color).toBe(NAV_GRAY);
-  await expect(navLink).toHaveAttribute("href", "/compare");
+  await expect(navLink).toHaveAttribute("href", "/mappings");
 
   const header = await computed(page.locator("header"), [
     "border-bottom-width",
@@ -280,7 +280,7 @@ test("picker and dropdown expose source placeholder, focus and hover states", as
     .toBe(SUBTLE_GRAY);
 });
 
-test("Compare keeps its controls and content with the same theme tokens", async ({ page }) => {
+test("Mappings keeps its controls and content with the same theme tokens", async ({ page }) => {
   await mockCatalog(
     page,
     catalogWith([{ name: "University of Toronto", country: "Canada" }]),
@@ -294,7 +294,7 @@ test("Compare keeps its controls and content with the same theme tokens", async 
   );
 
   await page.goto(
-    `/compare?degree=${encodeURIComponent(fixtureDegree.name)}&uni=${encodeURIComponent("University of Toronto")}`,
+    `/mappings?degree=${encodeURIComponent(fixtureDegree.name)}&uni=${encodeURIComponent("University of Toronto")}`,
   );
 
   const degree = page.getByRole("combobox", { name: "Degree programme" });

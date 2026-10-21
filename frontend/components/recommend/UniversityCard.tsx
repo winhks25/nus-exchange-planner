@@ -29,7 +29,7 @@ export default function UniversityCard({
 }: Props) {
   const { university, country, distinct_nus_module_count, partner_module_count } =
     recommendation;
-  const href = `/compare?degree=${encodeURIComponent(degree)}&uni=${encodeURIComponent(university)}`;
+  const href = `/mappings?degree=${encodeURIComponent(degree)}&uni=${encodeURIComponent(university)}`;
 
   return (
     <Card role="article" data-tier={tier} className={cn(styles.card, tierStyles[tier])}>

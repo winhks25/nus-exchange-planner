@@ -5,10 +5,8 @@ import RecommendDegreeField from "@/components/recommend/RecommendDegreeField";
 import RecommendHero from "@/components/recommend/RecommendHero";
 import LoadingState from "@/components/loading/LoadingState";
 import UniversityCards from "@/components/UniversityCards";
-import { getCatalog, getRecommendations } from "@/lib/api";
-import type { Catalog, Degree, Recommendation } from "@/lib/types";
-
-type PageState = "loading-catalog" | "idle" | "loading" | "error";
+import { getCatalog, getRecommendations, UNAVAILABLE_MESSAGE } from "@/lib/api";
+import type { Catalog, Degree, PageState, Recommendation } from "@/lib/types";
 
 export default function RecommendPage() {
   const [catalog, setCatalog] = useState<Catalog | null>(null);
@@ -76,9 +74,7 @@ export default function RecommendPage() {
       {state === "loading" && (
         <LoadingState variant="results" label="Finding partner universities…" />
       )}
-      {state === "error" && (
-        <p role="alert">The mapping service is unavailable. Please try again.</p>
-      )}
+      {state === "error" && <p role="alert">{UNAVAILABLE_MESSAGE}</p>}
       {state === "idle" && !selected && touched && <p>Choose a degree to see results.</p>}
       {state === "idle" && selected && results && (
         <UniversityCards degree={selected.name} recommendations={results} />

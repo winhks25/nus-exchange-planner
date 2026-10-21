@@ -2,17 +2,15 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import CompareEmptyState from "@/components/CompareEmptyState";
+import MappingsEmptyState from "@/components/MappingsEmptyState";
 import DegreeCombobox from "@/components/DegreeCombobox";
 import LoadingState from "@/components/loading/LoadingState";
 import MappingRows from "@/components/MappingRows";
 import UniversityCombobox from "@/components/UniversityCombobox";
-import { getCatalog, getMappings } from "@/lib/api";
-import type { Catalog, Degree, MappingResult, University } from "@/lib/types";
+import { getCatalog, getMappings, UNAVAILABLE_MESSAGE } from "@/lib/api";
+import type { Catalog, Degree, MappingResult, PageState, University } from "@/lib/types";
 
-type PageState = "loading-catalog" | "idle" | "loading" | "error";
-
-function CompareContent() {
+function MappingsContent() {
   const router = useRouter();
   const params = useSearchParams();
   const [catalog, setCatalog] = useState<Catalog | null>(null);
@@ -91,15 +89,14 @@ function CompareContent() {
     if (nextDegree) next.set("degree", nextDegree.name);
     if (nextUniversity) next.set("uni", nextUniversity.name);
     appliedUrl.current = next.toString();
-    router.replace(`/compare${next.size ? `?${next.toString()}` : ""}`, { scroll: false });
+    router.replace(`/mappings${next.size ? `?${next.toString()}` : ""}`, { scroll: false });
   }
 
   return (
     <main>
       <div className="hero">
-        <p className="eyebrow">SIDE BY SIDE</p>
-        <h1>Compare module mappings.</h1>
-        <p>Explore qualifying NUS and partner courses for one degree and university.</p>
+        <h1>Module mappings.</h1>
+        <p>Explore qualifying NUS and partner course mappings for your degree and your preferred university.</p>
       </div>
 
       {/* Catalog loading replaces page content until the selectors are ready. */}
@@ -124,9 +121,7 @@ function CompareContent() {
       {state === "loading" && (
         <LoadingState variant="results" label="Loading mappings…" />
       )}
-      {state === "error" && (
-        <p role="alert">The mapping service is unavailable. Please try again.</p>
-      )}
+      {state === "error" && <p role="alert">{UNAVAILABLE_MESSAGE}</p>}
       {state === "idle" && result && (
         <section>
           <div className="result-summary" role="group" aria-label="Mapping counts">
@@ -143,7 +138,7 @@ function CompareContent() {
           {result.mappings.length ? (
             <MappingRows mappings={result.mappings} />
           ) : (
-            <CompareEmptyState />
+            <MappingsEmptyState />
           )}
         </section>
       )}
@@ -151,7 +146,7 @@ function CompareContent() {
   );
 }
 
-export default function ComparePage() {
+export default function MappingsPage() {
   // The Suspense fallback owns a single main landmark while the page suspends.
   return (
     <Suspense
@@ -161,7 +156,7 @@ export default function ComparePage() {
         </main>
       }
     >
-      <CompareContent />
+      <MappingsContent />
     </Suspense>
   );
 }

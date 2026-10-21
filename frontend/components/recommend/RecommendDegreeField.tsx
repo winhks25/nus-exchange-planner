@@ -19,6 +19,7 @@ export default function RecommendDegreeField({ degrees, selected, onSelect }: Pr
         label="Degree Programme"
         placeholder="Choose your degree programme"
       />
+      <span>Find out which university offers the best module mapping options for you.</span>
     </div>
   );
 }

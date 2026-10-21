@@ -4,9 +4,16 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .catalog import DATA_ROOT, MANIFEST, CatalogUnavailable, load_catalog
-from .matching import compare_rows
-from .models import CatalogResponse, ErrorResponse, MappingResponse, RecommendationsResponse
+from .catalog import DATA_ROOT, MANIFEST, Catalog, CatalogUnavailable, load_catalog
+from .matching import compare_rows, count_distinct_nus_modules, count_partner_modules
+from .models import (
+    CatalogResponse,
+    DegreeOption,
+    ErrorResponse,
+    MappingResponse,
+    RecommendationsResponse,
+    UniversityOption,
+)
 from .recommendations import rank_universities
 
 
@@ -25,7 +32,7 @@ def create_app(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> FastAP
     except CatalogUnavailable:
         catalog = None
 
-    def available():
+    def available() -> Catalog:
         if catalog is None:
             raise HTTPException(
                 status_code=503, detail="Catalog data is unavailable. Please try again later."
@@ -40,9 +47,9 @@ def create_app(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> FastAP
     def get_catalog():
         data = available()
         return CatalogResponse(
-            degrees=[{"name": item.name, "degree": item.degree} for item in data.degrees],
+            degrees=[DegreeOption(name=item.name, degree=item.degree) for item in data.degrees],
             universities=[
-                {"name": item.name, "country": item.country} for item in data.universities
+                UniversityOption(name=item.name, country=item.country) for item in data.universities
             ],
         )
 
@@ -81,8 +88,8 @@ def create_app(data_root: Path = DATA_ROOT, manifest: Path = MANIFEST) -> FastAP
         return MappingResponse(
             degree=degree,
             university=uni,
-            partner_module_count=len({row.partner_course.code.upper() for row in rows}),
-            distinct_nus_module_count=len({row.nus_course.code.upper() for row in rows}),
+            partner_module_count=count_partner_modules(rows),
+            distinct_nus_module_count=count_distinct_nus_modules(rows),
             mappings=rows,
         )
 

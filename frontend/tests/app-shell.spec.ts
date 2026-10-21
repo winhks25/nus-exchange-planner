@@ -5,7 +5,7 @@ const BRAND_TEXT = "nus exchange planner";
 // Exact sidebar link contract: label text and route.
 const NAV_ITEMS = [
   { label: "Recommend", href: "/" },
-  { label: "Compare", href: "/compare" },
+  { label: "Mappings", href: "/mappings" },
 ];
 
 function expectNear(actual: number, target: number, tolerance = 8) {
@@ -20,7 +20,7 @@ async function frameGeometry(page: import("@playwright/test").Page) {
 }
 
 test.describe("header content", () => {
-  for (const route of ["/", "/compare"]) {
+  for (const route of ["/", "/mappings"]) {
     test(`the header row holds only the brand link on ${route}`, async ({ page }) => {
       await page.goto(route);
 
@@ -60,8 +60,8 @@ test.describe("reference geometry at 1888x1337", () => {
     expectNear(brandBox!.y, 44);
   });
 
-  test("the Compare frame keeps the same shell geometry", async ({ page }) => {
-    await page.goto("/compare");
+  test("the Mappings frame keeps the same shell geometry", async ({ page }) => {
+    await page.goto("/mappings");
 
     const header = page.locator("header");
     await expect(header).toBeVisible();
@@ -74,7 +74,7 @@ test.describe("reference geometry at 1888x1337", () => {
 });
 
 test.describe("shared navigation sidebar", () => {
-  for (const route of ["/", "/compare"]) {
+  for (const route of ["/", "/mappings"]) {
     test(`direct load of ${route} marks only that route active`, async ({ page }) => {
       await page.goto(route);
 
@@ -109,22 +109,22 @@ test.describe("shared navigation sidebar", () => {
     await page.keyboard.press("Tab");
     expect(await page.evaluate(() => document.activeElement!.textContent)).toBe("Recommend");
     await page.keyboard.press("Tab");
-    expect(await page.evaluate(() => document.activeElement!.textContent)).toBe("Compare");
+    expect(await page.evaluate(() => document.activeElement!.textContent)).toBe("Mappings");
 
-    // Enter on the focused Compare link navigates and updates aria-current.
+    // Enter on the focused Mappings link navigates and updates aria-current.
     await page.keyboard.press("Enter");
-    const compare = nav.getByRole("link", { name: "Compare", exact: true });
-    await page.waitForURL("**/compare");
-    await expect(compare).toHaveAttribute("aria-current", "page");
+    const mappings = nav.getByRole("link", { name: "Mappings", exact: true });
+    await page.waitForURL("**/mappings");
+    await expect(mappings).toHaveAttribute("aria-current", "page");
     await expect(
       nav.getByRole("link", { name: "Recommend", exact: true }),
     ).not.toHaveAttribute("aria-current");
   });
 
   test("back and forward restore the active link on the persistent shell", async ({ page }) => {
-    await page.goto("/compare");
+    await page.goto("/mappings");
     const nav = page.getByRole("navigation");
-    await expect(nav.getByRole("link", { name: "Compare", exact: true })).toHaveAttribute(
+    await expect(nav.getByRole("link", { name: "Mappings", exact: true })).toHaveAttribute(
       "aria-current",
       "page",
     );
@@ -141,12 +141,12 @@ test.describe("shared navigation sidebar", () => {
       "page",
     );
 
-    // Back to /compare: same nav node, Compare active again.
+    // Back to /mappings: same nav node, Mappings active again.
     await page.goBack();
-    await expect(page).toHaveURL(/\/compare/);
+    await expect(page).toHaveURL(/\/mappings/);
     await expect(nav).toHaveCount(1);
     expect(await nav.evaluate(el => (el as HTMLElement).dataset.shellProbe)).toBe("us3");
-    await expect(nav.getByRole("link", { name: "Compare", exact: true })).toHaveAttribute(
+    await expect(nav.getByRole("link", { name: "Mappings", exact: true })).toHaveAttribute(
       "aria-current",
       "page",
     );
@@ -210,17 +210,17 @@ test.describe("reference sidebar geometry at 1888x1337", () => {
     }
   });
 
-  test("the Compare rail keeps identical sidebar dimensions", async ({ page }) => {
+  test("the Mappings rail keeps identical sidebar dimensions", async ({ page }) => {
     await page.goto("/");
     const navBox = await page.getByRole("navigation").boundingBox();
 
-    await page.goto("/compare");
-    const compareNavBox = await page.getByRole("navigation").boundingBox();
+    await page.goto("/mappings");
+    const mappingsNavBox = await page.getByRole("navigation").boundingBox();
 
-    expect(compareNavBox!.x).toBe(navBox!.x);
-    expect(compareNavBox!.width).toBe(navBox!.width);
-    expect(compareNavBox!.y).toBe(navBox!.y);
-    expectNear(compareNavBox!.x + compareNavBox!.width, 303);
+    expect(mappingsNavBox!.x).toBe(navBox!.x);
+    expect(mappingsNavBox!.width).toBe(navBox!.width);
+    expect(mappingsNavBox!.y).toBe(navBox!.y);
+    expectNear(mappingsNavBox!.x + mappingsNavBox!.width, 303);
   });
 });
 
@@ -263,9 +263,9 @@ test.describe("shell persistence", () => {
       (el as HTMLElement).dataset.shellProbe = "us2";
     });
 
-    await page.getByRole("navigation").getByRole("link", { name: "Compare" }).click();
-    await page.waitForURL("**/compare");
-    await expect(page.getByRole("heading", { name: "Compare module mappings." })).toBeVisible();
+    await page.getByRole("navigation").getByRole("link", { name: "Mappings" }).click();
+    await page.waitForURL("**/mappings");
+    await expect(page.getByRole("heading", { name: "Module mappings." })).toBeVisible();
 
     expect(await page.evaluate(() => performance.getEntriesByType("navigation").length)).toBe(1);
     await expect(header).toHaveCount(1);

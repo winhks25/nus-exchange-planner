@@ -11,7 +11,7 @@ type Props = {
   placeholder?: string;
 };
 
-// Shared defaults keep Compare copy unchanged.
+// Shared defaults keep the Mappings page copy unchanged.
 export default function DegreeCombobox({
   degrees,
   selected,

@@ -1,6 +1,31 @@
 import { expect, test } from "@playwright/test";
 
-test("Recommend keyboard search, ranking, zero card, and Compare deep link", async ({ page }) => {
+test("old Compare links redirect to Mappings and preserve selections", async ({ page, request }) => {
+  const query = "?degree=Computer%20Science&uni=University%20of%20Toronto";
+  const response = await request.get(`/compare${query}`, { maxRedirects: 0 });
+  expect(response.status()).toBe(308);
+  const destination = new URL(response.headers().location, response.url());
+  expect(destination.pathname).toBe("/mappings");
+  expect(destination.searchParams.get("degree")).toBe("Computer Science");
+  expect(destination.searchParams.get("uni")).toBe("University of Toronto");
+
+  await page.goto(`/compare${query}`);
+  await expect(page).toHaveURL(/\/mappings\?/);
+  await expect(page.getByRole("combobox", { name: "Degree programme" })).toHaveValue("Computer Science");
+  await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
+  await expect(page.locator(".mapping-row")).toHaveCount(6);
+  await expect(page.getByRole("navigation").getByRole("link", { name: "Mappings" })).toHaveAttribute("aria-current", "page");
+});
+
+test("old Compare links without selections open the Mappings page", async ({ page }) => {
+  await page.goto("/compare");
+  await expect(page).toHaveURL(/\/mappings$/);
+  await expect(page.getByRole("heading", { name: "Module mappings." })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "Degree programme" })).toHaveValue("");
+  await expect(page.getByLabel("Partner university")).toHaveValue("");
+});
+
+test("Recommend keyboard search, ranking, zero card, and Mappings deep link", async ({ page }) => {
   await page.goto("/");
   const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await expect(picker).toBeVisible();
@@ -23,14 +48,14 @@ test("Recommend keyboard search, ranking, zero card, and Compare deep link", asy
     await expect(card).toContainText("0 Partner University Modules");
   }
   await cards.first().getByRole("link", { name: /View Mappings/ }).click();
-  await expect(page).toHaveURL(/compare\?degree=Computer%20Science&uni=University%20of%20Toronto/);
+  await expect(page).toHaveURL(/mappings\?degree=Computer%20Science&uni=University%20of%20Toronto/);
   await expect(page.getByRole("combobox", { name: "Degree programme" })).toHaveValue("Computer Science");
   await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
   await expect(page.getByText("3 distinct NUS modules")).toBeVisible();
   await expect(page.locator(".mapping-row")).toHaveCount(6);
 });
 
-test("Artificial Intelligence counts reconcile from Recommend to Compare", async ({ page }) => {
+test("Artificial Intelligence counts reconcile from Recommend to Mappings", async ({ page }) => {
   await page.goto("/");
   const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await picker.click();
@@ -78,7 +103,7 @@ test("Recommend ranks by NUS modules and sizes cards by rank", async ({ page }) 
   await expect(cards.nth(0)).toContainText("11 NUS Modules");
   await expect(cards.nth(0)).toContainText("17 Partner University Modules");
   await expect(cards.nth(0).getByRole("link", { name: /View Mappings/ })).toHaveAttribute(
-    "href", "/compare?degree=Business%20Analytics&uni=Korea%20University"
+    "href", "/mappings?degree=Business%20Analytics&uni=Korea%20University"
   );
   const boxes = await Promise.all([0, 1, 2, 3, 4].map(index => cards.nth(index).boundingBox()));
   const [first, second, third, fourth, fifth] = boxes;
@@ -109,7 +134,7 @@ test("Recommend ranks by NUS modules and sizes cards by rank", async ({ page }) 
 });
 
 test("clearing selection, invalid link, and zero match", async ({ page }) => {
-  await page.goto("/compare?degree=bad&uni=University%20of%20Toronto");
+  await page.goto("/mappings?degree=bad&uni=University%20of%20Toronto");
   await expect(page.getByText(/unknown degree or partner university/)).toBeVisible();
   await expect(page.getByRole("combobox", { name: "Degree programme" })).toHaveValue("");
   await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
@@ -158,12 +183,12 @@ test("keyboard boundaries, Escape, and zero-count navigation", async ({ page }) 
   await expect(page.getByText(/No qualifying mappings/)).toBeVisible();
 });
 
-test("Compare ignores a delayed response for an old pair", async ({ page }) => {
+test("Mappings ignores a delayed response for an old pair", async ({ page }) => {
   await page.route("**/api/v1/mappings?**", async route => {
     if (route.request().url().includes("University%20of%20Toronto")) await new Promise(resolve => setTimeout(resolve, 800));
     try { await route.continue(); } catch { /* The old request may be aborted. */ }
   });
-  await page.goto("/compare?degree=Computer%20Science&uni=University%20of%20Toronto");
+  await page.goto("/mappings?degree=Computer%20Science&uni=University%20of%20Toronto");
   await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
   const partner = page.getByRole("combobox", { name: "Partner university" });
   await partner.fill("Kyoto");
@@ -188,12 +213,12 @@ test("warmed Recommend result renders within one second", async ({ page }) => {
   expect(elapsed).toBeLessThan(1000);
 });
 
-test("Compare leaves absent partner units blank and keeps source titles", async ({ page }) => {
+test("Mappings leaves absent partner units blank and keeps source titles", async ({ page }) => {
   await page.route("**/api/v1/mappings?**", route => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({
     degree: "Computer Science", university: "University of Toronto", distinct_nus_module_count: 1,
     mappings: [{ nus_course: { code: "CS2106", title: "Introduction to Operating", units: 4 }, partner_course: { code: "ECE344H1", title: "Operating Systems" } }],
   }) }));
-  await page.goto("/compare?degree=Computer%20Science&uni=University%20of%20Toronto");
+  await page.goto("/mappings?degree=Computer%20Science&uni=University%20of%20Toronto");
   await expect(page.getByText("Introduction to Operating")).toBeVisible();
   const sides = page.locator(".mapping-row .course");
   await expect(sides.first()).toContainText("4 units");

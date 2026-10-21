@@ -1,5 +1,8 @@
 import type { Catalog, MappingResult, Recommendations } from "./types";
 
+export const UNAVAILABLE_MESSAGE =
+  "The mapping service is unavailable. Please try again.";
+
 export class ApiError extends Error {
   constructor(public kind: "not-found" | "unavailable", message: string) {
     super(message);
@@ -15,13 +18,13 @@ async function get<T>(path: string, signal?: AbortSignal): Promise<T> {
     response = await fetch(`${base}/api/v1${path}`, { signal });
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") throw error;
-    throw new ApiError("unavailable", "The mapping service is unavailable. Please try again.");
+    throw new ApiError("unavailable", UNAVAILABLE_MESSAGE);
   }
 
   if (response.status === 404) {
     throw new ApiError("not-found", "The selected degree or university was not found.");
   }
-  if (!response.ok) throw new ApiError("unavailable", "The mapping service is unavailable. Please try again.");
+  if (!response.ok) throw new ApiError("unavailable", UNAVAILABLE_MESSAGE);
   return response.json() as Promise<T>;
 }
 

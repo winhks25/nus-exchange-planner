@@ -58,7 +58,7 @@ test("each tier shows real details, two counts and one encoded action", async ({
   await expect(action).toHaveText(ACTION_TEXT);
   await expect(action).toHaveAttribute(
     "href",
-    "/compare?degree=Computer%20Science&uni=University%20of%20Aurora%20Bay",
+    "/mappings?degree=Computer%20Science&uni=University%20of%20Aurora%20Bay",
   );
 
   // The action is the card's only control and is not nested in another control.
@@ -125,6 +125,6 @@ test("the isolated preview reuses real cards with repeated fixture copy", async 
   await expect(page).toHaveURL("http://127.0.0.1:18767/");
   await expect(page.locator("html")).toHaveAttribute(
     "data-harness-link",
-    "/compare?degree=Computer%20Science&uni=University%20Name",
+    "/mappings?degree=Computer%20Science&uni=University%20Name",
   );
 });
