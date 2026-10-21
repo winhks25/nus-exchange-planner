@@ -2,21 +2,25 @@
 
 ## Authority and scope
 
-User update, 2026-10-21: preserve the agreed layout and all wording; replace visual styling, including font sizes, with the theme in nusmodifications/nusmods. Use the default light application theme, not the timetable's selectable lesson-color palettes. A dark-mode switch is not part of this change.
+User update, 2026-10-21: preserve the agreed layout and all wording; replace visual styling, including font sizes, with the theme in nusmodifications/nusmods. Use the dark application theme shown in the user’s follow-up screenshot. This supersedes the original light-theme interpretation. A dark-mode switch is not part of this change.
 
 Inspected commit: `f487593c16f580cc6ea5fa6cff9bdc934de7c064`. Sources were read directly from a shallow checkout of the public repository. Bootstrap 4.6.2 is explicitly pinned by its website/package.json; inherited values below were verified against that version's upstream source. These are source-derived values, not a claim that every NUSMods screen uses one universal component style.
 
-## Verified source tokens
+## Current palette
+
+The follow-up screenshot’s dominant background pixel is `#222324`; its secondary surface is `#292929`. Text and border tokens below are adapted for readability on those dark surfaces. Typography and geometry remain unchanged. These colors supersede earlier light-surface references in the remaining phase tasks.
+
+## Theme tokens
 
 | Token | Value | Source |
 | --- | --- | --- |
-| Body/card background | #ffffff | Bootstrap body-bg default; NUSMods CSS variable mapping |
-| Main body text | #69707a | NUSMods variable-overrides.scss |
-| Dark/emphasis text | #222324 | NUSMods gray-dark |
-| Secondary navigation | #848490 | NUSMods gray-mid and Navtabs.scss |
+| Body/card background | #222324 | Sampled from the user’s dark screenshot |
+| Main body text | #b5b5b5 | Dark-surface adaptation |
+| Emphasis text | #dddddd | Dark-surface adaptation |
+| Secondary navigation | #a3a3a3 | Dark-surface adaptation |
 | Placeholder | #aeb1b5 | NUSMods gray-light and components/form.scss |
-| Borders/dividers | #d3d6db | NUSMods gray-lighter |
-| Subtle surface/hover | #f3f5f8 | NUSMods gray-lightest |
+| Borders/dividers | #484848 | Dark-surface adaptation |
+| Subtle surface/hover | #292929 | Sampled from the user’s dark screenshot |
 | Primary/active/link/focus border | #ff5138 | NUSMods primary |
 | Error | #b71c1c | NUSMods danger |
 | Base text | 1rem, weight 400, line-height 1.5 | Bootstrap 4.6.2 defaults |
@@ -42,7 +46,7 @@ No handwritten font, condensed brand font, custom webfont download or font-ident
 
 Keep the screenshot's element positions, card footprints, row composition, whitespace, internal content order and action placement. Do not import NUSMods' navigation width, header height, page padding, routing, or timetable layout. The typography role mapping in recommend-ui.md selects actual source scale values for our existing roles; NUSMods has no identical hero/three-tier-card screen.
 
-Use white shell/header/sidebar/cards, dark headings, gray body text, thin gray dividers and smooth borders. Replace sketch outlines and blue accents. Use .35rem smooth card/outer-frame radii and .25rem field/action radii; this changes decoration, not bounding boxes. Country badges use a subtle gray surface with gray text and border. View Mappings stays an outlined anchor in its current position, using primary-colored text/border and a subtle hover surface. Keep its exact ASCII arrow. Navigation uses gray-mid and primary active color, with existing icon meanings and positions; plane detail uses primary instead of blue. No NUSMods branding or new navigation labels.
+Use charcoal shell/header/sidebar/cards, light headings, gray body text, thin gray dividers and smooth borders. Replace sketch outlines and blue accents. Use .35rem smooth card/outer-frame radii and .25rem field/action radii; this changes decoration, not bounding boxes. Country badges use a subtle gray surface with gray text and border. View Mappings stays an outlined anchor in its current position, using primary-colored text/border and a subtle hover surface. Keep its exact ASCII arrow. Navigation uses gray-mid and primary active color, with existing icon meanings and positions; plane detail uses primary instead of blue. No NUSMods branding or new navigation labels.
 
 Apply the theme tokens application-wide, including Compare controls/text/surfaces, without changing Compare wording, content order, behavior or geometry. Reuse existing Base UI/Tailwind components; port tokens and equivalent styles, not Bootstrap's global stylesheet or its component runtime. This avoids importing NUSMods layout/reset rules. Shared AppShell remains mounted once in the root layout.
 

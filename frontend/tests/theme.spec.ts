@@ -12,13 +12,13 @@ const SYSTEM_FONT_STACK =
   '"Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", ' +
   '"Segoe UI Symbol", "Noto Color Emoji"';
 
-const WHITE = "rgb(255, 255, 255)";
-const BODY_GRAY = "rgb(105, 112, 122)";
-const DARK = "rgb(34, 35, 36)";
-const NAV_GRAY = "rgb(132, 132, 144)";
+const SURFACE = "rgb(34, 35, 36)";
+const BODY_GRAY = "rgb(181, 181, 181)";
+const EMPHASIS = "rgb(221, 221, 221)";
+const NAV_GRAY = "rgb(163, 163, 163)";
 const PLACEHOLDER_GRAY = "rgb(174, 177, 181)";
-const BORDER_GRAY = "rgb(211, 214, 219)";
-const SUBTLE_GRAY = "rgb(243, 245, 248)";
+const BORDER_GRAY = "rgb(72, 72, 72)";
+const SUBTLE_GRAY = "rgb(41, 41, 41)";
 const CORAL = "rgb(255, 81, 56)";
 
 async function computed(
@@ -76,7 +76,7 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   expect(body["font-size"]).toBe("16px");
   expect(body["line-height"]).toBe("24px");
   expect(body.color).toBe(BODY_GRAY);
-  expect(body["background-color"]).toBe(WHITE);
+  expect(body["background-color"]).toBe(SURFACE);
 
   const hero = await computed(page.getByRole("heading", { level: 1 }), [
     "font-size",
@@ -87,7 +87,7 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   expect(hero["font-size"]).toBe("40px");
   expect(hero["font-weight"]).toBe("500");
   expect(hero["line-height"]).toBe("48px");
-  expect(hero.color).toBe(DARK);
+  expect(hero.color).toBe(EMPHASIS);
 
   const brand = await computed(page.locator(".brand"), [
     "font-size",
@@ -96,7 +96,7 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   ]);
   expect(brand["font-size"]).toBe("20px");
   expect(brand["font-weight"]).toBe("700");
-  expect(brand.color).toBe(DARK);
+  expect(brand.color).toBe(EMPHASIS);
 
   const navLink = page.getByRole("navigation").getByRole("link", { name: "Compare" });
   const nav = await computed(navLink, ["font-size", "font-weight", "color"]);
@@ -140,7 +140,7 @@ test("cards use source surfaces, radii and tier type sizes", async ({ page }) =>
     "border-radius",
     "box-shadow",
   ]);
-  expect(firstCard["background-color"]).toBe(WHITE);
+  expect(firstCard["background-color"]).toBe(SURFACE);
   expect(firstCard["border-top-width"]).toBe("1px");
   expect(firstCard["border-top-style"]).toBe("solid");
   expect(firstCard["border-top-color"]).toBe(BORDER_GRAY);
@@ -160,7 +160,7 @@ test("cards use source surfaces, radii and tier type sizes", async ({ page }) =>
   );
   for (const title of titleSizes) {
     expect(title["font-weight"]).toBe("500");
-    expect(title.color).toBe(DARK);
+    expect(title.color).toBe(EMPHASIS);
   }
   expect(titleSizes[0]["font-size"]).toBe("32px");
   expect(titleSizes[0]["line-height"]).toBe("38.4px");
@@ -238,7 +238,7 @@ test("picker and dropdown expose source placeholder, focus and hover states", as
     "border-radius",
   ]);
   expect(idle["font-size"]).toBe("16px");
-  expect(idle["background-color"]).toBe(WHITE);
+  expect(idle["background-color"]).toBe(SURFACE);
   expect(idle["border-top-width"]).toBe("1px");
   expect(idle["border-top-color"]).toBe(BORDER_GRAY);
   expect(idle["border-radius"]).toBe("4px");
@@ -264,7 +264,7 @@ test("picker and dropdown expose source placeholder, focus and hover states", as
     "border-radius",
     "box-shadow",
   ]);
-  expect(dropdown["background-color"]).toBe(WHITE);
+  expect(dropdown["background-color"]).toBe(SURFACE);
   expect(dropdown["border-top-width"]).toBe("1px");
   expect(dropdown["border-top-color"]).toBe(BORDER_GRAY);
   expect(dropdown["border-radius"]).toBe("4px");
@@ -307,7 +307,7 @@ test("Compare keeps its controls and content with the same theme tokens", async 
     "border-top-color",
     "border-radius",
   ]);
-  expect(degreeStyle["background-color"]).toBe(WHITE);
+  expect(degreeStyle["background-color"]).toBe(SURFACE);
   expect(degreeStyle["border-top-width"]).toBe("1px");
   expect(degreeStyle["border-top-color"]).toBe(BORDER_GRAY);
   expect(degreeStyle["border-radius"]).toBe("4px");
@@ -330,7 +330,7 @@ test("Compare keeps its controls and content with the same theme tokens", async 
     "border-top-color",
     "border-radius",
   ]);
-  expect(row["background-color"]).toBe(WHITE);
+  expect(row["background-color"]).toBe(SURFACE);
   expect(row["border-top-width"]).toBe("1px");
   expect(row["border-top-color"]).toBe(BORDER_GRAY);
   expect(row["border-radius"]).toBe("5.6px");

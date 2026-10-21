@@ -3,27 +3,27 @@
 @import "shadcn/tailwind.css";
 @custom-variant dark (&:is(.dark *));
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", "Noto Color Emoji";
-  --background: #ffffff;
-  --foreground: #69707a;
-  --card: #ffffff;
-  --card-foreground: #222324;
-  --popover: #ffffff;
-  --popover-foreground: #222324;
+  --background: #222324;
+  --foreground: #b5b5b5;
+  --card: #222324;
+  --card-foreground: #dddddd;
+  --popover: #222324;
+  --popover-foreground: #dddddd;
   --primary: #ff5138;
   --primary-foreground: #ffffff;
-  --secondary: #f3f5f8;
-  --secondary-foreground: #222324;
-  --muted: #f3f5f8;
-  --muted-foreground: #848490;
-  --accent: #f3f5f8;
-  --accent-foreground: #222324;
+  --secondary: #292929;
+  --secondary-foreground: #dddddd;
+  --muted: #292929;
+  --muted-foreground: #a3a3a3;
+  --accent: #292929;
+  --accent-foreground: #dddddd;
   --destructive: #b71c1c;
-  --border: #d3d6db;
-  --input: #d3d6db;
+  --border: #484848;
+  --input: #484848;
   --ring: #ff5138;
   --placeholder: #aeb1b5;
   --radius: 0.35rem;

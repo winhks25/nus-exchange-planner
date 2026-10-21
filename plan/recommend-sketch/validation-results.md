@@ -300,3 +300,16 @@ six-column grid/gap/margin, tier `grid-column` spans and paddings, card content 
 colors, borders, radii and the requested type sizes changed, so no new controls or
 route content were introduced. The Compare page retained its wording, control labels,
 summary and row order.
+
+## Phase 3 follow-up — dark background (2026-10-21)
+
+The user's follow-up screenshot supersedes the earlier light palette. Its most
+common pixel is #222324, now used for body, cards and controls; #292929 is the
+secondary surface. Text and borders were adapted for readability, with coral
+accents, typography and layout retained. The theme contract records this override
+for subsequent phases. Earlier theme captures above show the superseded palette.
+
+Validation: `npx playwright test tests/theme.spec.ts` from frontend passed 4/4
+(12.9s), covering body/chrome, cards, picker interaction styles and Compare.
+`git diff --check` passed. The first test attempt could not access the sandboxed
+uv cache; the rerun with local-server/cache permissions passed.
