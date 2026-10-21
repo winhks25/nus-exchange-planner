@@ -8,16 +8,24 @@ type Props = {
   selected: Degree | null;
   onSelect: (degree: Degree | null) => void;
   label?: string;
+  placeholder?: string;
 };
 
-export default function DegreeCombobox({ degrees, selected, onSelect, label = "Degree programme" }: Props) {
+// Shared defaults keep Compare copy unchanged.
+export default function DegreeCombobox({
+  degrees,
+  selected,
+  onSelect,
+  label = "Degree programme",
+  placeholder = "Search degree programmes",
+}: Props) {
   return (
     <TypableDropdown
       options={degrees}
       value={selected}
       onSelect={onSelect}
       label={label}
-      placeholder="Search degree programmes"
+      placeholder={placeholder}
       searchText={degree => `${degree.name} ${degree.degree}`}
       getOptionValue={degree => degree.name}
       renderOption={degree => (
