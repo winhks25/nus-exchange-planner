@@ -1,6 +1,6 @@
 # Tasks: Consistent page loading spinner
 
-Date: 2026-10-21. Status: verification in progress; T001–T008 complete.
+Date: 2026-10-21. Status: complete.
 
 Sources: [spec.md](spec.md), [plan.md](plan.md). Paths below are repository-relative. The scope includes both current routes, common route fallbacks, initial catalog requests, and selection-triggered requests. Keep the header/sidebar visible. New routes inherit the common route fallback; future effect-based requests must explicitly reuse the component.
 
@@ -40,7 +40,7 @@ Workflow adaptation: `.specify/` and its setup script/template/constitution/hook
 ## Phase 5: Polish and cross-cutting verification
 
 - [X] T008 Check both stories' acceptance scenarios at desktop and 390px mobile width, with reduced motion and throttled/failed requests; verify shared navigation remains interactive and there are no duplicate statuses, stuck spinners, or overflow, and record outcomes in plan/loading-spinner/validation-results.md.
-- [ ] T009 Run lint, typecheck, build, and relevant existing Playwright scenarios using frontend/package.json (including frontend/tests/recommend-picker.spec.ts, frontend/tests/flows.spec.ts, and frontend/tests/app-shell.spec.ts); preserve existing status text assertions where applicable, adjust only assertions directly affected by the agreed presentation, and record commands, outcomes, and any pre-existing failures in plan/loading-spinner/validation-results.md.
+- [X] T009 Run lint, typecheck, build, and relevant existing Playwright scenarios using frontend/package.json (including frontend/tests/recommend-picker.spec.ts, frontend/tests/flows.spec.ts, and frontend/tests/app-shell.spec.ts); preserve existing status text assertions where applicable, adjust only assertions directly affected by the agreed presentation, and record commands, outcomes, and any pre-existing failures in plan/loading-spinner/validation-results.md.
 
 ## Dependencies
 
@@ -62,4 +62,4 @@ Complete setup and foundation, then ship US1 as the smallest useful increment. A
 
 ## Checklist audit
 
-9 tasks: setup 1, foundation 1, US1 3, US2 2, polish 2. IDs T001–T009 are sequential; T001–T008 are checked. Every task has a task ID and concrete file path, with a story label only in story phases. Five tasks have valid parallel markers.
+9 tasks: setup 1, foundation 1, US1 3, US2 2, polish 2. IDs T001–T009 are sequential and all tasks are checked. Every task has a task ID and concrete file path, with a story label only in story phases. Five tasks have valid parallel markers.
