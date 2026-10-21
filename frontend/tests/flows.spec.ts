@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("Recommend keyboard search, ranking, zero card, and Compare deep link", async ({ page }) => {
   await page.goto("/");
-  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await expect(picker).toBeVisible();
   await expect(page.getByRole("region", { name: "Ranked partner universities" })).toHaveCount(0);
   await picker.click();
@@ -34,7 +34,7 @@ test("Recommend keyboard search, ranking, zero card, and Compare deep link", asy
 
 test("Artificial Intelligence counts reconcile from Recommend to Compare", async ({ page }) => {
   await page.goto("/");
-  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await picker.click();
   await picker.fill("Artificial Intelligence");
   await picker.press("Enter");
@@ -65,7 +65,7 @@ test("Artificial Intelligence counts reconcile from Recommend to Compare", async
 
 test("Recommend ranks by NUS modules and sizes cards by rank", async ({ page }) => {
   await page.goto("/");
-  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await picker.click();
   await picker.fill("Business Analytics");
   await picker.press("Enter");
@@ -129,7 +129,7 @@ test("clearing selection, invalid link, and zero match", async ({ page }) => {
 
 test("no match and service error have clear states", async ({ page }) => {
   await page.goto("/");
-  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await picker.fill("impossible programme");
   await expect(page.getByText("Program not available. Check the degree list.")).toBeVisible();
   await expect(page.getByText("Choose a degree to see results.")).toBeVisible();
@@ -141,7 +141,7 @@ test("no match and service error have clear states", async ({ page }) => {
 
 test("keyboard boundaries, Escape, and zero-count navigation", async ({ page }) => {
   await page.goto("/");
-  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await picker.fill("Computer Science"); await picker.press("Enter");
   await expect(page.getByRole("article")).toHaveCount(5);
   await picker.click();
@@ -177,7 +177,7 @@ test("Compare ignores a delayed response for an old pair", async ({ page }) => {
 
 test("warmed Recommend result renders within one second", async ({ page }) => {
   await page.goto("/");
-  const picker = page.getByRole("combobox", { name: "Degree programme" });
+  const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await expect(picker).toBeVisible();
   await picker.fill("Computer Science");
   const start = await page.evaluate(() => performance.now());

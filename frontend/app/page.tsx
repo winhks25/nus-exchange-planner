@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DegreeCombobox from "@/components/DegreeCombobox";
+import RecommendDegreeField from "@/components/recommend/RecommendDegreeField";
 import RecommendHero from "@/components/recommend/RecommendHero";
 import UniversityCards from "@/components/UniversityCards";
 import { getCatalog, getRecommendations } from "@/lib/api";
@@ -61,7 +61,12 @@ export default function RecommendPage() {
       {state === "loading-catalog" ? (
         <p role="status">Loading degree programmes…</p>
       ) : catalog && (
-        <DegreeCombobox degrees={catalog.degrees} selected={selected} onSelect={select} />
+        // The page owns degree state; the field only presents it.
+        <RecommendDegreeField
+          degrees={catalog.degrees}
+          selected={selected}
+          onSelect={select}
+        />
       )}
       {state === "loading" && <p role="status">Finding partner universities…</p>}
       {state === "error" && (
