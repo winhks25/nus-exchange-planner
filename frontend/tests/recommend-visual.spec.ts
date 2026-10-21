@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { recommendationResultVariants } from "./fixtures/recommendations";
+import { apiRecommendations, recommendationResultVariants } from "./fixtures/recommendations";
 import { openRecommendWithFixtures } from "./helpers/recommendation-fixtures";
 
 // Reference anchors use the 1888px canvas; approximate values allow 8px.
@@ -74,5 +74,58 @@ test.describe("reference collection at 1888x1337", () => {
       border: "1px",
       radius: "5.6px",
     });
+  });
+});
+
+test.describe("six-card surfaces", () => {
+  test.use({ viewport: { width: 1888, height: 1337 } });
+
+  test("production keeps real ordinals and unique universities", async ({ page }) => {
+    await openRecommendWithFixtures(page, {
+      recommendations: recommendationResultVariants.six,
+    });
+
+    const cards = page.getByRole("article");
+    await expect(cards).toHaveCount(6);
+
+    // Fixture order is API order; ranks are not copied from the sketch.
+    for (let index = 0; index < 6; index += 1) {
+      await expect(cards.nth(index)).toContainText(`#${index + 1}`);
+      await expect(cards.nth(index).getByRole("heading", { level: 2 })).toHaveText(
+        apiRecommendations[index].university,
+      );
+    }
+  });
+
+  test("the isolated harness renders the six reference cards in rows", async ({ page }) => {
+    await page.goto("http://127.0.0.1:18767/");
+
+    const cards = page.getByRole("article");
+    await expect(cards).toHaveCount(6);
+
+    const boxes = await Promise.all(
+      [0, 1, 2, 3, 4, 5].map(async index => {
+        const box = await cards.nth(index).boundingBox();
+        expect(box).not.toBeNull();
+        return box!;
+      }),
+    );
+
+    // The harness reuses the collection tiers and widths.
+    expectNear(boxes[0].width, 634);
+    expectNear(boxes[1].width, 505);
+    expectNear(boxes[2].width, 505);
+    expectNear(boxes[3].width, 355);
+    expectNear(boxes[1].y, boxes[2].y);
+    expectNear(boxes[3].y, boxes[4].y);
+    expectNear(boxes[4].y, boxes[5].y);
+
+    // Repeated copy and #1 stay confined to this test surface.
+    for (const card of await cards.all()) {
+      await expect(card).toContainText("#1");
+      await expect(card).toContainText("University Name");
+      await expect(card).toContainText("10 NUS Modules");
+      await expect(card).toContainText("12 Partner University Modules");
+    }
   });
 });
