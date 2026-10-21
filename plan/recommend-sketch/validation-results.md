@@ -860,10 +860,34 @@ visible):
 | --- | --- | --- |
 | `recommend-1888.png` | 1888x1337 | 1/2/3 rows at the anchors; footers clear |
 | `recommend-1440.png` | 1440x1399 | featured, pair, triple; no overflow |
-| `recommend-1280.png` | 1280x1632 | featured, pair, compact pairs; lone sixth centred |
+| `recommend-1280.png` | 1280x1632 | featured, pair, compact pairs; lone sixth left-aligned |
 | `recommend-768.png` | 768x1926 | one full-width card per row, ordered |
 | `recommend-390.png` | 390x2101 | stacked, 44px actions, no clipping |
 
 The Next.js dev-tools badge visible in captures is a dev-only overlay, not
 application UI. No production demo data, public preview route or backend change
 was added.
+
+
+### Phase 9 amendment — partial compact rows
+The user rule is: a final compact row with fewer than three cards starts at the
+collection's left edge. Tests were added first
+(`test(recommend): assert left-aligned partial rows`), then the layout changed
+(`style(recommend): left-align partial compact rows`).
+
+- `UniversityCards.tsx` records each compact chunk's size as `data-count`.
+- Compact rows default to `justify-content: flex-start`; the ≥1700px full row
+  keeps `space-between` for the reference columns. A two-card partial row at
+  1888px starts at x391 and keeps the second column at x835; a one-card row
+  starts at x391.
+- At 1024–1439px the compact wrapper starts at the left, so pair rows and a
+  lone final card both stay left. At 1440–1699px a two-card row occupies the
+  first two fluid columns. Stacked widths are unchanged.
+- Coverage: four, five and seven API results at 1888px, plus the lone sixth at
+  1280px. `recommend-visual.spec.ts` 19/19, `flows.spec.ts` 9/9 and
+  `recommend-card.spec.ts` 4/4 pass; typecheck and lint pass.
+
+Added reviewed captures: `recommend-1888-four.png`, `recommend-1888-five.png`
+(second card at x835), `recommend-1888-seven.png` (second compact row at x391),
+`recommend-1440-five.png` (first two fluid columns) and the refreshed
+`recommend-1280.png`. No copy, theme, fetching or backend behavior changed.
