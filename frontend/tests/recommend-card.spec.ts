@@ -105,3 +105,26 @@ test("long names and countries stay complete above the action", async ({ page })
   );
   await expect(first).toContainText(`${longNameRecommendations[0].distinct_nus_module_count} NUS Modules`);
 });
+
+test("the isolated preview reuses real cards with repeated fixture copy", async ({ page }) => {
+  await page.goto("http://127.0.0.1:18767/");
+
+  const cards = page.getByRole("article");
+  await expect(cards).toHaveCount(6);
+  for (let index = 0; index < 6; index += 1) {
+    await expect(cards.nth(index)).toContainText("#1");
+    await expect(cards.nth(index).getByRole("heading", { level: 2 })).toHaveText(
+      "University Name",
+    );
+    await expect(cards.nth(index)).toContainText("10 NUS Modules");
+    await expect(cards.nth(index)).toContainText("12 Partner University Modules");
+  }
+
+  // Fixture links stay in the harness instead of opening a fake live pair.
+  await cards.first().getByRole("link", { name: ACTION_TEXT, exact: true }).click();
+  await expect(page).toHaveURL("http://127.0.0.1:18767/");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-harness-link",
+    "/compare?degree=Computer%20Science&uni=University%20Name",
+  );
+});

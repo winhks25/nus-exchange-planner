@@ -25,5 +25,11 @@ export default defineConfig({
         PLAYWRIGHT_TEST: "1",
       },
     },
+    {
+      command: "node tests/fixtures/preview-server.mjs",
+      url: "http://127.0.0.1:18767",
+      reuseExistingServer: false,
+      timeout: 30000,
+    },
   ],
 });
