@@ -21,24 +21,62 @@
   text-decoration: none;
 }
 
-/* Temporary navigation row below the header until US3. */
-.tempNav {
-  display: flex;
-  gap: 24px;
-  padding: 16px 65px 0;
+/* Content row splits the shared rail from the page content column. */
+.body {
+  display: grid;
+  /* 284px inner rail plus its 1px divider at x303 from the frame edge. */
+  grid-template-columns: 285px minmax(0, 1fr);
 }
 
-.tempNav a {
+/* Shared rail: divider at x303, icon x45 / text x83, first row y210. */
+.sideNav {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 30px;
+  padding: 108px 26px 40px 27px;
+  border-right: 1px solid var(--border);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
   color: var(--muted-foreground);
   font-size: 1rem;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.6;
   text-decoration: none;
   transition: color 0.15s ease;
 }
 
-.tempNav a:hover {
+.navLink svg {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  pointer-events: none;
+}
+
+.navLink:hover,
+.navLink[aria-current="page"] {
   color: var(--primary);
+}
+
+/* Below 1024px every page swaps the rail for a compact row under the header. */
+@media (max-width: 1023px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sideNav {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 24px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
 }
 
 .content {
