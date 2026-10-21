@@ -15,14 +15,12 @@ test("Recommend keyboard search, ranking, zero card, and Compare deep link", asy
   const cards = page.getByRole("article");
   await expect(cards).toHaveCount(5);
   await expect(cards.first()).toContainText("University of Toronto");
-  await expect(cards.first().locator(".card-count")).toHaveText("6mappable partner modules");
-  await expect(cards.first().locator(".card-secondary-counts")).toContainText("distinct NUS modules3");
-  await expect(cards.first().locator(".card-secondary-counts")).toContainText("mappings6");
-  const zeroCards = cards.filter({ hasText: "0mappable partner modules" });
+  await expect(cards.first()).toContainText("3 NUS Modules");
+  await expect(cards.first()).toContainText("6 Partner University Modules");
+  const zeroCards = cards.filter({ hasText: "0 NUS Modules" });
   await expect(zeroCards).toHaveCount(2);
   for (const card of await zeroCards.all()) {
-    await expect(card.locator(".card-secondary-counts")).toContainText("distinct NUS modules0");
-    await expect(card.locator(".card-secondary-counts")).toContainText("mappings0");
+    await expect(card).toContainText("0 Partner University Modules");
   }
   await cards.first().getByRole("link", { name: /View Mappings/ }).click();
   await expect(page).toHaveURL(/compare\?degree=Computer%20Science&uni=University%20of%20Toronto/);
@@ -41,11 +39,10 @@ test("Artificial Intelligence counts reconcile from Recommend to Compare", async
   const cards = page.getByRole("article");
   await expect(cards).toHaveCount(5);
   const toronto = cards.first();
-  await expect(toronto.locator(".rank")).toHaveText("#1");
+  await expect(toronto).toContainText("#1");
   await expect(toronto).toContainText("University of Toronto");
-  await expect(toronto.locator(".card-count")).toHaveText("9mappable partner modules");
-  await expect(toronto.locator(".card-secondary-counts")).toContainText("distinct NUS modules6");
-  await expect(toronto.locator(".card-secondary-counts")).toContainText("mappings9");
+  await expect(toronto).toContainText("6 NUS Modules");
+  await expect(toronto).toContainText("9 Partner University Modules");
   await toronto.getByRole("link", { name: /View Mappings/ }).click();
   await expect(page).toHaveURL(/degree=Artificial%20Intelligence&uni=University%20of%20Toronto/);
   const summary = page.locator(".result-count");
@@ -76,11 +73,10 @@ test("Recommend ranks by NUS modules and sizes cards by rank", async ({ page }) 
   await expect(cards.nth(2)).toContainText("University of Toronto");
   await expect(cards.nth(3)).toContainText("Yonsei University");
   await expect(cards.nth(4)).toContainText("Kyoto University");
-  await expect(cards.nth(0).locator(".rank")).toHaveText("#1");
-  await expect(cards.nth(1).locator(".rank")).toHaveText("#2");
-  await expect(cards.nth(0).locator(".card-count")).toHaveText("17mappable partner modules");
-  await expect(cards.nth(0).locator(".card-secondary-counts")).toContainText("distinct NUS modules11");
-  await expect(cards.nth(0).locator(".card-secondary-counts")).toContainText("mappings18");
+  await expect(cards.nth(0)).toContainText("#1");
+  await expect(cards.nth(1)).toContainText("#2");
+  await expect(cards.nth(0)).toContainText("11 NUS Modules");
+  await expect(cards.nth(0)).toContainText("17 Partner University Modules");
   await expect(cards.nth(0).getByRole("link", { name: /View Mappings/ })).toHaveAttribute(
     "href", "/compare?degree=Business%20Analytics&uni=Korea%20University"
   );
@@ -153,7 +149,8 @@ test("keyboard boundaries, Escape, and zero-count navigation", async ({ page }) 
   await expect(picker).toHaveValue("Computer Science");
   await expect(picker).toHaveAttribute("aria-expanded", "false");
   const zero = page.getByRole("article").filter({ hasText: "Yonsei University" });
-  await expect(zero.locator(".card-count")).toHaveText("0mappable partner modules");
+  await expect(zero).toContainText("0 NUS Modules");
+  await expect(zero).toContainText("0 Partner University Modules");
   await zero.getByRole("link", { name: /View Mappings/ }).click();
   await expect(page.getByText(/No qualifying mappings/)).toBeVisible();
 });

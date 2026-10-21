@@ -172,7 +172,7 @@ test("cards use source surfaces, radii and tier type sizes", async ({ page }) =>
 
   const nusSizes = await Promise.all(
     [0, 1, 3].map(async index => {
-      const metric = await computed(cards.nth(index).locator(".nus-module-count"), [
+      const metric = await computed(cards.nth(index).locator("p").nth(0), [
         "font-size",
         "font-weight",
         "line-height",
@@ -185,7 +185,7 @@ test("cards use source surfaces, radii and tier type sizes", async ({ page }) =>
   expect(nusSizes[2]["font-size"]).toBe("16px");
   for (const metric of nusSizes) expect(metric["font-weight"]).toBe("500");
 
-  const partner = await computed(cards.nth(0).locator(".partner-module-count"), [
+  const partner = await computed(cards.nth(0).locator("p").nth(1), [
     "font-size",
     "font-weight",
     "color",
@@ -194,7 +194,7 @@ test("cards use source surfaces, radii and tier type sizes", async ({ page }) =>
   expect(partner["font-weight"]).toBe("400");
   expect(partner.color).toBe(BODY_GRAY);
 
-  const badge = await computed(cards.nth(0).locator(".country-badge"), [
+  const badge = await computed(cards.nth(0).getByText("Canada", { exact: true }), [
     "font-size",
     "font-weight",
     "background-color",
@@ -211,7 +211,7 @@ test("cards use source surfaces, radii and tier type sizes", async ({ page }) =>
   expect(badge["border-top-color"]).toBe(BORDER_GRAY);
   expect(badge["border-radius"]).toBe("4px");
 
-  const action = await computed(cards.nth(0).locator(".university-card-footer a"), [
+  const action = await computed(cards.nth(0).getByRole("link"), [
     "font-size",
     "font-weight",
     "color",
