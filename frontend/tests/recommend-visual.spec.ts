@@ -175,6 +175,48 @@ test.describe("collection variants at 1888x1337", () => {
     });
   }
 
+  test("a four-result compact row starts at the collection edge", async ({ page }) => {
+    await openRecommendWithFixtures(page, {
+      recommendations: recommendationResultVariants.five.slice(0, 4),
+    });
+
+    const region = page.getByRole("region", { name: "Ranked partner universities" });
+    const regionBox = await region.boundingBox();
+    const compact = await page.getByRole("article").nth(3).boundingBox();
+    if (!regionBox || !compact) throw new Error("Expected collection boxes");
+    expectNear(compact.x, regionBox.x);
+  });
+
+  test("a five-result compact row keeps the first two columns", async ({ page }) => {
+    await openRecommendWithFixtures(page, {
+      recommendations: recommendationResultVariants.five,
+    });
+
+    const region = page.getByRole("region", { name: "Ranked partner universities" });
+    const regionBox = await region.boundingBox();
+    const cards = page.getByRole("article");
+    const fourth = await cards.nth(3).boundingBox();
+    const fifth = await cards.nth(4).boundingBox();
+    if (!regionBox || !fourth || !fifth) throw new Error("Expected collection boxes");
+    expectNear(fourth.x, regionBox.x);
+    expectNear(fifth.x, regionBox.x + 444);
+  });
+
+  test("a later one-card compact row starts at the collection edge", async ({ page }) => {
+    await openRecommendWithFixtures(page, {
+      recommendations: recommendationResultVariants.seven,
+    });
+
+    const region = page.getByRole("region", { name: "Ranked partner universities" });
+    const regionBox = await region.boundingBox();
+    const cards = page.getByRole("article");
+    const sixth = await cards.nth(5).boundingBox();
+    const seventh = await cards.nth(6).boundingBox();
+    if (!regionBox || !sixth || !seventh) throw new Error("Expected collection boxes");
+    expectNear(seventh.x, regionBox.x);
+    expect(seventh.y).toBeGreaterThan(sixth.y);
+  });
+
   test("long titles grow inside the reference row widths", async ({ page }) => {
     await openRecommendWithFixtures(page, {
       recommendations: longNameRecommendations,
@@ -245,6 +287,13 @@ test.describe("responsive collection", () => {
     expectNear(second.y, third.y);
     expectNear(fourth.y, fifth.y);
     expect(sixth.y).toBeGreaterThan(fourth.y);
+
+    // A lone compact card stays on the left of its own row.
+    const regionBox = await page
+      .getByRole("region", { name: "Ranked partner universities" })
+      .boundingBox();
+    if (!regionBox) throw new Error("Expected collection box");
+    expectNear(sixth.x, regionBox.x);
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true);
