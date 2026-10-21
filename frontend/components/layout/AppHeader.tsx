@@ -6,7 +6,7 @@ export default function AppHeader() {
   return (
     <header className={styles.header}>
       <Link href="/" className={styles.brand}>
-        nus exchange planner
+        NUS Exchange Planner
       </Link>
     </header>
   );
