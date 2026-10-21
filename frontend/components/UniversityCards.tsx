@@ -57,19 +57,23 @@ export function RecommendationRows({ degree, cards }: RecommendationRowsProps) {
         </div>
       )}
 
-      {compactRows.map(row => (
-        <div className={styles.compactRow} key={row[0].key}>
-          {row.map(card => (
-            <UniversityCard
-              key={card.key}
-              recommendation={card.recommendation}
-              degree={degree}
-              rank={card.rank}
-              tier="compact"
-            />
+      {compactRows.length > 0 && (
+        <div className={styles.compactRows}>
+          {compactRows.map(row => (
+            <div className={styles.compactRow} key={row[0].key}>
+              {row.map(card => (
+                <UniversityCard
+                  key={card.key}
+                  recommendation={card.recommendation}
+                  degree={degree}
+                  rank={card.rank}
+                  tier="compact"
+                />
+              ))}
+            </div>
           ))}
         </div>
-      ))}
+      )}
     </section>
   );
 }
