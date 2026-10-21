@@ -39,3 +39,23 @@ No Playwright or build run was needed for the baseline; T009 runs the full regre
 - `page` and `results` variants share the theme tokens and centered layout; rotation uses `transform` only and stops under `prefers-reduced-motion: reduce`.
 - `npm run lint`: pass.
 - `npm run typecheck`: pass.
+
+## T008 cross-cutting verification (2026-10-21)
+
+Method: a temporary Playwright probe ran against the dev server and real backend, then was removed. It delayed catalog, recommendation, and mapping responses by 800–1200 ms, forced 503 responses, and emulated desktop (1440x900), mobile (390x844), and reduced motion. It also mounted a temporary suspended server route to exercise the root `loading.tsx` boundary; that route was removed.
+
+All 9 scenarios passed:
+
+| Scenario | Result |
+|----------|--------|
+| Desktop initial loading | One “Loading degree programmes…” status, ring is `aria-hidden`, header/sidebar visible and enabled, no overflow; picker replaces the status. |
+| Mobile 390px initial loading | Same status, fully contained at 390px, shell visible, no overflow. |
+| Reduced motion | “Loading degree programmes…” remains visible; ring stays visible with `animation-name: none`. |
+| Catalog failure | Existing alert replaces loading; no status remains after settling; navigation stays visible. |
+| Recommendation loading | One “Finding partner universities…” status; hero, picker, and navigation remain visible; picker stays editable. |
+| Clear during result loading | Clearing removes the status immediately; the delayed response cannot restore results. |
+| Recommendation failure | Existing alert replaces loading; no stuck status. |
+| Compare deep link | “Loading choices…” progresses to “Loading mappings…” with no empty-state flash; selectors stay visible; the result summary replaces the status. |
+| Compare mobile + pending route | “Loading choices…” is contained at 390px. A suspended route rendered the shared “Loading page…” fallback inside the persistent shell before the page content. |
+
+No duplicate status elements, stuck spinners, or horizontal overflow were observed. Ready/instant transitions were not forced to wait.
