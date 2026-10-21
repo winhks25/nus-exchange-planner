@@ -208,3 +208,95 @@ routes and bundle entry points.
 | `npm run typecheck` | PASS (exit 0) |
 
 No product route, production fixture switch or UI change was made in this phase.
+
+## Phase 3 — US1: NUSMods theme only
+
+### T007 — Theme acceptance checks
+
+Created `frontend/tests/theme.spec.ts` with four computed-style scenarios:
+
+- Body declares the exact source stack in `--font-system`; Chromium normalizes
+  `BlinkMacSystemFont` to `"system-ui"` in `getComputedStyle`, so the test asserts the
+  declared custom property exactly and the computed value in its browser-normalized
+  equivalent. Base is 16px/24px (1.5), body text `#69707a`, background white.
+- Existing chrome: h1 40px/500/1.2, brand 20px/700, nav 16px/400 `#848490`, header
+  bottom border 1px `#d3d6db`, nav hover coral. The test asserts the current header,
+  Recommend/Compare links, hero and picker still exist and no results render before a
+  selection; it does not encode the future sidebar or grid.
+- Cards (six-result fixture): white surface, 1px `#d3d6db` border, `.35rem` radius,
+  no ring/shadow; titles 32/24/20px at weight 500; NUS metrics 24/20/16px at weight
+  500; partner text 14px/400 gray; badge 12px/400; action 14px/400 coral outlined.
+- Picker/dropdown: 16px white field, 1px border, `.25rem` radius, `#aeb1b5`
+  placeholder, coral focus border and `.2rem` 25%-alpha ring, dropdown 1px border,
+  `.25rem` radius, `0 2px 6px rgba(0,0,0,.25)` shadow and `#f3f5f8` option hover.
+- Compare (mocked catalog/mappings): existing Degree programme and Partner university
+  controls, three-count summary and mapping row remain; the row uses the same white
+  surface, 1px border, `.35rem` radius and gray text roles.
+
+### T008/T009 — Semantic tokens and source type roles
+
+`frontend/app/globals.css` now maps the pinned source values:
+
+- White `#ffffff`; body `#69707a`; emphasis `#222324`; navigation `#848490`;
+  placeholder `#aeb1b5`; border `#d3d6db`; subtle surface `#f3f5f8`; primary
+  `#ff5138`; error `#b71c1c`.
+- Exact Bootstrap 4.6.2 system font stack, 16px root, 400/500/700 weights, body
+  line-height 1.5 and headings 1.2.
+- `.25rem` control radius and `.35rem` card/frame radius via `--radius-sm/md/lg/xl`;
+  no Bootstrap import, webfont download or new dependency.
+
+Role mapping applied to the existing selectors: brand 20/700; nav 16/400; hero 40/500
+(32px below 650px); picker label and field 16; card titles 32/24/20 and NUS metrics
+24/20/16 at weight 500; partner 14; badge 12; action 14. The previous
+number-only `2rem`/`1.35rem` strong overrides were removed so each value and its label
+share the role size. Natural reflow only: at 1888px the hero fell from the old
+`3.7rem` clamp maximum to the source 40px, and card text occupies less height because
+the source scale is smaller; card boxes, grid tracks, gaps, margins and padding were
+kept.
+
+### T010 — Interaction states
+
+- Field focus uses border `#ff5138` and `0 0 0 .2rem rgba(255,81,56,.25)`; hover uses
+  the placeholder gray; placeholders are `#aeb1b5`.
+- Dropdown uses the source 1px border, `.25rem` radius, `0 2px 6px rgba(0,0,0,.25)`
+  shadow and `#f3f5f8` hover/active options.
+- Nav hover and link/action text use coral; the card action remains bottom-right as an
+  outlined coral anchor. Its existing nested Button markup is only neutralized
+  visually here; removing the nested control is US6 scope.
+- `frontend/components/ui/input.tsx`, `button.tsx` and `badge.tsx` were aligned to
+  the same tokens (control radius, `.2rem`/25% ring, placeholder token, 12px/400
+  badge) only where their utility classes override global element styles.
+
+### T011 — Theme-only validation
+
+| Command | Result |
+| --- | --- |
+| `npx playwright test tests/theme.spec.ts` | PASS — 4/4 (12.3s, 1 worker) |
+| `npx playwright test tests/flows.spec.ts` | 5 passed, 4 failed — the same four baseline failures caused only by removed `.card-count`/`.card-secondary-counts` selectors; no new failure |
+| `npm run lint` | PASS (exit 0) |
+| `npm run typecheck` | PASS (exit 0) |
+
+The four flow failures are exactly the baseline items owned by US6/US7:
+`flows.spec.ts:3`, `:35`, `:66` and `:142` still look for the removed `.card-count`
+before reaching their old layout assertions. The previously passing Compare, no-match,
+error, stale-response, warmed-render (`WARM_RENDER_MS=23.9`) and blank-units scenarios
+still pass.
+
+Theme-only captures, same fixed macOS 26.5.1 / Playwright 1.56.1 Chromium /
+deviceScaleFactor 1 environment:
+
+| Capture | Size |
+| --- | --- |
+| `reference/theme/recommend-idle-1888.png` | 1888 x 1337 |
+| `reference/theme/recommend-results-1888.png` | 1888 x 1337 |
+| `reference/theme/compare-loaded-1888.png` | 1888 x 1337 |
+| `reference/theme/recommend-results-390.png` | 390 x 1986 |
+| `reference/theme/compare-loaded-390.png` | 390 x 1667 |
+
+Layout review against the previous declarations found no changed layout rules:
+`.shell` max-width/margin/padding, header flex/padding, `.hero` padding, the `.cards`
+six-column grid/gap/margin, tier `grid-column` spans and paddings, card content inset,
+`.selectors` grid/gap, and `.mapping-row` grid/gap/padding are unchanged. Only theme
+colors, borders, radii and the requested type sizes changed, so no new controls or
+route content were introduced. The Compare page retained its wording, control labels,
+summary and row order.

@@ -1,6 +1,6 @@
 # Tasks: Recommend layout with NUSMods theme and shared application shell
 
-Generated: 2026-10-21. Status: planned; no implementation tasks completed.
+Generated: 2026-10-21. Status: Phases 1–3 complete (baseline, fixtures, US1 theme); later phases pending.
 
 ## Execution contract
 
@@ -52,11 +52,11 @@ Each story's test can run independently once its listed prerequisites exist; ind
 
 **Independent acceptance:** Both routes use the source system font stack, white/gray/coral tokens and role sizes; existing layout rules and behavior remain intact.
 
-- [ ] T007 [P] [US1] Add focused computed-style assertions in frontend/tests/theme.spec.ts for body font stack/16px base, white surfaces, gray text, coral interaction tokens, 1px borders and source radii; compare against plan/recommend-sketch/contracts/nusmods-theme.md. Assert existing route content/controls remain present; do not encode future sidebar or grid structure.
-- [ ] T008 [P] [US1] Map semantic colors, exact system font stack, 400/500/700 weights, body 1.5 and heading 1.2 line heights, .25rem control and .35rem card radii into frontend/app/globals.css. Use #ffffff background, #69707a body, #222324 emphasis, #848490 navigation, #aeb1b5 placeholders, #d3d6db borders, #f3f5f8 subtle surfaces, #ff5138 primary and #b71c1c error. Replace conflicting old token values; do not install Bootstrap or download fonts.
-- [ ] T009 [US1] Replace hardcoded palette/type overrides in frontend/app/globals.css with the semantic theme: apply the UI contract role table to existing selectors (brand 20, nav 16, hero 40, field 16; tier title 32/24/20 and NUS 24/20/16; partner 14, badge 12, action 14). Remove oversized-number-only treatment. Retain margins, padding, grid tracks, widths, heights and wording; note any natural text reflow caused by the requested font changes.
-- [ ] T010 [US1] Apply source focus/hover/placeholder/dropdown states through frontend/app/globals.css and, only where existing classes override them, frontend/components/ui/input.tsx, frontend/components/ui/button.tsx and frontend/components/ui/badge.tsx. Use the .2rem coral focus ring and specified dropdown shadow; keep Compare control labels and layout untouched.
-- [ ] T011 [US1] Run frontend/tests/theme.spec.ts plus relevant existing flow checks; capture both routes and record theme-only results in plan/recommend-sketch/validation-results.md. Verify changed computed typography, unchanged layout declarations and no new controls. Resolve regressions introduced by this phase before advancing.
+- [X] T007 [P] [US1] Add focused computed-style assertions in frontend/tests/theme.spec.ts for body font stack/16px base, white surfaces, gray text, coral interaction tokens, 1px borders and source radii; compare against plan/recommend-sketch/contracts/nusmods-theme.md. Assert existing route content/controls remain present; do not encode future sidebar or grid structure.
+- [X] T008 [P] [US1] Map semantic colors, exact system font stack, 400/500/700 weights, body 1.5 and heading 1.2 line heights, .25rem control and .35rem card radii into frontend/app/globals.css. Use #ffffff background, #69707a body, #222324 emphasis, #848490 navigation, #aeb1b5 placeholders, #d3d6db borders, #f3f5f8 subtle surfaces, #ff5138 primary and #b71c1c error. Replace conflicting old token values; do not install Bootstrap or download fonts.
+- [X] T009 [US1] Replace hardcoded palette/type overrides in frontend/app/globals.css with the semantic theme: apply the UI contract role table to existing selectors (brand 20, nav 16, hero 40, field 16; tier title 32/24/20 and NUS 24/20/16; partner 14, badge 12, action 14). Remove oversized-number-only treatment. Retain margins, padding, grid tracks, widths, heights and wording; note any natural text reflow caused by the requested font changes.
+- [X] T010 [US1] Apply source focus/hover/placeholder/dropdown states through frontend/app/globals.css and, only where existing classes override them, frontend/components/ui/input.tsx, frontend/components/ui/button.tsx and frontend/components/ui/badge.tsx. Use the .2rem coral focus ring and specified dropdown shadow; keep Compare control labels and layout untouched.
+- [X] T011 [US1] Run frontend/tests/theme.spec.ts plus relevant existing flow checks; capture both routes and record theme-only results in plan/recommend-sketch/validation-results.md. Verify changed computed typography, unchanged layout declarations and no new controls. Resolve regressions introduced by this phase before advancing.
 
 ## Phase 4: US2 — introduce the shared frame and header
 
