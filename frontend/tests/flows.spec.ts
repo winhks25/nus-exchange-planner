@@ -81,15 +81,18 @@ test("Recommend ranks by NUS modules and sizes cards by rank", async ({ page }) 
     "href", "/compare?degree=Business%20Analytics&uni=Korea%20University"
   );
   const boxes = await Promise.all([0, 1, 2, 3, 4].map(index => cards.nth(index).boundingBox()));
-  const [first, second, third, fourth] = boxes;
-  if (!first || !second || !third || !fourth) throw new Error("Expected card boxes");
-  expect(second.width / first.width).toBeGreaterThan(0.45);
-  expect(second.width / first.width).toBeLessThan(0.51);
-  expect(third.width / first.width).toBeGreaterThan(0.45);
-  expect(third.width / first.width).toBeLessThan(0.51);
-  expect(fourth.width / first.width).toBeGreaterThan(0.29);
-  expect(fourth.width / first.width).toBeLessThan(0.35);
+  const [first, second, third, fourth, fifth] = boxes;
+  if (!first || !second || !third || !fourth || !fifth) throw new Error("Expected card boxes");
+  // At 1280 the featured card stays narrow and lower tiers continue in pairs.
+  expect(second.width).toBeLessThan(first.width);
+  expect(second.width / first.width).toBeGreaterThan(0.62);
+  expect(second.width / first.width).toBeLessThan(0.78);
+  expect(third.width).toBeCloseTo(second.width, 0);
+  expect(fourth.width / first.width).toBeGreaterThan(0.48);
+  expect(fourth.width / first.width).toBeLessThan(0.62);
   expect(Math.abs(second.y - third.y)).toBeLessThan(1);
+  expect(Math.abs(second.y - fourth.y)).toBeGreaterThan(1);
+  expect(Math.abs(fourth.y - fifth.y)).toBeLessThan(1);
 
   await page.setViewportSize({ width: 390, height: 844 });
   const narrowBoxes = await Promise.all([0, 1, 2, 3, 4].map(index => cards.nth(index).boundingBox()));
