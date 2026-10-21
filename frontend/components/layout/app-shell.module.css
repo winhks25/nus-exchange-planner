@@ -1,0 +1,60 @@
+/* Shared shell geometry: reference frame x18 y14, width 1745 at viewport 1888. */
+.frame {
+  max-width: 1745px;
+  margin: 14px 18px 53px;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  background: var(--background);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 88px;
+  padding: 0 24px 0 65px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--card-foreground);
+  text-decoration: none;
+}
+
+/* Temporary navigation row below the header until US3. */
+.tempNav {
+  display: flex;
+  gap: 24px;
+  padding: 16px 65px 0;
+}
+
+.tempNav a {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.tempNav a:hover {
+  color: var(--primary);
+}
+
+.content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* Narrow screens keep a fluid frame; the sidebar phase finalizes these. */
+@media (max-width: 800px) {
+  .frame {
+    margin: 10px 12px 24px;
+  }
+
+  .content {
+    padding: 0 12px 40px;
+  }
+}
