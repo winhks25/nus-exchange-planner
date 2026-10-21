@@ -212,15 +212,16 @@
   overflow: hidden;
 }
 
-/* Reference footprints stay as max widths so long content can grow. */
+/* Rank 1 spans the full row, matching the two cards beneath. */
 .cardFeatured {
-  width: min(100%, 634px);
+  width: 100%;
   min-height: 270px;
   padding: 30px;
 }
 
+/* Secondary cards fill their tracks so the pair matches rank 1. */
 .cardSecondary {
-  width: min(100%, 505px);
+  width: 100%;
   min-height: 214px;
   padding: 24px;
 }

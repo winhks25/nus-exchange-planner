@@ -756,3 +756,14 @@ Live count checks from the API (no data changed):
 
 The phase adds no production demo cards, no public preview route and no backend
 changes.
+
+### Post-phase 8 follow-up — featured card width
+The user asked for rank 1 to span the same length as the cards below it. The
+featured and secondary max-width caps were removed, so all three rows share the
+full content width (1052px at the 1888px reference viewport) while the 6-column
+tier ratios still hold. At 390px every card stacks at 100%.
+
+Validation from `frontend/`:
+`npx playwright test tests/recommend-card.spec.ts tests/flows.spec.ts` -> 13/13
+passed. This includes the former US7 width-ratio check: featured 1052px, each
+secondary 518px and each compact 340px, with 16px gaps.
