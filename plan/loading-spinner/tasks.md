@@ -12,7 +12,7 @@ Workflow adaptation: `.specify/` and its setup script/template/constitution/hook
 
 ## Phase 2: Foundation
 
-- [ ] T002 Create frontend/components/loading/LoadingState.tsx with a typed label prop (default “Loading page…”) and page/results variants; render one role="status" with visible text and an aria-hidden decorative ring, no main landmark, focus changes, timers, or fetching. Create frontend/components/loading/loading-state.module.css with centered responsive layouts, existing theme tokens, transform-only ring rotation, and a prefers-reduced-motion override that keeps text visible with a static ring.
+- [X] T002 Create frontend/components/loading/LoadingState.tsx with a typed label prop (default “Loading page…”) and page/results variants; render one role="status" with visible text and an aria-hidden decorative ring, no main landmark, focus changes, timers, or fetching. Create frontend/components/loading/loading-state.module.css with centered responsive layouts, existing theme tokens, transform-only ring rotation, and a prefers-reduced-motion override that keeps text visible with a static ring.
 
 **Gate:** Shared component supports both loading sizes and accessible status labeling before route/page integration.
 

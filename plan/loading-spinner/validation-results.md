@@ -31,3 +31,11 @@ No Playwright or build run was needed for the baseline; T009 runs the full regre
 - Reduced motion: static ring with text still visible.
 - Keep existing status wording: “Loading degree programmes…”, “Loading choices…”, “Finding partner universities…”, “Loading mappings…”.
 - Preserve abort cleanup and prevent stale completions from overwriting newer results.
+
+## T002 foundation (2026-10-21)
+
+- Added `frontend/components/loading/LoadingState.tsx` and `loading-state.module.css`.
+- One `role="status"` includes the visible label and an `aria-hidden` ring; the component has no main landmark, focus management, timers, or fetching.
+- `page` and `results` variants share the theme tokens and centered layout; rotation uses `transform` only and stops under `prefers-reduced-motion: reduce`.
+- `npm run lint`: pass.
+- `npm run typecheck`: pass.
