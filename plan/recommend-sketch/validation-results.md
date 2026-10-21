@@ -767,3 +767,103 @@ Validation from `frontend/`:
 `npx playwright test tests/recommend-card.spec.ts tests/flows.spec.ts` -> 13/13
 passed. This includes the former US7 width-ratio check: featured 1052px, each
 secondary 518px and each compact 340px, with 16px gaps.
+
+Superseded by Phase 9 T039: the final layout restores the 634px centred featured
+card and explicit 1/2/3 row groups. The full-width experiment is not the accepted
+baseline.
+
+## Phase 9 — US7: final card rows
+
+### T037 — Collection geometry checks
+Created `frontend/tests/recommend-visual.spec.ts` at 1888x1337 with six unique
+API fixtures. It asserts the documented anchors within the 8px tolerance, tier
+order and non-overlap, theme surface/border/radius, and no horizontal overflow.
+The test was written first and failed against the temporary six-column/full-width
+collection; it passed after T038/T039. No whole-image comparison is used.
+
+### T038/T039 — Row grouping and collection geometry
+- `frontend/components/UniversityCards.tsx` exports `RankedCard` and
+  `RecommendationRows`; `splitRows` groups index 0, indices 1–2 and chunks of
+  three. Order and real identities are preserved; no filler cards, re-sorting or
+  hidden later rows.
+- `frontend/components/recommend/recommend.module.css` replaces the temporary
+  grid with flex row groups. The collection stays in the 1100px shell content
+  column until 1700px; at 1888px it is 1208px wide at x391 via
+  `margin-left: calc(50% - 642px)`, without touching the picker's 1052px column.
+- Breakpoints: ≥1440 keeps 1/2/3; 1024–1439 keeps featured then pairs; <1024
+  stacks in order. Compact cards use `margin-left: 35px` on the middle item at
+  ≥1700px to reach x835.
+- Card gaps were tightened from 18px to 0 and content gained 8px top padding to
+  meet the vertical anchors without changing copy, theme or fetching.
+
+Measured at 1888x1337 with six API fixtures:
+
+| Tier | Box | Measured | Reference |
+| --- | --- | --- | --- |
+| Featured | #1 | x678 y512 634x270 | x678 y512 634x270 |
+| Secondary | #2/#3 | x440/x1010 y838 505x215.8 | x440/x1010 y839 505x214 |
+| Compact | #4/#5/#6 | x391/x835/x1244 y1098.8 355x221 | x391/x835/x1244 y1095 355x151 |
+
+Featured centre delta is 0. Compact height grows from long fixture titles while
+keeping the 151px minimum; no card overlaps another and the document has 0px
+horizontal overflow. Footer boxes sit directly below content (0px gap for
+secondary/compact, 26.6px for featured) and actions keep 21–31px lower-right
+insets. Hierarchy remains #1 name/counts/action, #2–#3, then #4–#6.
+
+At 390x844 all six cards are 342px wide at x24, ordered vertically; titles are
+24px, NUS metrics 20px, partner/badge/action 14px, actions are 44px tall and
+overflow remains 0px. Tablet 768px also stacks at full content width.
+
+Source tokens are unchanged from the user theme: card surface
+`rgb(34, 35, 36)` (`#222324`), border `rgb(72, 72, 72)` (`#484848`), radius
+`5.6px` (`.35rem`). The accent remains the user override `rgb(113, 182, 243)`
+(`#71b6f3`) rather than the pinned NUSMods cyan, and the hero keeps its Comic
+Sans treatment; both differences from the sketch are intentional and preserved.
+
+### T040 — Preview and live identities
+`frontend/tests/recommend-visual.spec.ts` now checks the isolated six-card
+harness at 1888px (634/505/355 widths, 1-2-3 row alignment, repeated `#1` and
+copy confined to the harness) and the production UI with six unique API
+universities (ranks `#1`–`#6` in API order, unique names, no fabricated
+placeholder cards).
+
+### T041 — Variants and responsive checks
+Added coverage for 0/1/2/5/6/7 results, long titles, empty initial state, rapid
+degree changes, 1440/1280/768/390px, and 200% zoom emulated as 944 CSS px at
+deviceScaleFactor 2. Later compact rows remain visible and ordered; rapid changes
+leave only the newest collection. The stale half/third width ratios in
+`frontend/tests/flows.spec.ts` were replaced with current pair rules while
+keeping rank, count and deep-link assertions.
+
+### T042 — Phase validation (macOS 26.5.1, Playwright 1.56.1 Chromium)
+
+| Command (from frontend/) | Result |
+| --- | --- |
+| `npx playwright test tests/recommend-visual.spec.ts` | PASS 16/16 |
+| `npx playwright test tests/flows.spec.ts` | PASS 9/9 |
+| `npm run test:e2e` | 51 passed / 9 failed — all nine inherited |
+| `npm run build` | PASS (`/`, `/_not-found`, `/compare`) |
+| `npm run typecheck` | PASS |
+| `npm run lint` | PASS (no warnings) |
+
+Full-suite failures are all present before Phase 9 and unrelated to the
+collection: five `app-shell.spec.ts` cases (lowercase brand/frame/rail anchors),
+one `recommend-hero.spec.ts` font case, and three `theme.spec.ts` accent or hero
+line-height cases. The former US7-owned `flows.spec.ts:63` width-ratio failure
+now passes. Full-suite time: 1.1m.
+
+New reviewed captures in `reference/collection/` (same OS/browser; 1888 at the
+1337px reference frame, narrower widths full-page so every row and footer is
+visible):
+
+| Capture | Size | Reviewed result |
+| --- | --- | --- |
+| `recommend-1888.png` | 1888x1337 | 1/2/3 rows at the anchors; footers clear |
+| `recommend-1440.png` | 1440x1399 | featured, pair, triple; no overflow |
+| `recommend-1280.png` | 1280x1632 | featured, pair, compact pairs; lone sixth centred |
+| `recommend-768.png` | 768x1926 | one full-width card per row, ordered |
+| `recommend-390.png` | 390x2101 | stacked, 44px actions, no clipping |
+
+The Next.js dev-tools badge visible in captures is a dev-only overlay, not
+application UI. No production demo data, public preview route or backend change
+was added.
