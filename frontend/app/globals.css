@@ -141,7 +141,7 @@ input:hover,select:hover {
 input:focus,select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 .2rem --ring;
+  box-shadow: 0 0 0 .2rem var(--ring);
 }
 .combo-wrap {
   position: relative;

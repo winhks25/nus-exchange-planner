@@ -19,7 +19,9 @@ const NAV_GRAY = "rgb(163, 163, 163)";
 const PLACEHOLDER_GRAY = "rgb(174, 177, 181)";
 const BORDER_GRAY = "rgb(72, 72, 72)";
 const SUBTLE_GRAY = "rgb(41, 41, 41)";
-const CORAL = "rgb(255, 81, 56)";
+// Accent follows the user's committed cyan override of --primary/--ring.
+const ACCENT = "rgb(0, 197, 255)";
+const RING = "rgb(0, 249, 255)";
 
 async function computed(
   locator: Locator,
@@ -96,7 +98,8 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   ]);
   expect(brand["font-size"]).toBe("20px");
   expect(brand["font-weight"]).toBe("700");
-  expect(brand.color).toBe(EMPHASIS);
+  // Brand renders in the accent since the rounded-header restyle.
+  expect(brand.color).toBe(ACCENT);
 
   const navLink = page.getByRole("navigation").getByRole("link", { name: "Compare" });
   const nav = await computed(navLink, ["font-size", "font-weight", "color"]);
@@ -117,7 +120,7 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   await navLink.hover();
   await expect
     .poll(async () => (await computed(navLink, ["color"])).color)
-    .toBe(CORAL);
+    .toBe(ACCENT);
 
   await expect(page.getByRole("link", { name: "Recommend" })).toHaveAttribute("href", "/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -218,9 +221,9 @@ test("cards use source surfaces, radii and tier type sizes", async ({ page }) =>
   ]);
   expect(action["font-size"]).toBe("14px");
   expect(action["font-weight"]).toBe("400");
-  expect(action.color).toBe(CORAL);
+  expect(action.color).toBe(ACCENT);
   expect(action["border-top-width"]).toBe("1px");
-  expect(action["border-top-color"]).toBe(CORAL);
+  expect(action["border-top-color"]).toBe(ACCENT);
   expect(action["border-radius"]).toBe("4px");
   await expect(cards.nth(0).getByRole("link", { name: /View Mappings/ })).toBeVisible();
 });
@@ -249,10 +252,10 @@ test("picker and dropdown expose source placeholder, focus and hover states", as
   await picker.focus();
   await expect
     .poll(async () => (await computed(picker, ["border-top-color"]))["border-top-color"])
-    .toBe(CORAL);
+    .toBe(ACCENT);
   const focused = await computed(picker, ["box-shadow"]);
   expect(focused["box-shadow"]).toContain("3.2px");
-  expect(focused["box-shadow"]).toContain("rgba(255, 81, 56, 0.25)");
+  expect(focused["box-shadow"]).toContain(RING);
 
   await picker.click();
   const listbox = page.getByRole("listbox");
