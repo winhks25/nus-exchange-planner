@@ -81,6 +81,9 @@
 }
 
 .content {
+  /* A definite width keeps the capped 1100px column; grid auto margins
+     otherwise shrink-fit the item to its widest text. */
+  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 24px 60px;
