@@ -89,9 +89,9 @@ test.describe("shared navigation sidebar", () => {
       }
 
       // Only the link matching the current route carries aria-current.
-      for (const { label } of NAV_ITEMS) {
+      for (const { label, href } of NAV_ITEMS) {
         const link = nav.getByRole("link", { name: label, exact: true });
-        if (label === route || `/${label.toLowerCase()}` === route) {
+        if (href === route) {
           await expect(link).toHaveAttribute("aria-current", "page");
         } else {
           await expect(link).not.toHaveAttribute("aria-current");
