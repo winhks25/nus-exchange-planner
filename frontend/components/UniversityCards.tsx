@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants, Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Recommendation } from "@/lib/types";
 
 export default function UniversityCards(
@@ -7,35 +10,44 @@ export default function UniversityCards(
   return (
     <section aria-label="Ranked partner universities" className="cards">
       {recommendations.map((item, index) => (
-        <article
-          className={`card ${index === 0 ? "top-card" : index < 3 ? "half-card" : "third-card"}`}
+        <Card
+          role="article"
+          className={`university-card ${index === 0 ? "top-card" : index < 3 ? "half-card" : "third-card"}`}
           key={item.university}
         >
-          <div className="rank">#{index + 1}</div>
-          <div>
-            <h2>{item.university}</h2>
-            <p>{item.country}</p>
-          </div>
+          <CardHeader className="university-card-header">
+            <span className="rank">#{index + 1}</span>
+            <div className="university-card-heading">
+              <CardTitle className="university-card-title text-6xl">
+                <h2>{item.university}</h2>
+              </CardTitle>
+              <Badge variant="secondary" className="country-badge">{item.country}</Badge>
+            </div>
+          </CardHeader>
 
-          {/* number of mappable modules */}
-          <div className="card-count flex flex-col">
-            {/* NUS */}
-            <div>
+          <CardContent className="university-card-content">
+            <p className="module-count nus-module-count">
               <strong>{item.distinct_nus_module_count}</strong>
-              <span> NUS Modules</span>
-            </div>
-            
-            {/* Partner Uniersity */}
-            <div>
+              <span>NUS Modules</span>
+            </p>
+            <p className="module-count partner-module-count">
               <strong>{item.partner_module_count}</strong>
-              <span> {item.university} Modules</span>
-            </div>
-          </div>
-        
-          <Link href={`/compare?degree=${encodeURIComponent(degree)}&uni=${encodeURIComponent(item.university)}`}>
-            View Mappings →
-          </Link>
-        </article>
+              <span>{item.university} Modules</span>
+            </p>
+          </CardContent>
+
+          <CardFooter className="university-card-footer">
+            <Link 
+            href={`/compare?degree=${encodeURIComponent(degree)}&uni=${encodeURIComponent(item.university)}`}
+            >
+              <Button variant="link"
+                className={buttonVariants({ variant: "default" })}
+              >
+                View Mappings →
+              </Button>
+            </Link>
+          </CardFooter>
+        </Card>
       ))}
     </section>
   );

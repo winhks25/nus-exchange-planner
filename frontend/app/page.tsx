@@ -56,7 +56,7 @@ export default function RecommendPage() {
   return (
     <main>
       <div className="hero">
-        <p className="eyebrow">NUS SCHOOL OF COMPUTING · EXCHANGE</p>
+        <p className="eyebrow">NUS Exchange Planner</p>
         <h1>Find where your modules can take you.</h1>
         <p>Choose a degree to rank partner universities by available module mappings.</p>
       </div>
