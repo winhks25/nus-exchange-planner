@@ -657,3 +657,102 @@ stays within the viewport.
 Captures in `reference/picker/` (fixed environment):
 `recommend-idle-1888.png`, `recommend-dropdown-1888.png` (listbox over the first
 card), `recommend-idle-390.png`, and `recommend-dropdown-390.png`.
+
+## Phase 8 — US6: reusable university card
+
+### T031 — Card acceptance checks
+`frontend/tests/recommend-card.spec.ts` adds four API-driven scenarios:
+- Tier order: index 0 is featured, indices 1–2 secondary and indices 3+ compact;
+  each card shows its 1-based rank, h2 title, country badge, `NUS Modules` primary
+  count and `Partner University Modules` secondary count.
+- `mapping_count` stays out of the card: the fixture with 22 mappings renders no
+  "22" metric, and no `distinct`/`mappable` copy remains.
+- Action: exactly one link per card, exact ASCII text `View Mappings -->`, encoded
+  degree/university href, one focus stop and no button nested inside the link.
+- 0/1 counts keep the plural labels; long names/countries stay complete above the
+  footer without horizontal overflow.
+- The isolated preview serves six repeated-copy cards, displays rank `#1` on every
+  card and intercepts the fixture link instead of leaving the harness.
+
+TDD evidence: before implementation the file failed 3/3 at the missing `data-tier`
+attribute and old count copy; after implementation it passed 4/4.
+
+### T032/T033 — Component and tier styles
+- `frontend/components/recommend/UniversityCard.tsx` composes the existing
+  `Card`, `CardHeader`, `CardTitle`, `CardContent`, `CardFooter` and `Badge`
+  primitives. Props are `recommendation`, `degree`, 1-based `rank` and
+  `featured | secondary | compact` tier. Counts come straight from the API;
+  `mapping_count` is unused by the view. The only control is one plain anchor to
+  `/compare?degree=<encoded>&uni=<encoded>`.
+- `frontend/components/recommend/recommend.module.css` adds the temporary 6-column
+  collection grid and card rules: 634x270 / 505x214 / 355x151 constrained
+  footprints, `.35rem` radius, 1px border, 32/24/20 titles, 24/20/16 NUS metrics,
+  14px partner/action and 12px badge type. Lower-right footer, rank/count insets
+  and natural growth for long text are preserved.
+- At `max-width: 650px` cards stack in one column with 24px titles, 20px NUS
+  metrics, 14px supporting/badge/action text and a 44px action target.
+
+Note: task text still names the earlier white surface; the committed dark tokens
+(`--card`/`--border`) remain authoritative, matching the user theme override.
+
+### T034 — Collection integration and flow selectors
+- `frontend/components/UniversityCards.tsx` now maps incoming order onto
+  `UniversityCard` tiers and keeps the section/region label. The old inline card
+  markup, nested `Button`/`Link`, Unicode arrow and `text-6xl` are gone.
+- Obsolete `.university-card*`, `.card*`, `.top-card`/`.half-card`/`.third-card`
+  rules were removed from `frontend/app/globals.css`; the temporary collection
+  grid moved to the scoped Recommend module.
+- `frontend/tests/flows.spec.ts` now checks the new labels (`NUS Modules`,
+  `Partner University Modules`) and exact ranks. API expectations, Compare
+  behavior and deep links are unchanged. The old width-ratio assertions were
+  intentionally left for US7.
+- `frontend/tests/theme.spec.ts` card lookups now use semantic elements
+  (`p`, badge text and the action link) rather than removed class names. Card
+  surface, radius, title/metric sizes and footer assertions pass; the remaining
+  theme failures are inherited accent-token expectations.
+
+Focused result: `npx playwright test tests/flows.spec.ts` -> 8 passed / 1 failed.
+The single failure is `flows.spec.ts:63` reaching the stale US7 width ratios
+(secondary/featured 0.706 against the old 0.45–0.51); all preceding rank/count
+assertions in that test pass.
+
+### T035 — Isolated preview harness
+- `frontend/tests/fixtures/UniversityCardPreview.tsx` renders the six
+  `visualRecommendations` through the real `UniversityCard` with
+  `VISUAL_DISPLAY_RANK = 1`, repeated `University Name`/`Country`, NUS 10 and
+  partner 12.
+- `frontend/tests/fixtures/preview-server.mjs` is a Node-only server that
+  transpiles the real TSX, serves the scoped card CSS on port 18767 and intercepts
+  fixture links. It is not a Next route and is not imported by application code.
+- `frontend/playwright.config.ts` starts the harness beside the API and frontend
+  servers; `recommend-card.spec.ts` confirms the preview cards, repeated rank and
+  intercepted action.
+
+### T036 — Validation (macOS, Playwright 1.56.1 Chromium)
+
+| Check (from frontend/) | Result |
+| --- | --- |
+| `npx playwright test tests/recommend-card.spec.ts` | PASS 4/4 (9–10s) |
+| `npx playwright test tests/flows.spec.ts` | 8 passed / 1 failed — only the US7-owned stale card-width ratios at `flows.spec.ts:63` |
+| `npx playwright test` | 34 passed / 10 failed — all ten are inherited and documented below |
+| `npm run typecheck` | PASS |
+| `npm run lint` | PASS |
+| Full-suite time | 40.4s |
+
+Full-suite failures, all present before this phase or scheduled for US7:
+- 5 app-shell cases: lowercase brand copy, frame/header anchors, rail anchors and
+  390px brand copy inherited from the post-phase-5 restyle.
+- 3 theme cases: Comic Sans hero family/line-height and cyan-vs-committed accent
+  expectations after the user's hero/color changes.
+- 1 hero case: system-font expectation superseded by Comic Sans.
+- 1 flow case: old card width ratios owned by US7.
+
+Live count checks from the API (no data changed):
+- Artificial Intelligence / University of Toronto: NUS 6, partner 9,
+  mapping_count 9, Compare rows 9.
+- Business Analytics / University of Western Australia, The: NUS 11, partner 19,
+  mapping_count 22, Compare rows 22. The browser flow also verifies Korea
+  University NUS 11 / partner 17 and the encoded Compare deep link.
+
+The phase adds no production demo cards, no public preview route and no backend
+changes.

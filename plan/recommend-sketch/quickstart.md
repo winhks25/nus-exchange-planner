@@ -54,6 +54,13 @@ components or any route entry.
   production-page tests use these API mocks, while repeated-placeholder display is
   reserved for the isolated component harness introduced in US6.
 
+- `frontend/tests/fixtures/preview-server.mjs` renders
+  `frontend/tests/fixtures/UniversityCardPreview.tsx` on
+  `http://127.0.0.1:18767`; Playwright starts it with the other test servers. It is a
+  Node-only harness that imports the real card component, supplies the fixture rank
+  `#1` explicitly and intercepts fixture links. It is not a Next.js route or part of
+  the production bundle.
+
 Fixed visual capture settings for all screenshots and geometry checks: macOS
 26.5.1, Playwright 1.56.1 bundled Chromium (Desktop Chrome profile), viewport
 1888×1337, deviceScaleFactor 1. The old PNG is a geometry reference only, never the
