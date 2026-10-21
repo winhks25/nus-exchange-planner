@@ -35,7 +35,7 @@ Workflow adaptation: `.specify/` and its setup script/template/constitution/hook
 **Independent verification:** Delay each result endpoint, change/clear selections, simulate failed and empty responses, and navigate away mid-request. Verify pending indicators disappear correctly and obsolete requests cannot overwrite newer results. Open Compare with valid degree/uni query values and verify continuous truthful loading through both dependent requests.
 
 - [X] T006 [P] [US2] Update frontend/app/page.tsx to use results-variant LoadingState with “Finding partner universities…” for the loading state while keeping hero and degree selector visible; verify clear, success, empty results, error, and rapid selection transitions, adding request guards only if needed to prevent stale completion.
-- [ ] T007 [P] [US2] Update frontend/app/compare/page.tsx to use results-variant LoadingState with “Loading mappings…” while retaining hero/selectors; keep valid URL-driven catalog-to-mappings transitions loading until the appropriate request settles, and preserve invalid-link notes, clear behavior, error/empty results, cancellation, and stale-response protection.
+- [X] T007 [P] [US2] Update frontend/app/compare/page.tsx to use results-variant LoadingState with “Loading mappings…” while retaining hero/selectors; keep valid URL-driven catalog-to-mappings transitions loading until the appropriate request settles, and preserve invalid-link notes, clear behavior, error/empty results, cancellation, and stale-response protection.
 
 ## Phase 5: Polish and cross-cutting verification
 

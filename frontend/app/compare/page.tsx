@@ -28,8 +28,8 @@ function CompareContent() {
 
     getCatalog(controller.signal)
       .then(data => {
+        // URL synchronization decides whether to stay loading for mappings.
         setCatalog(data);
-        setState("idle");
       })
       .catch(error => {
         if (error.name !== "AbortError") setState("error");
@@ -68,6 +68,8 @@ function CompareContent() {
 
     getMappings(degree.name, university.name, controller.signal)
       .then(data => {
+        // Ignore responses superseded by a newer selection pair.
+        if (controller.signal.aborted) return;
         setResult(data);
         setState("idle");
       })
@@ -118,7 +120,10 @@ function CompareContent() {
         </div>
       )}
       {note && <p role="status" className="note">{note}</p>}
-      {state === "loading" && <p role="status">Loading mappings…</p>}
+      {/* Result loading keeps the hero and selectors available. */}
+      {state === "loading" && (
+        <LoadingState variant="results" label="Loading mappings…" />
+      )}
       {state === "error" && (
         <p role="alert">The mapping service is unavailable. Please try again.</p>
       )}
