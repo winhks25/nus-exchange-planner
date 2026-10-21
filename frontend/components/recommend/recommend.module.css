@@ -143,3 +143,37 @@
   border-right: 3px solid var(--illustration-fill);
   transform: rotate(-25deg);
 }
+
+/* Degree picker: reference field 526x60 at x726/y405 on the 1888px canvas. */
+.degreeField {
+  width: min(526px, 100%);
+  margin: clamp(24px, 2.81vw, 53px) auto 0;
+}
+
+/* Wide screens keep the reference's slightly left-of-centre field. */
+@media (min-width: 1600px) {
+  .degreeField {
+    margin-left: calc(50% - 307px);
+    margin-right: auto;
+  }
+}
+
+/* Flatten the shared picker wrapper so the field fills this frame. */
+.degreeField :global(.combo-wrap) {
+  max-width: none;
+}
+
+/* Centre the visible label over the field. */
+.degreeField label {
+  margin-bottom: 11px;
+  text-align: center;
+}
+
+/* Themed surface, 60px control height and centred value/placeholder. */
+.degreeField input {
+  height: 60px;
+  padding: 0 15px;
+  text-align: center;
+  background: var(--card);
+  border-radius: .25rem;
+}
