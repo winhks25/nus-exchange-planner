@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AppShell from "@/components/layout/AppShell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -8,19 +9,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const navigation = (
+    <>
+      <Link href="/">Recommend</Link>
+      <Link href="/compare">Compare</Link>
+    </>
+  );
+
   return (
     <html lang="en">
       <body>
-        <div className="shell">
-          <header>
-            <Link className="brand" href="/">NUS Exchange Planner</Link>
-            <nav>
-              <Link href="/">Recommend</Link>
-              <Link href="/compare">Compare</Link>
-            </nav>
-          </header>
-          {children}
-        </div>
+        <AppShell navigation={navigation}>{children}</AppShell>
       </body>
     </html>
   );

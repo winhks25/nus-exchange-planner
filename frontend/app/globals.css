@@ -91,39 +91,6 @@ button,input,select {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
-.shell {
-  max-width: 1100px;
-  margin: auto;
-  padding: 0 24px 60px;
-}
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--border);
-}
-header nav {
-  display: flex;
-  gap: 24px;
-}
-header a {
-  text-decoration: none;
-}
-header nav a {
-  color: var(--muted-foreground);
-  font-size: 1rem;
-  font-weight: 400;
-  transition: color .15s ease;
-}
-header nav a:hover {
-  color: var(--primary);
-}
-.brand {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--card-foreground);
-}
 .hero {
   padding: 55px 0 26px;
 }
@@ -412,11 +379,6 @@ input:focus,select:focus {
 @media(max-width:650px) {
   .selectors {
     grid-template-columns: 1fr;
-  }
-  header {
-    align-items: flex-start;
-    gap: 16px;
-    flex-direction: column;
   }
   .mapping-row {
     gap: 6px;

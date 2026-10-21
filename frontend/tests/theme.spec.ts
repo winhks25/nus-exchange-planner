@@ -89,7 +89,7 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   expect(hero["line-height"]).toBe("48px");
   expect(hero.color).toBe(EMPHASIS);
 
-  const brand = await computed(page.locator(".brand"), [
+  const brand = await computed(page.locator("header").getByRole("link"), [
     "font-size",
     "font-weight",
     "color",
