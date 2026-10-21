@@ -205,7 +205,7 @@
 .compactRow {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 24px;
   margin-top: 45px;
 }
@@ -244,6 +244,16 @@
   .compactRow > :nth-child(2) {
     margin-left: 35px;
   }
+
+  /* Partial rows keep their columns and stay anchored to the left. */
+  .compactRow[data-count="1"],
+  .compactRow[data-count="2"] {
+    justify-content: flex-start;
+  }
+
+  .compactRow[data-count="2"] > :nth-child(2) {
+    margin-left: 89px;
+  }
 }
 
 /* Three fluid compact cards before the reference canvas width. */
@@ -266,7 +276,7 @@
   .compactRows {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 24px;
     margin-top: 45px;
   }

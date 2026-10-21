@@ -60,7 +60,11 @@ export function RecommendationRows({ degree, cards }: RecommendationRowsProps) {
       {compactRows.length > 0 && (
         <div className={styles.compactRows}>
           {compactRows.map(row => (
-            <div className={styles.compactRow} key={row[0].key}>
+            <div
+              className={styles.compactRow}
+              data-count={row.length}
+              key={row[0].key}
+            >
               {row.map(card => (
                 <UniversityCard
                   key={card.key}
