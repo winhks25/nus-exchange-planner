@@ -27,7 +27,7 @@ npm run build --prefix frontend
 npm run test:e2e --prefix frontend
 ```
 
-Playwright starts isolated local servers on ports 18765 and 18766 and needs Chromium (`cd frontend && npx playwright install chromium`). See [validation results](plan/validation-results.md) for dataset counts, browser scenarios, and timings.
+Playwright starts isolated local servers on ports 18765 and 18766 and needs Chromium (`cd frontend && npx playwright install chromium`). Its frontend uses `.next-e2e/` so test bundles containing the temporary API address cannot overwrite the normal dev server's `.next/` output. You can keep `./dev` running during tests. See [validation results](plan/validation-results.md) for dataset counts, browser scenarios, and timings.
 
 ## Deploy on Vercel
 

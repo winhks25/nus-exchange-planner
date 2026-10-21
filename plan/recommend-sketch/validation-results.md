@@ -399,3 +399,30 @@ y102; the temporary Recommend/Compare row below the header on desktop and at
 1100px content column; the frame grows with short content and no fixed height or
 clipping occurs. The dev-tools badge visible in captures is a Next.js dev-only
 overlay, not application UI.
+
+## Post-phase 4 repair — isolate browser-test build output (2026-10-21)
+
+The local app displayed “The mapping service is unavailable” even though
+`http://localhost:8001/api/v1/catalog` returned 200 with six degrees and five
+universities. The JavaScript served on port 3000 contained the test API origin
+`http://127.0.0.1:18765`. Playwright used separate ports but shared `.next/`
+with the regular development server, allowing its compiled bundles to overwrite
+the live app's output. Once its temporary API stopped, catalog loading failed.
+
+Added `frontend/next.config.ts` to select `.next-e2e/` when the Playwright
+frontend sets `PLAYWRIGHT_TEST=1`. Normal development retains `.next/`.
+Git and ESLint ignore test build output; TypeScript includes the generated test
+route types. No product UI or later feature phase was implemented by this repair.
+
+Validation:
+
+- The normal dev server recompiled with `http://localhost:8001` after loading
+  the new config, and stayed running throughout browser tests.
+- `npm run test:e2e --prefix frontend -- tests/app-shell.spec.ts`: 6 passed.
+- After the test servers stopped, a Chromium smoke check against the actual
+  app on port 3000 confirmed catalog HTTP 200 from port 8001, Artificial
+  Intelligence selection producing five university cards, and navigation to
+  Compare producing nine mapping rows with no error alert.
+- `npm run lint --prefix frontend`, `npm run typecheck --prefix frontend`, and
+  `git diff --check`: passed. The inherited card-selector failures documented
+  above are outside this repair; the full flow suite was not rerun.
