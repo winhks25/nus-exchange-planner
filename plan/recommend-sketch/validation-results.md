@@ -521,3 +521,68 @@ badge in captures is a Next.js dev-only overlay, not application UI.
 
 Sidebar/header dimensions match across pages per the app-shell spec, and no
 duplicate or hidden-focusable navigation remains.
+
+## Phase 6 — US4: Recommend hero only
+
+### T022 — Hero acceptance checks
+`frontend/tests/recommend-hero.spec.ts` covers:
+- Recommend shows exactly one `h1` with the exact text `Ready to study abroad?`;
+  the old eyebrow, headline and supporting sentence are absent within `main`.
+- The plane is a single decorative `svg` in `main`: `aria-hidden`, not a
+  link/tab stop, `pointer-events: none`.
+- Reference anchors at 1888x1337 with 8px tolerance: heading x417/y193, 48px
+  tall on one line; plane x1422/y172 at 116x115.
+- 390px mobile: 32px/500 heading, plane visible, no horizontal overflow.
+- Compare guard: its own eyebrow, `Compare module mappings.` h1, supporting
+  sentence, both pickers and one mapping row survive the Recommend hero swap.
+
+TDD ordering confirmed: the spec ran 3 failing / 1 skipped before T024 and
+4/4 after.
+
+### T023/T024 — Component, scoped styles, page integration
+- `frontend/components/recommend/RecommendHero.tsx`: heading plus an outlined
+  paper-plane SVG. The outline is light (`--text-secondary`); the fold detail
+  follows the tracked accent token `--primary` (cyan under the committed
+  override), honouring the "coral detail" wording via the token the user pins.
+- `frontend/components/recommend/recommend.module.css` (new): reserved hero
+  region `min-height: 296px` so the picker label starts at y370 (reference);
+  heading absolute at x417/y193, 2.5rem/500/1.2, single line; plane absolute at
+  x1422/y172, 116x115, `pointer-events: none`; <=1556px plane 84x83 inset
+  right 66px; 1024-1140px heading left 305px (clears the rail); <=1023px
+  heading left 24px; <=800px hero flows statically and the heading wraps
+  naturally (plane 72x71); <=650px heading 2rem/32px, matching the global
+  breakpoint.
+- `frontend/app/page.tsx`: only the hero markup was replaced with
+  `<RecommendHero />`; data fetching, effects, picker and results sections are
+  untouched. `globals.css` is untouched because Compare still uses the global
+  `.hero`/`.eyebrow` markup (out of phase scope).
+- Absolute placement uses page coordinates (no positioned ancestor), which
+  matches the reference; smaller source typography is NOT enlarged to fill the
+  sketch's wider headline box (40px type renders 413px wide where the sketch
+  hero spanned ~930px; the plane stays at x1422).
+
+### Repair — content column width (shell defect surfaced by US4)
+With the old in-flow 80px hero removed, the grid item `.content` (auto margins
++ max-width, no width) shrink-fit to its largest in-flow child: the picker
+collapsed 675 -> 207px, contradicting the phase-4 "1100px capped content
+column" design. Repair in `frontend/components/layout/app-shell.module.css`:
+`.content { width: 100%; }` so the column is definite (1052px inside padding
+at 1888) instead of shrink-fit. Header/rail untouched.
+
+### Verification (macOS, Playwright 1.56.1 Chromium)
+
+| Check (from frontend/) | Result |
+| --- | --- |
+| `npx playwright test tests/recommend-hero.spec.ts` | PASS 4/4 |
+| `npx playwright test tests/theme.spec.ts` | PASS 4/4 |
+| `npx playwright test tests/app-shell.spec.ts tests/flows.spec.ts` | 13 passed / 9 failed — identical to the pre-phase baseline: 5 app-shell failures inherited from the post-phase-5 restyle (brand casing, header geometry) and 4 stale `.card-count` flows failures owned by US6. No new failures. |
+| `npm run typecheck` | PASS |
+| `npm run lint` | PASS |
+
+Measured at 1888x1337: heading x417.0 y193.0 413.2x48 (one line); plane at
+x1422.0 y172.0, 116x115; picker label returns to x507 y370 at its full 600px
+width. At 390: 32px heading wraps in flow, plane 72x71, overflow 0.
+
+Captures (fixed env) in `reference/hero/`: `recommend-idle-1888.png`,
+`compare-loaded-1888.png` (CS x Toronto, 6 mapping rows), and
+`recommend-idle-390.png` (full page), reviewed against the anchors above.

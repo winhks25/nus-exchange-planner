@@ -1,6 +1,6 @@
 # Tasks: Recommend layout with NUSMods theme and shared application shell
 
-Generated: 2026-10-21. Status: Phases 1–5 complete (baseline, fixtures, US1 theme, US2 shell/header, US3 sidebar); later phases pending.
+Generated: 2026-10-21. Status: Phases 1–6 complete (baseline, fixtures, US1 theme, US2 shell/header, US3 sidebar, US4 hero); later phases pending.
 
 ## Execution contract
 
@@ -100,10 +100,10 @@ Each story's test can run independently once its listed prerequisites exist; ind
 
 **Independent acceptance:** One h1 reads Ready to study abroad?, the plane remains decorative, and no old eyebrow or marketing paragraph remains on Recommend.
 
-- [ ] T022 [P] [US4] Add hero assertions in frontend/tests/recommend-hero.spec.ts for exact h1 text, removal of old eyebrow/supporting copy on Recommend only, 40px desktop/32px mobile size and decorative non-focusable plane. Retain a Compare content assertion to catch global selector leakage.
-- [ ] T023 [P] [US4] Create frontend/components/recommend/RecommendHero.tsx with the exact heading Ready to study abroad? and clean outlined paper plane with coral detail. Add scoped hero rules to frontend/components/recommend/recommend.module.css: heading anchor x417/y193 and plane near x1422/y172 sized 116×115 at 1888px, source weight 500 and line-height 1.2. Use a reserved hero region so smaller theme type does not collapse planned whitespace.
-- [ ] T024 [US4] Replace only the hero markup in frontend/app/page.tsx with RecommendHero. Keep catalog fetching, effects, picker rendering and results conditions unchanged. Scope desktop and narrow hero layout in frontend/components/recommend/recommend.module.css; preserve one line at the reference width and allow natural wrapping on phones.
-- [ ] T025 [US4] Run frontend/tests/recommend-hero.spec.ts and inspect desktop/390px placement; record results in plan/recommend-sketch/validation-results.md. Verify smaller NUSMods typography does not lead to enlarging the font to fill the reference box.
+- [X] T022 [P] [US4] Add hero assertions in frontend/tests/recommend-hero.spec.ts for exact h1 text, removal of old eyebrow/supporting copy on Recommend only, 40px desktop/32px mobile size and decorative non-focusable plane. Retain a Compare content assertion to catch global selector leakage.
+- [X] T023 [P] [US4] Create frontend/components/recommend/RecommendHero.tsx with the exact heading Ready to study abroad? and clean outlined paper plane with coral detail. Add scoped hero rules to frontend/components/recommend/recommend.module.css: heading anchor x417/y193 and plane near x1422/y172 sized 116×115 at 1888px, source weight 500 and line-height 1.2. Use a reserved hero region so smaller theme type does not collapse planned whitespace.
+- [X] T024 [US4] Replace only the hero markup in frontend/app/page.tsx with RecommendHero. Keep catalog fetching, effects, picker rendering and results conditions unchanged. Scope desktop and narrow hero layout in frontend/components/recommend/recommend.module.css; preserve one line at the reference width and allow natural wrapping on phones.
+- [X] T025 [US4] Run frontend/tests/recommend-hero.spec.ts and inspect desktop/390px placement; record results in plan/recommend-sketch/validation-results.md. Verify smaller NUSMods typography does not lead to enlarging the font to fill the reference box.
 
 ## Phase 7: US5 — restyle and position the degree picker
 
