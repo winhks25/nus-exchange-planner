@@ -1,6 +1,6 @@
 # Tasks: Recommend layout with NUSMods theme and shared application shell
 
-Generated: 2026-10-21. Status: Phases 1–3 complete (baseline, fixtures, US1 theme); later phases pending.
+Generated: 2026-10-21. Status: Phases 1–4 complete (baseline, fixtures, US1 theme, US2 shell/header); later phases pending.
 
 ## Execution contract
 
@@ -68,11 +68,11 @@ Each story's test can run independently once its listed prerequisites exist; ind
 
 **Independent acceptance:** Direct loads and client navigation render exactly one frame/header with the same dimensions; children remain usable on both routes.
 
-- [ ] T012 [P] [US2] Add frame/header checks in frontend/tests/app-shell.spec.ts: brand text exactly nus exchange planner links to /, one header exists on / and /compare, and shell/header DOM identity persists through client navigation. Assert the header contains only the site-name link: no navigation, logo icon, search, subtitle or actions at any viewport. Temporary navigation before US3 must be outside the header.
-- [ ] T013 [P] [US2] Create frontend/components/layout/AppHeader.tsx with only the site-name link (exact lowercase text nus exchange planner), plus frontend/components/layout/AppShell.tsx with header, a separate temporary navigation slot below it, and page-content slots. Keep document metadata in frontend/app/layout.tsx, no page selection state, and no new main landmark if page children already own main.
-- [ ] T014 [US2] Create frontend/components/layout/app-shell.module.css for the normalized outer frame (x18/y14, width1745 at viewport1888), header divider y102 and brand anchor x83/y44 using fluid constraints, source colors and .35rem smooth frame radius. Preserve content scroll, dropdown overflow and natural shell growth. Add narrow-screen containment now, without final sidebar styling.
-- [ ] T015 [US2] Replace the existing shell/header wrapper in frontend/app/layout.tsx with AppShell/AppHeader and place the existing Recommend/Compare links in AppShell’s separate temporary navigation row below the header. The header itself contains only nus exchange planner. Remove only superseded shell/header CSS from frontend/app/globals.css; keep both page bodies and state ownership intact. Do not create a legacy Compare shell.
-- [ ] T016 [US2] Run frontend/tests/app-shell.spec.ts and inspect both routes at desktop and 390px; record frame/header geometry, one-header semantics and navigation persistence in plan/recommend-sketch/validation-results.md. No forced fixed height or clipping is acceptable.
+- [X] T012 [P] [US2] Add frame/header checks in frontend/tests/app-shell.spec.ts: brand text exactly nus exchange planner links to /, one header exists on / and /compare, and shell/header DOM identity persists through client navigation. Assert the header contains only the site-name link: no navigation, logo icon, search, subtitle or actions at any viewport. Temporary navigation before US3 must be outside the header.
+- [X] T013 [P] [US2] Create frontend/components/layout/AppHeader.tsx with only the site-name link (exact lowercase text nus exchange planner), plus frontend/components/layout/AppShell.tsx with header, a separate temporary navigation slot below it, and page-content slots. Keep document metadata in frontend/app/layout.tsx, no page selection state, and no new main landmark if page children already own main.
+- [X] T014 [US2] Create frontend/components/layout/app-shell.module.css for the normalized outer frame (x18/y14, width1745 at viewport1888), header divider y102 and brand anchor x83/y44 using fluid constraints, source colors and .35rem smooth frame radius. Preserve content scroll, dropdown overflow and natural shell growth. Add narrow-screen containment now, without final sidebar styling.
+- [X] T015 [US2] Replace the existing shell/header wrapper in frontend/app/layout.tsx with AppShell/AppHeader and place the existing Recommend/Compare links in AppShell’s separate temporary navigation row below the header. The header itself contains only nus exchange planner. Remove only superseded shell/header CSS from frontend/app/globals.css; keep both page bodies and state ownership intact. Do not create a legacy Compare shell.
+- [X] T016 [US2] Run frontend/tests/app-shell.spec.ts and inspect both routes at desktop and 390px; record frame/header geometry, one-header semantics and navigation persistence in plan/recommend-sketch/validation-results.md. No forced fixed height or clipping is acceptable.
 
 ## Phase 5: US3 — move navigation into the shared left panel
 

@@ -313,3 +313,89 @@ Validation: `npx playwright test tests/theme.spec.ts` from frontend passed 4/4
 (12.9s), covering body/chrome, cards, picker interaction styles and Compare.
 `git diff --check` passed. The first test attempt could not access the sandboxed
 uv cache; the rerun with local-server/cache permissions passed.
+
+## Phase 4 — US2: shared frame and header
+
+### T012 — Shell acceptance checks
+
+Created `frontend/tests/app-shell.spec.ts` with six scenarios:
+
+- Header content on direct loads of `/` and `/compare`: exactly one `<header>`
+  with exactly one link whose text is exactly `nus exchange planner` (lowercase)
+  and href `/`; no nav, svg, img, input, button, textarea, p, h1, ul or li inside.
+- Reference geometry at 1888x1337: the header's parent (frame) starts at x18/y14
+  with width 1745 (+/-8 normalized px); the header border bottom sits at y102 with
+  88px height; the brand anchor sits at x83/y44.
+- Compare keeps the same frame geometry and header content.
+- Narrow containment at 390px: no horizontal page overflow, frame margins reduce
+  to 12px, the brand and temp navigation remain visible, and the header stays
+  free of navigation.
+- Shell persistence: after waiting for hydration (picker visible), a
+  `dataset.shellProbe` marker is set on the header node; clicking Compare performs
+  client navigation (`performance.getEntriesByType("navigation")` stays 1), the
+  same header node retains the marker on `/compare`, its bounding box width and
+  height are unchanged, and `header nav` does not exist.
+
+### T013/T014 — Shell components and frame CSS
+
+- `frontend/components/layout/AppHeader.tsx`: stateless server component holding
+  only the lowercase `nus exchange planner` Link to `/`.
+- `frontend/components/layout/AppShell.tsx`: frame wrapper with header, an
+  optional temporary navigation slot (`<nav aria-label="Primary">`) below the
+  header, and a page-content slot. No page selection state; no new main landmark
+  (pages own `<main>`). Document metadata stays in `frontend/app/layout.tsx`.
+- `frontend/components/layout/app-shell.module.css`: frame `max-width 1745px`
+  with margins 14/18/53/18 (right gap retains the reference outer margin instead
+  of centering), 1px border and `.35rem` radius on source colors; header 88px
+  tall with 65px left padding and bottom divider at y102; brand 20px/700 links;
+  temporary nav row with the old header-nav link styles (16px/400 gray, coral
+  hover); content keeps the old `.shell` content inset (max-width 1100, padding
+  0 24px 60px) so both page bodies are unaffected; below 800px the frame margins
+  and content padding are reduced before the US3 sidebar work. No overflow or
+  fixed heights on content, so scroll, dropdown stacking and shell growth are
+  preserved.
+
+### T015 — Root layout integration
+
+- `frontend/app/layout.tsx` now renders `<AppShell>` with the Recommend/Compare
+  links passed as the temporary navigation slot; the header markup and
+  `.shell`/`header`/`.brand` CSS were removed from `frontend/app/globals.css`
+  (including the 650px header media rule), and none of the page-body styles or
+  state ownership changed. No legacy Compare shell was created.
+- `frontend/tests/theme.spec.ts` had its single stale locator updated:
+  `.brand` (global class, now a hashed CSS-module class) became
+  `page.locator("header").getByRole("link")`. All other theme assertions are
+  unchanged and still pass.
+
+### T016 — Shell validation
+
+| Command (from `frontend/`) | Result |
+| --- | --- |
+| `npx playwright test tests/app-shell.spec.ts` | PASS — 6/6 (12.6s, 1 worker) |
+| `npx playwright test tests/theme.spec.ts` | PASS — 4/4 (13.2s), no theme regression |
+| `npx playwright test tests/flows.spec.ts` | 5 passed, 4 failed — exactly the four baseline `.card-count` failures owned by US6/US7; no new failure |
+| `npm run lint` | PASS (exit 0) |
+| `npm run typecheck` | PASS (exit 0) |
+
+One-header semantics: direct loads and client navigation each show exactly one
+`<header>` whose DOM node persists through the Recommend → Compare route change
+(marker probe retained; navigation-entry count stays at 1, confirming client-side
+navigation), and the header bounding box is identical across routes.
+
+Shell-only captures (same fixed macOS 26.5.1 / Playwright 1.56.1 Chromium /
+deviceScaleFactor 1 environment):
+
+| Capture | Size |
+| --- | --- |
+| `reference/shell/recommend-1888.png` | 1888 x 1337 |
+| `reference/shell/compare-1888.png` | 1888 x 1337 |
+| `reference/shell/recommend-390.png` | 390 x 2007 (full page) |
+| `reference/shell/compare-390.png` | 390 x 1737 (full page) |
+
+Reviewed captures confirm: charcoal rounded frame starting x18/y14 with the
+reference 125px right gap at 1888; brand-only header with full-width divider at
+y102; the temporary Recommend/Compare row below the header on desktop and at
+390px; recommendations/pickers/mapping rows render unchanged inside the retained
+1100px content column; the frame grows with short content and no fixed height or
+clipping occurs. The dev-tools badge visible in captures is a Next.js dev-only
+overlay, not application UI.
