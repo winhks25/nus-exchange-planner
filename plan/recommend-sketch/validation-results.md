@@ -426,3 +426,98 @@ Validation:
 - `npm run lint --prefix frontend`, `npm run typecheck --prefix frontend`, and
   `git diff --check`: passed. The inherited card-selector failures documented
   above are outside this repair; the full flow suite was not rerun.
+
+## Phase 5 — US3: shared left navigation
+
+### T017 — Sidebar acceptance checks
+
+Extended `frontend/tests/app-shell.spec.ts` from six to thirteen scenarios:
+
+- Shared navigation: direct loads of `/` and `/compare` show exactly one nav
+  region whose only links are `Recommend` → `/` and `Compare` → `/compare`;
+  only the link matching the current route carries `aria-current="page"`.
+- Keyboard: tab order after the header brand reaches Recommend then Compare;
+  Enter on the focused Compare link performs a client navigation and moves
+  `aria-current` without a second navigation entry.
+- Back/forward: breadcrumb `/compare → / → /compare → /` keeps one nav node
+  (`dataset.shellProbe` retained), and `aria-current` always reflects the
+  current path after `goBack`/`goForward`.
+- Narrow viewport (390px): exactly one visible compact navigation region sits
+  below the site-name-only header with both links and exact hrefs.
+- Reference sidebar geometry at 1888x1337: the rail box starts at x18 and its
+  divider edge lands at x303 (+/-8); link rows start at y210 and y284; icons
+  align at x45 and label text at x83 for both rows; the Compare rail keeps the
+  same x/width/y as the Recommend rail.
+
+One early failure was a test bug (active-route branch derived the path from the
+label instead of the item href) and was fixed before recording.
+
+### T018/T019/T020 — Sidebar component, rail CSS and integration
+
+- `frontend/components/layout/AppSidebar.tsx`: smallest required client
+  boundary (`"use client"` + `usePathname`, confirmed against the installed
+  Next.js docs). Real `Link`s to `/` and `/compare`; `aria-current="page"` when
+  `pathname === href` (single source, no duplicated selection state). Clean
+  24px decorative line SVGs (search for Recommend, opposing arrows for Compare)
+  are `aria-hidden` and `pointer-events: none`, so the label span is the
+  accessible name. Indirect hover and active colors use `--muted-foreground`
+  and `--primary`; labels are 1rem/400 with line-height 1.6.
+- `frontend/components/layout/app-shell.module.css`: `.body` grid adds the
+  rail — 284px inner column plus 1px divider (285px border-box), first link row
+  y210 via 108px top padding under the y102 header divider, 44px interactive
+  rows with 30px gaps, icon x45/text x83 via 27px padding + 24px icon + 14px
+  gap. The divider stretches with content (natural height). Below 1023px the
+  same nav reflows into a compact row under the header (single-column grid,
+  horizontal links, bottom divider, 14px/24px padding).
+- `frontend/components/layout/AppShell.tsx` now renders `AppSidebar` inside a
+  `.body` grid next to the single `.content` outlet; the temporary
+  below-header navigation prop was removed from `AppShell`, and
+  `frontend/app/layout.tsx` lost its Recommend/Compare `Link` imports/JSX.
+  `AppHeader` remains site-name-only; there is exactly one nav region and one
+  content outlet on every route; Compare content structure and all route
+  queries are untouched.
+
+### Accent-token reconciliation (user style override, not US3)
+
+Re-running `tests/theme.spec.ts` after the phase surfaced 3/4 failures that
+also reproduce at the pre-phase commit `60b032f` ("update cyan accents and
+rounded header"): the tracked assertions expected coral `rgb(255, 81, 56)`
+while the committed `--primary` is cyan `#00c5ff` (brand now uses the accent).
+The committed focus rule `box-shadow: 0 0 0 .2rem --ring` was also invalid CSS,
+so the focus ring had silently disappeared. As the latest user styling wins:
+`tests/theme.spec.ts` now asserts the committed cyan accent and ring
+(`#00c5ff` / `#00f9ff`), with `CORAL` renamed to `ACCENT`, and
+`frontend/app/globals.css` uses `var(--ring)` in the focus rule. Theme spec
+after repair: 4/4 passed (11.6s). US3's sidebar styling itself tracks tokens,
+so it follows whichever accent the user pins next.
+
+### T021 — Shell/sidebar validation
+
+| Command (from `frontend/`) | Result |
+| --- | --- |
+| `npm run test:e2e -- tests/app-shell.spec.ts` | PASS — 13/13 (21.3s, 1 worker) |
+| `npm run test:e2e -- tests/theme.spec.ts` | PASS — 4/4 (11.6s) |
+| `npm run test:e2e -- tests/flows.spec.ts` | 5 passed, 4 failed — the same four stale `.card-count`/`.card-secondary-counts` card-selector files owned by US6/US7; no new failure |
+| `npm run typecheck` (tsc) | PASS (exit 0) |
+| `npx eslint` (layout components, layout.tsx, theme/app-shell specs) | PASS |
+
+Measured layout facts (fixed macOS 26.5.1 / Playwright 1.56.1 bundled Chromium,
+deviceScaleFactor 1; 200% zoom emulated as 944 CSS px at dpr 2):
+
+| Viewport | Header | Nav rail/row | Nav rows | Overflow | Nav regions |
+| --- | --- | --- | --- | --- | --- |
+| 1888 `/` and `/compare` | x18 y14, 1745x88 | x18 y102, 285 wide (divider x303), height 345 | y210, y284; icon x45, text x83 | 0 | 1 |
+| 1280 `/` | x18 y14, 1244x88 | 285-wide rail persists (>=1024px) | y210, y284 | 0 | 1 |
+| 768 `/` | x12 y10, 744x88 | compact row x12 y98, 744x73 | horizontal, 44px targets | 0 | 1 |
+| 390 `/` | x12 y10, 366x88 | compact row x12 y98, 366x73 | horizontal, 44px targets | 0 | 1 |
+| 200% zoom `/` | 908x88 at CSS 944px | compact row 908x73 | horizontal | 0 | 1 |
+
+Reviewed captures in `reference/sidebar/` (recommend/compare 1888,
+recommend 1280/768/390, 1888-zoom200) confirm: identical rail width, divider
+and brand header on both routes; Recommend cyan-active with the search icon
+and Compare gray-mid with opposing arrows; exactly one navigation region at
+every scale with no duplicate or hidden-focusable options; the dev-tools
+badge in captures is a Next.js dev-only overlay, not application UI.
+
+Sidebar/header dimensions match across pages per the app-shell spec, and no
+duplicate or hidden-focusable navigation remains.

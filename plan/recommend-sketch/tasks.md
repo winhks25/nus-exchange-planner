@@ -1,6 +1,6 @@
 # Tasks: Recommend layout with NUSMods theme and shared application shell
 
-Generated: 2026-10-21. Status: Phases 1–4 complete (baseline, fixtures, US1 theme, US2 shell/header); later phases pending.
+Generated: 2026-10-21. Status: Phases 1–5 complete (baseline, fixtures, US1 theme, US2 shell/header, US3 sidebar); later phases pending.
 
 ## Execution contract
 
@@ -84,11 +84,11 @@ Each story's test can run independently once its listed prerequisites exist; ind
 
 **Independent acceptance:** Sidebar is identical across routes, shows the right active link on direct loads/back/forward, and becomes compact navigation below 1024px.
 
-- [ ] T017 [P] [US3] Extend frontend/tests/app-shell.spec.ts with exact Recommend/Compare link labels, routes, aria-current, keyboard navigation, direct /compare load, back/forward and persistent shell identity; add a narrow viewport assertion for one visible compact navigation region.
-- [ ] T018 [P] [US3] Create frontend/components/layout/AppSidebar.tsx as the smallest client boundary needed for pathname-based active state. Use actual links to / and /compare, clean search/opposing-arrow icons, gray-mid inactive and coral active colors, 16px labels and line-height 1.6. Icons are decorative; current path is the single source of active state.
-- [ ] T019 [US3] Add rail geometry to frontend/components/layout/app-shell.module.css: approximately 284px inner width, divider x303, icon/text anchors x45/x83 and link rows y210/y284 at 1888px. Use a shared content column, natural-height divider and 44px interactive targets. Below 1024px replace the rail with a separate compact navigation row below the site-name-only header consistently on every page; keep reference desktop header height.
-- [ ] T020 [US3] Integrate AppSidebar into frontend/components/layout/AppShell.tsx and remove the temporary below-header navigation row/links from AppShell and frontend/app/layout.tsx. AppHeader stays site-name-only. Keep exactly one navigation region and one content outlet; preserve Compare content structure and all route queries.
-- [ ] T021 [US3] Run frontend/tests/app-shell.spec.ts and inspect / and /compare at 1888,1280,768 and390px plus 200% zoom. Record results in plan/recommend-sketch/validation-results.md; verify sidebar/header dimensions match across pages and no duplicate or hidden-focusable navigation remains.
+- [X] T017 [P] [US3] Extend frontend/tests/app-shell.spec.ts with exact Recommend/Compare link labels, routes, aria-current, keyboard navigation, direct /compare load, back/forward and persistent shell identity; add a narrow viewport assertion for one visible compact navigation region.
+- [X] T018 [P] [US3] Create frontend/components/layout/AppSidebar.tsx as the smallest client boundary needed for pathname-based active state. Use actual links to / and /compare, clean search/opposing-arrow icons, gray-mid inactive and coral active colors, 16px labels and line-height 1.6. Icons are decorative; current path is the single source of active state.
+- [X] T019 [US3] Add rail geometry to frontend/components/layout/app-shell.module.css: approximately 284px inner width, divider x303, icon/text anchors x45/x83 and link rows y210/y284 at 1888px. Use a shared content column, natural-height divider and 44px interactive targets. Below 1024px replace the rail with a separate compact navigation row below the site-name-only header consistently on every page; keep reference desktop header height.
+- [X] T020 [US3] Integrate AppSidebar into frontend/components/layout/AppShell.tsx and remove the temporary below-header navigation row/links from AppShell and frontend/app/layout.tsx. AppHeader stays site-name-only. Keep exactly one navigation region and one content outlet; preserve Compare content structure and all route queries.
+- [X] T021 [US3] Run frontend/tests/app-shell.spec.ts and inspect / and /compare at 1888,1280,768 and390px plus 200% zoom. Record results in plan/recommend-sketch/validation-results.md; verify sidebar/header dimensions match across pages and no duplicate or hidden-focusable navigation remains.
 
 ## Phase 6: US4 — replace the Recommend hero only
 
