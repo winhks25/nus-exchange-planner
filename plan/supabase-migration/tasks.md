@@ -1,6 +1,6 @@
 # Tasks: Supabase catalog migration
 
-Date: 2026-10-22. Status: ready for implementation; every task below is pending.
+Date: 2026-10-22. Status: implementation in progress; Phase 1 and Phase 2 complete.
 
 Sources: [spec.md](spec.md), [plan.md](plan.md), the applied migration in
 supabase/migrations/20261022000100_create_exchange_catalog.sql, and
@@ -35,7 +35,7 @@ Goal: establish configuration and schema support before data publication or API 
 - [X] T006 Implement bounded synchronous connection pooling in backend/app/database.py with TLS and prepared-statement settings from research.md, short read-only transactions, connection/pool/statement timeouts, shutdown cleanup and sanitized operational errors; keep all network access out of module import.
 - [X] T007 Create supabase/migrations/20261022000200_prepare_catalog_import.sql as an additive follow-up: degree full title/source order, nullable module names and verified units, specialization kind, immutable raw source snapshots, import batches, source-addressed issues/repairs, source-row mapping identity/order and row-specific presentation; enforce foreign keys, repeat-import uniqueness and nonblank known values, preserve repeated equivalent pairs at different source indexes, and enable RLS on every new table.
 - [X] T008 Create supabase/migrations/20261022000300_catalog_reader.sql and credential-provisioning instructions in supabase/README.md for a dedicated non-owner, non-BYPASSRLS runtime role with only required schema usage/table SELECT privileges and corresponding SELECT policies; deny writes, raw archives and issue tables, retain no browser policies, and keep passwords out of migrations; give imports separate credentials.
-- [ ] T009 Apply the new migrations to an isolated PostgreSQL validation database before Supabase, inspect resulting constraints/policies, then apply them to the verified Supabase project and record execution/history evidence in plan/supabase-migration/schema-audit.md; confirm the actual runtime role can read intended tables and cannot mutate them or read archives.
+- [X] T009 Apply the new migrations to an isolated PostgreSQL validation database before Supabase, inspect resulting constraints/policies, then apply them to the verified Supabase project and record execution/history evidence in plan/supabase-migration/schema-audit.md; confirm the actual runtime role can read intended tables and cannot mutate them or read archives.
 
 Gate: original deployed schema remains intact, new schema is verified, roles are separated,
 and settings support JSON mode without database credentials. US1 and US2 construction
