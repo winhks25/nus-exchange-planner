@@ -167,3 +167,117 @@ def test_unknown_degree_is_not_a_server_error(
     database.execute(PUBLISHED_BATCH + RANKING_FIXTURE)
     with pytest.raises(UnknownSelection, match="Unknown degree$"):
         repository.recommendations("Missing")
+
+
+MAPPING_FIXTURE = """
+insert into public.nus_modules (code, name) values
+  ('CS2102', 'Verified Data'),
+  ('CS2103', null),
+  ('CS2104', null),
+  ('CS2105', null),
+  ('CS9999', null);
+insert into public.degrees (name, faculty, full_title, source_order)
+values ('Test', 'School of Computing', 'Bachelor of Test', 0);
+insert into public.degree_modules (degree_id, module_code, requirement_type)
+select d.id, module_code, null
+from public.degrees d
+cross join (values ('CS2102'), ('CS2103'), ('CS2104'), ('CS2105')) modules(module_code)
+where d.name = 'Test';
+insert into public.partner_universities (name, country, source_order) values
+  ('A University', 'Japan', 0),
+  ('Z University', 'Japan', 1);
+insert into public.pu_modules (code, name, partner_university_id, verified_units)
+select pairs.code, pairs.name, u.id, pairs.verified_units
+from (
+  values
+    ('A University', 'P1', 'Verified Partner One', null),
+    ('A University', 'P2', null, null),
+    ('A University', 'P3', 'Partner Three', 0.5)
+) pairs(university, code, name, verified_units)
+join public.partner_universities u on u.name = pairs.university;
+insert into public.module_mappings (
+  nus_module_code,
+  pu_module_id,
+  source_order,
+  source_nus_title,
+  source_partner_title,
+  source_partner_units
+)
+select
+  pairs.nus_code,
+  pm.id,
+  pairs.source_order,
+  pairs.nus_title,
+  pairs.partner_title,
+  pairs.partner_units
+from (
+  values
+    ('A University', 'P1', 'CS2102', 1, 'Source Data', null, 3.0),
+    ('A University', 'P3', 'CS2102', 0, null, 'Partner Three', null),
+    ('A University', 'P2', 'CS2103', 2, null, 'Partner Two', null),
+    ('A University', 'P2', 'CS2105', 3, null, null, null),
+    ('A University', 'P1', 'CS9999', 4, 'Outside Degree', null, null)
+) pairs(university, partner_code, nus_code, source_order, nus_title, partner_title, partner_units)
+join public.partner_universities u on u.name = pairs.university
+join public.pu_modules pm
+  on pm.partner_university_id = u.id and pm.code = pairs.partner_code;
+"""
+
+
+def test_mappings_filter_sort_and_preserve_repeated_rows(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+
+    response = repository.mappings("Test", "A University")
+    assert response.partner_module_count == 3
+    assert response.distinct_nus_module_count == 3
+    assert [
+        (row.nus_course.code, row.nus_course.title, row.partner_course.code)
+        for row in response.mappings
+    ] == [
+        ("CS2102", "Verified Data", "P3"),
+        ("CS2102", "Source Data", "P1"),
+        ("CS2103", None, "P2"),
+        ("CS2105", None, "P2"),
+    ]
+    assert all(row.nus_course.units == 4 for row in response.mappings)
+
+
+def test_mapping_optional_fields_and_partner_unit_fallbacks(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+
+    rows = repository.mappings("Test", "A University").mappings
+    first, second, third, fourth = rows
+    assert first.partner_course.title == "Partner Three"
+    assert first.partner_course.units == 0.5
+    assert second.partner_course.title == "Verified Partner One"
+    assert second.partner_course.units == 3.0
+    assert third.partner_course.title == "Partner Two"
+    assert third.partner_course.units is None
+    assert fourth.partner_course.title is None
+    assert fourth.partner_course.units is None
+
+
+def test_valid_empty_pair_returns_zero_counts(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+
+    response = repository.mappings("Test", "Z University")
+    assert response.partner_module_count == 0
+    assert response.distinct_nus_module_count == 0
+    assert response.mappings == []
+
+
+def test_unknown_mapping_selections_raise_shared_error(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+
+    with pytest.raises(UnknownSelection, match="Unknown degree or university$"):
+        repository.mappings("Missing", "A University")
+    with pytest.raises(UnknownSelection, match="Unknown degree or university$"):
+        repository.mappings("Test", "Missing University")
