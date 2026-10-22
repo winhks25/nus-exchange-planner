@@ -2,38 +2,13 @@ import pytest
 
 from app.repositories.base import CatalogUnavailable, UnknownSelection
 from app.repositories.postgres_catalog import PostgresCatalogRepository
-from app.settings import Settings
-from tests.postgres_support import DatabaseTarget, PostgresCluster
+from tests.postgres_support import DatabaseTarget
 
 PUBLISHED_BATCH = """
 insert into public.catalog_import_batches (
   source_checksum, repair_checksum, status, is_current, completed_at
 ) values (repeat('a', 64), repeat('b', 64), 'completed', true, now());
 """
-
-
-@pytest.fixture(scope="module")
-def cluster():
-    server = PostgresCluster()
-    server.start()
-    yield server
-    server.stop()
-
-
-@pytest.fixture
-def database(cluster: PostgresCluster):
-    test_database = cluster.create_database()
-    yield test_database
-    cluster.drop_database(test_database)
-
-
-@pytest.fixture
-def repository(database: DatabaseTarget):
-    settings = Settings(catalog_backend="postgres", database_url=database.url)
-    adapter = PostgresCatalogRepository(settings)
-    adapter.startup()
-    yield adapter
-    adapter.close()
 
 
 def test_unpublished_database_is_unavailable(repository: PostgresCatalogRepository):

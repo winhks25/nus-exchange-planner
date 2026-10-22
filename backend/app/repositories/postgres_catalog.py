@@ -104,7 +104,10 @@ class PostgresCatalogRepository:
     def startup(self) -> None:
         """Start the bounded connection pool without opening a network connection."""
 
-        self._database.open()
+        try:
+            self._database.open()
+        except DatabaseError:
+            raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE) from None
 
     def close(self) -> None:
         """Close the connection pool during application shutdown."""
