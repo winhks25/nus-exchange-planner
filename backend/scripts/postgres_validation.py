@@ -10,9 +10,33 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlsplit
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 MIGRATIONS = sorted((REPO_ROOT / "supabase" / "migrations").glob("*.sql"))
+LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
+
+# Disposable local clusters use trust authentication; these passwords only make
+# the role-bearing connection URLs explicit and are never used for a remote server.
+IMPORTER_ROLE = "catalog_importer"
+READER_ROLE = "catalog_reader"
+TEST_ROLE_PASSWORD = "catalog-test-local"
+
+ROLE_SETUP_SQL = f"""
+do $$
+begin
+  if not exists (select 1 from pg_roles where rolname = '{IMPORTER_ROLE}') then
+    create role {IMPORTER_ROLE} login password '{TEST_ROLE_PASSWORD}';
+  else
+    alter role {IMPORTER_ROLE} login password '{TEST_ROLE_PASSWORD}';
+  end if;
+  alter role {READER_ROLE} login password '{TEST_ROLE_PASSWORD}';
+end
+$$;
+grant usage on schema public to {IMPORTER_ROLE};
+grant select, insert, update, delete on all tables in schema public to {IMPORTER_ROLE};
+grant usage, select on all sequences in schema public to {IMPORTER_ROLE};
+"""
 
 
 def _find_binary(name: str) -> str:
@@ -37,6 +61,19 @@ def _free_port() -> int:
         return int(sock.getsockname()[1])
 
 
+def require_local_database_url(url: str, label: str = "test database") -> None:
+    """Refuse any configured test target that is not a local disposable server."""
+
+    try:
+        host = (urlsplit(url).hostname or "").lower()
+    except ValueError:
+        raise RuntimeError(f"{label} is not a valid PostgreSQL URL") from None
+    if host not in LOCAL_HOSTS:
+        raise RuntimeError(
+            f"{label} must point at a local disposable PostgreSQL server; got host {host!r}"
+        )
+
+
 @dataclass(frozen=True)
 class DatabaseTarget:
     """Connection details for one disposable test database."""
@@ -45,11 +82,31 @@ class DatabaseTarget:
     name: str
 
     @property
-    def url(self) -> str:
+    def owner_url(self) -> str:
         return f"postgresql://postgres@127.0.0.1:{self.cluster.port}/{self.name}"
 
+    @property
+    def importer_url(self) -> str:
+        return (
+            f"postgresql://{IMPORTER_ROLE}:{TEST_ROLE_PASSWORD}"
+            f"@127.0.0.1:{self.cluster.port}/{self.name}"
+        )
+
+    @property
+    def reader_url(self) -> str:
+        return (
+            f"postgresql://{READER_ROLE}:{TEST_ROLE_PASSWORD}"
+            f"@127.0.0.1:{self.cluster.port}/{self.name}"
+        )
+
+    @property
+    def url(self) -> str:
+        """Backward-compatible owner connection URL."""
+
+        return self.owner_url
+
     def execute(self, sql: str) -> None:
-        """Run SQL with the cluster's psql and fail on any statement error."""
+        """Run SQL as the database owner and fail on any statement error."""
 
         result = subprocess.run(
             [
@@ -58,7 +115,7 @@ class DatabaseTarget:
                 "-v",
                 "ON_ERROR_STOP=1",
                 "-d",
-                self.url,
+                self.owner_url,
                 "-c",
                 sql,
             ],
@@ -189,12 +246,13 @@ class PostgresCluster:
         shutil.rmtree(self._temp_dir, ignore_errors=True)
 
     def create_database(self) -> DatabaseTarget:
-        """Create an empty database and apply every migration in order."""
+        """Create an empty database, apply every migration, and provision test roles."""
 
         database = DatabaseTarget(self, f"catalog_test_{uuid.uuid4().hex[:12]}")
         self._run_psql("postgres", f'create database "{database.name}"')
         for migration in MIGRATIONS:
             self._run_psql(database.name, None, migration)
+        self._run_psql(database.name, ROLE_SETUP_SQL)
         return database
 
     def drop_database(self, database: DatabaseTarget) -> None:
