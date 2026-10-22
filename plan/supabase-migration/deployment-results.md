@@ -113,6 +113,76 @@ do not exist yet.
 
 ## T038 local outage and rollback rehearsal
 
-Pending. The rehearsal will use the disposable PostgreSQL wrapper, stop and
-restart the database, verify the sanitized 503 and recovery, then switch the API
-to JSON mode and compare the frozen snapshot with the published batch.
+Completed on 2026-10-22 at approximately 12:57 UTC against a disposable local
+PostgreSQL 15 cluster. The rehearsal used the same migrations, importer and
+read-only runtime role as `quickstart.md`; no Supabase project was contacted.
+
+### Procedure
+
+1. Create a temporary TLS-enabled cluster, apply all three migrations, and
+   publish the reviewed snapshot through `catalog_importer`.
+2. Start uvicorn with `CATALOG_BACKEND=postgres`, `DATABASE_URL` set to the
+   `catalog_reader` URL, and no `IMPORT_DATABASE_URL` in the process.
+3. Confirm `GET /api/v1/catalog` returns 200 with 6 degrees and 5 universities.
+4. Pause the PostgreSQL server and request the catalog again.
+5. Resume the same server and retry on the unchanged uvicorn process.
+6. Stop the API, remove `DATABASE_URL`, and start it with
+   `CATALOG_BACKEND=json`.
+7. Confirm the JSON catalog is served and compare the four repaired Toronto
+   pairs with the PostgreSQL responses.
+8. Stop the API and delete the temporary cluster.
+
+### Results
+
+| Step | Status | Evidence |
+| --- | --- | --- |
+| PostgreSQL catalog before outage | 200 | 6 degrees, 5 universities |
+| Database paused | 503 | `{"detail":"Catalog data is unavailable. Please try again later."}` |
+| Recovery after resume | 200 | Same uvicorn process, no restart |
+| JSON rollback | 200 | 6 degrees, 5 universities |
+| Cleanup | complete | Port 18801 free; no temporary cluster left |
+
+The outage log contained only `Database catalog failed: PoolTimeout`. It did not
+contain a connection string, role name or password. The API returned no JSON
+catalog while the database was unavailable, so no automatic fallback occurred.
+
+### Data-version differences
+
+| Degree / University | JSON mapping rows | PostgreSQL mapping rows |
+| --- | ---: | ---: |
+| Artificial Intelligence / Toronto | 9 | 10 |
+| Business Analytics / Toronto | 18 | 19 |
+| Computer Science / Toronto | 6 | 7 |
+| Information Security / Toronto | 7 | 8 |
+
+Partner-module counts follow the mapping rows. Distinct NUS counts are unchanged
+at 6, 9, 3 and 5 respectively. Rollback therefore restores the frozen 147-row
+snapshot and removes the four repaired rows; it does not undo later database
+changes, because it does not use the database at all.
+
+### Rollback and roll-forward steps
+
+Local:
+
+```text
+stop the PostgreSQL API
+set CATALOG_BACKEND=json and unset DATABASE_URL
+start uvicorn again
+confirm /api/v1/catalog is 200 with the frozen snapshot
+```
+
+Production, once T036 unblocks access:
+
+```text
+set CATALOG_BACKEND=json in the backend Vercel project
+remove DATABASE_URL from the runtime project
+redeploy the backend; no frontend change is needed
+confirm the backend catalog and both frontend pages
+```
+
+Roll forward by setting `CATALOG_BACKEND=postgres`, restoring the server-only
+`DATABASE_URL`, and redeploying. The database remains intact throughout, and an
+identical import is a no-op, so no re-import is required.
+
+The frozen JSON snapshot remains deployable: it started successfully during the
+rehearsal without any database credentials and served the expected catalog.
