@@ -1,5 +1,12 @@
 import { expect, test } from "@playwright/test";
 
+// Verified repairs add one Toronto mapping to these pairs in PostgreSQL mode.
+const POSTGRES_DATA = process.env.TEST_CATALOG_BACKEND === "postgres";
+const CS_TORONTO_MAPPINGS = POSTGRES_DATA ? 7 : 6;
+const CS_TORONTO_PARTNER_MODULES = POSTGRES_DATA ? 7 : 6;
+const AI_TORONTO_MAPPINGS = POSTGRES_DATA ? 10 : 9;
+const AI_TORONTO_PARTNER_MODULES = POSTGRES_DATA ? 10 : 9;
+
 test("old Compare links redirect to Mappings and preserve selections", async ({ page, request }) => {
   const query = "?degree=Computer%20Science&uni=University%20of%20Toronto";
   const response = await request.get(`/compare${query}`, { maxRedirects: 0 });
@@ -13,7 +20,7 @@ test("old Compare links redirect to Mappings and preserve selections", async ({ 
   await expect(page).toHaveURL(/\/mappings\?/);
   await expect(page.getByRole("combobox", { name: "Degree programme" })).toHaveValue("Computer Science");
   await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
-  await expect(page.locator(".mapping-row")).toHaveCount(6);
+  await expect(page.locator(".mapping-row")).toHaveCount(CS_TORONTO_MAPPINGS);
   await expect(page.getByRole("navigation").getByRole("link", { name: "Mappings" })).toHaveAttribute("aria-current", "page");
 });
 
@@ -41,7 +48,7 @@ test("Recommend keyboard search, ranking, zero card, and Mappings deep link", as
   await expect(cards).toHaveCount(5);
   await expect(cards.first()).toContainText("University of Toronto");
   await expect(cards.first()).toContainText("3 NUS Modules");
-  await expect(cards.first()).toContainText("6 Partner University Modules");
+  await expect(cards.first()).toContainText(`${CS_TORONTO_PARTNER_MODULES} Partner University Modules`);
   const zeroCards = cards.filter({ hasText: "0 NUS Modules" });
   await expect(zeroCards).toHaveCount(2);
   for (const card of await zeroCards.all()) {
@@ -52,7 +59,7 @@ test("Recommend keyboard search, ranking, zero card, and Mappings deep link", as
   await expect(page.getByRole("combobox", { name: "Degree programme" })).toHaveValue("Computer Science");
   await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
   await expect(page.getByText("3 distinct NUS modules")).toBeVisible();
-  await expect(page.locator(".mapping-row")).toHaveCount(6);
+  await expect(page.locator(".mapping-row")).toHaveCount(CS_TORONTO_MAPPINGS);
 });
 
 test("Artificial Intelligence counts reconcile from Recommend to Mappings", async ({ page }) => {
@@ -67,15 +74,15 @@ test("Artificial Intelligence counts reconcile from Recommend to Mappings", asyn
   await expect(toronto).toContainText("#1");
   await expect(toronto).toContainText("University of Toronto");
   await expect(toronto).toContainText("6 NUS Modules");
-  await expect(toronto).toContainText("9 Partner University Modules");
+  await expect(toronto).toContainText(`${AI_TORONTO_PARTNER_MODULES} Partner University Modules`);
   await toronto.getByRole("link", { name: /View Mappings/ }).click();
   await expect(page).toHaveURL(/degree=Artificial%20Intelligence&uni=University%20of%20Toronto/);
   const summary = page.locator(".result-count");
-  await expect(summary).toContainText("9 mappable partner modules");
+  await expect(summary).toContainText(`${AI_TORONTO_PARTNER_MODULES} mappable partner modules`);
   await expect(summary).toContainText("6 distinct NUS modules");
-  await expect(summary).toContainText("9 mappings");
+  await expect(summary).toContainText(`${AI_TORONTO_MAPPINGS} mappings`);
   await expect(page.getByText(/One NUS module can have several partner mappings/)).toBeVisible();
-  await expect(page.locator(".mapping-row")).toHaveCount(9);
+  await expect(page.locator(".mapping-row")).toHaveCount(AI_TORONTO_MAPPINGS);
   await page.getByRole("combobox", { name: "Partner university" }).fill("Western Australia");
   await page.getByRole("combobox", { name: "Partner university" }).press("Enter");
   await expect(summary).toContainText("0 mappable partner modules");
@@ -140,7 +147,7 @@ test("clearing selection, invalid link, and zero match", async ({ page }) => {
   await expect(page.getByLabel("Partner university")).toHaveValue("University of Toronto");
   const picker = page.getByRole("combobox", { name: "Degree programme" });
   await picker.fill("Computer Science"); await picker.press("Enter");
-  await expect(page.locator(".mapping-row")).toHaveCount(6);
+  await expect(page.locator(".mapping-row")).toHaveCount(CS_TORONTO_MAPPINGS);
   await picker.fill("");
   await expect(page.locator(".mapping-row")).toHaveCount(0);
   await picker.fill("Computer Science"); await picker.press("Enter");

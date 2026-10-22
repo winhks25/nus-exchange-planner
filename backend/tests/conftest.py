@@ -1,4 +1,10 @@
+import os
+
 import pytest
+
+# Keep legacy fixture tests on JSON even when the developer shell targets a real database.
+os.environ["CATALOG_BACKEND"] = "json"
+os.environ.pop("DATABASE_URL", None)
 
 from scripts.postgres_validation import DatabaseTarget, PostgresCluster
 

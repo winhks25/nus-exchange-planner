@@ -126,3 +126,48 @@ uv run --directory backend python -m scripts.verify_catalog
   records API behavior and repair deltas rather than target-project import evidence.
 - Catches, counts and ordering are compared exactly for all six degrees and all
   thirty degree/university pairs; only the documented repairs are allowed to differ.
+
+## Regression checks (T026)
+
+Run on 2026-10-22 after explicitly pinning legacy fixture tests to JSON so a
+developer shell cannot redirect them to a real database.
+
+### Backend
+
+```bash
+uv run --directory backend ruff check .
+uv run --directory backend pytest -q
+```
+
+Result: Ruff reported `All checks passed!`; pytest reported `28 passed`.
+
+The legacy catalog and contract tests now construct `Settings(catalog_backend="json")`
+directly, and `backend/tests/conftest.py` clears `CATALOG_BACKEND`/`DATABASE_URL`
+defaults before application imports. The PostgreSQL tests still pass their own
+explicit settings and disposable database URL.
+
+### Browser flows, JSON mode
+
+```bash
+npm run test:e2e -- tests/flows.spec.ts --workers=1
+```
+
+Result: `11 passed` against the JSON repository. This confirms the updated
+mode-aware count assertions still match the legacy baseline.
+
+### Browser flows, disposable PostgreSQL mode
+
+```bash
+uv run --directory backend python -m scripts.serve_catalog_database \
+  --url-file /tmp/nus-validation-database-url
+
+TEST_CATALOG_BACKEND=postgres \
+TEST_DATABASE_URL="$(cat /tmp/nus-validation-database-url)" \
+npm run test:e2e -- tests/flows.spec.ts --workers=1
+```
+
+Result: `11 passed` against a disposable PostgreSQL 15.15 database seeded from
+the deterministic import preview. The four repaired Toronto pairs are reflected
+in the browser assertions: Computer Science mappings/partner modules `6 -> 7`
+and Artificial Intelligence mappings/partner modules `9 -> 10`. The warmed
+Recommend render stayed within the one-second budget (`WARM_RENDER_MS=114.6`).

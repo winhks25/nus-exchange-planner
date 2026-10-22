@@ -2,7 +2,10 @@ from pathlib import Path
 
 import yaml
 
-from app.main import app
+from app.main import create_app
+from app.settings import Settings
+
+app = create_app(settings=Settings(catalog_backend="json"))
 
 
 def resolve(schema: dict, document: dict) -> dict:

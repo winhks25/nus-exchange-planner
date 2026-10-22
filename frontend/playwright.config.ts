@@ -1,5 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
 
+// Browser checks default to JSON; set TEST_CATALOG_BACKEND=postgres with
+// TEST_DATABASE_URL to exercise a disposable preview-seeded database instead.
+const backendEnvironment: Record<string, string> = {
+  CORS_ORIGINS: "http://127.0.0.1:18766",
+  CATALOG_BACKEND: process.env.TEST_CATALOG_BACKEND ?? "json",
+  DATABASE_URL: process.env.TEST_DATABASE_URL ?? "",
+};
+
 export default defineConfig({
   testDir: "./tests",
   timeout: 30000,
@@ -13,7 +21,7 @@ export default defineConfig({
       url: "http://127.0.0.1:18765/openapi.json",
       reuseExistingServer: false,
       timeout: 30000,
-      env: { CORS_ORIGINS: "http://127.0.0.1:18766" },
+      env: backendEnvironment,
     },
     {
       command: "npm run dev -- --hostname 127.0.0.1 --port 18766",

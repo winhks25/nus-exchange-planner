@@ -9,6 +9,9 @@ from app.course_codes import extract_course_codes
 from app.main import create_app
 from app.matching import compare_rows, pair_mappings
 from app.recommendations import rank_universities
+from app.settings import Settings
+
+JSON_SETTINGS = Settings(catalog_backend="json")
 
 
 def test_code_extraction_only_list_strings():
@@ -22,7 +25,7 @@ def test_code_extraction_only_list_strings():
 
 def test_current_catalog_and_consistency():
     catalog = load_catalog()
-    client = TestClient(create_app())
+    client = TestClient(create_app(settings=JSON_SETTINGS))
     assert len(catalog.degrees) == 6
     assert len(catalog.universities) == 5
     partner_order_differs = False
@@ -97,7 +100,7 @@ def test_current_catalog_and_consistency():
 
 
 def test_api_status_and_optional_units():
-    client = TestClient(create_app())
+    client = TestClient(create_app(settings=JSON_SETTINGS))
     assert client.get("/api/v1/catalog").status_code == 200
     assert client.get("/api/v1/recommendations", params={"degree": "missing"}).status_code == 404
     assert (
@@ -127,7 +130,7 @@ def test_missing_and_malformed_expected_file_fail_entire_catalog(tmp_path: Path)
     (data / "mapping" / "japan" / "one.json").write_text("not json")
     with pytest.raises(CatalogUnavailable):
         load_catalog(data, manifest)
-    assert TestClient(create_app(data, manifest)).get("/api/v1/catalog").status_code == 503
+    assert TestClient(create_app(data, manifest, settings=JSON_SETTINGS)).get("/api/v1/catalog").status_code == 503
 
 
 def test_duplicate_rows_and_stable_tie_order(tmp_path: Path):
@@ -158,7 +161,7 @@ def test_duplicate_rows_and_stable_tie_order(tmp_path: Path):
         "SECOND",
         "FIRST",
     ]
-    response = TestClient(create_app(data, manifest)).get(
+    response = TestClient(create_app(data, manifest, settings=JSON_SETTINGS)).get(
         "/api/v1/mappings", params={"degree": "Test", "uni": "One"}
     )
     assert "units" not in response.json()["mappings"][0]["partner_course"]
@@ -196,7 +199,7 @@ def test_partner_code_deduplication_ties_and_zero_pairs(tmp_path: Path):
         (item.partner_module_count, item.distinct_nus_module_count, item.mapping_count)
         for item in ranked
     ] == [(1, 1, 2), (1, 1, 1), (2, 1, 2), (0, 0, 0)]
-    client = TestClient(create_app(data, manifest))
+    client = TestClient(create_app(data, manifest, settings=JSON_SETTINGS))
     assert client.get("/api/v1/mappings", params={"degree": "Test", "uni": "Z"}).json() == {
         "degree": "Test",
         "university": "Z",
