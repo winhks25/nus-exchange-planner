@@ -2,7 +2,7 @@ import pytest
 
 from app.repositories.base import CatalogUnavailable, UnknownSelection
 from app.repositories.postgres_catalog import PostgresCatalogRepository
-from tests.postgres_support import DatabaseTarget
+from scripts.postgres_validation import DatabaseTarget
 
 PUBLISHED_BATCH = """
 insert into public.catalog_import_batches (

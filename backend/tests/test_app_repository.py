@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from app.main import create_app
 from app.repositories.base import CATALOG_UNAVAILABLE_MESSAGE
 from app.settings import PoolSettings, Settings
-from tests.postgres_support import DatabaseTarget
+from scripts.postgres_validation import DatabaseTarget
 
 APP_FIXTURE = """
 insert into public.catalog_import_batches (

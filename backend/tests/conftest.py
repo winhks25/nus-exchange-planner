@@ -1,6 +1,6 @@
 import pytest
 
-from tests.postgres_support import DatabaseTarget, PostgresCluster
+from scripts.postgres_validation import DatabaseTarget, PostgresCluster
 
 
 @pytest.fixture(scope="session")

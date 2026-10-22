@@ -51,7 +51,7 @@ class DatabaseTarget:
     def execute(self, sql: str) -> None:
         """Run SQL with the cluster's psql and fail on any statement error."""
 
-        subprocess.run(
+        result = subprocess.run(
             [
                 self.cluster.psql,
                 "-X",
@@ -62,10 +62,12 @@ class DatabaseTarget:
                 "-c",
                 sql,
             ],
-            check=True,
+            check=False,
             capture_output=True,
             text=True,
         )
+        if result.returncode != 0:
+            raise RuntimeError(f"SQL failed: {result.stderr.strip()}")
 
 
 class PostgresCluster:
@@ -105,6 +107,11 @@ class PostgresCluster:
             capture_output=True,
             text=True,
         )
+        self._start_server()
+
+    def _start_server(self) -> None:
+        """Start the initialized server with TLS on the reserved port."""
+
         subprocess.run(
             [
                 self._pg_ctl,
@@ -127,6 +134,22 @@ class PostgresCluster:
         )
         self._started = True
         self._wait_until_ready()
+
+    def pause(self) -> None:
+        """Stop accepting connections without deleting the database files."""
+
+        subprocess.run(
+            [self._pg_ctl, "-D", str(self._data_dir), "-m", "fast", "-w", "stop"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        self._started = False
+
+    def resume(self) -> None:
+        """Restart a paused server on the same port and data directory."""
+
+        self._start_server()
 
     def _write_tls_certificate(self) -> None:
         """Create a throwaway certificate so the runtime can require TLS."""
