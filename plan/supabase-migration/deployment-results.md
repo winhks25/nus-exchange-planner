@@ -2,18 +2,19 @@
 
 Generated: 2026-10-22
 
-This file records the Phase 6 rollout evidence. Local checks are complete, but
-the production configuration and deployment are blocked by missing Vercel
-access. No deployment, production environment change or Supabase mutation is
-claimed.
+This file records the Phase 6 rollout evidence, including the completed
+production configuration, deployment and smoke checks in T036/T037, and the
+local outage rollback rehearsal in T038. The backend and frontend Vercel
+projects were newly created with the operator's consent because no existing
+NUS Exchange Planner project could be found in the Vercel account.
 
-## Status
+## Summary
 
 | Task | Scope | Status |
 | --- | --- | --- |
-| T036 | Configure backend Vercel runtime variables | Blocked: Vercel CLI is logged out and no project link or token exists |
-| T037 | Deploy and smoke-check backend and frontend | Blocked: depends on T036 |
-| T038 | Rehearse outage and JSON rollback locally | Complete; see below |
+| T036 | Configure backend Vercel runtime variables | Complete: backend project created, runtime variables set, reader role provisioned |
+| T037 | Deploy and smoke-check backend and frontend | Complete: production deploys verified against the published batch |
+| T038 | Rehearse outage and JSON rollback locally | Complete: sanitized 503, recovery and JSON rollback verified |
 
 ## Target identifiers
 
@@ -28,88 +29,114 @@ claimed.
 | Repair checksum | `61268be6b39c1effc644d72c8cc4787287cdbcafc86d32fb3c48814d48064a3e` |
 | Runtime role | `catalog_reader` |
 | Vercel CLI | 65.1.0 |
-| Vercel authentication | Logged out |
-| Vercel project link | None in the repository |
-| Backend production origin | Not available |
-| Frontend production origin | Not available |
+| Vercel team | `win-htut-s-projects` |
+| Backend project | `nus-exchange-planner-api` (Vercel root = repository root) |
+| Frontend project | `nus-exchange-planner-web` (Vercel root = `frontend/`) |
+| Backend production origin | `https://nus-exchange-planner-api.vercel.app` |
+| Frontend production origin | `https://nus-exchange-planner-web.vercel.app` |
 
-The Supabase project URL and project ref are public identifiers. No credential,
-connection string or password appears in this file.
+The Supabase project URL, project ref and Vercel origins are public
+identifiers. No credential, connection string or password appears in this
+file; the generated reader password and its URL exist only in the deployment
+secret and were never printed or committed.
 
-## T036 configuration preflight
+## T036 runtime configuration
 
-The runtime variables were prepared from `backend/.env.example`, but they cannot
-be written to Vercel without an authenticated project link. The required target
-configuration is:
+The Vercel account had no existing NUS Exchange Planner project, so T036 created
+`nus-exchange-planner-api` (linked at the repository root) and linked
+`nus-exchange-planner-web` (linked in `frontend/`) after the operator consented.
+The following server-only Production variables were applied to the backend
+project, matching `backend/.env.example`:
 
-| Variable | Required value | Current state |
-| --- | --- | --- |
-| `CATALOG_BACKEND` | `postgres` | Not set; Vercel project inaccessible |
-| `DATABASE_URL` | `catalog_reader` URL on the transaction pooler | Not set; reader has no login |
-| `DB_POOL_MIN_SIZE` | `0` | Documented, not set |
-| `DB_POOL_MAX_SIZE` | `1` for serverless | Documented, not set |
-| `DB_POOL_TIMEOUT` | `5` | Documented, not set |
-| `DB_POOL_MAX_WAITING` | `16` | Documented, not set |
-| `DB_CONNECT_TIMEOUT` | `5` | Documented, not set |
-| `DB_STATEMENT_TIMEOUT_MS` | `5000` | Documented, not set |
-| `DB_IDLE_IN_TRANSACTION_TIMEOUT_MS` | `5000` | Documented, not set |
-| `CORS_ORIGINS` | Exact frontend production origin | Unchanged; origin unknown |
-| `IMPORT_DATABASE_URL` | Must be absent from runtime | Confirmed absent from runtime config |
+| Variable | Value |
+| --- | --- |
+| `CATALOG_BACKEND` | `postgres` |
+| `DATABASE_URL` | `catalog_reader.<project-ref>` URL, transaction pooler port 6543, `sslmode=require` |
+| `DB_POOL_MIN_SIZE` | `0` |
+| `DB_POOL_MAX_SIZE` | `1` (serverless default) |
+| `DB_POOL_TIMEOUT` | `5` |
+| `DB_POOL_MAX_WAITING` | `16` |
+| `DB_POOL_CLOSE_TIMEOUT` | `5` |
+| `DB_POOL_MAX_LIFETIME` | `1800` |
+| `DB_POOL_MAX_IDLE` | `300` |
+| `DB_CONNECT_TIMEOUT` | `5` |
+| `DB_STATEMENT_TIMEOUT_MS` | `5000` |
+| `DB_IDLE_IN_TRANSACTION_TIMEOUT_MS` | `5000` |
+| `CORS_ORIGINS` | `https://nus-exchange-planner-web.vercel.app` |
 
-The read-only role currently has no login, so a deployed backend could not
-connect even if the URL were configured:
+`IMPORT_DATABASE_URL` is confirmed absent from the runtime project. One
+misplaced `NEXT_PUBLIC_API_BASE_URL` was added to the backend project while the
+shell was at the repository root; it was removed and the backend was redeployed
+without it. The frontend project Production variable is:
+
+| Variable | Value |
+| --- | --- |
+| `NEXT_PUBLIC_API_BASE_URL` | `https://nus-exchange-planner-api.vercel.app` |
+
+The read-only role was provisioned with a generated login password outside any
+migration or repository file:
 
 | Check | Result |
 | --- | --- |
-| `catalog_reader` can select `public.module_mappings` | `true` |
-| `catalog_reader` can select `public.catalog_source_snapshots` | `false` |
-| `catalog_reader` can insert into `public.module_mappings` | `false` |
-| `catalog_reader` can log in | `false` |
-
-The frontend setting `NEXT_PUBLIC_API_BASE_URL` was not changed. It still points
-at `http://localhost:8001`, and no frontend production deployment is known.
-`CORS_ORIGINS` was not changed either.
+| `catalog_reader` can log in | `true`, password provisioned with `alter role` |
+| Live reader connection sees catalog | 6 degrees, 5 universities, 151 mappings, batch `1` completed/current |
+| `select` from `catalog_source_snapshots` | denied (`42501`) |
+| `insert` into catalog tables | denied (`25006` runtime read-only; `has_table_privilege ... 'insert'` is `false`) |
 
 ### Region
 
-The database is in `ap-southeast-2`. A Vercel backend in `sin1` (Singapore) is
-the closest documented option. The existing project region could not be
-inspected, so proximity is not verified.
+The database is in `ap-southeast-2`. The Vercel project is on the hobby plan,
+which does not expose function region selection (`inspect --json` reports no
+region). Observed warm p95 latency from `curl` including TLS setup was about
+1.5-1.9 seconds per request. Record this distance as a known limitation; a
+function region near Sydney should be chosen when the account plan allows.
 
-### Blockers
+## T037 deployment and smoke checks
 
-1. `npx vercel@latest whoami` reports `Logged out`.
-2. There is no `.vercel/` project link in the repository and no `VERCEL_TOKEN` in
-   the environment.
-3. No backend or frontend production URL is recorded anywhere in the repository.
-4. The `catalog_reader` role still has `rolcanlogin=false`; its password must be
-   provisioned outside the repository and stored only in the deployment secret.
+Production deployments after the T036 configuration:
 
-No Vercel or Supabase production state was modified while establishing these
-blockers. Completing T036 requires an operator to authenticate the CLI or link
-the existing project, provision the reader password, and set the variables in the
-project dashboard or through `vercel env add` with values supplied interactively.
-Secrets must not be passed on the command line or committed.
+| Deployment | Description | Production URL | Timestamp (UTC) | Status |
+| --- | --- | --- | --- | --- |
+| `nus-exchange-planner-3hir2iioj-…` |Backend, final (CORS applied) | `https://nus-exchange-planner-api.vercel.app` | 2026-10-22T13:28:43Z | Ready |
+| `nus-exchange-planner-b64ftt60i-…` | Frontend Next.js build | `https://nus-exchange-planner-web.vercel.app` | 2026-10-22T13:29:12Z | Ready |
 
-## T037 deployment and smoke check
+Two earlier backend deployments, `2mch9o1z4` and `6qk4vgxul`, are superseded by
+`3hir2iioj`.
 
-Not executed. Deployment cannot start until T036 supplies an authenticated Vercel
-project with the runtime variables.
+### Backend smoke evidence
 
-No production smoke result is claimed. The local release gate and target import
-evidence remain the only completed verification:
+All checks were made against the live production URL with the full import batch
+published in Supabase.
 
-| Check | Evidence |
-| --- | --- |
-| Phase 5 regression gate | `regression-results.md`: 198 checks passed |
-| Target publication | `import-results.md`: batch `1`, 151 active mappings |
-| Target reconciliation | `import-results.md`: 19/19 checks passed |
-| API parity | `api-validation.md`: all degrees and 30 pairs compared |
+| Check | Expected | Result |
+| --- | --- | --- |
+| `GET /api/v1/catalog` | 200, source order | 200; 6 degrees, 5 universities; full titles present as the `degree` field, matching the baseline shape |
+| `GET /api/v1/recommendations?degree=Computer Science` | 200 | 200; Toronto first with 7/3/7 |
+| `GET /api/v1/mappings?degree=Computer Science&uni=University of Toronto` | 200, 7 rows | 200; 7 mapping rows, 7 partner modules, 3 distinct NUS modules, including the verified `0.5` unit repair |
+| Unknown degree mappings | 404 | 404 |
+| Missing `degree` parameter | 422 | 422 |
+| Valid-empty pair, Computer Science / Yonsei | 200 | 200 |
 
-The deployment smoke commands remain those in `quickstart.md`: check
-`/api/v1/catalog`, `/api/v1/recommendations` and `/api/v1/mappings` on the
-backend origin, then open `/` and `/mappings` on the frontend origin. Those URLs
-do not exist yet.
+### Frontend smoke evidence
+
+| Check | Expected | Result |
+| --- | --- | --- |
+| `GET /` | 200 | 200 |
+| `GET /mappings` | 200 | 200 |
+| Origin allowed by backend CORS | exact origin | `Origin: https://nus-exchange-planner-web.vercel.app` on `/api/v1/catalog` returns 200 |
+| Browser bundle API base | production origin | The deployed Next.js chunks contain `nus-exchange-planner-api.vercel.app` and no `localhost:8001` fallback |
+
+The production responses match the reviewed PostgreSQL batch: the four repaired
+Toronto pairs appear in PostgreSQL mode (Artificial Intelligence 10, Business
+Analytics 19, Computer Science 7, Information Security 8) and were exercised on
+the deployed instance via the mappings smoke checks.
+
+### Remaining issues
+
+- Function-to-database latency is limited by the non-selectable hobby-plan
+  function region and the `ap-southeast-2` database.
+- Quota/limits and cold-start behavior were not stress-tested on the live
+  deployment; measurements in `performance.md` cover contention locally.
 
 ## T038 local outage and rollback rehearsal
 

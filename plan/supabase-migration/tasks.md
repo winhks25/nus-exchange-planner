@@ -1,8 +1,8 @@
 # Tasks: Supabase catalog migration
 
 Date: 2026-10-22. Status: implementation in progress; Phases 1-5 complete;
-Phase 6 runbook and local rollback rehearsal in progress; production deployment
-blocked on Vercel access.
+Phase 6 deployment and rollback evidence recorded; documentation and final
+verification (Phase 7) remain.
 
 Sources: [spec.md](spec.md), [plan.md](plan.md), the applied migration in
 supabase/migrations/20261022000100_create_exchange_catalog.sql, and
@@ -118,10 +118,10 @@ evidence; local success alone is insufficient.
 
 - [X] T035 [US3] Write plan/supabase-migration/quickstart.md with local JSON/postgres commands, separate import/migration commands, role provisioning, environment loading, checksum gates and startup diagnostics; document manual-mode rollback and that it restores the original snapshot rather than later database repairs.
   - Status: quickstart now covers both runtime modes, Supabase migrations and role provisioning, import/reconcile checksum gates, Vercel variables, startup/outage diagnostics, manual JSON rollback with data-version differences, and the regression gate.
-- [ ] T036 [US3] Configure the existing backend Vercel project's server-only runtime DATABASE_URL, CATALOG_BACKEND=postgres and bounded pool settings using backend/.env.example as the variable reference; keep frontend NEXT_PUBLIC_API_BASE_URL and CORS behavior intact, exclude importer credentials from runtime, verify region proximity, and record redacted configuration/deployment identifiers in plan/supabase-migration/deployment-results.md.
-  - Status: blocked. Vercel CLI 65.1.0 reports `Logged out`, no `.vercel` project link or `VERCEL_TOKEN` exists, no production origin is recorded, and `catalog_reader` has no login. No production variables were changed; the prepared values and blockers are in deployment-results.md.
-- [ ] T037 [US3] Deploy the backend after import and API gates pass; smoke-check /api/v1/catalog, /api/v1/recommendations and /api/v1/mappings plus frontend / and /mappings, comparing against the verified import batch; record URLs, timestamps, status/count evidence and remaining issues in plan/supabase-migration/deployment-results.md without credentials.
-  - Status: blocked by T036. Local import, reconciliation, API parity and regression evidence is complete; no production deployment or smoke result is claimed.
+- [X] T036 [US3] Configure the existing backend Vercel project's server-only runtime DATABASE_URL, CATALOG_BACKEND=postgres and bounded pool settings using backend/.env.example as the variable reference; keep frontend NEXT_PUBLIC_API_BASE_URL and CORS behavior intact, exclude importer credentials from runtime, verify region proximity, and record redacted configuration/deployment identifiers in plan/supabase-migration/deployment-results.md.
+  - Status: complete. No existing NUS Exchange Planner Vercel project existed; with the operator's consent `nus-exchange-planner-api` and `nus-exchange-planner-web` were created. Twelve Runtime variables including the `catalog_reader` transaction-pooler `DATABASE_URL` are set, `IMPORT_DATABASE_URL` is absent, and CORS allows the exact frontend origin. The Vercel hobby plan does not expose function region choice, so proximity to `ap-southeast-2` is recorded as a limitation rather than verified.
+- [X] T037 [US3] Deploy the backend after import and API gates pass; smoke-check /api/v1/catalog, /api/v1/recommendations and /api/v1/mappings plus frontend / and /mappings, comparing against the verified import batch; record URLs, timestamps, status/count evidence and remaining issues in plan/supabase-migration/deployment-results.md without credentials.
+  - Status: complete. Backend `nus-exchange-planner-api` and frontend `nus-exchange-planner-web` are on production; catalog/recommendations/mappings smoke checks match the verified batch (7 Toronto CS rows, verified 0.5-unit repair, 404/422/valid-empty behavior), and both frontend pages load with the production API origin baked into the client bundle.
 - [X] T038 [US3] Rehearse loss/recovery of database access and explicit CATALOG_BACKEND=json rollback in a local/staging environment using plan/supabase-migration/quickstart.md; verify 503 with no automatic fallback, restore postgres mode, confirm the frozen JSON snapshot remains deployable, and record precise rollback/redeployment steps and data-version differences in plan/supabase-migration/deployment-results.md.
   - Status: complete locally. A paused disposable PostgreSQL returned a sanitized 503 with no JSON fallback, resumed with 200, and an explicit JSON restart served the frozen snapshot. Evidence and rollback steps are in deployment-results.md.
 
