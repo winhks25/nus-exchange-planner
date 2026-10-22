@@ -12,6 +12,7 @@ from scripts.import_catalog import (
     build_import_plan,
     dry_run,
 )
+from scripts.verify_catalog import Reconciler
 
 
 def test_import_plan_accounts_for_every_preview_entity():
@@ -178,3 +179,37 @@ def test_injected_failure_rolls_back_the_entire_import(database):
     with _connect(database.url) as connection:
         counts = _catalog_counts(connection)
     assert all(value == 0 for value in counts.values())
+
+
+def _reconciliation_report(database, plan):
+    with _connect(database.url) as connection:
+        connection.read_only = True
+        with connection.transaction():
+            return Reconciler(connection, plan).run()
+
+
+def test_reconciliation_accepts_a_fresh_publication(database):
+    plan = build_import_plan()
+    apply_plan(plan, database.url)
+
+    report = _reconciliation_report(database, plan)
+
+    assert report["ok"] is True
+    assert report["summary"]["failed"] == 0
+    assert report["batch_id"] == 1
+
+
+def test_reconciliation_reports_a_missing_repair_row(database):
+    plan = build_import_plan()
+    apply_plan(plan, database.url)
+    database.execute(
+        "delete from public.catalog_repairs where id = (select min(id) from public.catalog_repairs)"
+    )
+
+    report = _reconciliation_report(database, plan)
+
+    assert report["ok"] is False
+    failed = {check["name"]: check for check in report["checks"] if not check["ok"]}
+    assert "catalog repairs" in failed
+    assert failed["catalog repairs"]["expected"]["records"] == 44
+    assert failed["catalog repairs"]["actual"]["records"] == 43
