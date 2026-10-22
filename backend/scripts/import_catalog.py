@@ -5,11 +5,22 @@ records are built and validated here before any database connection is opened,
 so a malformed source fails without touching the target.
 """
 
+import argparse
 import hashlib
+import json
+import logging
+import os
 import re
+import sys
 from dataclasses import dataclass
-from datetime import date
+from datetime import UTC, date, datetime
+from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
+
+import psycopg
+from psycopg.conninfo import conninfo_to_dict, make_conninfo
+from psycopg.types.json import Jsonb
 
 from app.course_codes import normalized_course_code
 from scripts.catalog_preview import build_preview
@@ -17,15 +28,41 @@ from scripts.catalog_source import (
     SourceFile,
     combined_checksum,
     load_archive_sources,
+    write_json,
+)
+
+IMPORT_LOCK_KEY = "nus-exchange-planner:catalog-import"
+REQUIRED_TABLES = (
+    "public.degrees",
+    "public.nus_modules",
+    "public.degree_modules",
+    "public.specializations",
+    "public.specialization_modules",
+    "public.partner_universities",
+    "public.pu_modules",
+    "public.module_mappings",
+    "public.catalog_import_batches",
+    "public.catalog_source_snapshots",
+    "public.catalog_source_rows",
+    "public.catalog_issues",
+    "public.catalog_repairs",
 )
 
 
-class ImportError(RuntimeError):
+class CatalogImportError(RuntimeError):
     """Base class for importer failures that must not leak connection details."""
 
 
-class ImportDataError(ImportError):
+class ImportDataError(CatalogImportError):
     """Raised when the source cannot be represented without inventing data."""
+
+
+class ImportRefused(CatalogImportError):
+    """Raised when publishing would overwrite a different or partial catalog."""
+
+
+class SimulatedImportFailure(CatalogImportError):
+    """Raised by the isolated failure exercise to prove transaction rollback."""
 
 
 SOURCE_URL_PATTERN = re.compile(r"^https?://\S+$")
@@ -215,6 +252,31 @@ class ImportPlan:
     @property
     def summary(self) -> dict[str, Any]:
         return self.preview["summary"]
+
+    @property
+    def academic_year(self) -> str | None:
+        value = self.preview.get("academic_year")
+        return value if isinstance(value, str) else None
+
+    @property
+    def prepared_on(self) -> str | None:
+        value = self.preview.get("prepared_on")
+        return value if isinstance(value, str) else None
+
+    @property
+    def repair_file(self) -> str | None:
+        value = self.preview["source_snapshot"].get("repair_file")
+        return value if isinstance(value, str) else None
+
+
+@dataclass(frozen=True)
+class PublicationState:
+    """The target's publication state before a write is attempted."""
+
+    action: str
+    reason: str
+    batch_id: int | None
+    existing_counts: dict[str, int]
 
 
 def build_import_plan() -> ImportPlan:
@@ -872,24 +934,847 @@ def _optional_positive(value: object, label: str) -> float | None:
     return number
 
 
-def main() -> int:
-    """Print a compact plan summary; database publishing is added in T016."""
+def _project_ref_from_url(database_url: str) -> str | None:
+    """Read a Supabase project ref from the host and never echo credentials."""
 
-    plan = build_import_plan()
-    entities = plan.entities
-    print(
-        "Import plan: "
-        f"{len(entities.degrees)} degrees, "
-        f"{len(entities.universities)} universities, "
-        f"{len(entities.nus_modules)} NUS modules, "
-        f"{len(entities.partner_modules)} partner modules, "
-        f"{len(entities.degree_modules)} degree memberships, "
-        f"{len(entities.specializations)} specializations/focus areas, "
-        f"{len(entities.specialization_modules)} specialization memberships"
+    parts = urlsplit(database_url)
+    host = (parts.hostname or "").lower()
+    username = parts.username or ""
+    if host.endswith(".pooler.supabase.com") and "." in username:
+        return username.split(".", 1)[1]
+    if host.startswith("db.") and host.endswith(".supabase.co"):
+        return host.split(".")[1]
+    return None
+
+
+def _expected_target_label(database_url: str) -> str:
+    """Return the confirmation label a target URL requires."""
+
+    project_ref = _project_ref_from_url(database_url)
+    if project_ref:
+        return project_ref
+    host = (urlsplit(database_url).hostname or "").lower()
+    if host in {"localhost", "127.0.0.1", "::1"} or host.startswith("/"):
+        return "local"
+    return host
+
+
+def _validate_target(database_url: str, target: str) -> None:
+    """Require an explicit confirmation that names the actual database target."""
+
+    expected = _expected_target_label(database_url)
+    if target != expected:
+        raise ImportRefused(f"Target confirmation mismatch: expected {expected!r}, got {target!r}")
+
+
+def _target_summary(database_url: str) -> dict[str, str | None]:
+    """Describe a target without exposing usernames, passwords, or query strings."""
+
+    parts = urlsplit(database_url)
+    return {
+        "host": parts.hostname,
+        "database": parts.path.lstrip("/") or None,
+        "project_ref": _project_ref_from_url(database_url),
+    }
+
+
+def _database_error_message(exc: Exception) -> str:
+    """Keep driver errors actionable while omitting connection strings."""
+
+    diagnostic = getattr(exc, "diag", None)
+    detail = getattr(diagnostic, "message_primary", None) if diagnostic else None
+    sqlstate = getattr(exc, "sqlstate", None)
+    parts = [type(exc).__name__]
+    if sqlstate:
+        parts.append(str(sqlstate))
+    if detail:
+        parts.append(detail)
+    return "Database operation failed: " + " - ".join(parts)
+
+
+def _connect(database_url: str) -> psycopg.Connection:
+    """Open a non-autocommit connection with prepared statements disabled."""
+
+    try:
+        params = conninfo_to_dict(database_url)
+        host = str(params.get("host") or "").lower()
+        local = host in {"localhost", "127.0.0.1", "::1"} or host.startswith("/")
+        if not local and params.get("sslmode") not in {"require", "verify-ca", "verify-full"}:
+            params["sslmode"] = "require"
+        params.setdefault("application_name", "nus-exchange-planner-import")
+        params.setdefault("connect_timeout", "15")
+        return psycopg.connect(
+            make_conninfo(**params),
+            autocommit=False,
+            prepare_threshold=None,
+        )
+    except (psycopg.Error, ValueError) as exc:
+        raise CatalogImportError(_database_error_message(exc)) from None
+
+
+def _require_schema(connection: psycopg.Connection) -> None:
+    """Fail clearly when the target has not had the reviewed migrations applied."""
+
+    missing = [
+        table
+        for table in REQUIRED_TABLES
+        if connection.execute("select to_regclass(%s)", (table,)).fetchone()[0] is None
+    ]
+    if missing:
+        raise ImportRefused(
+            "Target schema is incomplete; apply the reviewed migrations first. "
+            f"Missing: {', '.join(missing)}"
+        )
+
+
+def _catalog_counts(connection: psycopg.Connection) -> dict[str, int]:
+    """Count every table that the importer owns so partial publications are visible."""
+
+    row = connection.execute(
+        """
+        select
+          (select count(*) from public.degrees),
+          (select count(*) from public.nus_modules),
+          (select count(*) from public.degree_modules),
+          (select count(*) from public.specializations),
+          (select count(*) from public.specialization_modules),
+          (select count(*) from public.partner_universities),
+          (select count(*) from public.pu_modules),
+          (select count(*) from public.module_mappings),
+          (select count(*) from public.catalog_source_snapshots),
+          (select count(*) from public.catalog_source_rows),
+          (select count(*) from public.catalog_issues),
+          (select count(*) from public.catalog_repairs),
+          (select count(*) from public.catalog_import_batches)
+        """
+    ).fetchone()
+    keys = (
+        "degrees",
+        "nus_modules",
+        "degree_modules",
+        "specializations",
+        "specialization_modules",
+        "partner_universities",
+        "pu_modules",
+        "module_mappings",
+        "source_snapshots",
+        "source_rows",
+        "issues",
+        "repairs",
+        "batches",
     )
-    print(f"Source checksum: {plan.source_checksum}")
-    print(f"Repair checksum: {plan.repair_checksum}")
+    return dict(zip(keys, (int(value) for value in row), strict=True))
+
+
+def _publication_state(connection: psycopg.Connection, plan: ImportPlan) -> PublicationState:
+    """Decide whether this target may receive the initial publication."""
+
+    batches = connection.execute(
+        """
+        select id, source_checksum, repair_checksum, status, is_current
+        from public.catalog_import_batches
+        order by id
+        """
+    ).fetchall()
+    counts = _catalog_counts(connection)
+    current = [row for row in batches if row[3] == "completed" and row[4]]
+    matching = [
+        row for row in current if row[1] == plan.source_checksum and row[2] == plan.repair_checksum
+    ]
+    if len(batches) == 1 and len(matching) == 1:
+        if counts["degrees"] > 0 and counts["module_mappings"] > 0:
+            return PublicationState(
+                "noop",
+                "matching source and repair checksums are already published",
+                int(matching[0][0]),
+                counts,
+            )
+        return PublicationState(
+            "blocked",
+            "a completed batch exists but its catalog rows are missing",
+            int(matching[0][0]),
+            counts,
+        )
+    if batches or any(counts.values()):
+        return PublicationState(
+            "blocked",
+            "target already contains a different or partial catalog; "
+            "this importer only publishes an empty target",
+            None,
+            counts,
+        )
+    return PublicationState(
+        "import",
+        "target is empty and ready for the reviewed catalog snapshot",
+        None,
+        counts,
+    )
+
+
+def _plan_counts(plan: ImportPlan) -> dict[str, int]:
+    """Expose the deterministic source accounting used by the preview."""
+
+    summary = plan.summary
+    return {
+        "archives": len(plan.archives),
+        "degrees": len(plan.entities.degrees),
+        "nus_modules": len(plan.entities.nus_modules),
+        "degree_modules": len(plan.entities.degree_modules),
+        "specializations": len(plan.entities.specializations),
+        "specialization_modules": len(plan.entities.specialization_modules),
+        "partner_universities": len(plan.entities.universities),
+        "partner_modules": len(plan.entities.partner_modules),
+        "source_rows": summary["raw_rows"],
+        "active_rows": len(plan.mappings),
+        "accepted_rows": summary["accepted_rows"],
+        "repaired_rows": summary["repaired_rows"],
+        "quarantined_rows": summary["quarantined_rows"],
+        "issues": len(plan.issues),
+        "repairs": len(plan.repairs),
+    }
+
+
+def _result_base(plan: ImportPlan) -> dict[str, Any]:
+    """Build stable, secret-free fields shared by every run report."""
+
+    return {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "source_checksum": plan.source_checksum,
+        "repair_checksum": plan.repair_checksum,
+        "planned_counts": _plan_counts(plan),
+    }
+
+
+def dry_run(plan: ImportPlan, database_url: str | None) -> dict[str, Any]:
+    """Read target state without writing and report what an apply would do."""
+
+    result = _result_base(plan)
+    result["mode"] = "dry-run"
+    if not database_url:
+        result["action"] = "planned"
+        result["reason"] = "no database URL supplied; only the offline plan was validated"
+        return result
+    with _connect(database_url) as connection:
+        connection.read_only = True
+        with connection.transaction():
+            _require_schema(connection)
+            state = _publication_state(connection, plan)
+    result["target"] = _target_summary(database_url)
+    result["action"] = {
+        "import": "would_import",
+        "noop": "noop",
+        "blocked": "blocked",
+    }[state.action]
+    result["reason"] = state.reason
+    result["batch_id"] = state.batch_id
+    result["existing_counts"] = state.existing_counts
+    return result
+
+
+def _insert_batch(connection: psycopg.Connection, plan: ImportPlan) -> int:
+    """Create the running batch marker before any catalog rows are written."""
+
+    manifest = {
+        "files": [
+            {
+                "path": archive.path,
+                "kind": archive.kind,
+                "sha256": archive.sha256,
+                "byte_size": archive.byte_size,
+            }
+            for archive in plan.archives
+        ],
+        "source_checksum_sha256": plan.source_checksum,
+        "repair_checksum_sha256": plan.repair_checksum,
+        "academic_year": plan.academic_year,
+        "prepared_on": plan.prepared_on,
+        "repair_file": plan.repair_file,
+    }
+    row = connection.execute(
+        """
+        insert into public.catalog_import_batches (
+          source_checksum,
+          repair_checksum,
+          status,
+          is_current,
+          source_manifest,
+          source_file_count,
+          raw_row_count,
+          accepted_row_count,
+          repaired_row_count,
+          quarantined_row_count,
+          note
+        ) values (%s, %s, 'running', false, %s, %s, %s, %s, %s, %s, %s)
+        returning id
+        """,
+        (
+            plan.source_checksum,
+            plan.repair_checksum,
+            Jsonb(manifest),
+            len(plan.archives),
+            plan.summary["raw_rows"],
+            plan.summary["accepted_rows"],
+            plan.summary["repaired_rows"],
+            plan.summary["quarantined_rows"],
+            "Initial reviewed publication from the checked-in catalog snapshot.",
+        ),
+    ).fetchone()
+    return int(row[0])
+
+
+def _insert_snapshots(
+    connection: psycopg.Connection, plan: ImportPlan, batch_id: int
+) -> dict[str, int]:
+    """Persist exact source text and parsed JSON for every archived file."""
+
+    ids: dict[str, int] = {}
+    for archive in plan.archives:
+        row = connection.execute(
+            """
+            insert into public.catalog_source_snapshots (
+              batch_id, file_path, source_kind, raw_text, parsed_json, sha256, byte_size
+            ) values (%s, %s, %s, %s, %s, %s, %s)
+            returning id
+            """,
+            (
+                batch_id,
+                archive.path,
+                archive.kind,
+                archive.raw_text,
+                Jsonb(archive.parsed),
+                archive.sha256,
+                archive.byte_size,
+            ),
+        ).fetchone()
+        ids[archive.path] = int(row[0])
+    return ids
+
+
+def _insert_source_rows(
+    connection: psycopg.Connection,
+    plan: ImportPlan,
+    snapshots: dict[str, int],
+) -> dict[tuple[str, int], int]:
+    """Insert one row per source position and keep repaired raw values intact."""
+
+    ids: dict[tuple[str, int], int] = {}
+    for item in plan.source_rows:
+        row = connection.execute(
+            """
+            insert into public.catalog_source_rows (
+              snapshot_id,
+              mapping_index,
+              raw_json,
+              source_nus_code,
+              source_partner_code,
+              source_nus_title,
+              source_partner_title,
+              source_nus_units,
+              source_partner_units,
+              source_faculty,
+              source_page,
+              outcome
+            ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            returning id
+            """,
+            (
+                snapshots[item.source_file],
+                item.mapping_index,
+                Jsonb(item.raw_row),
+                item.source_nus_code,
+                item.source_partner_code,
+                item.source_nus_title,
+                item.source_partner_title,
+                item.source_nus_units,
+                item.source_partner_units,
+                item.source_faculty,
+                item.source_page,
+                item.outcome,
+            ),
+        ).fetchone()
+        ids[item.key] = int(row[0])
+    return ids
+
+
+def _insert_degrees(connection: psycopg.Connection, plan: ImportPlan) -> dict[str, int]:
+    """Insert degree identities and return their generated ids."""
+
+    ids: dict[str, int] = {}
+    for item in plan.entities.degrees:
+        row = connection.execute(
+            """
+            insert into public.degrees (name, faculty, full_title, source_order)
+            values (%s, %s, %s, %s)
+            returning id
+            """,
+            (item.name, item.faculty, item.full_title, item.source_order),
+        ).fetchone()
+        ids[item.name] = int(row[0])
+    return ids
+
+
+def _insert_nus_modules(connection: psycopg.Connection, plan: ImportPlan) -> None:
+    """Insert normalized NUS courses, preserving genuinely unknown metadata."""
+
+    with connection.cursor() as cursor:
+        cursor.executemany(
+            """
+            insert into public.nus_modules (code, name, offering_faculty, verified_units)
+            values (%s, %s, %s, %s)
+            """,
+            [
+                (item.code, item.name, item.offering_faculty, item.verified_units)
+                for item in plan.entities.nus_modules
+            ],
+        )
+
+
+def _insert_degree_modules(
+    connection: psycopg.Connection,
+    plan: ImportPlan,
+    degree_ids: dict[str, int],
+) -> None:
+    """Insert each degree membership once, retaining its requirement label."""
+
+    with connection.cursor() as cursor:
+        cursor.executemany(
+            """
+            insert into public.degree_modules (degree_id, module_code, requirement_type)
+            values (%s, %s, %s)
+            """,
+            [
+                (
+                    degree_ids[item.degree],
+                    item.module_code,
+                    item.requirement_type,
+                )
+                for item in plan.entities.degree_modules
+            ],
+        )
+
+
+def _insert_universities(connection: psycopg.Connection, plan: ImportPlan) -> dict[str, int]:
+    """Insert partner universities and return their generated ids."""
+
+    ids: dict[str, int] = {}
+    for item in plan.entities.universities:
+        row = connection.execute(
+            """
+            insert into public.partner_universities (
+              name, country, city, continent, source_order
+            ) values (%s, %s, %s, %s, %s)
+            returning id
+            """,
+            (item.name, item.country, item.city, item.continent, item.source_order),
+        ).fetchone()
+        ids[item.name] = int(row[0])
+    return ids
+
+
+def _insert_partner_modules(
+    connection: psycopg.Connection,
+    plan: ImportPlan,
+    universities: dict[str, int],
+) -> dict[tuple[str, str], int]:
+    """Insert partner-scoped course identities and return their ids."""
+
+    ids: dict[tuple[str, str], int] = {}
+    for item in plan.entities.partner_modules:
+        row = connection.execute(
+            """
+            insert into public.pu_modules (
+              code, name, partner_university_id, verified_units
+            ) values (%s, %s, %s, %s)
+            returning id
+            """,
+            (
+                item.code,
+                item.name,
+                universities[item.university],
+                item.verified_units,
+            ),
+        ).fetchone()
+        ids[(item.university, item.code)] = int(row[0])
+    return ids
+
+
+def _insert_mappings(
+    connection: psycopg.Connection,
+    plan: ImportPlan,
+    source_rows: dict[tuple[str, int], int],
+    partner_modules: dict[tuple[str, str], int],
+) -> None:
+    """Insert one normalized mapping for each active source row position."""
+
+    with connection.cursor() as cursor:
+        cursor.executemany(
+            """
+            insert into public.module_mappings (
+              nus_module_code,
+              pu_module_id,
+              source_row_id,
+              source_order,
+              source_nus_title,
+              source_nus_units,
+              source_partner_title,
+              source_partner_units,
+              source_faculty
+            ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            [
+                (
+                    item.nus_module_code,
+                    partner_modules[(item.university, item.partner_module_code)],
+                    source_rows[item.key],
+                    item.source_order,
+                    item.source_nus_title,
+                    item.source_nus_units,
+                    item.source_partner_title,
+                    item.source_partner_units,
+                    item.source_faculty,
+                )
+                for item in plan.mappings
+            ],
+        )
+
+
+def _insert_specializations(
+    connection: psycopg.Connection,
+    plan: ImportPlan,
+    degree_ids: dict[str, int],
+) -> None:
+    """Insert specializations/focus areas and their ordered memberships.
+
+    Membership notes stay in the source-addressed issue rows so unknown or
+    externally linked curriculum details are retained without inventing a list.
+    """
+
+    memberships: dict[tuple[str, str], list[str]] = {}
+    for item in plan.entities.specialization_modules:
+        memberships.setdefault((item.degree, item.specialization), []).append(item.module_code)
+    for item in plan.entities.specializations:
+        row = connection.execute(
+            """
+            insert into public.specializations (
+              degree_id, name, kind, source_order
+            ) values (%s, %s, %s, %s)
+            returning id
+            """,
+            (
+                degree_ids[item.degree],
+                item.name,
+                item.kind,
+                item.source_order,
+            ),
+        ).fetchone()
+        specialization_id = int(row[0])
+        codes = memberships.get((item.degree, item.name), [])
+        if codes:
+            with connection.cursor() as cursor:
+                cursor.executemany(
+                    """
+                    insert into public.specialization_modules (
+                      specialization_id, module_code
+                    ) values (%s, %s)
+                    """,
+                    [(specialization_id, code) for code in codes],
+                )
+
+
+def _insert_issues(
+    connection: psycopg.Connection,
+    plan: ImportPlan,
+    batch_id: int,
+    snapshots: dict[str, int],
+    source_rows: dict[tuple[str, int], int],
+) -> None:
+    """Persist every source-addressed issue and its resolution state."""
+
+    for item in plan.issues:
+        connection.execute(
+            """
+            insert into public.catalog_issues (
+              batch_id,
+              snapshot_id,
+              source_row_id,
+              json_pointer,
+              issue_code,
+              severity,
+              message,
+              status
+            ) values (%s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                batch_id,
+                snapshots[item.source_file],
+                source_rows.get((item.source_file, item.mapping_index))
+                if item.mapping_index is not None
+                else None,
+                item.json_pointer,
+                item.code,
+                item.severity,
+                item.message,
+                item.status,
+            ),
+        )
+
+
+def _insert_repairs(
+    connection: psycopg.Connection,
+    plan: ImportPlan,
+    batch_id: int,
+    snapshots: dict[str, int],
+    source_rows: dict[tuple[str, int], int],
+) -> None:
+    """Persist verified and unresolved repair evidence at source pointers."""
+
+    for item in plan.repairs:
+        connection.execute(
+            """
+            insert into public.catalog_repairs (
+              batch_id,
+              snapshot_id,
+              source_row_id,
+              json_pointer,
+              before_value,
+              after_value,
+              source_url,
+              source_title,
+              accessed_on,
+              academic_year,
+              evidence,
+              status
+            ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                batch_id,
+                snapshots[item.source_file],
+                source_rows[(item.source_file, item.mapping_index)],
+                item.json_pointer,
+                Jsonb(item.before_value),
+                Jsonb(item.after_value),
+                item.source_url,
+                item.source_title,
+                item.accessed_on,
+                item.academic_year,
+                item.evidence,
+                item.status,
+            ),
+        )
+
+
+def _complete_batch(connection: psycopg.Connection, plan: ImportPlan, batch_id: int) -> None:
+    """Mark the batch complete only after every row and archive is present."""
+
+    updated = connection.execute(
+        """
+        update public.catalog_import_batches
+        set status = 'completed',
+            is_current = true,
+            completed_at = now(),
+            note = %s
+        where id = %s and status = 'running'
+        """,
+        (
+            "Initial publication completed from the reviewed import plan.",
+            batch_id,
+        ),
+    ).rowcount
+    if updated != 1:
+        raise ImportDataError("Import batch could not be marked complete")
+
+
+def apply_plan(
+    plan: ImportPlan,
+    database_url: str,
+    *,
+    simulate_failure: bool = False,
+) -> dict[str, Any]:
+    """Publish the initial catalog in one transaction, or prove a clean rollback."""
+
+    with _connect(database_url) as connection, connection.transaction():
+        _require_schema(connection)
+        connection.execute(
+            "select pg_advisory_xact_lock(hashtextextended(%s, 0))",
+            (IMPORT_LOCK_KEY,),
+        )
+        state = _publication_state(connection, plan)
+        if state.action == "blocked":
+            raise ImportRefused(state.reason)
+        result = _result_base(plan)
+        result["mode"] = "apply"
+        result["target"] = _target_summary(database_url)
+        result["existing_counts"] = state.existing_counts
+        if state.action == "noop":
+            result["action"] = "noop"
+            result["reason"] = state.reason
+            result["batch_id"] = state.batch_id
+            return result
+        batch_id = _insert_batch(connection, plan)
+        snapshots = _insert_snapshots(connection, plan, batch_id)
+        source_rows = _insert_source_rows(connection, plan, snapshots)
+        degree_ids = _insert_degrees(connection, plan)
+        _insert_nus_modules(connection, plan)
+        _insert_degree_modules(connection, plan, degree_ids)
+        universities = _insert_universities(connection, plan)
+        partner_modules = _insert_partner_modules(connection, plan, universities)
+        _insert_mappings(connection, plan, source_rows, partner_modules)
+        _insert_specializations(connection, plan, degree_ids)
+        _insert_issues(connection, plan, batch_id, snapshots, source_rows)
+        _insert_repairs(connection, plan, batch_id, snapshots, source_rows)
+        if simulate_failure:
+            raise SimulatedImportFailure("Injected failure after catalog inserts")
+        _complete_batch(connection, plan, batch_id)
+        result["action"] = "imported"
+        result["reason"] = "initial catalog publication committed"
+        result["batch_id"] = batch_id
+        return result
+
+
+def _print_summary(result: dict[str, Any]) -> None:
+    """Print a compact, secret-free report for terminal use."""
+
+    print(f"Mode: {result['mode']}")
+    print(f"Action: {result['action']}")
+    if target := result.get("target"):
+        database = target.get("database") or ""
+        print(f"Target: {target.get('host')}/{database}".rstrip("/"))
+    if result.get("batch_id"):
+        print(f"Batch: {result['batch_id']}")
+    print(f"Source checksum: {result['source_checksum']}")
+    print(f"Repair checksum: {result['repair_checksum']}")
+    counts = result["planned_counts"]
+    print(
+        "Rows: "
+        f"{counts['source_rows']} raw, "
+        f"{counts['active_rows']} active, "
+        f"{counts['accepted_rows']} accepted, "
+        f"{counts['repaired_rows']} repaired, "
+        f"{counts['quarantined_rows']} quarantined"
+    )
+    print(f"Reason: {result['reason']}")
+
+
+def _emit(result: dict[str, Any], args: argparse.Namespace) -> None:
+    """Write an optional deterministic report and print the requested format."""
+
+    if args.output:
+        write_json(args.output, result)
+    if args.json:
+        print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+    else:
+        _print_summary(result)
+
+
+def _exit_code(result: dict[str, Any]) -> int:
+    """Use a distinct nonzero status for refusals and rolled-back failures."""
+
+    if result["action"] == "blocked":
+        return 2
+    if result["action"] == "rolled_back":
+        return 1
     return 0
+
+
+def _parser() -> argparse.ArgumentParser:
+    """Build the explicitly safe import CLI."""
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="validate and report without writing (default)",
+    )
+    mode.add_argument(
+        "--apply",
+        action="store_true",
+        help="publish the catalog in one transaction",
+    )
+    parser.add_argument(
+        "--database-url",
+        help="PostgreSQL URL; defaults to IMPORT_DATABASE_URL",
+    )
+    parser.add_argument(
+        "--target-project-ref",
+        help="expected Supabase project ref, or 'local' for a local database",
+    )
+    parser.add_argument(
+        "--confirm-project-ref",
+        help="must exactly repeat --target-project-ref when applying",
+    )
+    parser.add_argument("--json", action="store_true", help="print the full report as JSON")
+    parser.add_argument("--output", type=Path, help="also write the report to this path")
+    parser.add_argument(
+        "--simulate-failure",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Plan, inspect, or publish the checked-in catalog."""
+
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    parser = _parser()
+    args = parser.parse_args(argv)
+    database_url = args.database_url or os.environ.get("IMPORT_DATABASE_URL")
+    if args.simulate_failure and not args.apply:
+        parser.error("--simulate-failure requires --apply")
+    if args.apply:
+        if not database_url:
+            parser.error("--apply requires --database-url or IMPORT_DATABASE_URL")
+        if not args.target_project_ref or not args.confirm_project_ref:
+            parser.error("--apply requires --target-project-ref and --confirm-project-ref")
+        if args.target_project_ref != args.confirm_project_ref:
+            parser.error("--confirm-project-ref must exactly match --target-project-ref")
+
+    plan: ImportPlan | None = None
+    try:
+        if database_url and args.target_project_ref:
+            _validate_target(database_url, args.target_project_ref)
+        plan = build_import_plan()
+        if not args.apply:
+            result = dry_run(plan, database_url)
+        else:
+            try:
+                result = apply_plan(
+                    plan,
+                    database_url,
+                    simulate_failure=args.simulate_failure,
+                )
+            except SimulatedImportFailure:
+                result = _result_base(plan)
+                result["mode"] = "apply"
+                result["action"] = "rolled_back"
+                result["reason"] = "injected failure rolled back the entire transaction"
+                result["batch_id"] = None
+                result["target"] = _target_summary(database_url)
+                with _connect(database_url) as connection:
+                    connection.read_only = True
+                    with connection.transaction():
+                        result["existing_counts"] = _catalog_counts(connection)
+        _emit(result, args)
+        return _exit_code(result)
+    except CatalogImportError as exc:
+        error = {
+            "error": str(exc),
+            "source_checksum": plan.source_checksum if plan else None,
+            "repair_checksum": plan.repair_checksum if plan else None,
+        }
+        if args.json:
+            print(json.dumps(error, indent=2, sort_keys=True))
+        else:
+            print(f"error: {exc}", file=sys.stderr)
+        return 2 if isinstance(exc, ImportRefused) else 1
+    except psycopg.Error as exc:
+        message = _database_error_message(exc)
+        if args.json:
+            print(json.dumps({"error": message}, indent=2, sort_keys=True))
+        else:
+            print(f"error: {message}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

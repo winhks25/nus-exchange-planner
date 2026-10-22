@@ -1,4 +1,17 @@
-from scripts.import_catalog import build_import_plan
+import copy
+from dataclasses import replace
+
+import pytest
+
+from scripts.import_catalog import (
+    ImportRefused,
+    SimulatedImportFailure,
+    _catalog_counts,
+    _connect,
+    apply_plan,
+    build_import_plan,
+    dry_run,
+)
 
 
 def test_import_plan_accounts_for_every_preview_entity():
@@ -96,3 +109,72 @@ def test_focus_areas_keep_their_kind_and_external_membership_note():
         item.specialization == "Algorithms & Theory"
         for item in plan.entities.specialization_modules
     )
+
+
+def test_dry_run_and_apply_publish_the_expected_catalog(database):
+    plan = build_import_plan()
+
+    preview = dry_run(plan, database.url)
+    assert preview["action"] == "would_import"
+    assert preview["existing_counts"]["batches"] == 0
+
+    result = apply_plan(plan, database.url)
+    assert result["action"] == "imported"
+    assert result["batch_id"] == 1
+
+    with _connect(database.url) as connection:
+        counts = _catalog_counts(connection)
+    assert counts == {
+        "degrees": 6,
+        "nus_modules": 152,
+        "degree_modules": 226,
+        "specializations": 19,
+        "specialization_modules": 30,
+        "partner_universities": 5,
+        "pu_modules": 142,
+        "module_mappings": 151,
+        "source_snapshots": 8,
+        "source_rows": 154,
+        "issues": 34,
+        "repairs": 44,
+        "batches": 1,
+    }
+
+
+def test_identical_rerun_is_a_noop(database):
+    plan = build_import_plan()
+    apply_plan(plan, database.url)
+
+    result = apply_plan(plan, database.url)
+
+    assert result["action"] == "noop"
+    assert result["batch_id"] == 1
+    with _connect(database.url) as connection:
+        assert _catalog_counts(connection)["batches"] == 1
+
+
+def test_changed_snapshot_is_refused_without_overwriting(database):
+    plan = build_import_plan()
+    apply_plan(plan, database.url)
+    changed_preview = copy.deepcopy(plan.preview)
+    changed_preview["source_snapshot"]["source_checksum_sha256"] = "0" * 64
+    changed = replace(plan, preview=changed_preview)
+
+    with pytest.raises(ImportRefused, match="different or partial catalog"):
+        apply_plan(changed, database.url)
+
+    with _connect(database.url) as connection:
+        counts = _catalog_counts(connection)
+    assert counts["batches"] == 1
+    assert counts["source_rows"] == 154
+
+
+def test_injected_failure_rolls_back_the_entire_import(database):
+    plan = build_import_plan()
+
+    with pytest.raises(SimulatedImportFailure):
+        apply_plan(plan, database.url, simulate_failure=True)
+
+    with _connect(database.url) as connection:
+        counts = _catalog_counts(connection)
+    assert all(value == 0 for value in counts.values())
