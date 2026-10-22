@@ -128,7 +128,7 @@ evidence; local success alone is insufficient.
 ## Phase 7: Documentation and final verification
 
 - [X] T039 Update README.md, supabase/README.md and backend/.env.example to explain the new runtime source, import lifecycle, migration history, supported mode switches, unresolved-data reporting and deployed status; update plan/contracts/openapi.yaml's unavailable-service description to cover database failures without changing response shapes.
-- [ ] T040 Run final applicable backend checks and frontend lint/typecheck/build plus relevant existing browser checks via frontend/package.json, inspect git diff --check and tracked files for accidental credentials, and summarize requirements-to-evidence coverage and any genuine blockers in plan/supabase-migration/validation-results.md; mark tasks complete only where implementation or deployment evidence exists.
+- [X] T040 Run final applicable backend checks and frontend lint/typecheck/build plus relevant existing browser checks via frontend/package.json, inspect git diff --check and tracked files for accidental credentials, and summarize requirements-to-evidence coverage and any genuine blockers in plan/supabase-migration/validation-results.md; mark tasks complete only where implementation or deployment evidence exists.
 
 ## Dependencies
 
