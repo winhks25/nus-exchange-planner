@@ -1,0 +1,410 @@
+{
+  "schema_version": 1,
+  "prepared_on": "2026-10-22",
+  "academic_year": "AY2026/27",
+  "scope": "Source-addressed repairs for the Toronto mapping rows detected by T010. Verified repairs recover metadata already implied by the source pairing; they do not create new exchange equivalences.",
+  "notes": [
+    "Before values are exact raw values at the recorded source pointer.",
+    "The importer must refuse a repair whose before value does not match the raw source.",
+    "Only status=verified entries may be applied. Unresolved rows remain quarantined.",
+    "No original JSON source file is modified by this repair file."
+  ],
+  "source_file_sha256": {
+    "data/mapping/canada/toronto.json": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9"
+  },
+  "summary": {
+    "verified_repairs": 5,
+    "unresolved_repairs": 3,
+    "affected_rows": 8,
+    "verified_rows": [24, 50, 51, 52, 54],
+    "unresolved_rows": [48, 49, 53]
+  },
+  "repairs": [
+    {
+      "repair_id": "toronto-024-csc311h1-units",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 24,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "verified",
+      "issue_codes": ["partner_unit_conflict"],
+      "unresolved_fields": [],
+      "fields": {
+        "partner_course.units": {
+          "json_pointer": "/mappings/24/partner_course/units",
+          "before": 3.0,
+          "after": 0.5
+        }
+      },
+      "evidence": [
+        {
+          "publisher": "University of Toronto, Faculty of Applied Science & Engineering",
+          "url": "https://engineering.calendar.utoronto.ca/electrical-and-computer-engineering-aeescbaser",
+          "page_title": "Electrical and Computer Engineering",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2025-26",
+          "quote": "CSC311H1 : Introduction to Machine Learning F/S 2 - 1 0.50",
+          "supports": ["partner_course.code", "partner_course.title", "partner_course.units"]
+        },
+        {
+          "publisher": "University of Toronto, Faculty of Arts & Science",
+          "url": "https://artsci.calendar.utoronto.ca/course/csc311h1",
+          "page_title": "CSC311H1 - Academic Calendar",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2026-27",
+          "quote": "CSC311H1: Introduction to Machine Learning ... Hours 24L/12T ... Previous Course Number CSC411H1",
+          "supports": ["partner_course.code", "partner_course.title"]
+        }
+      ],
+      "rationale": "The first CSC311H1 occurrence (row 11) records 0.5 units, and the University of Toronto Engineering calendar assigns CSC311H1 a fixed 0.50 credit value. Row 24's 3.0 is therefore a data-entry error. The exchange pairing itself is unchanged."
+    },
+    {
+      "repair_id": "toronto-048-software-engineering",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 48,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "unresolved",
+      "issue_codes": ["invalid_nus_code", "missing_nus_title"],
+      "unresolved_fields": ["nus_course.code", "nus_course.title"],
+      "fields": {},
+      "candidates": {
+        "nus_course.code": ["CS2103", "CS2103T"],
+        "nus_course.title": ["Software Engineering"]
+      },
+      "evidence": [
+        {
+          "publisher": "National University of Singapore, NUS Bulletin",
+          "url": "https://www.nus.edu.sg/nusbulletin/ay202627/programmes/school-of-computing/undergraduate-education",
+          "page_title": "Undergraduate Education - NUS Bulletin AY2026/27",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "CS2103T Software Engineering | 4",
+          "supports": ["candidate:CS2103T"]
+        },
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/focus/software",
+          "page_title": "Software Engineering - NUS Computing",
+          "accessed_on": "2026-10-22",
+          "academic_year": "current programme page",
+          "quote": "CS2103 Software Engineering is the introductory course for this focus area (and a required course for all computer science students).",
+          "supports": ["candidate:CS2103"]
+        },
+        {
+          "publisher": "University of Toronto, Faculty of Arts & Science",
+          "url": "https://artsci.calendar.utoronto.ca/course/csc207h1",
+          "page_title": "CSC207H1 - Academic Calendar",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2026-27",
+          "quote": "CSC207H1: Software Design ... An introduction to software design and development concepts, methods, and tools using a statically-typed object-oriented programming language such as Java.",
+          "supports": ["partner_course.code", "partner_course.title"]
+        }
+      ],
+      "reason": "Both CS2103 and CS2103T are official NUS titles rendered as 'Software Engineering'. The source row records only the title, and the official pages disagree about which variant is the programme requirement, so neither code can be recovered without inference. The row stays quarantined."
+    },
+    {
+      "repair_id": "toronto-049-discrete-structures",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 49,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "unresolved",
+      "issue_codes": ["invalid_nus_code", "missing_nus_title"],
+      "unresolved_fields": ["nus_course.code", "nus_course.title"],
+      "fields": {},
+      "candidates": {
+        "nus_course.code": ["CS1231", "CS1231S"],
+        "nus_course.title": ["Discrete Structures"]
+      },
+      "evidence": [
+        {
+          "publisher": "National University of Singapore, NUS Bulletin",
+          "url": "https://www.nus.edu.sg/nusbulletin/ay202627/programmes/school-of-computing/undergraduate-education",
+          "page_title": "Undergraduate Education - NUS Bulletin AY2026/27",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "CS1231S Discrete Structures | 4",
+          "supports": ["candidate:CS1231S"]
+        },
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/minorc/minor-in-ai",
+          "page_title": "Minor in Artificial Intelligence - NUS Computing",
+          "accessed_on": "2026-10-22",
+          "academic_year": "current programme page",
+          "quote": "CS1231 Discrete Structures or MA1100/T Basic Discrete Mathematics",
+          "supports": ["candidate:CS1231"]
+        },
+        {
+          "publisher": "University of Toronto, Faculty of Arts & Science",
+          "url": "https://artsci.calendar.utoronto.ca/course/csc165h1",
+          "page_title": "CSC165H1 - Academic Calendar",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2026-27",
+          "quote": "CSC165H1: Mathematical Expression and Reasoning for Computer Science ... Introduction to abstraction and rigour.",
+          "supports": ["partner_course.code", "partner_course.title"]
+        }
+      ],
+      "reason": "Both CS1231 and CS1231S are official NUS titles rendered as 'Discrete Structures'. The source row does not identify the intended variant, and different official programme pages use different codes. The row stays quarantined."
+    },
+    {
+      "repair_id": "toronto-050-cs3264",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 50,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "verified",
+      "issue_codes": ["invalid_nus_code", "missing_nus_title"],
+      "unresolved_fields": [],
+      "fields": {
+        "nus_course.code": {
+          "json_pointer": "/mappings/50/nus_course/code",
+          "before": "Foundations of Machine Le",
+          "after": "CS3264"
+        },
+        "nus_course.title": {
+          "json_pointer": "/mappings/50/nus_course/title",
+          "before": null,
+          "after": "Foundations of Machine Learning"
+        }
+      },
+      "evidence": [
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/ai/curr/",
+          "page_title": "Curriculum (Prospective Students) - Artificial Intelligence",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "CS3264 Foundations of Machine Learning",
+          "supports": ["nus_course.code", "nus_course.title"]
+        },
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/minorc/minor-in-ai",
+          "page_title": "Minor in Artificial Intelligence - NUS Computing",
+          "accessed_on": "2026-10-22",
+          "academic_year": "current programme page",
+          "quote": "CS3264 Foundations of Machine Learning",
+          "supports": ["nus_course.code", "nus_course.title"]
+        },
+        {
+          "publisher": "University of Toronto Scarborough, Academic Calendar",
+          "url": "https://utsc.calendar.utoronto.ca/course/cscc11h3",
+          "page_title": "CSCC11H3 - UTSC Academic Calendar",
+          "accessed_on": "2026-10-22",
+          "academic_year": "current calendar",
+          "quote": "CSCC11H3: Introduction to Machine Learning and Data Mining",
+          "supports": ["partner_course.code", "partner_course.title"]
+        }
+      ],
+      "rationale": "The raw code field contains the truncated NUS title rather than a code. CS3264 is the unique official NUS course with the full title 'Foundations of Machine Learning', and the source row already pairs CSCC11H3 with that course. Only the lost code and title are restored."
+    },
+    {
+      "repair_id": "toronto-051-bt4240",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 51,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "verified",
+      "issue_codes": ["invalid_nus_code", "missing_nus_title"],
+      "unresolved_fields": [],
+      "fields": {
+        "nus_course.code": {
+          "json_pointer": "/mappings/51/nus_course/code",
+          "before": "Machine Learning for Pred",
+          "after": "BT4240"
+        },
+        "nus_course.title": {
+          "json_pointer": "/mappings/51/nus_course/title",
+          "before": null,
+          "after": "Machine Learning for Predictive Data Analytics"
+        }
+      },
+      "evidence": [
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/ba",
+          "page_title": "Bachelor of Science in Business Analytics",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "BT4240 Machine Learning for Predictive Data Analytics",
+          "supports": ["nus_course.code", "nus_course.title"]
+        },
+        {
+          "publisher": "University of Toronto, Faculty of Applied Science & Engineering",
+          "url": "https://engineering.calendar.utoronto.ca/course/mse403h1",
+          "page_title": "MSE403H1 - Faculty of Applied Science and Engineering",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2025-26",
+          "quote": "MSE403H1: Advanced A.I. for Accelerated Materials Discovery",
+          "supports": ["partner_course.code"]
+        }
+      ],
+      "rationale": "The raw code field and existing rows 30, 31, and 40 show that 'Machine Learning for Pred' is the truncated title for BT4240. The official NUS Business Analytics page gives the complete title. The partner course title in the source is older than the current U of T title; the exchange pairing is retained exactly as recorded.",
+      "notes": [
+        "The source partner title 'Data Sciences and Analytics for Materials Engineers' differs from the current U of T title for MSE403H1. This repair does not change the partner side."
+      ]
+    },
+    {
+      "repair_id": "toronto-052-it2002",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 52,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "verified",
+      "issue_codes": ["invalid_nus_code", "missing_nus_title"],
+      "unresolved_fields": [],
+      "fields": {
+        "nus_course.code": {
+          "json_pointer": "/mappings/52/nus_course/code",
+          "before": "Database Technology and",
+          "after": "IT2002"
+        },
+        "nus_course.title": {
+          "json_pointer": "/mappings/52/nus_course/title",
+          "before": null,
+          "after": "Database Technology and Management"
+        }
+      },
+      "evidence": [
+        {
+          "publisher": "National University of Singapore, College of Design and Engineering",
+          "url": "https://cde.nus.edu.sg/ece/undergraduate/electrical-engineering/specialisations-and-minor/data-engineering",
+          "page_title": "Minor in Data Engineering - Electrical and Computer Engineering",
+          "accessed_on": "2026-10-22",
+          "academic_year": "current programme page",
+          "quote": "IT2002 Database Technology and Management or CS2102 Database Systems",
+          "supports": ["nus_course.code", "nus_course.title"]
+        },
+        {
+          "publisher": "National University of Singapore, Department of Industrial Systems Engineering and Management",
+          "url": "https://cde.nus.edu.sg/isem/wp-content/uploads/sites/12/2026/06/Binder-BYOD1.pdf",
+          "page_title": "Industrial and Systems Engineering specialisation requirements",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "IT2002 Database Technology and Management or CS2102 Database Systems 4",
+          "supports": ["nus_course.code", "nus_course.title", "nus_course.units"]
+        },
+        {
+          "publisher": "University of Toronto, Faculty of Arts & Science",
+          "url": "https://artsci.calendar.utoronto.ca/course/csc343h1",
+          "page_title": "CSC343H1 - Academic Calendar",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2026-27",
+          "quote": "CSC343H1: Introduction to Databases ... Introduction to database management systems. The relational data model.",
+          "supports": ["partner_course.code", "partner_course.title"]
+        }
+      ],
+      "rationale": "The raw code field contains the truncated NUS title. IT2002 is the unique official NUS course with the title 'Database Technology and Management'. Existing row 9 confirms the same title-to-code mapping. Only the lost code and title are restored."
+    },
+    {
+      "repair_id": "toronto-053-programming-methodology",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 53,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "unresolved",
+      "issue_codes": ["invalid_nus_code", "missing_nus_title"],
+      "unresolved_fields": ["nus_course.code", "nus_course.title"],
+      "fields": {},
+      "candidates": {
+        "nus_course.code": ["CS1010", "CS1010E", "CS1010S", "CS1101S"],
+        "nus_course.title": ["Programming Methodology"],
+        "partner_course.code": ["CSC108H1F"]
+      },
+      "evidence": [
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/cs/curr/",
+          "page_title": "Curriculum (Prospective Students) - Computer Science",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "CS1101S Programming Methodology",
+          "supports": ["candidate:CS1101S"]
+        },
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/cs/curr/",
+          "page_title": "Curriculum (Prospective Students) - Computer Science",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "CS1010 Programming Methodology",
+          "supports": ["candidate:CS1010"]
+        },
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/programmes/ug/minorc/ba-minor",
+          "page_title": "Minor in Business Analytics - NUS Computing",
+          "accessed_on": "2026-10-22",
+          "academic_year": "current programme page",
+          "quote": "CS1010S Programming Methodology",
+          "supports": ["candidate:CS1010S"]
+        },
+        {
+          "publisher": "National University of Singapore, College of Design and Engineering",
+          "url": "https://cde.nus.edu.sg/me/wp-content/uploads/sites/11/2025/07/Sample-Schedule_RMI_AY2025-26-Onwards_20250624.pdf",
+          "page_title": "Mechanical Engineering sample schedule",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2025/26 onwards",
+          "quote": "CS1010E Programming Methodology 4",
+          "supports": ["candidate:CS1010E"]
+        },
+        {
+          "publisher": "University of Toronto, Faculty of Arts & Science",
+          "url": "https://artsci.calendar.utoronto.ca/course/csc108h1",
+          "page_title": "CSC108H1 - Academic Calendar",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2026-27",
+          "quote": "CSC108H1: Introduction to Computer Programming ... Programming in a language such as Python.",
+          "supports": ["partner_course.code", "partner_course.title"]
+        }
+      ],
+      "reason": "Several official NUS courses share the title 'Programming Methodology' and the source row does not identify which variant was intended. The partner code in the raw source is also truncated as '108H1F' instead of the official 'CSC108H1F'. The row stays quarantined and no partner-side correction is applied."
+    },
+    {
+      "repair_id": "toronto-054-cs2100",
+      "source_file": "data/mapping/canada/toronto.json",
+      "mapping_index": 54,
+      "source_sha256": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+      "status": "verified",
+      "issue_codes": ["invalid_nus_code", "missing_nus_title"],
+      "unresolved_fields": [],
+      "fields": {
+        "nus_course.code": {
+          "json_pointer": "/mappings/54/nus_course/code",
+          "before": "Computer Organisation",
+          "after": "CS2100"
+        },
+        "nus_course.title": {
+          "json_pointer": "/mappings/54/nus_course/title",
+          "before": null,
+          "after": "Computer Organisation"
+        }
+      },
+      "evidence": [
+        {
+          "publisher": "National University of Singapore, School of Computing",
+          "url": "https://www.comp.nus.edu.sg/~cs2100/1_course_info/desc.html",
+          "page_title": "CS2100 - Course Information - Description",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2025/26 Semester 2",
+          "quote": "CS2100 Computer Organisation ... Units: 4",
+          "supports": ["nus_course.code", "nus_course.title", "nus_course.units"]
+        },
+        {
+          "publisher": "National University of Singapore, NUS Bulletin",
+          "url": "https://www.nus.edu.sg/nusbulletin/ay202627/programmes/school-of-computing/undergraduate-education",
+          "page_title": "Undergraduate Education - NUS Bulletin AY2026/27",
+          "accessed_on": "2026-10-22",
+          "academic_year": "AY2026/27",
+          "quote": "CS2100 Computer Organisation | 4",
+          "supports": ["nus_course.code", "nus_course.title"]
+        },
+        {
+          "publisher": "University of Toronto, Faculty of Applied Science & Engineering",
+          "url": "https://engineering.calendar.utoronto.ca/course/ece243h1",
+          "page_title": "ECE243H1 - Faculty of Applied Science and Engineering",
+          "accessed_on": "2026-10-22",
+          "academic_year": "2025-26",
+          "quote": "ECE243H1: Computer Organization ... Basic computer structure. Design of central processing unit.",
+          "supports": ["partner_course.code", "partner_course.title"]
+        }
+      ],
+      "rationale": "The raw code field contains the NUS title. CS2100 is the official NUS course with the title 'Computer Organisation', and existing row 19 confirms the same title-to-code mapping. Only the lost code and title are restored."
+    }
+  ]
+}
