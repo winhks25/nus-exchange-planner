@@ -9,7 +9,7 @@ export class ApiError extends Error {
   }
 }
 
-const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/$/, "");
+const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8001").replace(/\/$/, "");
 
 async function get<T>(path: string, signal?: AbortSignal): Promise<T> {
   let response: Response;
