@@ -8,8 +8,11 @@ Applied the initial migration through the project's SQL Editor on 2026-10-22.
 The public schema was empty before application. The SQL Editor reported success;
 a subsequent catalog query verified all eight tables, RLS enabled on each,
 eight foreign keys, and sixteen indexes (including primary/unique indexes).
-No application data was imported. CLI migration history was not registered by
-this manual application; reconcile it before using `supabase db push`.
+No application data was imported. The manual application did not register CLI
+history, so version `20261022000100` was later recorded with
+`supabase migration repair` after a full schema comparison found no drift.
+Local and remote migration history now agree; see
+`plan/supabase-migration/schema-audit.md`.
 
 The initial migration is `migrations/20261022000100_create_exchange_catalog.sql`.
 Inspect the remote schema before applying it. It creates eight tables in one
