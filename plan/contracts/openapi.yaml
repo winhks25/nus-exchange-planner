@@ -142,7 +142,7 @@ components:
             properties:
               detail: { type: string }
     CatalogUnavailable:
-      description: Source data missing or malformed; no partial results
+      description: Catalog unavailable because source data is missing or malformed, or the configured database is unpublished or unreachable; no partial results or automatic JSON fallback
       content:
         application/json:
           schema:

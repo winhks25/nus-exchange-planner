@@ -2,7 +2,9 @@
 
 A read-only tool for NUS School of Computing students to find exchange partners with module mappings. **Recommend** (`/`) ranks every partner by the number of distinct degree modules with a mapping. **Mappings** (`/mappings`) shows every qualifying mapping row for a degree and partner, including repeated NUS codes.
 
-The source of truth is the checked-in JSON in `data/`. The API validates the complete catalog at startup. A missing or malformed file makes all three endpoints return 503; invalid NUS mapping codes are logged and skipped. Module titles are shown exactly as stored, including truncated titles.
+Production serves the catalog from Supabase PostgreSQL through the read-only `catalog_reader` role. Local development defaults to the checked-in JSON snapshot in `data/`, which is also the frozen manual-rollback release. The source is selected explicitly with `CATALOG_BACKEND=json|postgres`; a database failure returns a sanitized 503 and never falls back to JSON.
+
+The reviewed PostgreSQL batch contains 154 raw source rows: 146 accepted, 5 repaired and 3 quarantined because their NUS code field contains a course title. It publishes 151 active mappings, including one verified unit repair. The frozen JSON snapshot still contains the original 147 accepted mappings and missing titles. Both are documented in [data deltas](plan/supabase-migration/data-deltas.md); unresolved names remain null and are never invented.
 
 ## Run locally
 
@@ -11,10 +13,14 @@ Install Python 3.12+, [uv](https://docs.astral.sh/uv/), Node.js 20.9+, and npm. 
 ```sh
 uv sync --directory backend
 npm ci --prefix frontend
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env.local
 ./dev
 ```
 
 After the first install, run only `./dev`. It starts both servers and stops the API when the frontend exits. Open `http://localhost:3000` and `http://localhost:3000/mappings`; the backend schema is at `http://localhost:8001/openapi.json`. Local settings are saved in ignored `backend/.env` and `frontend/.env.local`. Port 8001 avoids the other local server using port 8000. `CORS_ORIGINS` is a comma-separated list of exact frontend origins without trailing slashes. `NEXT_PUBLIC_API_BASE_URL` is the backend origin, without `/api/v1`.
+
+`backend/.env.example` defaults to `CATALOG_BACKEND=json`, so local development needs no database credentials. To run PostgreSQL mode locally, use the disposable seeded database described in the [migration quickstart](plan/supabase-migration/quickstart.md) rather than pointing a developer shell at Supabase.
 
 ## Checks
 
@@ -27,25 +33,57 @@ npm run build --prefix frontend
 npm run test:e2e --prefix frontend
 ```
 
-Playwright starts isolated local servers on ports 18765 and 18766 and needs Chromium (`cd frontend && npx playwright install chromium`). Its frontend uses `.next-e2e/` so test bundles containing the temporary API address cannot overwrite the normal dev server's `.next/` output. You can keep `./dev` running during tests. See [validation results](plan/validation-results.md) for dataset counts, browser scenarios, and timings.
+Backend tests include import, repository-parity and failure suites that create disposable local PostgreSQL databases; install PostgreSQL 15-17 and `openssl`. Playwright starts isolated local servers on ports 18765, 18766 and 18767 and needs Chromium (`cd frontend && npx playwright install chromium`). Its frontend uses `.next-e2e/` so test bundles containing the temporary API address cannot overwrite the normal dev server's `.next/` output. You can keep `./dev` running during tests.
+
+Run the complete release gate, which covers backend tests plus the browser suites in both JSON and imported PostgreSQL modes:
+
+```sh
+./scripts/check-migration-regressions.sh
+```
+
+It never contacts Supabase or a developer database. Expected baseline and the latest evidence are in [regression results](plan/supabase-migration/regression-results.md).
+
+## Catalog data lifecycle
+
+The checked-in JSON in `data/` and the reviewed repairs in `data/repairs/catalog_repairs.json` are the inputs. Imports are deterministic and use separate writer credentials (`IMPORT_DATABASE_URL`); the API runtime never receives them.
+
+```sh
+# Inspect the target, source checksum and reviewed counts without writing.
+uv run --directory backend python -m scripts.import_catalog \
+  --dry-run --target-project-ref wydziozsjibkvpgphpia
+
+# Publish only after confirming the checksums and target project.
+uv run --directory backend python -m scripts.import_catalog \
+  --apply --target-project-ref wydziozsjibkvpgphpia \
+  --confirm-project-ref wydziozsjibkvpgphpia
+
+# Reconcile the published batch read-only.
+uv run --directory backend python -m scripts.verify_catalog \
+  --reconcile --target-project-ref wydziozsjibkvpgphpia
+```
+
+The importer uses one transaction and an advisory lock, writes the completed batch marker with all catalog rows, and is a no-op when the source and repair checksums match. It refuses to overwrite a different published snapshot, so a future data refresh needs its own reviewed workflow. Import details and unresolved records are recorded in [import results](plan/supabase-migration/import-results.md); the operator runbook is the [migration quickstart](plan/supabase-migration/quickstart.md).
+
+Supabase migration history is maintained with the CLI:
+
+```sh
+npx supabase@latest migration list
+```
+
+The applied versions are `20261022000100` (initial catalog), `20261022000200` (import provenance) and `20261022000300` (read-only runtime role). The initial migration was applied manually through the SQL Editor and later recorded with `migration repair` after a full schema comparison; never replay its `CREATE TABLE` statements. See [schema audit](plan/supabase-migration/schema-audit.md).
 
 ## Deploy on Vercel
 
-Create two Vercel projects from this repository. Deploy the **backend first**, with project root set to the **repository root**. The recognized FastAPI entry point is root `index.py` (with `api/index.py` also exporting the app); root `requirements.txt` supplies production dependencies and `.python-version` selects Python 3.12. Keeping the backend project at the repository root includes `data/` and the manifest in its deployment bundle. Confirm `GET /api/v1/catalog` on the deployed backend before connecting the frontend. See [Vercel's FastAPI deployment guide](https://vercel.com/docs/frameworks/backend/fastapi) for project setup.
+Production is deployed as two Vercel projects: backend `nus-exchange-planner-api` (project root = repository root) and frontend `nus-exchange-planner-web` (project root = `frontend/`). The frontend uses `https://nus-exchange-planner-api.vercel.app` as its public API origin.
 
-Create the frontend project with root directory **`frontend/`** and the Next.js framework preset. Set `NEXT_PUBLIC_API_BASE_URL` to the stable backend production origin, then deploy. On the backend project, set `CORS_ORIGINS` to the frontend production origin; add other exact origins separated by commas when needed. Environment changes require redeployment so the browser bundle and backend instance receive the new values.
+Deploy the backend first. The recognized FastAPI entry point is root `index.py` (with `api/index.py` also exporting the app); root `requirements.txt` supplies production dependencies and `.python-version` selects Python 3.12. Set the server-only `CATALOG_BACKEND=postgres`, `DATABASE_URL` for the `catalog_reader` transaction-pooler role and `CORS_ORIGINS` to the exact frontend origin. Keep `IMPORT_DATABASE_URL` out of the runtime project. SQL migrations and imports use their own writer connection. See [Vercel's FastAPI deployment guide](https://vercel.com/docs/frameworks/backend/fastapi) for project setup and [deployment results](plan/supabase-migration/deployment-results.md) for the recorded rollout.
 
-For previews, use a stable staging backend and set the frontend preview `NEXT_PUBLIC_API_BASE_URL` to its origin. Add the frontend preview origin to that backend's `CORS_ORIGINS`. For arbitrary preview URLs, use a stable preview domain alias or deploy a matching preview API with an exact allowlisted frontend origin; the backend does not use a wildcard CORS rule.
+Create the frontend project with root directory **`frontend/`** and the Next.js framework preset. Set `NEXT_PUBLIC_API_BASE_URL` to the stable backend production origin, then deploy. For previews, use a stable staging backend and set the frontend preview origin in that backend's `CORS_ORIGINS`; the backend does not use a wildcard CORS rule. Environment changes require redeployment.
 
-When JSON source files are added, removed, or renamed, regenerate the expected-file manifest and redeploy the backend:
+## Mode changes and rollback
 
-```sh
-uv run --directory backend python -m app.catalog
-uv run --directory backend pytest -q
-```
-
-Content edits to existing files also require backend redeployment. The catalog loads once per backend function instance. Recheck the deployed API and both pages after each data release. Deployment smoke checks are described in [the quickstart](plan/quickstart.md); this repository has not been deployed by this implementation run.
+Production runs PostgreSQL. To roll back, set `CATALOG_BACKEND=json` in the backend project, remove `DATABASE_URL`, and redeploy the backend; no frontend change is needed. This serves the frozen JSON snapshot, not later database repairs, and the database remains intact for roll-forward. There is no automatic fallback in either direction. The exact steps, including the four Toronto pairs whose mapping counts revert, are in the [migration quickstart](plan/supabase-migration/quickstart.md#manual-rollback-to-json).
 
 ## Scope and limitations
 
-See [project overview](plan/overview.md), [feature specifications](plan/featureSpecs.md), and [API contract](plan/contracts/openapi.yaml). The current catalog has six SoC majors and five partners. Some source module names are incomplete, such as `CS2106` in the Toronto file; the UI does not invent missing text. Partner units are displayed only when present; NUS units display as 4.
+See the [migration specification](plan/supabase-migration/spec.md), [implementation plan](plan/supabase-migration/plan.md), and [API contract](plan/contracts/openapi.yaml). The catalog has six SoC majors and five partners. The UI does not invent missing text: unresolved PostgreSQL titles stay null and three Toronto rows remain quarantined in the raw source archive rather than becoming mappings. Partner units are displayed only when present; NUS units display as 4 for compatibility. The hobby-plan deployment cannot select a function region near `ap-southeast-2`, and live cold-start/load behavior was not stress-tested.
