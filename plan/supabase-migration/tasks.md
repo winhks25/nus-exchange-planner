@@ -1,6 +1,7 @@
 # Tasks: Supabase catalog migration
 
-Date: 2026-10-22. Status: implementation in progress; Phase 1 and Phase 2 complete.
+Date: 2026-10-22. Status: implementation in progress; Phase 1, Phase 2 and Phase 4
+complete; Phase 3 importer and target publication pending.
 
 Sources: [spec.md](spec.md), [plan.md](plan.md), the applied migration in
 supabase/migrations/20261022000100_create_exchange_catalog.sql, and
@@ -82,7 +83,7 @@ query-per-university pattern is used for ranking. Existing frontend flows pass.
 - [X] T024 [US2] Wire repository selection and pool lifecycle into backend/app/main.py; preserve query names/routes/status codes/CORS, adapt missing-data errors to existing 503 responses, keep configuration failures distinguishable from transient outages, and ensure postgres failures never activate the JSON adapter.
 - [X] T025 [US2] Extend backend/scripts/verify_catalog.py to compare actual API responses across both modes and against plan/supabase-migration/baseline-responses.json, allowing only enumerated verified repairs from data-deltas.md; cover catalog order, all pairs, ties, repeated rows, null fields, missing/unknown parameters, unavailable database and recovery, and record results in plan/supabase-migration/api-validation.md.
 - [X] T026 [US2] Run existing backend/tests/test_catalog.py and backend/tests/test_contract.py plus Ruff; explicitly select JSON for legacy fixture tests so shell settings cannot redirect them to production, update only evidence-backed assertions, and run existing frontend/tests/flows.spec.ts against a disposable PostgreSQL-backed local setup; record commands/results in plan/supabase-migration/api-validation.md.
-- [ ] T027 [US2] Inspect representative EXPLAIN plans and measure request latency/pool contention using backend/scripts/verify_catalog.py against a disposable enlarged dataset; document query plans, dataset size, concurrency, timings and limitations in plan/supabase-migration/performance.md, adding a forward SQL migration only if evidence shows a missing index; do not run synthetic data generation in production.
+- [X] T027 [US2] Inspect representative EXPLAIN plans and measure request latency/pool contention using backend/scripts/verify_catalog.py against a disposable enlarged dataset; document query plans, dataset size, concurrency, timings and limitations in plan/supabase-migration/performance.md, adding a forward SQL migration only if evidence shows a missing index; do not run synthetic data generation in production.
 
 Checkpoint: both modes work locally and repaired-data differences are fully explained.
 

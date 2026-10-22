@@ -26,11 +26,21 @@ from app.repositories.base import CATALOG_UNAVAILABLE_MESSAGE
 from app.settings import PoolSettings, Settings
 from scripts.catalog_preview import build_preview
 from scripts.catalog_seed import seed_preview
+from scripts.measure_catalog_performance import (
+    collect_evidence,
+    enlarge,
+)
+from scripts.measure_catalog_performance import (
+    write_report as write_performance_report,
+)
 from scripts.postgres_validation import PostgresCluster
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BASELINE_PATH = REPO_ROOT / "plan" / "supabase-migration" / "baseline-responses.json"
 DEFAULT_OUTPUT = REPO_ROOT / "plan" / "supabase-migration" / "api-validation.md"
+DEFAULT_PERFORMANCE_OUTPUT = (
+    REPO_ROOT / "plan" / "supabase-migration" / "performance.md"
+)
 
 LOG = logging.getLogger("verify_catalog")
 
@@ -646,6 +656,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Seed the supplied local database from the import preview before verifying.",
     )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--enlarge",
+        action="store_true",
+        help="Add synthetic rows and record T027 performance evidence.",
+    )
+    parser.add_argument(
+        "--performance-output", type=Path, default=DEFAULT_PERFORMANCE_OUTPUT
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
@@ -705,6 +723,21 @@ def main(argv: list[str] | None = None) -> int:
             "uv run --directory backend python -m scripts.verify_catalog",
         )
         LOG.info("Wrote %s (%d checks passed)", args.output, len(checks))
+
+        if args.enlarge:
+            if cluster is None:
+                raise SystemExit("--enlarge requires a disposable cluster, not --database-url")
+            enlarge(database)
+            database.execute("analyze")
+            evidence = collect_evidence(database)
+            performance_command = (
+                "uv run --directory backend python -m scripts.verify_catalog --enlarge "
+                f"--output {args.output} --performance-output {args.performance_output}"
+            )
+            write_performance_report(
+                args.performance_output, evidence, performance_command
+            )
+            LOG.info("Wrote %s", args.performance_output)
         return 0
     except VerificationFailure as exc:
         LOG.error("%s", exc)
