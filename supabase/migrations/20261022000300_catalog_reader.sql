@@ -4,22 +4,30 @@
 
 begin;
 
--- Create the dedicated runtime role once, then enforce its security attributes.
+-- Create the dedicated runtime role with safe attributes in one statement.
+-- Hosted projects run migrations as a CREATEROLE owner, not a superuser, so we
+-- must not ALTER superuser/BYPASSRLS attributes after creation.
 do $$
+declare
+  existing_role record;
 begin
-  if not exists (select 1 from pg_roles where rolname = 'catalog_reader') then
-    create role catalog_reader;
+  select rolsuper, rolbypassrls into existing_role
+  from pg_roles
+  where rolname = 'catalog_reader';
+
+  if not found then
+    create role catalog_reader
+      nologin
+      nosuperuser
+      nocreatedb
+      nocreaterole
+      noreplication
+      nobypassrls;
+  elsif existing_role.rolsuper or existing_role.rolbypassrls then
+    raise exception 'catalog_reader must not have SUPERUSER or BYPASSRLS';
   end if;
 end
 $$;
-
-alter role catalog_reader
-  nologin
-  nosuperuser
-  nocreatedb
-  nocreaterole
-  noreplication
-  nobypassrls;
 
 -- Bound runtime sessions even if a caller forgets the pool-level settings.
 alter role catalog_reader set statement_timeout = '5s';
