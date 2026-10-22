@@ -1,0 +1,3009 @@
+{
+  "captured_at_utc": "2026-10-22T04:55:20.977478+00:00",
+  "git_revision": "745e24c723e43f3978df6e5a603afbf8a28d8140",
+  "git_status_short": [
+    " M frontend/next-env.d.ts",
+    "?? plan/supabase-migration/",
+    "?? supabase/"
+  ],
+  "python": "3.12.14",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "packages": {
+    "fastapi": "0.148.0",
+    "pydantic": "2.14.1",
+    "uvicorn": "0.54.0",
+    "psycopg": null,
+    "psycopg-pool": null
+  },
+  "source_checksums_sha256": {
+    "data/majors/nus_soc_majors.json": "f62a00b1f57bab9066e6629cbb20dabb0f43129d17c7bf456dc423933f04dfc4",
+    "data/mapping/australia/west-au.json": "987d1fe6343f72b41a51976f2767a0613b5028bb4371244863143ca8601aa95a",
+    "data/mapping/canada/toronto.json": "ad1baec1ee241b7b2ba253a65874615f66471abb384bf93a3fb66fc1430ddef9",
+    "data/mapping/japan/kyoto.json": "a42cb28be8372df929cd3c79b9860922ef15464758557689801ea004fdd48cd3",
+    "data/mapping/korea/korea.json": "96cdd005ff1d79923e7d3d19025bad6565f9a58dcf6dd6da16046e929b3a5946",
+    "data/mapping/korea/yonsei.json": "fd4b3635fa899f2e27c1a28592bf5c50f2908fe0992608d26d86a0c5ca269634",
+    "backend/app/data_manifest.json": "eafa0af73582f31afe4e30ef02f62284bd9bfce3425ddff679a7fef5d1d6400f"
+  },
+  "catalog": {
+    "status": 200,
+    "body": {
+      "degrees": [
+        {
+          "name": "Artificial Intelligence",
+          "degree": "Bachelor of Computing (Artificial Intelligence)"
+        },
+        {
+          "name": "Business Analytics",
+          "degree": "Bachelor of Science (Business Analytics)"
+        },
+        {
+          "name": "Business Artificial Intelligence Systems",
+          "degree": "Bachelor of Computing (Business Artificial Intelligence Systems)"
+        },
+        {
+          "name": "Computer Science",
+          "degree": "Bachelor of Computing (Computer Science)"
+        },
+        {
+          "name": "Information Systems",
+          "degree": "Bachelor of Computing (Information Systems)"
+        },
+        {
+          "name": "Information Security",
+          "degree": "Bachelor of Computing (Information Security)"
+        }
+      ],
+      "universities": [
+        {
+          "name": "University of Western Australia",
+          "country": "Australia"
+        },
+        {
+          "name": "University of Toronto",
+          "country": "Canada"
+        },
+        {
+          "name": "Kyoto University",
+          "country": "Japan"
+        },
+        {
+          "name": "Korea University",
+          "country": "South Korea"
+        },
+        {
+          "name": "Yonsei University",
+          "country": "South Korea"
+        }
+      ]
+    }
+  },
+  "recommendations": {
+    "Artificial Intelligence": {
+      "status": 200,
+      "body": {
+        "degree": "Artificial Intelligence",
+        "recommendations": [
+          {
+            "university": "University of Toronto",
+            "country": "Canada",
+            "partner_module_count": 9,
+            "distinct_nus_module_count": 6,
+            "mapping_count": 9
+          },
+          {
+            "university": "Yonsei University",
+            "country": "South Korea",
+            "partner_module_count": 4,
+            "distinct_nus_module_count": 3,
+            "mapping_count": 4
+          },
+          {
+            "university": "Korea University",
+            "country": "South Korea",
+            "partner_module_count": 2,
+            "distinct_nus_module_count": 2,
+            "mapping_count": 2
+          },
+          {
+            "university": "Kyoto University",
+            "country": "Japan",
+            "partner_module_count": 1,
+            "distinct_nus_module_count": 1,
+            "mapping_count": 1
+          },
+          {
+            "university": "University of Western Australia",
+            "country": "Australia",
+            "partner_module_count": 0,
+            "distinct_nus_module_count": 0,
+            "mapping_count": 0
+          }
+        ]
+      }
+    },
+    "Business Analytics": {
+      "status": 200,
+      "body": {
+        "degree": "Business Analytics",
+        "recommendations": [
+          {
+            "university": "Korea University",
+            "country": "South Korea",
+            "partner_module_count": 17,
+            "distinct_nus_module_count": 11,
+            "mapping_count": 18
+          },
+          {
+            "university": "University of Western Australia",
+            "country": "Australia",
+            "partner_module_count": 19,
+            "distinct_nus_module_count": 11,
+            "mapping_count": 22
+          },
+          {
+            "university": "University of Toronto",
+            "country": "Canada",
+            "partner_module_count": 18,
+            "distinct_nus_module_count": 9,
+            "mapping_count": 18
+          },
+          {
+            "university": "Yonsei University",
+            "country": "South Korea",
+            "partner_module_count": 10,
+            "distinct_nus_module_count": 5,
+            "mapping_count": 10
+          },
+          {
+            "university": "Kyoto University",
+            "country": "Japan",
+            "partner_module_count": 2,
+            "distinct_nus_module_count": 2,
+            "mapping_count": 2
+          }
+        ]
+      }
+    },
+    "Business Artificial Intelligence Systems": {
+      "status": 200,
+      "body": {
+        "degree": "Business Artificial Intelligence Systems",
+        "recommendations": [
+          {
+            "university": "Korea University",
+            "country": "South Korea",
+            "partner_module_count": 11,
+            "distinct_nus_module_count": 8,
+            "mapping_count": 11
+          },
+          {
+            "university": "University of Western Australia",
+            "country": "Australia",
+            "partner_module_count": 8,
+            "distinct_nus_module_count": 6,
+            "mapping_count": 8
+          },
+          {
+            "university": "Yonsei University",
+            "country": "South Korea",
+            "partner_module_count": 6,
+            "distinct_nus_module_count": 4,
+            "mapping_count": 6
+          },
+          {
+            "university": "University of Toronto",
+            "country": "Canada",
+            "partner_module_count": 4,
+            "distinct_nus_module_count": 3,
+            "mapping_count": 4
+          },
+          {
+            "university": "Kyoto University",
+            "country": "Japan",
+            "partner_module_count": 1,
+            "distinct_nus_module_count": 1,
+            "mapping_count": 1
+          }
+        ]
+      }
+    },
+    "Computer Science": {
+      "status": 200,
+      "body": {
+        "degree": "Computer Science",
+        "recommendations": [
+          {
+            "university": "University of Toronto",
+            "country": "Canada",
+            "partner_module_count": 6,
+            "distinct_nus_module_count": 3,
+            "mapping_count": 6
+          },
+          {
+            "university": "Korea University",
+            "country": "South Korea",
+            "partner_module_count": 2,
+            "distinct_nus_module_count": 2,
+            "mapping_count": 2
+          },
+          {
+            "university": "Kyoto University",
+            "country": "Japan",
+            "partner_module_count": 1,
+            "distinct_nus_module_count": 1,
+            "mapping_count": 1
+          },
+          {
+            "university": "University of Western Australia",
+            "country": "Australia",
+            "partner_module_count": 0,
+            "distinct_nus_module_count": 0,
+            "mapping_count": 0
+          },
+          {
+            "university": "Yonsei University",
+            "country": "South Korea",
+            "partner_module_count": 0,
+            "distinct_nus_module_count": 0,
+            "mapping_count": 0
+          }
+        ]
+      }
+    },
+    "Information Systems": {
+      "status": 200,
+      "body": {
+        "degree": "Information Systems",
+        "recommendations": [
+          {
+            "university": "Korea University",
+            "country": "South Korea",
+            "partner_module_count": 12,
+            "distinct_nus_module_count": 9,
+            "mapping_count": 12
+          },
+          {
+            "university": "University of Western Australia",
+            "country": "Australia",
+            "partner_module_count": 9,
+            "distinct_nus_module_count": 9,
+            "mapping_count": 12
+          },
+          {
+            "university": "University of Toronto",
+            "country": "Canada",
+            "partner_module_count": 9,
+            "distinct_nus_module_count": 5,
+            "mapping_count": 9
+          },
+          {
+            "university": "Yonsei University",
+            "country": "South Korea",
+            "partner_module_count": 7,
+            "distinct_nus_module_count": 5,
+            "mapping_count": 7
+          },
+          {
+            "university": "Kyoto University",
+            "country": "Japan",
+            "partner_module_count": 3,
+            "distinct_nus_module_count": 3,
+            "mapping_count": 3
+          }
+        ]
+      }
+    },
+    "Information Security": {
+      "status": 200,
+      "body": {
+        "degree": "Information Security",
+        "recommendations": [
+          {
+            "university": "University of Western Australia",
+            "country": "Australia",
+            "partner_module_count": 6,
+            "distinct_nus_module_count": 6,
+            "mapping_count": 6
+          },
+          {
+            "university": "University of Toronto",
+            "country": "Canada",
+            "partner_module_count": 7,
+            "distinct_nus_module_count": 5,
+            "mapping_count": 7
+          },
+          {
+            "university": "Korea University",
+            "country": "South Korea",
+            "partner_module_count": 5,
+            "distinct_nus_module_count": 4,
+            "mapping_count": 5
+          },
+          {
+            "university": "Yonsei University",
+            "country": "South Korea",
+            "partner_module_count": 3,
+            "distinct_nus_module_count": 2,
+            "mapping_count": 3
+          },
+          {
+            "university": "Kyoto University",
+            "country": "Japan",
+            "partner_module_count": 1,
+            "distinct_nus_module_count": 1,
+            "mapping_count": 1
+          }
+        ]
+      }
+    }
+  },
+  "mappings": {
+    "Artificial Intelligence || University of Western Australia": {
+      "degree": "Artificial Intelligence",
+      "university": "University of Western Australia",
+      "status": 200,
+      "body": {
+        "degree": "Artificial Intelligence",
+        "university": "University of Western Australia",
+        "partner_module_count": 0,
+        "distinct_nus_module_count": 0,
+        "mappings": []
+      }
+    },
+    "Artificial Intelligence || University of Toronto": {
+      "degree": "Artificial Intelligence",
+      "university": "University of Toronto",
+      "status": 200,
+      "body": {
+        "degree": "Artificial Intelligence",
+        "university": "University of Toronto",
+        "partner_module_count": 9,
+        "distinct_nus_module_count": 6,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE358",
+              "title": "Foundations of Computing",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC373H1",
+              "title": "Algorithm Design, Analysis & Complexity",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC373H",
+              "title": "Algorithm Design and Analysis",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3263",
+              "title": "Foundations of Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC384H1",
+              "title": "Introduction to Artificial Intelligence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3264",
+              "title": "Foundations of Machine Le",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC311H1",
+              "title": "Introduction to Machine Learning",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4220",
+              "title": "Knowledge Discovery Meth",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BCB420H1",
+              "title": "Computational Systems Biology",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4243",
+              "title": "Computer Vision and Patte",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC420H1",
+              "title": "Introduction to Image Understanding",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4248",
+              "title": "Introduction to Large Lang",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC401H1",
+              "title": "Natural Language Computing",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4248",
+              "title": "Introduction to Large Lang",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC485H1",
+              "title": "Computational Linguistics",
+              "units": 0.5
+            }
+          }
+        ]
+      }
+    },
+    "Artificial Intelligence || Kyoto University": {
+      "degree": "Artificial Intelligence",
+      "university": "Kyoto University",
+      "status": 200,
+      "body": {
+        "degree": "Artificial Intelligence",
+        "university": "Kyoto University",
+        "partner_module_count": 1,
+        "distinct_nus_module_count": 1,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2109S",
+              "title": "Introduction to AI and Mac",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "T57002",
+              "title": "Fundamentals of Artificial Intelligence- E2",
+              "units": 2.0
+            }
+          }
+        ]
+      }
+    },
+    "Artificial Intelligence || Korea University": {
+      "degree": "Artificial Intelligence",
+      "university": "Korea University",
+      "status": 200,
+      "body": {
+        "degree": "Artificial Intelligence",
+        "university": "Korea University",
+        "partner_module_count": 2,
+        "distinct_nus_module_count": 2,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE214",
+              "title": "ALORITHMS",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4248",
+              "title": "Introduction to Large Lang",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE461",
+              "title": "NATURAL LANGUAGE PROCESSING",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Artificial Intelligence || Yonsei University": {
+      "degree": "Artificial Intelligence",
+      "university": "Yonsei University",
+      "status": 200,
+      "body": {
+        "degree": "Artificial Intelligence",
+        "university": "Yonsei University",
+        "partner_module_count": 4,
+        "distinct_nus_module_count": 3,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS3263",
+              "title": "Foundations of Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "EEE3314",
+              "title": "INTRODUCTION ARTIFICIAL INTELLIGENCE",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3264",
+              "title": "Foundations of Machine Le",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STA3142",
+              "title": "STATISTICAL MACHINE LEARNING",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4243",
+              "title": "Computer Vision and Patte",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4116",
+              "title": "Computer Vision",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4243",
+              "title": "Computer Vision and Patte",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CAS3116",
+              "title": "COMPUTER VISION",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Analytics || University of Western Australia": {
+      "degree": "Business Analytics",
+      "university": "University of Western Australia",
+      "status": 200,
+      "body": {
+        "degree": "Business Analytics",
+        "university": "University of Western Australia",
+        "partner_module_count": 19,
+        "distinct_nus_module_count": 11,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "BT4013",
+              "title": "Analytics for Capital Marke",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "FINA4491",
+              "title": "Capital Markets Research",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3001",
+              "title": "Algorithms, Agents and Artificial Intelligence",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4009",
+              "title": "Computational Data Analysis",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4404",
+              "title": "Artificial Intelligence and Adaptive Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4015",
+              "title": "Geospatial Analytics",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ENVT4411",
+              "title": "Geographic Information Systems Applications",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4015",
+              "title": "Geospatial Analytics",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ENVT5566",
+              "title": "Advanced Spatial and Environmental Modelling",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4015",
+              "title": "Geospatial Analytics",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "GEOG2201",
+              "title": "Geographic Information Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4015",
+              "title": "Geospatial Analytics",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "GEOG3300",
+              "title": "Advanced Spatial Analysis",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4015",
+              "title": "Geospatial Analytics",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STAT3063",
+              "title": "Spatial Statistics and Modeling",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4211",
+              "title": "Data-Driven Marketing",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MKTG2305",
+              "title": "Marketing Research",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4211",
+              "title": "Data-Driven Marketing",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MKTG3307",
+              "title": "Digital Marketing",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4211",
+              "title": "Data-Driven Marketing",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MKTG3308",
+              "title": "Marketing Analytics",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4211",
+              "title": "Data-Driven Marketing",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MKTG5504",
+              "title": "Big Data in Marketing",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4240",
+              "title": "Machine Learning for Pred",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STAT3406",
+              "title": "Applied Statistics and Data Visualisation",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4240",
+              "title": "Machine Learning for Pred",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STAT4064",
+              "title": "Applied Predictive Modeling",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CTIS2005",
+              "title": "Object Oriented Programming",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2040",
+              "title": "Data Structures and Algor",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS2200",
+              "title": "Data Structures and Algorithms",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3001",
+              "title": "Algorithms, Agents and Artificial Intelligence",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4404",
+              "title": "Artificial Intelligence and Adaptive Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4241",
+              "title": "Social Media Network Ana",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MATH3002",
+              "title": "Network Science",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4242",
+              "title": "Intelligent Systems and Te",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4404",
+              "title": "Artificial Intelligence and Adaptive Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4302",
+              "title": "Blockchain and Distributed",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSN5001",
+              "title": "Blockchain and Distributed Ledger Technologies in Business",
+              "units": 6.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Analytics || University of Toronto": {
+      "degree": "Business Analytics",
+      "university": "University of Toronto",
+      "status": 200,
+      "body": {
+        "degree": "Business Analytics",
+        "university": "University of Toronto",
+        "partner_module_count": 18,
+        "distinct_nus_module_count": 9,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "BT2101",
+              "title": "Econometrics Modeling for",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECO375H1",
+              "title": "Foundations of Econometrics",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT3102",
+              "title": "Computational Methods fo",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC412",
+              "title": "Probabilistic Learning and Reasoning",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT3102",
+              "title": "Computational Methods fo",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ACT350",
+              "title": "Applied Probability for Actuarial Science",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT3103",
+              "title": "Application Systems Deve",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC309H1",
+              "title": "Programming on the Web",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4240",
+              "title": "Machine Learning for Pred",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "APS360H1",
+              "title": "Applied Fundamentals of Deep Learning",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MIE369H1",
+              "title": "Introduction to Artificial Intelligence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ROB311H1",
+              "title": "Artificial Intellgence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC384H1",
+              "title": "Introduction to Artificial Intelligence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ROB311",
+              "title": "Artificial Intelligence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ROB313H1",
+              "title": "Introduction to Learning from Data",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC311H1",
+              "title": "Introduction to Machine Learning",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC411H1",
+              "title": "Machine Learning and Data Mining",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE421",
+              "title": "Introduction to Machine Learning",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE521",
+              "title": "Inference Algorithms and Machine Learning",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4248",
+              "title": "Introduction to Large Lang",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC401H1",
+              "title": "Natural Language Computing",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4248",
+              "title": "Introduction to Large Lang",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC485H1",
+              "title": "Computational Linguistics",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3107",
+              "title": "Data Engineering",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC443H1",
+              "title": "Database System Technology",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4226",
+              "title": "Systematic Trading Strate",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "RSM434",
+              "title": "Financial Trading Strategies",
+              "units": 0.5
+            }
+          }
+        ]
+      }
+    },
+    "Business Analytics || Kyoto University": {
+      "degree": "Business Analytics",
+      "university": "Kyoto University",
+      "status": 200,
+      "body": {
+        "degree": "Business Analytics",
+        "university": "Kyoto University",
+        "partner_module_count": 2,
+        "distinct_nus_module_count": 2,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ENG39116",
+              "title": "Artificial Intelligence",
+              "units": 2.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "T057001",
+              "title": "Fundamentals of Artificial Intelligence- E2",
+              "units": 2.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Analytics || Korea University": {
+      "degree": "Business Analytics",
+      "university": "Korea University",
+      "status": 200,
+      "body": {
+        "degree": "Business Analytics",
+        "university": "Korea University",
+        "partner_module_count": 17,
+        "distinct_nus_module_count": 11,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "BT4221",
+              "title": "Advanced Analytics with B",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STAT346",
+              "title": "Statistical Data Science I (English)\"",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4222",
+              "title": "Mining Web Data for Busin",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "KHPM410",
+              "title": "Data Science in Healthcare",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4222",
+              "title": "Mining Web Data for Busin",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS317",
+              "title": "Social Media Analytics",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4240",
+              "title": "Machine Learning for Pred",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS217",
+              "title": "Business Analytics II",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4240",
+              "title": "Machine Learning for Pred",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS316",
+              "title": "Operations Analytics (English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4240",
+              "title": "Machine Learning for Pred",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "KECE470",
+              "title": "Pattern Recognition",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "KECE443",
+              "title": "Object-Oriented Programming and Laboratory",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE361",
+              "title": "Artificial Intelligence (English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE 362",
+              "title": "Machine Learning",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "KECE345",
+              "title": "\" MACHINE LEARNING AND INTELLIGENCE FOR ELECTRICAL ENGINEERS(English)\"",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BNCS411",
+              "title": "INTRODUCTION TO BRAIN AND MACHINE LEARNING",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4248",
+              "title": "Introduction to Large Lang",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE461",
+              "title": "NATURAL LANGUAGE PROCESSING",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE389",
+              "title": "ENTREPRENEURSHIP & LEADERSHIP",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS215",
+              "title": "INTRODUCTION TO MANAGEMENT INFORMATION SYSTEMS(English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3150",
+              "title": "Digital Media Marketing",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS475",
+              "title": "Internet Marketing",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4241",
+              "title": "Social Media Network Ana",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS317",
+              "title": "Social Media Analytics",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4246",
+              "title": "Smart Systems and AI Go",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "SMRT336",
+              "title": "AI Security II (English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4246",
+              "title": "Smart Systems and AI Go",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS305",
+              "title": "Artificial Intelligence for Business (English)\"",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Analytics || Yonsei University": {
+      "degree": "Business Analytics",
+      "university": "Yonsei University",
+      "status": 200,
+      "body": {
+        "degree": "Business Analytics",
+        "university": "Yonsei University",
+        "partner_module_count": 10,
+        "distinct_nus_module_count": 5,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "BT3104",
+              "title": "Optimization Methods for",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STA4123",
+              "title": "INTRODUCTION TO OPTIMIZATION FOR DATA SCIENCE",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2040",
+              "title": "Data Structures and Algor",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI2103",
+              "title": "Data Structures",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4108",
+              "title": "Artificial Intelligence",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4120",
+              "title": "MACHINE LEARNING",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CAS3120-01",
+              "title": "MACHINE LEARNING",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "EEE3314",
+              "title": "INTRODUCTION ARTIFICIAL INTELLIGENCE",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STA3141",
+              "title": "MATHEMATICS FOR MACHINE LEARNING",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3244",
+              "title": "Machine Learning",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STA3142",
+              "title": "STATISTICAL MACHINE LEARNING",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BIZ3189-04",
+              "title": "MANAGEMENT INFORMATION SYSTEMS",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ISM6011",
+              "title": "Global IT Management",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Artificial Intelligence Systems || University of Western Australia": {
+      "degree": "Business Artificial Intelligence Systems",
+      "university": "University of Western Australia",
+      "status": 200,
+      "body": {
+        "degree": "Business Artificial Intelligence Systems",
+        "university": "University of Western Australia",
+        "partner_module_count": 8,
+        "distinct_nus_module_count": 6,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3001",
+              "title": "Algorithms, Agents and Artificial Intelligence",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4009",
+              "title": "Computational Data Analysis",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4404",
+              "title": "Artificial Intelligence and Adaptive Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CTIS2005",
+              "title": "Object Oriented Programming",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2040",
+              "title": "Data Structures and Algor",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS2200",
+              "title": "Data Structures and Algorithms",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3002",
+              "title": "Computer Networks",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4241",
+              "title": "Social Media Network Ana",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MATH3002",
+              "title": "Network Science",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4302",
+              "title": "Blockchain and Distributed",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSN5001",
+              "title": "Blockchain and Distributed Ledger Technologies in Business",
+              "units": 6.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Artificial Intelligence Systems || University of Toronto": {
+      "degree": "Business Artificial Intelligence Systems",
+      "university": "University of Toronto",
+      "status": 200,
+      "body": {
+        "degree": "Business Artificial Intelligence Systems",
+        "university": "University of Toronto",
+        "partner_module_count": 4,
+        "distinct_nus_module_count": 3,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC358H1",
+              "title": "Principles of Computer Networks",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC457H1",
+              "title": "Principles of Computer Networks",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3107",
+              "title": "Data Engineering",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC443H1",
+              "title": "Database System Technology",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4226",
+              "title": "Systematic Trading Strate",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "RSM434",
+              "title": "Financial Trading Strategies",
+              "units": 0.5
+            }
+          }
+        ]
+      }
+    },
+    "Business Artificial Intelligence Systems || Kyoto University": {
+      "degree": "Business Artificial Intelligence Systems",
+      "university": "Kyoto University",
+      "status": 200,
+      "body": {
+        "degree": "Business Artificial Intelligence Systems",
+        "university": "Kyoto University",
+        "partner_module_count": 1,
+        "distinct_nus_module_count": 1,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "T019001",
+              "title": "Information Network-E2",
+              "units": 2.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Artificial Intelligence Systems || Korea University": {
+      "degree": "Business Artificial Intelligence Systems",
+      "university": "Korea University",
+      "status": 200,
+      "body": {
+        "degree": "Business Artificial Intelligence Systems",
+        "university": "Korea University",
+        "partner_module_count": 11,
+        "distinct_nus_module_count": 8,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "BT4221",
+              "title": "Advanced Analytics with B",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "STAT346",
+              "title": "Statistical Data Science I (English)\"",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "KECE443",
+              "title": "Object-Oriented Programming and Laboratory",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE 342",
+              "title": "Computer Network",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE342",
+              "title": "Computer Network",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE389",
+              "title": "ENTREPRENEURSHIP & LEADERSHIP",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS215",
+              "title": "INTRODUCTION TO MANAGEMENT INFORMATION SYSTEMS(English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3150",
+              "title": "Digital Media Marketing",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS475",
+              "title": "Internet Marketing",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4241",
+              "title": "Social Media Network Ana",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS317",
+              "title": "Social Media Analytics",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4246",
+              "title": "Smart Systems and AI Go",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "SMRT336",
+              "title": "AI Security II (English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4246",
+              "title": "Smart Systems and AI Go",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS305",
+              "title": "Artificial Intelligence for Business (English)\"",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4261",
+              "title": "Designing AI-driven Busin",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS410",
+              "title": "Technological Innovation Management: A Pre-requisite for Successful Entrepreneurship",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Business Artificial Intelligence Systems || Yonsei University": {
+      "degree": "Business Artificial Intelligence Systems",
+      "university": "Yonsei University",
+      "status": 200,
+      "body": {
+        "degree": "Business Artificial Intelligence Systems",
+        "university": "Yonsei University",
+        "partner_module_count": 6,
+        "distinct_nus_module_count": 4,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2040",
+              "title": "Data Structures and Algor",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI2103",
+              "title": "Data Structures",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4106",
+              "title": "Computer Networks",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "EEE3450",
+              "title": "COMMUNICATION NETWORKS",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2107",
+              "title": "Introduction to Informatio",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4109",
+              "title": "Information Security",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BIZ3189-04",
+              "title": "MANAGEMENT INFORMATION SYSTEMS",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ISM6011",
+              "title": "Global IT Management",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Computer Science || University of Western Australia": {
+      "degree": "Computer Science",
+      "university": "University of Western Australia",
+      "status": 200,
+      "body": {
+        "degree": "Computer Science",
+        "university": "University of Western Australia",
+        "partner_module_count": 0,
+        "distinct_nus_module_count": 0,
+        "mappings": []
+      }
+    },
+    "Computer Science || University of Toronto": {
+      "degree": "Computer Science",
+      "university": "University of Toronto",
+      "status": 200,
+      "body": {
+        "degree": "Computer Science",
+        "university": "University of Toronto",
+        "partner_module_count": 6,
+        "distinct_nus_module_count": 3,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2100",
+              "title": "Computer Organisation",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE352",
+              "title": "Computer Organization",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2106",
+              "title": "Introduction to Operating",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE344H1",
+              "title": "Operating Systems",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2106",
+              "title": "Introduction to Operating",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC369H1",
+              "title": "Operating Systems",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE358",
+              "title": "Foundations of Computing",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC373H1",
+              "title": "Algorithm Design, Analysis & Complexity",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC373H",
+              "title": "Algorithm Design and Analysis",
+              "units": 0.5
+            }
+          }
+        ]
+      }
+    },
+    "Computer Science || Kyoto University": {
+      "degree": "Computer Science",
+      "university": "Kyoto University",
+      "status": 200,
+      "body": {
+        "degree": "Computer Science",
+        "university": "Kyoto University",
+        "partner_module_count": 1,
+        "distinct_nus_module_count": 1,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2109S",
+              "title": "Introduction to AI and Mac",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "T57002",
+              "title": "Fundamentals of Artificial Intelligence- E2",
+              "units": 2.0
+            }
+          }
+        ]
+      }
+    },
+    "Computer Science || Korea University": {
+      "degree": "Computer Science",
+      "university": "Korea University",
+      "status": 200,
+      "body": {
+        "degree": "Computer Science",
+        "university": "Korea University",
+        "partner_module_count": 2,
+        "distinct_nus_module_count": 2,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2106",
+              "title": "Introduction to Operating",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE341",
+              "title": "Operating Systems",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3230",
+              "title": "Design and Analysis of Alg",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE214",
+              "title": "ALORITHMS",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Computer Science || Yonsei University": {
+      "degree": "Computer Science",
+      "university": "Yonsei University",
+      "status": 200,
+      "body": {
+        "degree": "Computer Science",
+        "university": "Yonsei University",
+        "partner_module_count": 0,
+        "distinct_nus_module_count": 0,
+        "mappings": []
+      }
+    },
+    "Information Systems || University of Western Australia": {
+      "degree": "Information Systems",
+      "university": "University of Western Australia",
+      "status": 200,
+      "body": {
+        "degree": "Information Systems",
+        "university": "University of Western Australia",
+        "partner_module_count": 9,
+        "distinct_nus_module_count": 9,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3001",
+              "title": "Algorithms, Agents and Artificial Intelligence",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4009",
+              "title": "Computational Data Analysis",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "BT4014",
+              "title": "Analytics Driven Design of",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4404",
+              "title": "Artificial Intelligence and Adaptive Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CTIS2005",
+              "title": "Object Oriented Programming",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2040",
+              "title": "Data Structures and Algor",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS2200",
+              "title": "Data Structures and Algorithms",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2102",
+              "title": "Database Systems",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS1402",
+              "title": "Relational Database Management Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3002",
+              "title": "Computer Networks",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3001",
+              "title": "Algorithms, Agents and Artificial Intelligence",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4404",
+              "title": "Artificial Intelligence and Adaptive Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4241",
+              "title": "Social Media Network Ana",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MATH3002",
+              "title": "Network Science",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4242",
+              "title": "Intelligent Systems and Te",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS4404",
+              "title": "Artificial Intelligence and Adaptive Systems",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4302",
+              "title": "Blockchain and Distributed",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSN5001",
+              "title": "Blockchain and Distributed Ledger Technologies in Business",
+              "units": 6.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Systems || University of Toronto": {
+      "degree": "Information Systems",
+      "university": "University of Toronto",
+      "status": 200,
+      "body": {
+        "degree": "Information Systems",
+        "university": "University of Toronto",
+        "partner_module_count": 9,
+        "distinct_nus_module_count": 5,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2102",
+              "title": "Database Systems",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC343H1",
+              "title": "Introduction to Databases",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC358H1",
+              "title": "Principles of Computer Networks",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC457H1",
+              "title": "Principles of Computer Networks",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "MIE369H1",
+              "title": "Introduction to Artificial Intelligence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ROB311H1",
+              "title": "Artificial Intellgence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC384H1",
+              "title": "Introduction to Artificial Intelligence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ROB311",
+              "title": "Artificial Intelligence",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3107",
+              "title": "Data Engineering",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC443H1",
+              "title": "Database System Technology",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4226",
+              "title": "Systematic Trading Strate",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "RSM434",
+              "title": "Financial Trading Strategies",
+              "units": 0.5
+            }
+          }
+        ]
+      }
+    },
+    "Information Systems || Kyoto University": {
+      "degree": "Information Systems",
+      "university": "Kyoto University",
+      "status": 200,
+      "body": {
+        "degree": "Information Systems",
+        "university": "Kyoto University",
+        "partner_module_count": 3,
+        "distinct_nus_module_count": 3,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2102",
+              "title": "Database Systems",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ENG39098",
+              "title": "Databases",
+              "units": 2.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "T019001",
+              "title": "Information Network-E2",
+              "units": 2.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ENG39116",
+              "title": "Artificial Intelligence",
+              "units": 2.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Systems || Korea University": {
+      "degree": "Information Systems",
+      "university": "Korea University",
+      "status": 200,
+      "body": {
+        "degree": "Information Systems",
+        "university": "Korea University",
+        "partner_module_count": 12,
+        "distinct_nus_module_count": 9,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "KECE443",
+              "title": "Object-Oriented Programming and Laboratory",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE 342",
+              "title": "Computer Network",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE342",
+              "title": "Computer Network",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3240",
+              "title": "Interaction Design",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE432",
+              "title": "HUMAN COMPUTER INTERACTION",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE361",
+              "title": "Artificial Intelligence (English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE389",
+              "title": "ENTREPRENEURSHIP & LEADERSHIP",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS215",
+              "title": "INTRODUCTION TO MANAGEMENT INFORMATION SYSTEMS(English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3150",
+              "title": "Digital Media Marketing",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS475",
+              "title": "Internet Marketing",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4241",
+              "title": "Social Media Network Ana",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS317",
+              "title": "Social Media Analytics",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4246",
+              "title": "Smart Systems and AI Go",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "SMRT336",
+              "title": "AI Security II (English)",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4246",
+              "title": "Smart Systems and AI Go",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS305",
+              "title": "Artificial Intelligence for Business (English)\"",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4261",
+              "title": "Designing AI-driven Busin",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSS410",
+              "title": "Technological Innovation Management: A Pre-requisite for Successful Entrepreneurship",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Systems || Yonsei University": {
+      "degree": "Information Systems",
+      "university": "Yonsei University",
+      "status": 200,
+      "body": {
+        "degree": "Information Systems",
+        "university": "Yonsei University",
+        "partner_module_count": 7,
+        "distinct_nus_module_count": 5,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2040",
+              "title": "Data Structures and Algor",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI2103",
+              "title": "Data Structures",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4106",
+              "title": "Computer Networks",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "EEE3450",
+              "title": "COMMUNICATION NETWORKS",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2107",
+              "title": "Introduction to Informatio",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4109",
+              "title": "Information Security",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3243",
+              "title": "Introduction to Artificial In",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4108",
+              "title": "Artificial Intelligence",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BIZ3189-04",
+              "title": "MANAGEMENT INFORMATION SYSTEMS",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS3103",
+              "title": "Digital Transformation and",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ISM6011",
+              "title": "Global IT Management",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Security || University of Western Australia": {
+      "degree": "Information Security",
+      "university": "University of Western Australia",
+      "status": 200,
+      "body": {
+        "degree": "Information Security",
+        "university": "University of Western Australia",
+        "partner_module_count": 6,
+        "distinct_nus_module_count": 6,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CTIS2005",
+              "title": "Object Oriented Programming",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3002",
+              "title": "Computer Networks",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3235",
+              "title": "Computer Security",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3004",
+              "title": "Cybersecurity",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4239",
+              "title": "Software Security",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3007",
+              "title": "Secure Coding",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IFS4103",
+              "title": "Penetration Testing Practic",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CITS3006",
+              "title": "Penetration Testing",
+              "units": 6.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "IS4302",
+              "title": "Blockchain and Distributed",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "BUSN5001",
+              "title": "Blockchain and Distributed Ledger Technologies in Business",
+              "units": 6.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Security || University of Toronto": {
+      "degree": "Information Security",
+      "university": "University of Toronto",
+      "status": 200,
+      "body": {
+        "degree": "Information Security",
+        "university": "University of Toronto",
+        "partner_module_count": 7,
+        "distinct_nus_module_count": 5,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2100",
+              "title": "Computer Organisation",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE352",
+              "title": "Computer Organization",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC358H1",
+              "title": "Principles of Computer Networks",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC457H1",
+              "title": "Principles of Computer Networks",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2106",
+              "title": "Introduction to Operating",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE344H1",
+              "title": "Operating Systems",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2106",
+              "title": "Introduction to Operating",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC369H1",
+              "title": "Operating Systems",
+              "units": 0.5
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS3235",
+              "title": "Computer Security",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "ECE568H1",
+              "title": "Computer Security",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS4236",
+              "title": "Cryptography in Practice:",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSC322H5",
+              "title": "Introduction to Algebraic Cryptography",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Security || Kyoto University": {
+      "degree": "Information Security",
+      "university": "Kyoto University",
+      "status": 200,
+      "body": {
+        "degree": "Information Security",
+        "university": "Kyoto University",
+        "partner_module_count": 1,
+        "distinct_nus_module_count": 1,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "T019001",
+              "title": "Information Network-E2",
+              "units": 2.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Security || Korea University": {
+      "degree": "Information Security",
+      "university": "Korea University",
+      "status": 200,
+      "body": {
+        "degree": "Information Security",
+        "university": "Korea University",
+        "partner_module_count": 5,
+        "distinct_nus_module_count": 4,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2030",
+              "title": "Programming Methodology",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "KECE443",
+              "title": "Object-Oriented Programming and Laboratory",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2040C",
+              "title": "Data Structures and Algor",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE 213",
+              "title": "Data Structures",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE 342",
+              "title": "Computer Network",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE342",
+              "title": "Computer Network",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2106",
+              "title": "Introduction to Operating",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "COSE341",
+              "title": "Operating Systems",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    },
+    "Information Security || Yonsei University": {
+      "degree": "Information Security",
+      "university": "Yonsei University",
+      "status": 200,
+      "body": {
+        "degree": "Information Security",
+        "university": "Yonsei University",
+        "partner_module_count": 3,
+        "distinct_nus_module_count": 2,
+        "mappings": [
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4106",
+              "title": "Computer Networks",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2105",
+              "title": "Introduction to Computer",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "EEE3450",
+              "title": "COMMUNICATION NETWORKS",
+              "units": 3.0
+            }
+          },
+          {
+            "nus_course": {
+              "code": "CS2107",
+              "title": "Introduction to Informatio",
+              "units": 4.0
+            },
+            "partner_course": {
+              "code": "CSI4109",
+              "title": "Information Security",
+              "units": 3.0
+            }
+          }
+        ]
+      }
+    }
+  }
+}

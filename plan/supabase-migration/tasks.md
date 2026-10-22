@@ -21,7 +21,7 @@ test suites alongside existing checks and import/reconciliation utilities.
 
 ## Phase 1: Setup
 
-- [ ] T001 Inspect working changes, existing schema evidence and API behavior; capture Git revision, source checksums, existing check outcomes, and current endpoint responses for all six degrees and thirty degree/university pairs in plan/supabase-migration/baseline.md and plan/supabase-migration/baseline-responses.json, without overwriting user work or exposing credentials.
+- [X] T001 Inspect working changes, existing schema evidence and API behavior; capture Git revision, source checksums, existing check outcomes, and current endpoint responses for all six degrees and thirty degree/university pairs in plan/supabase-migration/baseline.md and plan/supabase-migration/baseline-responses.json, without overwriting user work or exposing credentials.
 - [ ] T002 Inspect project wydziozsjibkvpgphpia through available Supabase tooling, compare table/constraint/index/RLS definitions against supabase/migrations/20261022000100_create_exchange_catalog.sql, and record drift plus migration-history status in plan/supabase-migration/schema-audit.md; reconcile the manually applied migration using the supported CLI history-repair command only after verifying equivalence, never replay its CREATE TABLE statements against the existing schema.
 - [ ] T003 Consult current official Supabase connection, Psycopg 3 pool/TLS, and migration-history documentation; record linked implementation decisions, timeout values and supported package versions in plan/supabase-migration/research.md, including transaction-pooler prepared-statement restrictions and the separate runtime/import credentials.
 
