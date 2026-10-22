@@ -46,3 +46,60 @@ accidental deletion of referenced catalog records.
 
 After applying, verify all eight tables, foreign keys, indexes, and RLS flags in
 the remote database. Do not treat the existence of this file as proof of deployment.
+
+## Catalog import and reader migrations
+
+Apply migrations in order after the initial catalog schema:
+
+1. `migrations/20261022000200_prepare_catalog_import.sql` adds source snapshots,
+   import batches, source-addressed issues/repairs, and row-level presentation.
+2. `migrations/20261022000300_catalog_reader.sql` creates the least-privilege
+   runtime role and its SELECT policies.
+
+Do not replay the initial `CREATE TABLE` migration. Use normal migration history
+once the earlier repair is recorded.
+
+## Runtime role credentials
+
+The reader migration creates `catalog_reader` with `NOLOGIN`, `NOSUPERUSER`,
+and `NOBYPASSRLS`, plus fixed statement and idle-transaction timeouts. It grants
+`USAGE` on `public` and `SELECT` only on the catalog and import-batch tables. The
+role cannot mutate data, read raw source snapshots, source rows, issues, or
+repairs, and it has no browser-facing policies.
+
+Provision a login password outside the repository and outside migrations:
+
+```sql
+-- Run once as the project owner with a password generated in a secret manager.
+alter role catalog_reader with login password '<generated-password>';
+```
+
+Use the transaction pooler host from the project's Connect dialog and the
+role-qualified pooler username:
+
+```text
+postgresql://catalog_reader.<project-ref>:<password>@<pooler-host>:6543/postgres?sslmode=require
+```
+
+Store that URL only in the backend deployment's server-side `DATABASE_URL`.
+The application pool also forces `sslmode=require` and disables prepared
+statements for transaction-pooler compatibility.
+
+## Import credentials
+
+Imports and migrations must not use `catalog_reader` or its password. Set a
+separate `IMPORT_DATABASE_URL` for the project owner or a dedicated writer role,
+prefer a direct connection (port `5432`) or session pooler, and keep it out of
+the runtime deployment. The importer needs write access to the catalog, batch,
+archive, issue, and repair tables; the reader intentionally does not.
+
+Passwords are never committed to migrations or planning files. After
+provisioning, verify the split with queries such as:
+
+```sql
+select has_table_privilege('catalog_reader', 'public.module_mappings', 'select');
+select has_table_privilege('catalog_reader', 'public.catalog_source_snapshots', 'select');
+select has_table_privilege('catalog_reader', 'public.module_mappings', 'insert');
+```
+
+The expected results are `true`, `false`, and `false`.
