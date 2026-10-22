@@ -26,9 +26,9 @@ ROLE_SETUP_SQL = f"""
 do $$
 begin
   if not exists (select 1 from pg_roles where rolname = '{IMPORTER_ROLE}') then
-    create role {IMPORTER_ROLE} login password '{TEST_ROLE_PASSWORD}';
+    create role {IMPORTER_ROLE} login password '{TEST_ROLE_PASSWORD}' bypassrls;
   else
-    alter role {IMPORTER_ROLE} login password '{TEST_ROLE_PASSWORD}';
+    alter role {IMPORTER_ROLE} login password '{TEST_ROLE_PASSWORD}' bypassrls;
   end if;
   alter role {READER_ROLE} login password '{TEST_ROLE_PASSWORD}';
 end
