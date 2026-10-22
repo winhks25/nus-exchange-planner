@@ -5,9 +5,15 @@ import logging
 import psycopg
 
 from ..database import CatalogDatabase, DatabaseError
-from ..models import CatalogResponse, DegreeOption, UniversityOption
+from ..models import (
+    CatalogResponse,
+    DegreeOption,
+    Recommendation,
+    RecommendationsResponse,
+    UniversityOption,
+)
 from ..settings import Settings
-from .base import CATALOG_UNAVAILABLE_MESSAGE, CatalogUnavailable
+from .base import CATALOG_UNAVAILABLE_MESSAGE, CatalogUnavailable, UnknownSelection
 
 LOG = logging.getLogger(__name__)
 
@@ -28,6 +34,35 @@ CATALOG_UNIVERSITIES_SQL = """
 select name, country
 from public.partner_universities
 order by source_order nulls last, id
+"""
+
+DEGREE_ID_SQL = """
+select id
+from public.degrees
+where name = %s
+"""
+
+RANKINGS_SQL = """
+select
+  u.name,
+  u.country,
+  coalesce(ranked.mapping_count, 0),
+  coalesce(ranked.distinct_nus_count, 0),
+  coalesce(ranked.partner_count, 0)
+from public.partner_universities u
+left join (
+  select
+    pm.partner_university_id as university_id,
+    count(*) as mapping_count,
+    count(distinct mm.nus_module_code) as distinct_nus_count,
+    count(distinct upper(pm.code)) as partner_count
+  from public.module_mappings mm
+  join public.pu_modules pm on pm.id = mm.pu_module_id
+  join public.degree_modules dm on dm.module_code = mm.nus_module_code
+  where dm.degree_id = %s
+  group by pm.partner_university_id
+) ranked on ranked.university_id = u.id
+order by coalesce(ranked.distinct_nus_count, 0) desc, u.name collate "C" asc
 """
 
 
@@ -78,6 +113,31 @@ class PostgresCatalogRepository:
             ],
         )
 
+    def recommendations(self, degree: str) -> RecommendationsResponse:
+        """Rank all universities by distinct NUS modules in one set-based query."""
+
+        try:
+            with self._database.read_transaction("recommendations") as conn:
+                _require_published_batch(conn)
+                degree_id = _require_degree(conn, degree)
+                rows = conn.execute(RANKINGS_SQL, (degree_id,)).fetchall()
+        except DatabaseError:
+            raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE) from None
+
+        return RecommendationsResponse(
+            degree=degree,
+            recommendations=[
+                Recommendation(
+                    university=university,
+                    country=country,
+                    partner_module_count=partner_count,
+                    distinct_nus_module_count=distinct_nus_count,
+                    mapping_count=mapping_count,
+                )
+                for university, country, mapping_count, distinct_nus_count, partner_count in rows
+            ],
+        )
+
 
 def _require_published_batch(conn: psycopg.Connection) -> None:
     """Reject an unpopulated or unpublished database with a sanitized error."""
@@ -85,3 +145,12 @@ def _require_published_batch(conn: psycopg.Connection) -> None:
     if conn.execute(PUBLISHED_BATCH_SQL).fetchone() is None:
         LOG.error("Catalog database has no completed current import batch")
         raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE)
+
+
+def _require_degree(conn: psycopg.Connection, degree: str) -> int:
+    """Return the degree id or raise the shared unknown-selection error."""
+
+    row = conn.execute(DEGREE_ID_SQL, (degree,)).fetchone()
+    if row is None:
+        raise UnknownSelection("Unknown degree")
+    return int(row[0])

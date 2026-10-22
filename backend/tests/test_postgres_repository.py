@@ -1,6 +1,6 @@
 import pytest
 
-from app.repositories.base import CatalogUnavailable
+from app.repositories.base import CatalogUnavailable, UnknownSelection
 from app.repositories.postgres_catalog import PostgresCatalogRepository
 from app.settings import Settings
 from tests.postgres_support import DatabaseTarget, PostgresCluster
@@ -89,3 +89,81 @@ def test_degree_without_full_title_is_treated_as_incomplete(
     )
     with pytest.raises(CatalogUnavailable):
         repository.catalog()
+
+
+RANKING_FIXTURE = """
+insert into public.nus_modules (code) values
+  ('CS2102'), ('CS2103'), ('CS2104'), ('CS2105');
+insert into public.degrees (name, faculty, full_title, source_order)
+values ('Test', 'School of Computing', 'Bachelor of Test', 0);
+insert into public.degree_modules (degree_id, module_code, requirement_type)
+select d.id, module_code, null
+from public.degrees d
+cross join (values ('CS2102'), ('CS2103'), ('CS2104'), ('CS2105')) modules(module_code)
+where d.name = 'Test';
+insert into public.partner_universities (name, country, source_order) values
+  ('A University', 'Japan', 0),
+  ('B University', 'Japan', 1),
+  ('C University', 'Japan', 2),
+  ('Z University', 'Japan', 3);
+insert into public.pu_modules (code, partner_university_id)
+select pairs.code, u.id
+from public.partner_universities u
+join (
+  values
+    ('A University', 'P1'),
+    ('A University', 'P2'),
+    ('A University', 'P3'),
+    ('B University', 'Q1'),
+    ('B University', 'Q2'),
+    ('B University', 'Q3'),
+    ('C University', 'R1'),
+    ('C University', 'R2')
+) pairs(university, code) on pairs.university = u.name;
+insert into public.module_mappings (nus_module_code, pu_module_id)
+select pairs.nus_code, pm.id
+from (
+  values
+    ('A University', 'P1', 'CS2102'),
+    ('A University', 'P2', 'CS2102'),
+    ('A University', 'P3', 'CS2102'),
+    ('B University', 'Q1', 'CS2103'),
+    ('B University', 'Q2', 'CS2103'),
+    ('B University', 'Q3', 'CS2104'),
+    ('C University', 'R1', 'CS2103'),
+    ('C University', 'R2', 'CS2105')
+) pairs(university, partner_code, nus_code)
+join public.partner_universities u on u.name = pairs.university
+join public.pu_modules pm
+  on pm.partner_university_id = u.id and pm.code = pairs.partner_code;
+"""
+
+
+def test_rankings_include_zero_counts_and_order_by_distinct_nus(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(PUBLISHED_BATCH + RANKING_FIXTURE)
+
+    ranked = repository.recommendations("Test").recommendations
+    assert [
+        (
+            item.university,
+            item.partner_module_count,
+            item.distinct_nus_module_count,
+            item.mapping_count,
+        )
+        for item in ranked
+    ] == [
+        ("B University", 3, 2, 3),
+        ("C University", 2, 2, 2),
+        ("A University", 3, 1, 3),
+        ("Z University", 0, 0, 0),
+    ]
+
+
+def test_unknown_degree_is_not_a_server_error(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(PUBLISHED_BATCH + RANKING_FIXTURE)
+    with pytest.raises(UnknownSelection, match="Unknown degree$"):
+        repository.recommendations("Missing")
