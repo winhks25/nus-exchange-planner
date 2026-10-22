@@ -5,11 +5,19 @@ records are built and validated here before any database connection is opened,
 so a malformed source fails without touching the target.
 """
 
+import hashlib
+import re
 from dataclasses import dataclass
+from datetime import date
 from typing import Any
 
 from app.course_codes import normalized_course_code
 from scripts.catalog_preview import build_preview
+from scripts.catalog_source import (
+    SourceFile,
+    combined_checksum,
+    load_archive_sources,
+)
 
 
 class ImportError(RuntimeError):
@@ -18,6 +26,11 @@ class ImportError(RuntimeError):
 
 class ImportDataError(ImportError):
     """Raised when the source cannot be represented without inventing data."""
+
+
+SOURCE_URL_PATTERN = re.compile(r"^https?://\S+$")
+SOURCE_OUTCOMES = frozenset({"accepted", "repaired", "quarantined"})
+ACTIVE_OUTCOMES = frozenset({"accepted", "repaired"})
 
 
 @dataclass(frozen=True)
@@ -71,6 +84,82 @@ class PartnerModuleRecord:
 
 
 @dataclass(frozen=True)
+class SourceRowRecord:
+    """One immutable raw mapping row, addressed by file and array index."""
+
+    source_file: str
+    mapping_index: int
+    source_order: int
+    raw_row: dict[str, Any]
+    outcome: str
+    university: str
+    source_nus_code: str
+    source_partner_code: str
+    source_nus_title: str | None
+    source_partner_title: str | None
+    source_nus_units: float | None
+    source_partner_units: float | None
+    source_faculty: str | None
+    source_page: int | None
+
+    @property
+    def key(self) -> tuple[str, int]:
+        return self.source_file, self.mapping_index
+
+
+@dataclass(frozen=True)
+class MappingRecord:
+    """One active mapping with its own source-row presentation."""
+
+    source_file: str
+    mapping_index: int
+    university: str
+    nus_module_code: str
+    partner_module_code: str
+    source_order: int
+    source_nus_title: str | None
+    source_nus_units: float | None
+    source_partner_title: str | None
+    source_partner_units: float | None
+    source_faculty: str | None
+    source_page: int | None
+
+    @property
+    def key(self) -> tuple[str, int]:
+        return self.source_file, self.mapping_index
+
+
+@dataclass(frozen=True)
+class IssueRecord:
+    """One source-addressed issue with its resolution state."""
+
+    source_file: str
+    mapping_index: int | None
+    json_pointer: str
+    code: str
+    severity: str
+    message: str
+    status: str
+
+
+@dataclass(frozen=True)
+class RepairRecord:
+    """One evidence-bearing repair row keyed by source pointer and citation URL."""
+
+    source_file: str
+    mapping_index: int
+    json_pointer: str
+    before_value: Any
+    after_value: Any
+    source_url: str
+    source_title: str | None
+    accessed_on: date
+    academic_year: str | None
+    evidence: str
+    status: str
+
+
+@dataclass(frozen=True)
 class SpecializationRecord:
     """One degree-scoped specialization or CS focus area."""
 
@@ -109,6 +198,11 @@ class ImportPlan:
 
     preview: dict[str, Any]
     entities: CatalogEntities
+    archives: tuple[SourceFile, ...]
+    source_rows: tuple[SourceRowRecord, ...]
+    mappings: tuple[MappingRecord, ...]
+    issues: tuple[IssueRecord, ...]
+    repairs: tuple[RepairRecord, ...]
 
     @property
     def source_checksum(self) -> str:
@@ -124,11 +218,26 @@ class ImportPlan:
 
 
 def build_import_plan() -> ImportPlan:
-    """Build and validate the entity plan without opening a database connection."""
+    """Build and validate the complete plan without opening a database connection."""
 
     preview = build_preview()
     entities = _build_entities(preview)
-    return ImportPlan(preview=preview, entities=entities)
+    archives = tuple(load_archive_sources())
+    _validate_archives(preview, archives)
+    source_rows = _build_source_rows(preview)
+    mappings = _build_mappings(preview, entities)
+    issues = _build_issues(preview)
+    repairs = _build_repairs(preview, source_rows)
+    _validate_provenance(preview, source_rows, mappings, issues, repairs)
+    return ImportPlan(
+        preview=preview,
+        entities=entities,
+        archives=archives,
+        source_rows=source_rows,
+        mappings=mappings,
+        issues=issues,
+        repairs=repairs,
+    )
 
 
 def _build_entities(preview: dict[str, Any]) -> CatalogEntities:
@@ -260,6 +369,372 @@ def _specialization_record(item: dict[str, Any]) -> SpecializationRecord:
     )
 
 
+def _validate_archives(preview: dict[str, Any], archives: tuple[SourceFile, ...]) -> None:
+    """Prove the archived bytes are exactly the snapshot the preview addressed."""
+
+    expected = {item["path"]: item for item in preview["source_snapshot"]["files"]}
+    actual = {item.path: item for item in archives}
+    if set(actual) != set(expected):
+        raise ImportDataError(
+            "Archive paths do not match the preview: "
+            f"missing={sorted(set(expected) - set(actual))}, "
+            f"unexpected={sorted(set(actual) - set(expected))}"
+        )
+    for path, item in expected.items():
+        source = actual[path]
+        if source.sha256 != item["sha256"] or source.byte_size != item["byte_size"]:
+            raise ImportDataError(f"Archived source changed before import: {path}")
+
+    # The source checksum covers the manifest and catalog files, not the repair file.
+    catalog_archives = [item for item in archives if item.kind != "repairs"]
+    if combined_checksum(catalog_archives) != preview["source_snapshot"]["source_checksum_sha256"]:
+        raise ImportDataError("Archived catalog checksum does not match the preview")
+
+    repair_file = preview["source_snapshot"]["repair_file"]
+    repair_archives = [item for item in archives if item.kind == "repairs"]
+    if repair_file is None:
+        if repair_archives:
+            raise ImportDataError("Unexpected repair archive for a repair-free preview")
+        if preview["source_snapshot"]["repair_checksum_sha256"] != hashlib.sha256(b"").hexdigest():
+            raise ImportDataError("Repair-free preview has a non-empty repair checksum")
+        return
+    matching = [item for item in repair_archives if item.path == repair_file]
+    if len(matching) != 1:
+        raise ImportDataError(f"Expected exactly one repair archive for {repair_file}")
+    if matching[0].sha256 != preview["source_snapshot"]["repair_checksum_sha256"]:
+        raise ImportDataError("Archived repair checksum does not match the preview")
+
+
+def _build_source_rows(preview: dict[str, Any]) -> tuple[SourceRowRecord, ...]:
+    """Flatten every raw row while retaining its original position and display values."""
+
+    records = []
+    for row in [*preview["mappings"], *preview["quarantined_mappings"]]:
+        raw_row = row.get("source_row")
+        if not isinstance(raw_row, dict):
+            raise ImportDataError(
+                f"Raw row {row.get('source_file')}#{row.get('mapping_index')} is not an object"
+            )
+        nus = _raw_course(raw_row, "nus_course", row)
+        partner = _raw_course(raw_row, "partner_course", row)
+        outcome = _required_text(row.get("outcome"), "source row outcome")
+        if outcome not in SOURCE_OUTCOMES:
+            raise ImportDataError(f"Unsupported source row outcome: {outcome}")
+        records.append(
+            SourceRowRecord(
+                source_file=_required_text(row.get("source_file"), "source row file"),
+                mapping_index=_required_int(row.get("mapping_index"), "source row mapping_index"),
+                source_order=_required_int(row.get("source_order"), "source row source_order"),
+                raw_row=raw_row,
+                outcome=outcome,
+                university=_required_text(row.get("university"), "source row university"),
+                source_nus_code=_required_text(nus.get("code"), "raw NUS course code"),
+                source_partner_code=_required_text(partner.get("code"), "raw partner course code"),
+                source_nus_title=_optional_text(nus.get("title"), "raw NUS course title"),
+                source_partner_title=_optional_text(
+                    partner.get("title"), "raw partner course title"
+                ),
+                source_nus_units=_optional_positive(nus.get("units"), "raw NUS course units"),
+                source_partner_units=_optional_positive(
+                    partner.get("units"), "raw partner course units"
+                ),
+                source_faculty=_optional_text(raw_row.get("faculty"), "raw faculty"),
+                source_page=_optional_positive_int(raw_row.get("source_page"), "raw source_page"),
+            )
+        )
+    return tuple(sorted(records, key=lambda item: item.key))
+
+
+def _raw_course(raw_row: dict[str, Any], key: str, row: dict[str, Any]) -> dict[str, Any]:
+    """Return one required raw course object or fail with its source address."""
+
+    value = raw_row.get(key)
+    if not isinstance(value, dict):
+        raise ImportDataError(
+            f"Raw row {row.get('source_file')}#{row.get('mapping_index')} has no {key} object"
+        )
+    return value
+
+
+def _build_mappings(
+    preview: dict[str, Any], entities: CatalogEntities
+) -> tuple[MappingRecord, ...]:
+    """Build active mappings from corrected rows while keeping row presentation."""
+
+    nus_codes = {item.code for item in entities.nus_modules}
+    partner_keys = {(item.university, item.code) for item in entities.partner_modules}
+    records = []
+    for row in preview["mappings"]:
+        nus_code = _required_code(row.get("nus_module_code"), "mapping NUS code")
+        partner_code = _required_code(row.get("partner_module_code"), "mapping partner code")
+        university = _required_text(row.get("university"), "mapping university")
+        if nus_code not in nus_codes:
+            raise ImportDataError(f"Mapping cites unknown NUS module: {nus_code}")
+        if (university, partner_code) not in partner_keys:
+            raise ImportDataError(
+                f"Mapping cites unknown partner module: {university}/{partner_code}"
+            )
+        records.append(
+            MappingRecord(
+                source_file=_required_text(row.get("source_file"), "mapping source file"),
+                mapping_index=_required_int(row.get("mapping_index"), "mapping source index"),
+                university=university,
+                nus_module_code=nus_code,
+                partner_module_code=partner_code,
+                source_order=_required_int(row.get("source_order"), "mapping source_order"),
+                source_nus_title=_optional_text(row.get("mapping_nus_title"), "mapping NUS title"),
+                source_nus_units=_optional_positive(
+                    row.get("mapping_nus_units"), "mapping NUS units"
+                ),
+                source_partner_title=_optional_text(
+                    row.get("mapping_partner_title"), "mapping partner title"
+                ),
+                source_partner_units=_optional_positive(
+                    row.get("mapping_partner_units"), "mapping partner units"
+                ),
+                source_faculty=_optional_text(row.get("mapping_faculty"), "mapping faculty"),
+                source_page=_optional_positive_int(row.get("mapping_page"), "mapping source_page"),
+            )
+        )
+    return tuple(sorted(records, key=lambda item: item.key))
+
+
+def _build_issues(preview: dict[str, Any]) -> tuple[IssueRecord, ...]:
+    """Carry every source issue, including membership notes, into the import plan."""
+
+    records = []
+    for issue in preview["issues"]:
+        context = issue.get("context") if isinstance(issue.get("context"), dict) else {}
+        message = _required_text(issue.get("message"), "issue message")
+        if issue.get("code") == "specialization_memberships_missing" and context.get("note"):
+            message = f"{message} Note: {context['note']}"
+        mapping_index = issue.get("mapping_index")
+        if mapping_index is not None:
+            mapping_index = _required_int(mapping_index, "issue mapping_index")
+        pointer = issue.get("json_pointer")
+        if pointer is None:
+            pointer = ""
+        if not isinstance(pointer, str) or (pointer and not pointer.startswith("/")):
+            raise ImportDataError(f"Issue has an invalid JSON pointer: {pointer!r}")
+        severity = _required_text(issue.get("severity"), "issue severity")
+        if severity not in {"warning", "error"}:
+            raise ImportDataError(f"Unsupported issue severity: {severity}")
+        status = _required_text(issue.get("status"), "issue status")
+        if status not in {"open", "resolved", "quarantined"}:
+            raise ImportDataError(f"Unsupported issue status: {status}")
+        records.append(
+            IssueRecord(
+                source_file=_required_text(issue.get("file"), "issue source file"),
+                mapping_index=mapping_index,
+                json_pointer=pointer,
+                code=_required_text(issue.get("code"), "issue code"),
+                severity=severity,
+                message=message,
+                status=status,
+            )
+        )
+    return tuple(sorted(records, key=lambda item: (item.source_file, item.json_pointer, item.code)))
+
+
+def _build_repairs(
+    preview: dict[str, Any], source_rows: tuple[SourceRowRecord, ...]
+) -> tuple[RepairRecord, ...]:
+    """Group evidence by source pointer and citation URL without losing any quote."""
+
+    rows_by_key = {item.key: item for item in source_rows}
+    grouped: dict[tuple[str, int, str, str], dict[str, Any]] = {}
+
+    def add_evidence(
+        key: tuple[str, int],
+        pointer: str,
+        before: Any,
+        after: Any,
+        status: str,
+        evidence: dict[str, Any],
+    ) -> None:
+        url = _required_text(evidence.get("url"), "repair evidence URL")
+        if not SOURCE_URL_PATTERN.fullmatch(url):
+            raise ImportDataError(f"Repair evidence URL is invalid: {url}")
+        entry = grouped.setdefault(
+            (key[0], key[1], pointer, url),
+            {
+                "before": before,
+                "after": after,
+                "status": status,
+                "quotes": [],
+                "titles": [],
+                "years": [],
+                "dates": [],
+            },
+        )
+        quote = _required_text(evidence.get("quote"), "repair evidence quote")
+        if quote not in entry["quotes"]:
+            entry["quotes"].append(quote)
+        title = _optional_text(evidence.get("page_title"), "repair page title")
+        if title and title not in entry["titles"]:
+            entry["titles"].append(title)
+        year = _optional_text(evidence.get("academic_year"), "repair academic year")
+        if year and year not in entry["years"]:
+            entry["years"].append(year)
+        try:
+            accessed = date.fromisoformat(
+                _required_text(evidence.get("accessed_on"), "repair accessed_on")
+            )
+        except ValueError:
+            raise ImportDataError("Repair accessed_on must be an ISO date") from None
+        entry["dates"].append(accessed)
+
+    for repair in preview["repairs"]:
+        key = (
+            _required_text(repair.get("source_file"), "repair source file"),
+            _required_int(repair.get("mapping_index"), "repair mapping_index"),
+        )
+        if key not in rows_by_key:
+            raise ImportDataError(f"Repair cites an unknown source row: {key}")
+        status = _required_text(repair.get("status"), "repair status")
+        if status not in {"verified", "unresolved"}:
+            raise ImportDataError(f"Unsupported repair status: {status}")
+        evidence_entries = repair.get("evidence")
+        if not isinstance(evidence_entries, list) or not evidence_entries:
+            raise ImportDataError(f"Repair {key} has no evidence")
+        fields = repair.get("fields") if isinstance(repair.get("fields"), dict) else {}
+        if status == "verified":
+            for field, change in fields.items():
+                if not isinstance(change, dict):
+                    raise ImportDataError(f"Repair {key} field {field} is not an object")
+                pointer = _required_text(change.get("json_pointer"), "repair JSON pointer")
+                for evidence in evidence_entries:
+                    add_evidence(
+                        key,
+                        pointer,
+                        change.get("before"),
+                        change.get("after"),
+                        status,
+                        evidence,
+                    )
+        else:
+            unresolved_fields = repair.get("unresolved_fields")
+            if not isinstance(unresolved_fields, list) or not unresolved_fields:
+                raise ImportDataError(f"Unresolved repair {key} lists no fields")
+            raw_row = rows_by_key[key].raw_row
+            for field in unresolved_fields:
+                if not isinstance(field, str) or not field:
+                    raise ImportDataError(f"Repair {key} has an invalid field")
+                pointer = f"/mappings/{key[1]}/{field.replace('.', '/')}"
+                parts = field.split(".")
+                for evidence in evidence_entries:
+                    add_evidence(
+                        key,
+                        pointer,
+                        _lookup_path(raw_row, parts),
+                        None,
+                        status,
+                        evidence,
+                    )
+
+    records = []
+    for (source_file, mapping_index, pointer, url), entry in sorted(grouped.items()):
+        if not entry["quotes"] or not entry["dates"]:
+            raise ImportDataError(f"Repair evidence is incomplete at {pointer}")
+        records.append(
+            RepairRecord(
+                source_file=source_file,
+                mapping_index=mapping_index,
+                json_pointer=pointer,
+                before_value=entry["before"],
+                after_value=entry["after"],
+                source_url=url,
+                source_title=entry["titles"][0] if entry["titles"] else None,
+                accessed_on=max(entry["dates"]),
+                academic_year="; ".join(entry["years"]) or None,
+                evidence="\n\n".join(entry["quotes"]),
+                status=entry["status"],
+            )
+        )
+    return tuple(records)
+
+
+def _lookup_path(document: Any, parts: list[str]) -> Any:
+    """Return a nested raw value or null when the path does not exist."""
+
+    target = document
+    for part in parts:
+        if not isinstance(target, dict) or part not in target:
+            return None
+        target = target[part]
+    return target
+
+
+def _validate_provenance(
+    preview: dict[str, Any],
+    source_rows: tuple[SourceRowRecord, ...],
+    mappings: tuple[MappingRecord, ...],
+    issues: tuple[IssueRecord, ...],
+    repairs: tuple[RepairRecord, ...],
+) -> None:
+    """Account for every raw row and one-to-one active mapping before publication."""
+
+    _unique_values((item.key for item in source_rows), "source row identities")
+    _unique_values((item.key for item in mappings), "active mapping identities")
+    _unique_values(
+        ((item.source_file, item.mapping_index, item.json_pointer, item.code) for item in issues),
+        "issue identities",
+    )
+    _unique_values(
+        (
+            (item.source_file, item.mapping_index, item.json_pointer, item.source_url)
+            for item in repairs
+        ),
+        "repair identities",
+    )
+
+    summary = preview["summary"]
+    outcome_counts = {
+        outcome: sum(1 for item in source_rows if item.outcome == outcome)
+        for outcome in SOURCE_OUTCOMES
+    }
+    if len(source_rows) != summary["raw_rows"]:
+        raise ImportDataError("Source row count does not match the preview summary")
+    if len(mappings) != summary["active_rows"]:
+        raise ImportDataError("Active mapping count does not match the preview summary")
+    if outcome_counts["accepted"] != summary["accepted_rows"]:
+        raise ImportDataError("Accepted row count does not match the preview summary")
+    if outcome_counts["repaired"] != summary["repaired_rows"]:
+        raise ImportDataError("Repaired row count does not match the preview summary")
+    if outcome_counts["quarantined"] != summary["quarantined_rows"]:
+        raise ImportDataError("Quarantined row count does not match the preview summary")
+
+    # Active rows must have exactly one mapping; quarantined rows must have none.
+    row_by_key = {item.key: item for item in source_rows}
+    mapping_keys = {item.key for item in mappings}
+    for item in source_rows:
+        if item.outcome in ACTIVE_OUTCOMES and item.key not in mapping_keys:
+            raise ImportDataError(f"Active source row has no mapping: {item.key}")
+        if item.outcome == "quarantined" and item.key in mapping_keys:
+            raise ImportDataError(f"Quarantined source row has a mapping: {item.key}")
+    for key in mapping_keys:
+        if row_by_key[key].outcome not in ACTIVE_OUTCOMES:
+            raise ImportDataError(f"Mapping is not backed by an active row: {key}")
+
+    # Every quarantine and every applied repair must have a matching source address.
+    issue_keys = {(item.source_file, item.mapping_index) for item in issues}
+    for item in source_rows:
+        if item.outcome == "quarantined" and item.key not in issue_keys:
+            raise ImportDataError(f"Quarantined source row has no issue: {item.key}")
+    verified_keys = {
+        (item.source_file, item.mapping_index) for item in repairs if item.status == "verified"
+    }
+    for item in mappings:
+        if item.key in verified_keys and row_by_key[item.key].outcome != "repaired":
+            raise ImportDataError(f"Repair cites a row not marked repaired: {item.key}")
+    for item in repairs:
+        key = (item.source_file, item.mapping_index)
+        if key not in row_by_key:
+            raise ImportDataError(f"Repair cites an unknown source row: {key}")
+        if item.status == "unresolved" and row_by_key[key].outcome != "quarantined":
+            raise ImportDataError(f"Unresolved repair row is not quarantined: {key}")
+
+
 def _validate_entities(entities: CatalogEntities) -> None:
     """Reject duplicate identities or broken references before database work."""
 
@@ -360,6 +835,16 @@ def _required_int(value: object, label: str) -> int:
 
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
         raise ImportDataError(f"{label} must be a non-negative integer")
+    return value
+
+
+def _optional_positive_int(value: object, label: str) -> int | None:
+    """Return a positive source page number or null without coercing strings."""
+
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ImportDataError(f"{label} must be a positive integer or null")
     return value
 
 

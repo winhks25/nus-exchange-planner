@@ -31,6 +31,56 @@ def test_specialization_memberships_keep_their_own_requirement_label():
     )
 
 
+def test_plan_accounts_for_raw_rows_mappings_and_provenance():
+    plan = build_import_plan()
+
+    assert len(plan.archives) == 8
+    assert len(plan.source_rows) == plan.summary["raw_rows"] == 154
+    assert len(plan.mappings) == plan.summary["active_rows"] == 151
+    assert len({item.key for item in plan.source_rows}) == 154
+    assert len({item.key for item in plan.mappings}) == 151
+    assert len(plan.issues) == 34
+    assert len(plan.repairs) == 44
+
+
+def test_repaired_rows_keep_raw_display_and_corrected_identity():
+    plan = build_import_plan()
+    rows = {item.key: item for item in plan.source_rows}
+    mappings = {item.key: item for item in plan.mappings}
+    key = ("data/mapping/canada/toronto.json", 50)
+
+    assert rows[key].source_nus_code == "Foundations of Machine Le"
+    assert rows[key].outcome == "repaired"
+    assert mappings[key].nus_module_code == "CS3264"
+    assert mappings[key].source_nus_title == "Foundations of Machine Learning"
+
+    repaired = {
+        (item.json_pointer, item.source_url): item
+        for item in plan.repairs
+        if item.mapping_index == 50
+        and item.json_pointer == "/mappings/50/nus_course/code"
+        and item.status == "verified"
+    }
+    assert repaired
+    assert all(item.before_value == "Foundations of Machine Le" for item in repaired.values())
+    assert all(item.after_value == "CS3264" for item in repaired.values())
+
+
+def test_unresolved_membership_notes_are_retained_in_issue_messages():
+    plan = build_import_plan()
+    notes = [
+        item.message
+        for item in plan.issues
+        if item.code == "specialization_memberships_missing" and "Note:" in item.message
+    ]
+
+    assert len(notes) == 6
+    assert any(
+        "See official curriculum page for prescribed course list." in message for message in notes
+    )
+    assert any("Optional; consult official specialisation list." in message for message in notes)
+
+
 def test_focus_areas_keep_their_kind_and_external_membership_note():
     plan = build_import_plan()
     focus_areas = {
