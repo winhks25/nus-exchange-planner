@@ -658,12 +658,56 @@ def build_inventory() -> dict[str, Any]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Write the inventory and print a compact human-readable summary."""
+    """Write the inventory, or the corrected preview with ``--preview``."""
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--preview",
+        action="store_true",
+        help="write the corrected import preview and data delta report instead",
+    )
+    parser.add_argument(
+        "--preview-output",
+        type=Path,
+        default=REPO_ROOT / "plan" / "supabase-migration" / "import-preview.json",
+    )
+    parser.add_argument(
+        "--delta-output",
+        type=Path,
+        default=REPO_ROOT / "plan" / "supabase-migration" / "data-deltas.md",
+    )
     parser.add_argument("--print-json", action="store_true", help="print the full document")
     args = parser.parse_args(argv)
+
+    if args.preview:
+        # Import lazily so the inventory remains usable without the preview module.
+        from scripts.catalog_preview import build_preview, write_delta_report
+
+        try:
+            document = build_preview()
+        except SourceError as exc:
+            print(f"Catalog preview failed: {exc}", file=sys.stderr)
+            return 1
+        write_json(args.preview_output, document)
+        write_delta_report(args.delta_output, document)
+        if args.print_json:
+            print(json.dumps(document, indent=2, sort_keys=True, ensure_ascii=False))
+        summary = document["summary"]
+        print(
+            "Catalog preview: "
+            f"{summary['active_rows']} active mappings, "
+            f"{summary['repaired_rows']} repaired, "
+            f"{summary['quarantined_rows']} quarantined; "
+            f"{summary['nus_modules']} NUS modules, "
+            f"{summary['partner_modules']} partner modules, "
+            f"{summary['specializations']} specializations/focus areas"
+        )
+        print(f"Source checksum: {document['source_snapshot']['source_checksum_sha256']}")
+        print(f"Repair checksum: {document['source_snapshot']['repair_checksum_sha256']}")
+        print(f"Wrote {repo_path(args.preview_output)}")
+        print(f"Wrote {repo_path(args.delta_output)}")
+        return 0
 
     try:
         document = build_inventory()

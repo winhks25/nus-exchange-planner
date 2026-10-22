@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -54,6 +55,15 @@ def repo_path(path: Path) -> str:
     """Return a stable repository-relative path for reports and archives."""
 
     return path.resolve().relative_to(REPO_ROOT).as_posix()
+
+
+def combined_checksum(sources: Iterable[SourceFile]) -> str:
+    """Hash a stable path-plus-content manifest for a source snapshot."""
+
+    digest = hashlib.sha256()
+    for source in sorted(sources, key=lambda item: item.path):
+        digest.update(f"{source.path}\0{source.sha256}\n".encode())
+    return digest.hexdigest()
 
 
 def json_pointer_escape(token: str) -> str:
