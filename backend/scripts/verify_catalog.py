@@ -941,10 +941,13 @@ class Reconciler:
             for item in self.plan.source_rows
         ]
         self._compare_map("catalog source rows", expected, actual, ("file", "index"))
-        self._compare_counts(
+        expected_outcomes = Counter(item["outcome"] for item in expected)
+        actual_outcomes = Counter(item["outcome"] for item in actual)
+        self._record(
             "source row outcome counts",
-            Counter(item["outcome"] for item in expected),
-            Counter(item["outcome"] for item in actual),
+            expected_outcomes == actual_outcomes,
+            dict(expected_outcomes),
+            dict(actual_outcomes),
         )
 
     def _check_entities(self) -> None:
