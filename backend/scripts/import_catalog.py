@@ -71,6 +71,26 @@ class PartnerModuleRecord:
 
 
 @dataclass(frozen=True)
+class SpecializationRecord:
+    """One degree-scoped specialization or CS focus area."""
+
+    degree: str
+    name: str
+    kind: str
+    source_order: int
+    membership_note: str | None
+
+
+@dataclass(frozen=True)
+class SpecializationModuleRecord:
+    """One explicit specialization membership; never a degree requirement."""
+
+    degree: str
+    specialization: str
+    module_code: str
+
+
+@dataclass(frozen=True)
 class CatalogEntities:
     """All normalized entities and memberships that are safe to publish."""
 
@@ -79,6 +99,8 @@ class CatalogEntities:
     degree_modules: tuple[DegreeModuleRecord, ...]
     universities: tuple[UniversityRecord, ...]
     partner_modules: tuple[PartnerModuleRecord, ...]
+    specializations: tuple[SpecializationRecord, ...]
+    specialization_modules: tuple[SpecializationModuleRecord, ...]
 
 
 @dataclass(frozen=True)
@@ -121,15 +143,44 @@ def _build_entities(preview: dict[str, Any]) -> CatalogEntities:
     )
     universities = tuple(_university_record(item) for item in preview["universities"])
     partner_modules = tuple(_partner_module_record(item) for item in preview["partner_modules"])
+    specializations = tuple(_specialization_record(item) for item in preview["specializations"])
+    specialization_modules = tuple(
+        SpecializationModuleRecord(
+            degree=item["degree"], specialization=item["name"], module_code=code
+        )
+        for item in preview["specializations"]
+        for code in item["memberships"]
+    )
     entities = CatalogEntities(
         degrees=degrees,
         nus_modules=nus_modules,
         degree_modules=degree_modules,
         universities=universities,
         partner_modules=partner_modules,
+        specializations=specializations,
+        specialization_modules=specialization_modules,
     )
     _validate_entities(entities)
+    _validate_degree_eligibility(preview, entities)
     return entities
+
+
+def _validate_degree_eligibility(preview: dict[str, Any], entities: CatalogEntities) -> None:
+    """Prove degree memberships still equal the legacy extractor's code set."""
+
+    memberships: dict[str, set[str]] = {}
+    for item in entities.degree_modules:
+        memberships.setdefault(item.degree, set()).add(item.module_code)
+    for degree in preview["degrees"]:
+        expected = {str(code) for code in degree["codes"]}
+        actual = memberships.get(degree["name"], set())
+        if actual != expected:
+            missing = sorted(expected - actual)
+            unexpected = sorted(actual - expected)
+            raise ImportDataError(
+                f"Degree eligibility changed for {degree['name']}: "
+                f"missing={missing}, unexpected={unexpected}"
+            )
 
 
 def _degree_record(item: dict[str, Any]) -> DegreeRecord:
@@ -192,6 +243,23 @@ def _partner_module_record(item: dict[str, Any]) -> PartnerModuleRecord:
     )
 
 
+def _specialization_record(item: dict[str, Any]) -> SpecializationRecord:
+    """Keep the source kind, order and note for one degree-scoped option."""
+
+    kind = _required_text(item.get("kind"), "specialization kind")
+    if kind not in {"specialization", "focus_area"}:
+        raise ImportDataError(f"Unsupported specialization kind: {kind}")
+    return SpecializationRecord(
+        degree=_required_text(item.get("degree"), "specialization degree"),
+        name=_required_text(item.get("name"), "specialization name"),
+        kind=kind,
+        source_order=_required_int(item.get("source_order"), "specialization source_order"),
+        membership_note=_optional_text(
+            item.get("membership_note"), "specialization membership_note"
+        ),
+    )
+
+
 def _validate_entities(entities: CatalogEntities) -> None:
     """Reject duplicate identities or broken references before database work."""
 
@@ -224,6 +292,36 @@ def _validate_entities(entities: CatalogEntities) -> None:
     for item in entities.partner_modules:
         if item.university not in university_names:
             raise ImportDataError(f"Partner module cites unknown university: {item.university}")
+
+    # Specialization memberships are exported separately and never merged into degree_modules.
+    specialization_keys = _unique_values(
+        ((item.degree, item.name) for item in entities.specializations),
+        "specialization identities",
+    )
+    _unique_values(
+        ((item.degree, item.source_order) for item in entities.specializations),
+        "specialization source orders",
+    )
+    for degree, _ in specialization_keys:
+        if degree not in degree_names:
+            raise ImportDataError(f"Specialization cites unknown degree: {degree}")
+
+    membership_keys = _unique_values(
+        (
+            (item.degree, item.specialization, item.module_code)
+            for item in entities.specialization_modules
+        ),
+        "specialization memberships",
+    )
+    for degree, specialization, module_code in membership_keys:
+        if (degree, specialization) not in specialization_keys:
+            raise ImportDataError(
+                f"Specialization membership cites unknown option: {degree}/{specialization}"
+            )
+        if module_code not in nus_codes:
+            raise ImportDataError(
+                f"Specialization membership cites unknown NUS module: {module_code}"
+            )
 
 
 def _unique_values(values: Any, label: str) -> set[Any]:
@@ -300,7 +398,9 @@ def main() -> int:
         f"{len(entities.universities)} universities, "
         f"{len(entities.nus_modules)} NUS modules, "
         f"{len(entities.partner_modules)} partner modules, "
-        f"{len(entities.degree_modules)} degree memberships"
+        f"{len(entities.degree_modules)} degree memberships, "
+        f"{len(entities.specializations)} specializations/focus areas, "
+        f"{len(entities.specialization_modules)} specialization memberships"
     )
     print(f"Source checksum: {plan.source_checksum}")
     print(f"Repair checksum: {plan.repair_checksum}")
