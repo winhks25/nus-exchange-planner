@@ -1418,8 +1418,9 @@ def _insert_mappings(
               source_nus_units,
               source_partner_title,
               source_partner_units,
-              source_faculty
-            ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+              source_faculty,
+              source_page
+            ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             [
                 (
@@ -1432,6 +1433,7 @@ def _insert_mappings(
                     item.source_partner_title,
                     item.source_partner_units,
                     item.source_faculty,
+                    item.source_page,
                 )
                 for item in plan.mappings
             ],
