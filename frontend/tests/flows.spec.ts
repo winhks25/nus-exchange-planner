@@ -94,7 +94,7 @@ test("Recommend ranks by NUS modules and sizes cards by rank", async ({ page }) 
   const cards = page.getByRole("article");
   await expect(cards).toHaveCount(5);
   await expect(cards.nth(0)).toContainText("Korea University");
-  await expect(cards.nth(1)).toContainText("University of Western Australia, The");
+  await expect(cards.nth(1)).toContainText("University of Western Australia");
   await expect(cards.nth(2)).toContainText("University of Toronto");
   await expect(cards.nth(3)).toContainText("Yonsei University");
   await expect(cards.nth(4)).toContainText("Kyoto University");

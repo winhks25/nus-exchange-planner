@@ -32,13 +32,13 @@ const compareMappings: MappingResult = {
   ],
 };
 
-test("the approved hero uses the project font and decorative travel illustrations", async ({ page }) => {
+test("the approved hero uses Comic Sans and decorative travel illustrations", async ({ page }) => {
   await page.goto("/");
   const heading = page.getByRole("heading", { level: 1 });
   await expect(heading).toHaveCount(1);
   await expect(heading).toHaveText(HERO_TEXT);
   expect(await computedStyle(page, "h1", "font-family")).toBe(
-    await computedStyle(page, "body", "font-family"),
+    '"Comic Sans MS", "Comic Sans", cursive',
   );
   expect(await computedStyle(page, "h1", "font-weight")).toBe("500");
   const hero = page.getByTestId("recommend-hero");

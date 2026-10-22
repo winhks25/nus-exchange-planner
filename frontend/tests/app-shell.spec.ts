@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const BRAND_TEXT = "nus exchange planner";
+const BRAND_TEXT = "NUS Exchange Planner";
 
 // Exact sidebar link contract: label text and route.
 const NAV_ITEMS = [
@@ -52,12 +52,12 @@ test.describe("reference geometry at 1888x1337", () => {
     expectNear((await frameGeometry(page)).width, 1745);
 
     const headerBox = await header.boundingBox();
-    expectNear(headerBox!.y + headerBox!.height, 102);
-    expectNear(headerBox!.height, 88);
+    expectNear(headerBox!.y + headerBox!.height, 74);
+    expectNear(headerBox!.height, 60);
 
     const brandBox = await header.getByRole("link").boundingBox();
-    expectNear(brandBox!.x, 83);
-    expectNear(brandBox!.y, 44);
+    expectNear(brandBox!.x, 84);
+    expectNear(brandBox!.y, 29);
   });
 
   test("the Mappings frame keeps the same shell geometry", async ({ page }) => {
@@ -192,21 +192,21 @@ test.describe("reference sidebar geometry at 1888x1337", () => {
     const nav = page.getByRole("navigation");
     const navBox = await nav.boundingBox();
 
-    // Rail starts at the frame edge; the divider edge sits at x303.
-    expectNear(navBox!.x, 18);
+    // Rail is inset 30px from the frame edge; the divider edge sits at x303.
+    expectNear(navBox!.x, 48);
     expectNear(navBox!.x + navBox!.width, 303);
 
-    // Link rows at y210 and y284 with icon x45 and text x83 anchors.
-    for (const [{ label }, top] of NAV_ITEMS.map((item, i) => [item, i === 0 ? 210 : 284] as const)) {
+    // Link rows at y134 and y208 with icon x68 and text x106 anchors.
+    for (const [{ label }, top] of NAV_ITEMS.map((item, i) => [item, i === 0 ? 134 : 208] as const)) {
       const link = nav.getByRole("link", { name: label, exact: true });
       const linkBox = await link.boundingBox();
       expectNear(linkBox!.y, top);
 
       // Icons are decorative line art aligned to the row anchors.
       const iconBox = await link.locator("svg").boundingBox();
-      expectNear(iconBox!.x, 45);
+      expectNear(iconBox!.x, 68);
       const textBox = await link.locator("span").boundingBox();
-      expectNear(textBox!.x, 83);
+      expectNear(textBox!.x, 106);
     }
   });
 

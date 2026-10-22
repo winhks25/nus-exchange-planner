@@ -89,7 +89,7 @@ def test_current_catalog_and_consistency():
     ) == (9, 6, 9)
     western = client.get(
         "/api/v1/mappings",
-        params={"degree": "Business Analytics", "uni": "University of Western Australia, The"},
+        params={"degree": "Business Analytics", "uni": "University of Western Australia"},
     ).json()
     assert western["partner_module_count"] == 19
     assert len(western["mappings"]) == 22

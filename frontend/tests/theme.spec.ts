@@ -19,9 +19,9 @@ const NAV_GRAY = "rgb(163, 163, 163)";
 const PLACEHOLDER_GRAY = "rgb(174, 177, 181)";
 const BORDER_GRAY = "rgb(72, 72, 72)";
 const SUBTLE_GRAY = "rgb(41, 41, 41)";
-// Accent follows the user's committed cyan override of --primary/--ring.
-const ACCENT = "rgb(0, 197, 255)";
-const RING = "rgb(0, 249, 255)";
+// Accent follows the committed override of --primary/--ring.
+const ACCENT = "rgb(113, 182, 243)";
+const RING = "rgb(169, 215, 250)";
 
 async function computed(
   locator: Locator,
@@ -88,7 +88,7 @@ test("body and existing chrome use the source type scale and gray palette", asyn
   ]);
   expect(hero["font-size"]).toBe("40px");
   expect(hero["font-weight"]).toBe("500");
-  expect(hero["line-height"]).toBe("48px");
+  expect(hero["line-height"]).toBe("44px");
   expect(hero.color).toBe(EMPHASIS);
 
   const brand = await computed(page.locator("header").getByRole("link"), [
@@ -123,7 +123,7 @@ test("body and existing chrome use the source type scale and gray palette", asyn
     .toBe(ACCENT);
 
   await expect(page.getByRole("link", { name: "Recommend" })).toHaveAttribute("href", "/");
-  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Ready to Study Abroad?");
   await expect(page.getByRole("article")).toHaveCount(0);
 });
 
