@@ -100,22 +100,51 @@ snapshot timestamp and therefore new file digests; update this README when
 regenerating. The generator must be retired together with the importer once these
 frozen fixtures and the final-schema seeder are in use.
 
-## Loading the upgrade fixture
+## Harness workflow
 
-Load the SQL only into a disposable local database that has migrations applied
-through `20261022000300` and has the roles required by the migration chain. The
-T011 harness adds the `create_database(through=...)` and
-`apply_next_migration(...)` helpers used by the tests:
+`backend/scripts/postgres_validation.py` exposes an explicit migration ceiling
+and a one-migration-at-a-time helper:
 
-```bash
-psql -X -v ON_ERROR_STOP=1 -d "<local-disposable-database>" \
-  -f backend/tests/fixtures/pre_catalog_removal.sql
+```python
+from pathlib import Path
+
+from scripts.postgres_validation import LEGACY_MIGRATION_CEILING, PostgresCluster
+
+cluster = PostgresCluster()
+cluster.start()
+try:
+    database = cluster.create_database(through=LEGACY_MIGRATION_CEILING)
+    database.execute_file(Path("backend/tests/fixtures/pre_catalog_removal.sql"))
+    advanced = cluster.apply_next_migration(database)
+finally:
+    cluster.stop()
 ```
+
+- `create_database()` keeps the default full migration replay.
+- `create_database(through=...)` applies the prefix ending at the named version
+  and records it on `DatabaseTarget.applied_migrations`.
+- `DatabaseTarget.execute_file(path)` runs a SQL fixture with `psql
+  ON_ERROR_STOP=1`.
+- `apply_next_migration(database)` applies exactly one pending migration,
+  returns the updated target, and raises when none remain or SQL fails.
+- An unknown ceiling raises before a database is created.
 
 The fixture uses `OVERRIDING SYSTEM VALUE` for identity columns and restores
 sequence values with `setval`, so it is intended for an empty schema at the
 ceiling, not for an already-populated database. Archive triggers are
 BEFORE UPDATE/DELETE or TRUNCATE triggers, so the data load itself is allowed.
+
+The removal migration itself is created later in T027. Until then,
+`backend/tests/test_catalog_table_removal.py` proves the ceiling, fixture load,
+single-next-migration behavior, SQL-error propagation, default replay, and
+external-target rejection with an isolated temporary next migration. T032 and
+T064 then run the real removal migration through the same helper.
+
+Run the current harness checks with:
+
+```bash
+uv run --directory backend pytest -q tests/test_catalog_table_removal.py
+```
 
 ## Cross-check evidence
 

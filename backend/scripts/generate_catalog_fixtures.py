@@ -21,13 +21,17 @@ from psycopg.types.json import Jsonb
 from scripts.catalog_preview import build_preview
 from scripts.catalog_seed import seed_preview
 from scripts.import_catalog import apply_plan, build_import_plan
-from scripts.postgres_validation import REPO_ROOT, DatabaseTarget, PostgresCluster
+from scripts.postgres_validation import (
+    LEGACY_MIGRATION_CEILING,
+    REPO_ROOT,
+    DatabaseTarget,
+    PostgresCluster,
+)
 from scripts.snapshot_core_data import _compare_snapshots, read_snapshot
 
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "backend" / "tests" / "fixtures"
 CORE_FILENAME = "core_dataset.json"
 UPGRADE_FILENAME = "pre_catalog_removal.sql"
-LEGACY_MIGRATION_CEILING = "20261022000300"
 BASELINE_PATH = (
     REPO_ROOT / "plan" / "remove-catalog-tables" / "baseline-responses.json"
 )

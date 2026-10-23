@@ -6,15 +6,16 @@ import socket
 import subprocess
 import time
 import uuid
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from urllib.parse import urlsplit
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-MIGRATIONS = sorted((REPO_ROOT / "supabase" / "migrations").glob("*.sql"))
+MIGRATIONS = tuple(sorted((REPO_ROOT / "supabase" / "migrations").glob("*.sql")))
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
+LEGACY_MIGRATION_CEILING = "20261022000300"
 
 # Disposable local clusters use trust authentication; these passwords only make
 # the role-bearing connection URLs explicit and are never used for a remote server.
@@ -61,6 +62,25 @@ def _free_port() -> int:
         return int(sock.getsockname()[1])
 
 
+def migration_version(path: Path) -> str:
+    """Return the leading version from a migration filename."""
+
+    return path.name.split("_", 1)[0]
+
+
+def _select_migrations(
+    migrations: Sequence[Path], through: str | None
+) -> tuple[Path, ...]:
+    """Return the migration prefix up to and including an explicit ceiling."""
+
+    if through is None:
+        return tuple(migrations)
+    for index, migration in enumerate(migrations):
+        if migration_version(migration) == through:
+            return tuple(migrations[: index + 1])
+    raise ValueError(f"unknown migration ceiling {through!r}")
+
+
 def require_local_database_url(url: str, label: str = "test database") -> None:
     """Refuse any configured test target that is not a local disposable server."""
 
@@ -80,6 +100,7 @@ class DatabaseTarget:
 
     cluster: "PostgresCluster"
     name: str
+    applied_migrations: tuple[Path, ...] = ()
 
     @property
     def owner_url(self) -> str:
@@ -126,14 +147,38 @@ class DatabaseTarget:
         if result.returncode != 0:
             raise RuntimeError(f"SQL failed: {result.stderr.strip()}")
 
+    def execute_file(self, path: Path) -> None:
+        """Run a SQL file as the database owner and fail on any statement error."""
+
+        result = subprocess.run(
+            [
+                self.cluster.psql,
+                "-X",
+                "-v",
+                "ON_ERROR_STOP=1",
+                "-d",
+                self.owner_url,
+                "-f",
+                str(path),
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            raise RuntimeError(f"SQL file failed: {path.name}: {result.stderr.strip()}")
+
 
 class PostgresCluster:
     """One temporary PostgreSQL server used by database-backed tests."""
 
-    def __init__(self) -> None:
+    def __init__(self, migrations: Sequence[Path] | None = None) -> None:
         self._initdb = _find_binary("initdb")
         self._pg_ctl = _find_binary("pg_ctl")
         self.psql = _find_binary("psql")
+        self.migrations = tuple(
+            sorted(migrations if migrations is not None else MIGRATIONS)
+        )
         self.port = _free_port()
         self._temp_dir = Path(
             os.environ.get("TMPDIR", "/tmp")
@@ -245,15 +290,39 @@ class PostgresCluster:
             )
         shutil.rmtree(self._temp_dir, ignore_errors=True)
 
-    def create_database(self) -> DatabaseTarget:
-        """Create an empty database, apply every migration, and provision test roles."""
+    def create_database(self, through: str | None = None) -> DatabaseTarget:
+        """Create a migrated database, optionally stopping at an explicit ceiling."""
 
-        database = DatabaseTarget(self, f"catalog_test_{uuid.uuid4().hex[:12]}")
+        applied = _select_migrations(self.migrations, through)
+        database = DatabaseTarget(
+            self,
+            f"catalog_test_{uuid.uuid4().hex[:12]}",
+            applied_migrations=applied,
+        )
         self._run_psql("postgres", f'create database "{database.name}"')
-        for migration in MIGRATIONS:
+        for migration in applied:
             self._run_psql(database.name, None, migration)
         self._run_psql(database.name, ROLE_SETUP_SQL)
         return database
+
+    def apply_next_migration(self, database: DatabaseTarget) -> DatabaseTarget:
+        """Apply exactly one pending migration and return the updated target."""
+
+        if database.cluster is not self:
+            raise RuntimeError("database belongs to a different PostgreSQL cluster")
+        applied = database.applied_migrations
+        if self.migrations[: len(applied)] != applied:
+            raise RuntimeError(
+                "database migration state is not a prefix of the available migrations"
+            )
+        if len(applied) == len(self.migrations):
+            raise RuntimeError("no pending migrations to apply")
+        migration = self.migrations[len(applied)]
+        self._run_psql(database.name, None, migration)
+        return replace(
+            database,
+            applied_migrations=(*applied, migration),
+        )
 
     def drop_database(self, database: DatabaseTarget) -> None:
         """Drop a test database, terminating any leftover pooled sessions."""
