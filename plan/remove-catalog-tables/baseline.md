@@ -61,3 +61,93 @@ MCP connection and read-only SQL instead; no secret value was printed.
   baseline checks section appended by T005.
 - No operational command may depend on the five metadata tables after the removal
   migration is applied.
+
+## Baseline checks before editing (T005)
+
+All checks ran on 2026-10-23 before any implementation edit. The repository had
+no tracked modifications at the time.
+
+### Toolchain availability
+
+| Tool | Version / availability |
+| --- | --- |
+| macOS | 26.5.1 (build 25F80) |
+| git | 2.56.0 |
+| uv | 0.13.0 |
+| Python used by `uv` | 3.12.14 |
+| Host `python3` | 3.14.2 |
+| Node.js | 22.23.3 |
+| npm | 10.9.9 |
+| Playwright (local package) | 1.56.1 |
+| Installed Playwright browsers | Chromium 1194 and 1243, headless shells, FFmpeg |
+| PostgreSQL binaries | `initdb`, `pg_ctl`, and `psql` 15.15 (Homebrew) |
+| OpenSSL | 4.0.3 |
+| Supabase CLI | 2.121.0 through `npx --yes supabase@latest` |
+| psycopg | 3.3.6 |
+
+`uv`, Node, npm, Playwright, PostgreSQL, and OpenSSL are available. The Supabase
+CLI is available only through `npx` and has no authenticated linked session, as
+recorded in the target verification section above.
+
+### Commands and results
+
+| Command | Exit | Result |
+| --- | ---: | --- |
+| `bash scripts/check-migration-regressions.sh` | 1 | Backend and JSON browser suites passed; PostgreSQL browser suite had one failure |
+| `npm --prefix frontend run lint` | 0 | ESLint completed with no reported problems |
+| `npm --prefix frontend run typecheck` | 0 | `tsc --noEmit` completed |
+| `npm --prefix frontend run build` | 0 | Next.js production build completed; routes `/`, `/mappings`, and `/_not-found` generated |
+| `cd frontend && TEST_CATALOG_BACKEND=postgres npx playwright test tests/database-regression.spec.ts --reporter=line` | 0 | Isolated rerun: 8 passed in 1.5m |
+
+The regression script unsets inherited `CATALOG_BACKEND`, `DATABASE_URL`,
+`IMPORT_DATABASE_URL`, `TEST_DATABASE_URL`, and `TEST_CATALOG_BACKEND`, so it did
+not contact a developer or production database.
+
+### Regression script details
+
+| Stage | Exit | Counts | Notes |
+| --- | ---: | --- | --- |
+| Backend pytest | 0 | 60 passed, 1 warning | Warning: Starlette deprecation recommending `httpx2` |
+| JSON Playwright | 0 | 65 passed in 44.9s | `database-regression.spec.ts` is excluded by `playwright.config.ts` in JSON mode |
+| PostgreSQL Playwright | 1 | 72 passed, 1 failed in 1.3m | Failure described below; all 73 tests were attempted |
+
+Failure:
+
+```text
+tests/database-regression.spec.ts:48:5
+degree selection navigates to imported Toronto recommendations
+
+Locator: locator('.mapping-row')
+Expected: 10
+Received: 0
+Timeout: 5000ms
+at frontend/tests/database-regression.spec.ts:66
+```
+
+The URL assertion immediately before the row count passed, so the click and route
+update occurred, but the mapping rows had not rendered within five seconds. The
+same test passed when the PostgreSQL database-regression file was rerun alone
+with one worker (8/8 passed). Because no source code changed between runs, this is
+classified as a pre-existing timing flake under four-worker parallel load, not a
+regression introduced by Phase 1.
+
+### Skips and warnings
+
+- Backend: no skipped tests.
+- JSON browser mode: the PostgreSQL-only `database-regression.spec.ts` file is
+  intentionally excluded by configuration.
+- PostgreSQL browser mode: no skipped tests.
+- Next.js reported that `@next/swc-darwin-arm64` was not installed and fell back
+  to the available compiler path; the build still succeeded.
+- Next.js warned that a `package-lock.json` exists above the repository root.
+  This does not affect the build and is not a Phase 1 blocker.
+- Starlette warned that `httpx` with `TestClient` is deprecated. This is existing
+  dependency debt.
+
+### Baseline conclusion
+
+The backend, JSON browser behavior, lint, typecheck, and production build are
+green. The current PostgreSQL browser gate is red only for one
+`database-regression.spec.ts` case that passed in isolation. This failure must
+not be hidden or weakened; T021 and T057/T069 should rerun the PostgreSQL flows
+and investigate the timing before the final gate.
