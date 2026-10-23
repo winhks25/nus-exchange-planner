@@ -151,3 +151,85 @@ green. The current PostgreSQL browser gate is red only for one
 `database-regression.spec.ts` case that passed in isolation. This failure must
 not be hidden or weakened; T021 and T057/T069 should rerun the PostgreSQL flows
 and investigate the timing before the final gate.
+
+## Pre-change PostgreSQL API baseline (T008)
+
+The dedicated pre-change baseline is
+`plan/remove-catalog-tables/baseline-responses.json`. It is a new snapshot from
+the verified PostgreSQL-backed production API, not a copy of the historical
+JSON-only baseline in `plan/supabase-migration/baseline-responses.json`.
+
+| Item | Value |
+| --- | --- |
+| Endpoint origin | `https://nus-exchange-planner-api.vercel.app` |
+| Capture command | `uv run --directory backend python -m scripts.compare_api_baseline capture --base-url https://nus-exchange-planner-api.vercel.app --expected-origin https://nus-exchange-planner-api.vercel.app --timeout 10 --max-requests 200` |
+| Baseline captured | `2026-10-23T14:42:17.452174+00:00` (Asia/Singapore: 22:42) |
+| Request window | `2026-10-23T14:42:15.829126+00:00` to `2026-10-23T14:43:19.121088+00:00` |
+| Requests captured | 41 read-only `GET` requests |
+| Request bounds | 10-second timeout per request, 200-request ceiling, 2 MB response ceiling |
+| Baseline bytes / SHA-256 | `102059` / `0f31a6e417ff4614464a95da578339a8c8c51b638f252a03d5f86a89b4ef7ee0` |
+| Capture Git revision | `4d3442d189a0baddb03e80b60d040d4475a94d5c` |
+| Mutation performed | None; the utility issues only bounded `GET` requests |
+
+### Captured request set
+
+| Case | Count | Parameters |
+| --- | ---: | --- |
+| Catalog | 1 | none |
+| Recommendations | 6 | one request per discovered degree name |
+| Mappings | 30 | every discovered degree/university pair |
+| Error responses | 4 | two missing-parameter `422` cases and two unknown-selection `404` cases |
+
+The six degrees and five universities were discovered from the production
+catalog response, not hardcoded. Each case records its exact method, path,
+parameters, URL, request timestamp, status, and parsed body. Arrays retain their
+server order, and optional `title`/`units` fields retain their presence or
+absence.
+
+Representative error cases captured:
+
+| Case | Status | Body detail |
+| --- | ---: | --- |
+| `missing_recommendation_degree` | 422 | `loc: ["query", "degree"]` |
+| `missing_mapping_university` | 422 | `loc: ["query", "uni"]` |
+| `unknown_degree` | 404 | `Unknown degree` |
+| `unknown_university` | 404 | `Unknown degree or university` |
+
+Valid empty pairs are part of the 30 mapping requests:
+`Artificial Intelligence / University of Western Australia`,
+`Computer Science / University of Western Australia`, and
+`Computer Science / Yonsei University` all returned `200` with zero mappings.
+
+### Endpoint mode and data boundary
+
+The endpoint is PostgreSQL-backed. `Artificial Intelligence / University of
+Toronto` returned `mapping_count=10`, `distinct_nus_module_count=6`, and
+`partner_module_count=10`, matching the repaired PostgreSQL catalog rather than
+the frozen JSON count of 9.
+
+The read-only database boundary was checked immediately before and after the
+capture through the configured Supabase MCP connection. The final boundary check
+at `2026-10-23T14:49:34.660857+00:00` returned:
+
+| Table | Rows | Table | Rows |
+| --- | ---: | --- | ---: |
+| `catalog_import_batches` | 1 | `degrees` | 6 |
+| `catalog_source_snapshots` | 8 | `nus_modules` | 152 |
+| `catalog_source_rows` | 154 | `degree_modules` | 226 |
+| `catalog_issues` | 34 | `specializations` | 19 |
+| `catalog_repairs` | 44 | `specialization_modules` | 30 |
+| `partner_universities` | 5 | `pu_modules` | 142 |
+| `module_mappings` | 151 | | |
+
+Migration history remained `20261022000100`, `20261022000200`, and
+`20261022000300`. The counts match the T006 inventory and the earlier T004
+boundary, so the captured responses correspond to the recorded 151 mapping rows
+and six degrees/five universities.
+
+### Utility validation
+
+Immediately after capture, comparison mode replayed all 41 requests against the
+same endpoint and reported zero differences and zero request failures. A
+deliberately altered temporary copy of the baseline produced one reported
+difference and exit status 1 without modifying the baseline. Formal local-fixture
+and post-deletion comparison remain T040-T042.
