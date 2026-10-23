@@ -1,0 +1,5394 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-23T15:01:41.105417+00:00",
+  "tool": {
+    "name": "snapshot_core_data",
+    "version": "1.0"
+  },
+  "target": {
+    "host": "127.0.0.1",
+    "database": "catalog_test_db3053149723",
+    "project_ref": null,
+    "server_version": "15.15 (Homebrew)"
+  },
+  "migration_versions": [],
+  "tables": {
+    "degrees": {
+      "columns": [
+        "id",
+        "name",
+        "faculty",
+        "full_title",
+        "source_order"
+      ],
+      "row_count": 6,
+      "fingerprint": "sha256:b4f2b9475925f98458d3e73922890a2c2f17451f7023a21d83674ea6a057a45b",
+      "rows": [
+        {
+          "id": 1,
+          "name": "Artificial Intelligence",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Artificial Intelligence)",
+          "source_order": 0
+        },
+        {
+          "id": 3,
+          "name": "Business Artificial Intelligence Systems",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Business Artificial Intelligence Systems)",
+          "source_order": 2
+        },
+        {
+          "id": 4,
+          "name": "Computer Science",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Computer Science)",
+          "source_order": 3
+        },
+        {
+          "id": 6,
+          "name": "Information Security",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Information Security)",
+          "source_order": 5
+        },
+        {
+          "id": 5,
+          "name": "Information Systems",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Information Systems)",
+          "source_order": 4
+        },
+        {
+          "id": 2,
+          "name": "Business Analytics",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Science (Business Analytics)",
+          "source_order": 1
+        }
+      ]
+    },
+    "nus_modules": {
+      "columns": [
+        "code",
+        "name",
+        "offering_faculty",
+        "verified_units"
+      ],
+      "row_count": 152,
+      "fingerprint": "sha256:4da6d62d48e894b8cb7ba0e14c104e5b5dc6fee54ce8801ad54b2d602ddc6ec8",
+      "rows": [
+        {
+          "code": "BT1101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT2101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT2102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3017",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3104",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4012",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4013",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4014",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4015",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4016",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4211",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4212",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4221",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4222",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4240",
+          "name": "Machine Learning for Predictive Data Analytics",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4241",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4301",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3100",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3107",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3110",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3200",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3202",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3880",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP4101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS1010E",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS1231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS1231S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2030",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2030S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2040",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2040C",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2040S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2100",
+          "name": "Computer Organisation",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2103T",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2104",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2105",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2106",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2107",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2109S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2251",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3210",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3213",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3221",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3230",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3235",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3236",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3237",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3240",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3241",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3243",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3244",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3247",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3263",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3264",
+          "name": "Foundations of Machine Learning",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3268",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4211",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4212",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4215",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4218",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4220",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4222",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4225",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4230",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4236",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4238",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4239",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4240",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4243",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4244",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4246",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4248",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4249",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4257",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4261",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4262",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4268",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4276",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4277",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4278",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4347",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5224",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5242",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5321",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5322",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5331",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5332",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "DBA4811",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IE3120",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4205",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2108",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2109",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3106",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3107",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3108",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3109",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3150",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3221",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3240",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3251",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4010",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4100",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4108",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4151",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4152",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4204",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4226",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4228",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4233",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4234",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4236",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4238",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4241",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4242",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4243",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4246",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4248",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4250",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4261",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4262",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4301",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4302",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4303",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4400",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4401",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4402",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4403",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IT1244",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IT2002",
+          "name": "Database Technology and Management",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "MA1521",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "MA1522",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "MA4261",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "ST2334",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "ST4245",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "TR3202",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        }
+      ]
+    },
+    "degree_modules": {
+      "columns": [
+        "degree_id",
+        "module_code",
+        "requirement_type"
+      ],
+      "row_count": 226,
+      "fingerprint": "sha256:27692889c6e5385f43ad53f1c95d4afd6d9a85aa336c155ab5b3429b589cbe7f",
+      "rows": [
+        {
+          "degree_id": 1,
+          "module_code": "CS1231S",
+          "requirement_type": "listed:required.mathematics_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2030S",
+          "requirement_type": "listed:required.computing_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2040S",
+          "requirement_type": "listed:required.computing_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2101",
+          "requirement_type": "listed:required.computing_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2103T",
+          "requirement_type": "listed:required.computing_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2109S",
+          "requirement_type": "listed:required.ai_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2251",
+          "requirement_type": "listed:required.mathematics_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3230",
+          "requirement_type": "listed:required.computing_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3263",
+          "requirement_type": "listed:required.ai_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3264",
+          "requirement_type": "listed:required.ai_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3268",
+          "requirement_type": "listed:required.ai_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4220",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4225",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4240",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4243",
+          "requirement_type": "choice:required.perception_choose_one"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4244",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4246",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4248",
+          "requirement_type": "choice:required.perception_choose_one"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4261",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4262",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4277",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4278",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4347",
+          "requirement_type": "choice:electives.ai_technical_electives_choose_min_12_units"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "MA1521",
+          "requirement_type": "listed:required.mathematics_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "MA1522",
+          "requirement_type": "listed:required.mathematics_foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "ST2334",
+          "requirement_type": "listed:required.mathematics_foundations"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT2101",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT2102",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3017",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Machine Learning-based Analytics; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3102",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3103",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3104",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4012",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Financial Analytics; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4013",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4014",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Machine Learning-based Analytics; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4015",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4016",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4101",
+          "requirement_type": "choice:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4103",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4211",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4212",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4221",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Financial Analytics; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4222",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Machine Learning-based Analytics; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4240",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4241",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4301",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CP3100",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS2030",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS2040",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS3243",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS3244",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS4248",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "DBA4811",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IE3120",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS2101",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3103",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3107",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3150",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3221",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3240",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4226",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4228",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4234",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4241",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications; choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4242",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4246",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Machine Learning-based Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4250",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4262",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.business_applications; specialization:Marketing Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4302",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4303",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.digital_and_it; specialization:Financial Analytics"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "MA1521",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "MA1522",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "ST2334",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "ST4245",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_constraints_3_level_4000_min_3_bt_coded.methodological_analytics"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT2102",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT3017",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT4014",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT4221",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT4301",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CP3100",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CP4101",
+          "requirement_type": "choice:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2030",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2040",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2105",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2107",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IFS4101",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2101",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2102",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2108",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2109",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3103",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3107",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3108",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3109",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3150",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3221",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3240",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3251",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4100",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4108",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4151",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4152",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4226",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4228",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4231",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4233",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4234",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4236",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4238",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4241",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4243",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4246",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4248",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4250",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4261",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4262",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4301",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4302",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4303",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4400",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4401",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4402",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4403",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "MA1521",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "MA1522",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 3,
+          "module_code": "ST2334",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS1231S",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2030S",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2040S",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2100",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2101",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2103T",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2106",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2109S",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS3230",
+          "requirement_type": "listed:required.computer_science_foundation"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "MA1521",
+          "requirement_type": "listed:required.mathematics_and_sciences"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "MA1522",
+          "requirement_type": "listed:required.mathematics_and_sciences"
+        },
+        {
+          "degree_id": 4,
+          "module_code": "ST2334",
+          "requirement_type": "listed:required.mathematics_and_sciences"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "BT2102",
+          "requirement_type": "choice:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "BT3017",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "BT4014",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CP4101",
+          "requirement_type": "choice:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2030",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2040",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2102",
+          "requirement_type": "choice:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2105",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2107",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS3240",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS3243",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IFS4101",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS2101",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS2102",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS2103",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3103",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3106",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3107",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3150",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3221",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3240",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3251",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4100",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4103",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4151",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4152",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4226",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4228",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4231",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4233",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4234",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4236",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4238",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4241",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4242",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4243",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4246",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4248",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4250",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4261",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4262",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4301",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4302",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4303",
+          "requirement_type": "choice:electives.programme_electives_choose_5_20_units_at_least_3_level_4000"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "MA1521",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 5,
+          "module_code": "ST2334",
+          "requirement_type": "listed:required.core"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3107",
+          "requirement_type": "listed:electives.industry_experience"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3110",
+          "requirement_type": "listed:electives.industry_experience"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3200",
+          "requirement_type": "listed:electives.industry_experience"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3202",
+          "requirement_type": "listed:electives.industry_experience"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3880",
+          "requirement_type": "listed:electives.industry_experience"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS1231S",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2030",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2040C",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2100",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2101",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2103T",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2105",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2106",
+          "requirement_type": "listed:required.computing_foundation"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2107",
+          "requirement_type": "listed:required.information_security"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS3235",
+          "requirement_type": "listed:required.information_security"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4230",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4236",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4238",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units; choice:required.information_security"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4239",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4257",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4276",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5231",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5321",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5322",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5331",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5332",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4101",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4102",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4103",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units; choice:required.information_security"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4205",
+          "requirement_type": "choice:required.information_security"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4010",
+          "requirement_type": "listed:electives.industry_experience"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4204",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4231",
+          "requirement_type": "listed:required.information_security"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4233",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4234",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4238",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4302",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "MA1521",
+          "requirement_type": "listed:required.mathematics"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "MA1522",
+          "requirement_type": "listed:required.mathematics"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "MA4261",
+          "requirement_type": "choice:electives.information_security_electives_choose_8_units"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "ST2334",
+          "requirement_type": "listed:required.mathematics"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "TR3202",
+          "requirement_type": "listed:electives.industry_experience"
+        }
+      ]
+    },
+    "partner_universities": {
+      "columns": [
+        "id",
+        "name",
+        "country",
+        "city",
+        "continent",
+        "source_order"
+      ],
+      "row_count": 5,
+      "fingerprint": "sha256:c168d315430f360c3d21c688c58ae42cbadeac3891a34c53da30e62c9c66c4fc",
+      "rows": [
+        {
+          "id": 1,
+          "name": "University of Western Australia",
+          "country": "Australia",
+          "city": null,
+          "continent": null,
+          "source_order": 0
+        },
+        {
+          "id": 2,
+          "name": "University of Toronto",
+          "country": "Canada",
+          "city": null,
+          "continent": null,
+          "source_order": 1
+        },
+        {
+          "id": 3,
+          "name": "Kyoto University",
+          "country": "Japan",
+          "city": null,
+          "continent": null,
+          "source_order": 2
+        },
+        {
+          "id": 4,
+          "name": "Korea University",
+          "country": "South Korea",
+          "city": null,
+          "continent": null,
+          "source_order": 3
+        },
+        {
+          "id": 5,
+          "name": "Yonsei University",
+          "country": "South Korea",
+          "city": null,
+          "continent": null,
+          "source_order": 4
+        }
+      ]
+    },
+    "pu_modules": {
+      "columns": [
+        "id",
+        "code",
+        "name",
+        "partner_university_id",
+        "verified_units"
+      ],
+      "row_count": 142,
+      "fingerprint": "sha256:56350759a44df29440bdbd12ef58993117e23e44930261e7a0d33eacc47bd814",
+      "rows": [
+        {
+          "id": 43,
+          "code": "ACT350",
+          "name": "Applied Probability for Actuarial Science",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 121,
+          "code": "AIC2120",
+          "name": "INTRODUCTION TO AI AND ITS APPLICATIONS",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 44,
+          "code": "APS360H1",
+          "name": "Applied Fundamentals of Deep Learning",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 45,
+          "code": "BCB420H1",
+          "name": "Computational Systems Biology",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 122,
+          "code": "BIZ3189-04",
+          "name": "MANAGEMENT INFORMATION SYSTEMS",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 1,
+          "code": "BNCS411",
+          "name": "INTRODUCTION TO BRAIN AND MACHINE LEARNING",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 92,
+          "code": "BUSN5001",
+          "name": "Blockchain and Distributed Ledger Technologies in Business",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 2,
+          "code": "BUSS 216",
+          "name": "Business Analytics I (English)",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 3,
+          "code": "BUSS215",
+          "name": "INTRODUCTION TO MANAGEMENT INFORMATION SYSTEMS(English)",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 4,
+          "code": "BUSS217",
+          "name": "Business Analytics II",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 5,
+          "code": "BUSS305",
+          "name": "Artificial Intelligence for Business (English)\"",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 6,
+          "code": "BUSS316",
+          "name": "Operations Analytics (English)",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 7,
+          "code": "BUSS317",
+          "name": "Social Media Analytics",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 8,
+          "code": "BUSS410",
+          "name": "Technological Innovation Management: A Pre-requisite for Successful Entrepreneurship",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 9,
+          "code": "BUSS475",
+          "name": "Internet Marketing",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 123,
+          "code": "CAS3116",
+          "name": "COMPUTER VISION",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 124,
+          "code": "CAS3120-01",
+          "name": "MACHINE LEARNING",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 93,
+          "code": "CITS1402",
+          "name": "Relational Database Management Systems",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 94,
+          "code": "CITS2200",
+          "name": "Data Structures and Algorithms",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 95,
+          "code": "CITS3001",
+          "name": "Algorithms, Agents and Artificial Intelligence",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 96,
+          "code": "CITS3002",
+          "name": "Computer Networks",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 97,
+          "code": "CITS3004",
+          "name": "Cybersecurity",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 98,
+          "code": "CITS3006",
+          "name": "Penetration Testing",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 99,
+          "code": "CITS3007",
+          "name": "Secure Coding",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 100,
+          "code": "CITS3301",
+          "name": "Software Requirements and Design",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 101,
+          "code": "CITS4009",
+          "name": "Computational Data Analysis",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 102,
+          "code": "CITS4404",
+          "name": "Artificial Intelligence and Adaptive Systems",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 103,
+          "code": "CITS4419",
+          "name": "Mobile and Wireless Computing",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 104,
+          "code": "CITS5503",
+          "name": "Cloud Computing",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 105,
+          "code": "CITS5506",
+          "name": "The Internet of Things",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 106,
+          "code": "CITS5507",
+          "name": "High Performance Computing",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 10,
+          "code": "COSE 213",
+          "name": "Data Structures",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 11,
+          "code": "COSE 342",
+          "name": "Computer Network",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 12,
+          "code": "COSE 362",
+          "name": "Machine Learning",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 13,
+          "code": "COSE101",
+          "name": "Computer Programming I",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 14,
+          "code": "COSE211",
+          "name": "Discrete Mathematics",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 15,
+          "code": "COSE212",
+          "name": "PROGRAMMING LANGUAGES",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 16,
+          "code": "COSE214",
+          "name": "ALORITHMS",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 17,
+          "code": "COSE215",
+          "name": "THEORY OF COMPUTATION",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 18,
+          "code": "COSE331",
+          "name": "COMPUTER GRAPHICS",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 19,
+          "code": "COSE341",
+          "name": "Operating Systems",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 20,
+          "code": "COSE342",
+          "name": "Computer Network",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 21,
+          "code": "COSE361",
+          "name": "Artificial Intelligence (English)",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 22,
+          "code": "COSE371",
+          "name": "Databases",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 23,
+          "code": "COSE389",
+          "name": "ENTREPRENEURSHIP & LEADERSHIP",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 24,
+          "code": "COSE432",
+          "name": "HUMAN COMPUTER INTERACTION",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 25,
+          "code": "COSE436",
+          "name": "Interactive Visualization",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 26,
+          "code": "COSE442",
+          "name": "Wireless Communications",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 27,
+          "code": "COSE461",
+          "name": "NATURAL LANGUAGE PROCESSING",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 28,
+          "code": "COSE474",
+          "name": "Deep Learning",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 46,
+          "code": "CSC301H1",
+          "name": "Introduction to Software Engineering",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 47,
+          "code": "CSC302H1",
+          "name": "Engineering Large Software Systems",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 48,
+          "code": "CSC309H1",
+          "name": "Programming on the Web",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 49,
+          "code": "CSC311H1",
+          "name": "Introduction to Machine Learning",
+          "partner_university_id": 2,
+          "verified_units": "0.50"
+        },
+        {
+          "id": 50,
+          "code": "CSC317H1",
+          "name": "Computer Graphics",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 51,
+          "code": "CSC322H5",
+          "name": "Introduction to Algebraic Cryptography",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 52,
+          "code": "CSC324H1",
+          "name": "Principles of Programming Languages",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 53,
+          "code": "CSC326H1",
+          "name": "Programming Languages",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 54,
+          "code": "CSC343H1",
+          "name": "Introduction to Databases",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 55,
+          "code": "CSC3465H1",
+          "name": "Formal Methods in Software Design",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 56,
+          "code": "CSC358H1",
+          "name": "Principles of Computer Networks",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 57,
+          "code": "CSC367H1",
+          "name": "Parallel Programming",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 58,
+          "code": "CSC369H1",
+          "name": "Operating Systems",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 59,
+          "code": "CSC373H",
+          "name": "Algorithm Design and Analysis",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 60,
+          "code": "CSC373H1",
+          "name": "Algorithm Design, Analysis & Complexity",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 61,
+          "code": "CSC384H1",
+          "name": "Introduction to Artificial Intelligence",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 62,
+          "code": "CSC401H1",
+          "name": "Natural Language Computing",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 63,
+          "code": "CSC404H1",
+          "name": "Introduction to Video Game Design",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 64,
+          "code": "CSC410",
+          "name": "Software Verification and Testing",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 65,
+          "code": "CSC411H1",
+          "name": "Machine Learning and Data Mining",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 66,
+          "code": "CSC412",
+          "name": "Probabilistic Learning and Reasoning",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 67,
+          "code": "CSC413H1",
+          "name": "\" Neural Networks and Deep Learning\"",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 68,
+          "code": "CSC420H1",
+          "name": "Introduction to Image Understanding",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 69,
+          "code": "CSC428H1-S",
+          "name": "Human-Computer Interaction",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 70,
+          "code": "CSC443H1",
+          "name": "Database System Technology",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 71,
+          "code": "CSC444H1",
+          "name": "Software Engineering",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 72,
+          "code": "CSC457H1",
+          "name": "Principles of Computer Networks",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 73,
+          "code": "CSC465",
+          "name": "Formal Methods in Software Design",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 74,
+          "code": "CSC469",
+          "name": "Operating Systems Design and Implementation",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 75,
+          "code": "CSC485H1",
+          "name": "Computational Linguistics",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 76,
+          "code": "CSC488",
+          "name": "Compilers and Interpreters",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 77,
+          "code": "CSCC11H3",
+          "name": "Introduction to Machine Learning and Data Mining",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 125,
+          "code": "CSI2103",
+          "name": "Data Structures",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 126,
+          "code": "CSI3109",
+          "name": "AUTOMATA AND FORMAL LANGUAGES",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 127,
+          "code": "CSI4106",
+          "name": "Computer Networks",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 128,
+          "code": "CSI4108",
+          "name": "Artificial Intelligence",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 129,
+          "code": "CSI4109",
+          "name": "Information Security",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 130,
+          "code": "CSI4116",
+          "name": "Computer Vision",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 131,
+          "code": "CSI4120",
+          "name": "MACHINE LEARNING",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 107,
+          "code": "CTIS2005",
+          "name": "Object Oriented Programming",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 78,
+          "code": "ECE243H1",
+          "name": "Computer Organization",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 79,
+          "code": "ECE344H1",
+          "name": "Operating Systems",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 80,
+          "code": "ECE352",
+          "name": "Computer Organization",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 81,
+          "code": "ECE358",
+          "name": "Foundations of Computing",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 82,
+          "code": "ECE421",
+          "name": "Introduction to Machine Learning",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 83,
+          "code": "ECE521",
+          "name": "Inference Algorithms and Machine Learning",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 84,
+          "code": "ECE568H1",
+          "name": "Computer Security",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 85,
+          "code": "ECO375H1",
+          "name": "Foundations of Econometrics",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 132,
+          "code": "EE4624",
+          "name": "WIRELESS AND MOBILE NETWORKS",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 133,
+          "code": "EEE3314",
+          "name": "INTRODUCTION ARTIFICIAL INTELLIGENCE",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 134,
+          "code": "EEE3450",
+          "name": "COMMUNICATION NETWORKS",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 135,
+          "code": "EEE7501",
+          "name": "NEURAL NETWORK",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 36,
+          "code": "ENG39098",
+          "name": "Databases",
+          "partner_university_id": 3,
+          "verified_units": null
+        },
+        {
+          "id": 37,
+          "code": "ENG39116",
+          "name": "Artificial Intelligence",
+          "partner_university_id": 3,
+          "verified_units": null
+        },
+        {
+          "id": 38,
+          "code": "ENG39128",
+          "name": "Implementation of Programming Languages",
+          "partner_university_id": 3,
+          "verified_units": null
+        },
+        {
+          "id": 108,
+          "code": "ENVT4411",
+          "name": "Geographic Information Systems Applications",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 109,
+          "code": "ENVT5566",
+          "name": "Advanced Spatial and Environmental Modelling",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 110,
+          "code": "FINA4491",
+          "name": "Capital Markets Research",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 111,
+          "code": "GEOG2201",
+          "name": "Geographic Information Systems",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 112,
+          "code": "GEOG3300",
+          "name": "Advanced Spatial Analysis",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 136,
+          "code": "ISM6011",
+          "name": "Global IT Management",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 29,
+          "code": "KECE345",
+          "name": "\" MACHINE LEARNING AND INTELLIGENCE FOR ELECTRICAL ENGINEERS(English)\"",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 30,
+          "code": "KECE421",
+          "name": "INFORMATION AND CODING THEORY",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 31,
+          "code": "KECE443",
+          "name": "Object-Oriented Programming and Laboratory",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 32,
+          "code": "KECE470",
+          "name": "Pattern Recognition",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 33,
+          "code": "KHPM410",
+          "name": "Data Science in Healthcare",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 137,
+          "code": "MAT2106",
+          "name": "DISCRETE MATHEMATICS",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 113,
+          "code": "MATH3002",
+          "name": "Network Science",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 86,
+          "code": "MIE369H1",
+          "name": "Introduction to Artificial Intelligence",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 114,
+          "code": "MKTG2305",
+          "name": "Marketing Research",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 115,
+          "code": "MKTG3307",
+          "name": "Digital Marketing",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 116,
+          "code": "MKTG3308",
+          "name": "Marketing Analytics",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 117,
+          "code": "MKTG5504",
+          "name": "Big Data in Marketing",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 87,
+          "code": "MSE403H1",
+          "name": "Data Sciences and Analytics for Materials Engineers",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 138,
+          "code": "PHY4125",
+          "name": "QUANTUM COMPUTER",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 88,
+          "code": "ROB311",
+          "name": "Artificial Intelligence",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 89,
+          "code": "ROB311H1",
+          "name": "Artificial Intellgence",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 90,
+          "code": "ROB313H1",
+          "name": "Introduction to Learning from Data",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 91,
+          "code": "RSM434",
+          "name": "Financial Trading Strategies",
+          "partner_university_id": 2,
+          "verified_units": null
+        },
+        {
+          "id": 34,
+          "code": "SMRT336",
+          "name": "AI Security II (English)",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 139,
+          "code": "STA3141",
+          "name": "MATHEMATICS FOR MACHINE LEARNING",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 140,
+          "code": "STA3142",
+          "name": "STATISTICAL MACHINE LEARNING",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 141,
+          "code": "STA4123",
+          "name": "INTRODUCTION TO OPTIMIZATION FOR DATA SCIENCE",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 142,
+          "code": "STA9131",
+          "name": "DEEP LEARNING FOR VISUAL RECOGNITION",
+          "partner_university_id": 5,
+          "verified_units": null
+        },
+        {
+          "id": 118,
+          "code": "STAT3063",
+          "name": "Spatial Statistics and Modeling",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 119,
+          "code": "STAT3406",
+          "name": "Applied Statistics and Data Visualisation",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 35,
+          "code": "STAT346",
+          "name": "Statistical Data Science I (English)\"",
+          "partner_university_id": 4,
+          "verified_units": null
+        },
+        {
+          "id": 120,
+          "code": "STAT4064",
+          "name": "Applied Predictive Modeling",
+          "partner_university_id": 1,
+          "verified_units": null
+        },
+        {
+          "id": 39,
+          "code": "T019001",
+          "name": "Information Network-E2",
+          "partner_university_id": 3,
+          "verified_units": null
+        },
+        {
+          "id": 40,
+          "code": "T057001",
+          "name": "Fundamentals of Artificial Intelligence- E2",
+          "partner_university_id": 3,
+          "verified_units": null
+        },
+        {
+          "id": 41,
+          "code": "T57002",
+          "name": "Fundamentals of Artificial Intelligence- E2",
+          "partner_university_id": 3,
+          "verified_units": null
+        },
+        {
+          "id": 42,
+          "code": "U-LAS30 20044 LE10",
+          "name": "Introduction to Formal Languages-E2",
+          "partner_university_id": 3,
+          "verified_units": null
+        }
+      ]
+    },
+    "specializations": {
+      "columns": [
+        "id",
+        "degree_id",
+        "name",
+        "kind",
+        "source_order"
+      ],
+      "row_count": 19,
+      "fingerprint": "sha256:cf80010c2efc5eec537141ff4114b76670fb637a0a81c831380a1a4fb89e4c5a",
+      "rows": [
+        {
+          "id": 1,
+          "degree_id": 2,
+          "name": "Financial Analytics",
+          "kind": "specialization",
+          "source_order": 0
+        },
+        {
+          "id": 2,
+          "degree_id": 2,
+          "name": "Machine Learning-based Analytics",
+          "kind": "specialization",
+          "source_order": 1
+        },
+        {
+          "id": 3,
+          "degree_id": 2,
+          "name": "Marketing Analytics",
+          "kind": "specialization",
+          "source_order": 2
+        },
+        {
+          "id": 4,
+          "degree_id": 3,
+          "name": "AI Governance and Management",
+          "kind": "specialization",
+          "source_order": 0
+        },
+        {
+          "id": 5,
+          "degree_id": 3,
+          "name": "Digital Product and Platform Management",
+          "kind": "specialization",
+          "source_order": 1
+        },
+        {
+          "id": 6,
+          "degree_id": 3,
+          "name": "Financial Technology",
+          "kind": "specialization",
+          "source_order": 2
+        },
+        {
+          "id": 10,
+          "degree_id": 4,
+          "name": "Computer Security",
+          "kind": "focus_area",
+          "source_order": 3
+        },
+        {
+          "id": 11,
+          "degree_id": 4,
+          "name": "Database Systems",
+          "kind": "focus_area",
+          "source_order": 4
+        },
+        {
+          "id": 12,
+          "degree_id": 4,
+          "name": "Multimedia Information Retrieval",
+          "kind": "focus_area",
+          "source_order": 5
+        },
+        {
+          "id": 13,
+          "degree_id": 4,
+          "name": "Networking and Distributed Systems",
+          "kind": "focus_area",
+          "source_order": 6
+        },
+        {
+          "id": 14,
+          "degree_id": 4,
+          "name": "Parallel Computing",
+          "kind": "focus_area",
+          "source_order": 7
+        },
+        {
+          "id": 15,
+          "degree_id": 4,
+          "name": "Programming Languages",
+          "kind": "focus_area",
+          "source_order": 8
+        },
+        {
+          "id": 16,
+          "degree_id": 4,
+          "name": "Software Engineering",
+          "kind": "focus_area",
+          "source_order": 9
+        },
+        {
+          "id": 7,
+          "degree_id": 4,
+          "name": "Algorithms & Theory",
+          "kind": "focus_area",
+          "source_order": 0
+        },
+        {
+          "id": 8,
+          "degree_id": 4,
+          "name": "Artificial Intelligence",
+          "kind": "focus_area",
+          "source_order": 1
+        },
+        {
+          "id": 9,
+          "degree_id": 4,
+          "name": "Computer Graphics and Games",
+          "kind": "focus_area",
+          "source_order": 2
+        },
+        {
+          "id": 17,
+          "degree_id": 5,
+          "name": "Digital Product and Platform Management",
+          "kind": "specialization",
+          "source_order": 0
+        },
+        {
+          "id": 18,
+          "degree_id": 5,
+          "name": "Financial Technology",
+          "kind": "specialization",
+          "source_order": 1
+        },
+        {
+          "id": 19,
+          "degree_id": 5,
+          "name": "Intelligent Systems Solutioning",
+          "kind": "specialization",
+          "source_order": 2
+        }
+      ]
+    },
+    "specialization_modules": {
+      "columns": [
+        "specialization_id",
+        "module_code"
+      ],
+      "row_count": 30,
+      "fingerprint": "sha256:2146bb439cc7546560d7217b942458d1293574bd8b034f9eed5e877267f2f9a1",
+      "rows": [
+        {
+          "specialization_id": 2,
+          "module_code": "BT3017"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT3017"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT3102"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4012"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4012"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4013"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4014"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4014"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4015"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4016"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4211"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4212"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4221"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4221"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4222"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4222"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4240"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4241"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4301"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "CS3243"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "CS4248"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "IS3150"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4226"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4228"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4234"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "IS4241"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "IS4246"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "IS4262"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4302"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4303"
+        }
+      ]
+    },
+    "module_mappings": {
+      "columns": [
+        "id",
+        "nus_module_code",
+        "pu_module_id",
+        "source_order",
+        "source_nus_title",
+        "source_nus_units",
+        "source_partner_title",
+        "source_partner_units",
+        "source_faculty",
+        "source_page"
+      ],
+      "row_count": 152,
+      "fingerprint": "sha256:090b791332e47435dbaa8f9035676c062dbfb17fe9c99f902b57ebfb48eaecc0",
+      "rows": [
+        {
+          "id": 1,
+          "nus_module_code": "IS4302",
+          "pu_module_id": 92,
+          "source_order": 0,
+          "source_nus_title": "Blockchain and Distributed",
+          "source_nus_units": null,
+          "source_partner_title": "Blockchain and Distributed Ledger Technologies in Business",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 10,
+          "nus_module_code": "CS3213",
+          "pu_module_id": 100,
+          "source_order": 9,
+          "source_nus_title": "Software Requirements Sp",
+          "source_nus_units": null,
+          "source_partner_title": "Software Requirements and Design",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 100,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 21,
+          "source_order": 102,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence (English)",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 101,
+          "nus_module_code": "IT2002",
+          "pu_module_id": 22,
+          "source_order": 103,
+          "source_nus_title": "Database Technology and",
+          "source_nus_units": null,
+          "source_partner_title": "Databases",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 102,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 28,
+          "source_order": 104,
+          "source_nus_title": "Neural Networks and Deep",
+          "source_nus_units": null,
+          "source_partner_title": "Deep Learning",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 103,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 29,
+          "source_order": 105,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "\" MACHINE LEARNING AND INTELLIGENCE FOR ELECTRICAL ENGINEERS(English)\"",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 104,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 4,
+          "source_order": 106,
+          "source_nus_title": "Machine Learning for Pred",
+          "source_nus_units": null,
+          "source_partner_title": "Business Analytics II",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 105,
+          "nus_module_code": "CS3236",
+          "pu_module_id": 30,
+          "source_order": 107,
+          "source_nus_title": "Introduction to Informatio",
+          "source_nus_units": null,
+          "source_partner_title": "INFORMATION AND CODING THEORY",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 106,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 16,
+          "source_order": 108,
+          "source_nus_title": "Design and Analysis of Alg",
+          "source_nus_units": null,
+          "source_partner_title": "ALORITHMS",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 107,
+          "nus_module_code": "IS3150",
+          "pu_module_id": 9,
+          "source_order": 109,
+          "source_nus_title": "Digital Media Marketing",
+          "source_nus_units": null,
+          "source_partner_title": "Internet Marketing",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 108,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 23,
+          "source_order": 110,
+          "source_nus_title": "Digital Transformation and",
+          "source_nus_units": null,
+          "source_partner_title": "ENTREPRENEURSHIP & LEADERSHIP",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 109,
+          "nus_module_code": "CS4248",
+          "pu_module_id": 27,
+          "source_order": 111,
+          "source_nus_title": "Introduction to Large Lang",
+          "source_nus_units": null,
+          "source_partner_title": "NATURAL LANGUAGE PROCESSING",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 11,
+          "nus_module_code": "BT4014",
+          "pu_module_id": 101,
+          "source_order": 10,
+          "source_nus_title": "Analytics Driven Design of",
+          "source_nus_units": null,
+          "source_partner_title": "Computational Data Analysis",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 110,
+          "nus_module_code": "CS3231",
+          "pu_module_id": 17,
+          "source_order": 112,
+          "source_nus_title": "Theory of Computation",
+          "source_nus_units": null,
+          "source_partner_title": "THEORY OF COMPUTATION",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 111,
+          "nus_module_code": "CS3241",
+          "pu_module_id": 18,
+          "source_order": 113,
+          "source_nus_title": "Computer Graphics",
+          "source_nus_units": null,
+          "source_partner_title": "COMPUTER GRAPHICS",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 112,
+          "nus_module_code": "CS2104",
+          "pu_module_id": 15,
+          "source_order": 114,
+          "source_nus_title": "Programming Language C",
+          "source_nus_units": null,
+          "source_partner_title": "PROGRAMMING LANGUAGES",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 113,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 1,
+          "source_order": 115,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "INTRODUCTION TO BRAIN AND MACHINE LEARNING",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 114,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 6,
+          "source_order": 116,
+          "source_nus_title": "Machine Learning for Pred",
+          "source_nus_units": null,
+          "source_partner_title": "Operations Analytics (English)",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 115,
+          "nus_module_code": "IS4246",
+          "pu_module_id": 34,
+          "source_order": 117,
+          "source_nus_title": "Smart Systems and AI Go",
+          "source_nus_units": null,
+          "source_partner_title": "AI Security II (English)",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 116,
+          "nus_module_code": "BT4221",
+          "pu_module_id": 35,
+          "source_order": 118,
+          "source_nus_title": "Advanced Analytics with B",
+          "source_nus_units": null,
+          "source_partner_title": "Statistical Data Science I (English)\"",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 117,
+          "nus_module_code": "IS4246",
+          "pu_module_id": 5,
+          "source_order": 119,
+          "source_nus_title": "Smart Systems and AI Go",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence for Business (English)\"",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 118,
+          "nus_module_code": "BT4222",
+          "pu_module_id": 33,
+          "source_order": 120,
+          "source_nus_title": "Mining Web Data for Busin",
+          "source_nus_units": null,
+          "source_partner_title": "Data Science in Healthcare",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 119,
+          "nus_module_code": "CS3240",
+          "pu_module_id": 24,
+          "source_order": 121,
+          "source_nus_title": "Interaction Design",
+          "source_nus_units": null,
+          "source_partner_title": "HUMAN COMPUTER INTERACTION",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 12,
+          "nus_module_code": "BT4014",
+          "pu_module_id": 102,
+          "source_order": 11,
+          "source_nus_title": "Analytics Driven Design of",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence and Adaptive Systems",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 120,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 20,
+          "source_order": 122,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Network",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 121,
+          "nus_module_code": "BT4222",
+          "pu_module_id": 7,
+          "source_order": 123,
+          "source_nus_title": "Mining Web Data for Busin",
+          "source_nus_units": null,
+          "source_partner_title": "Social Media Analytics",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 122,
+          "nus_module_code": "IS4261",
+          "pu_module_id": 8,
+          "source_order": 124,
+          "source_nus_title": "Designing AI-driven Busin",
+          "source_nus_units": null,
+          "source_partner_title": "Technological Innovation Management: A Pre-requisite for Successful Entrepreneurship",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 123,
+          "nus_module_code": "CS4222",
+          "pu_module_id": 26,
+          "source_order": 125,
+          "source_nus_title": "Wireless Networking",
+          "source_nus_units": null,
+          "source_partner_title": "Wireless Communications",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 124,
+          "nus_module_code": "CS3241",
+          "pu_module_id": 25,
+          "source_order": 126,
+          "source_nus_title": "Computer Graphics",
+          "source_nus_units": null,
+          "source_partner_title": "Interactive Visualization",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 125,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 32,
+          "source_order": 127,
+          "source_nus_title": "Machine Learning for Pred",
+          "source_nus_units": null,
+          "source_partner_title": "Pattern Recognition",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 126,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 3,
+          "source_order": 128,
+          "source_nus_title": "Digital Transformation and",
+          "source_nus_units": null,
+          "source_partner_title": "INTRODUCTION TO MANAGEMENT INFORMATION SYSTEMS(English)",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 127,
+          "nus_module_code": "IS4241",
+          "pu_module_id": 7,
+          "source_order": 129,
+          "source_nus_title": "Social Media Network Ana",
+          "source_nus_units": null,
+          "source_partner_title": "Social Media Analytics",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 128,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 131,
+          "source_order": 130,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "MACHINE LEARNING",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 129,
+          "nus_module_code": "IT1244",
+          "pu_module_id": 121,
+          "source_order": 131,
+          "source_nus_title": "Artificial Intelligence: Tech",
+          "source_nus_units": null,
+          "source_partner_title": "INTRODUCTION TO AI AND ITS APPLICATIONS",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 13,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 102,
+          "source_order": 12,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence and Adaptive Systems",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 130,
+          "nus_module_code": "CS4243",
+          "pu_module_id": 130,
+          "source_order": 132,
+          "source_nus_title": "Computer Vision and Patte",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Vision",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 131,
+          "nus_module_code": "CS1231",
+          "pu_module_id": 137,
+          "source_order": 133,
+          "source_nus_title": "Discrete Structures",
+          "source_nus_units": null,
+          "source_partner_title": "DISCRETE MATHEMATICS",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 132,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 128,
+          "source_order": 134,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 133,
+          "nus_module_code": "CS4243",
+          "pu_module_id": 123,
+          "source_order": 135,
+          "source_nus_title": "Computer Vision and Patte",
+          "source_nus_units": null,
+          "source_partner_title": "COMPUTER VISION",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 134,
+          "nus_module_code": "BT3104",
+          "pu_module_id": 141,
+          "source_order": 136,
+          "source_nus_title": "Optimization Methods for",
+          "source_nus_units": null,
+          "source_partner_title": "INTRODUCTION TO OPTIMIZATION FOR DATA SCIENCE",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 135,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 124,
+          "source_order": 137,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "MACHINE LEARNING",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 136,
+          "nus_module_code": "CS3231",
+          "pu_module_id": 126,
+          "source_order": 138,
+          "source_nus_title": "Theory of Computation",
+          "source_nus_units": null,
+          "source_partner_title": "AUTOMATA AND FORMAL LANGUAGES",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 137,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 122,
+          "source_order": 139,
+          "source_nus_title": "Digital Transformation and",
+          "source_nus_units": null,
+          "source_partner_title": "MANAGEMENT INFORMATION SYSTEMS",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 138,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 135,
+          "source_order": 140,
+          "source_nus_title": "Neural Networks and Deep",
+          "source_nus_units": null,
+          "source_partner_title": "NEURAL NETWORK",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 139,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 136,
+          "source_order": 141,
+          "source_nus_title": "Digital Transformation and",
+          "source_nus_units": null,
+          "source_partner_title": "Global IT Management",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 14,
+          "nus_module_code": "IS4242",
+          "pu_module_id": 102,
+          "source_order": 13,
+          "source_nus_title": "Intelligent Systems and Te",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence and Adaptive Systems",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 140,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 127,
+          "source_order": 142,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Networks",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 141,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 134,
+          "source_order": 143,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "COMMUNICATION NETWORKS",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 142,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 133,
+          "source_order": 144,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "INTRODUCTION ARTIFICIAL INTELLIGENCE",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 143,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 139,
+          "source_order": 145,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "MATHEMATICS FOR MACHINE LEARNING",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 144,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 140,
+          "source_order": 146,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "STATISTICAL MACHINE LEARNING",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 145,
+          "nus_module_code": "CS4222",
+          "pu_module_id": 132,
+          "source_order": 147,
+          "source_nus_title": "Wireless Networking",
+          "source_nus_units": null,
+          "source_partner_title": "WIRELESS AND MOBILE NETWORKS",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 146,
+          "nus_module_code": "CS3263",
+          "pu_module_id": 133,
+          "source_order": 148,
+          "source_nus_title": "Foundations of Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "INTRODUCTION ARTIFICIAL INTELLIGENCE",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 147,
+          "nus_module_code": "CS4268",
+          "pu_module_id": 138,
+          "source_order": 149,
+          "source_nus_title": "Quantum Computing",
+          "source_nus_units": null,
+          "source_partner_title": "QUANTUM COMPUTER",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 148,
+          "nus_module_code": "CS2040",
+          "pu_module_id": 125,
+          "source_order": 150,
+          "source_nus_title": "Data Structures and Algor",
+          "source_nus_units": null,
+          "source_partner_title": "Data Structures",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 149,
+          "nus_module_code": "CS2107",
+          "pu_module_id": 129,
+          "source_order": 151,
+          "source_nus_title": "Introduction to Informatio",
+          "source_nus_units": null,
+          "source_partner_title": "Information Security",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 15,
+          "nus_module_code": "CS4222",
+          "pu_module_id": 103,
+          "source_order": 14,
+          "source_nus_title": "Wireless Networking",
+          "source_nus_units": null,
+          "source_partner_title": "Mobile and Wireless Computing",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 150,
+          "nus_module_code": "CS3264",
+          "pu_module_id": 140,
+          "source_order": 152,
+          "source_nus_title": "Foundations of Machine Le",
+          "source_nus_units": null,
+          "source_partner_title": "STATISTICAL MACHINE LEARNING",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 151,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 142,
+          "source_order": 153,
+          "source_nus_title": "Neural Networks and Deep",
+          "source_nus_units": null,
+          "source_partner_title": "DEEP LEARNING FOR VISUAL RECOGNITION",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 152,
+          "nus_module_code": "CS3213",
+          "pu_module_id": 100,
+          "source_order": 9,
+          "source_nus_title": "Software Requirements Sp",
+          "source_nus_units": null,
+          "source_partner_title": "Software Requirements and Design",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 16,
+          "nus_module_code": "CS5224",
+          "pu_module_id": 104,
+          "source_order": 15,
+          "source_nus_title": "Cloud Computing",
+          "source_nus_units": null,
+          "source_partner_title": "Cloud Computing",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 17,
+          "nus_module_code": "CS3237",
+          "pu_module_id": 105,
+          "source_order": 16,
+          "source_nus_title": "Introduction to Internet of",
+          "source_nus_units": null,
+          "source_partner_title": "The Internet of Things",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 18,
+          "nus_module_code": "CS3210",
+          "pu_module_id": 106,
+          "source_order": 17,
+          "source_nus_title": "Parallel Computing",
+          "source_nus_units": null,
+          "source_partner_title": "High Performance Computing",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 19,
+          "nus_module_code": "CS2030",
+          "pu_module_id": 107,
+          "source_order": 18,
+          "source_nus_title": "Programming Methodology",
+          "source_nus_units": null,
+          "source_partner_title": "Object Oriented Programming",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 2,
+          "nus_module_code": "CS2102",
+          "pu_module_id": 93,
+          "source_order": 1,
+          "source_nus_title": "Database Systems",
+          "source_nus_units": null,
+          "source_partner_title": "Relational Database Management Systems",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 20,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 108,
+          "source_order": 19,
+          "source_nus_title": "Geospatial Analytics",
+          "source_nus_units": null,
+          "source_partner_title": "Geographic Information Systems Applications",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 21,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 109,
+          "source_order": 20,
+          "source_nus_title": "Geospatial Analytics",
+          "source_nus_units": null,
+          "source_partner_title": "Advanced Spatial and Environmental Modelling",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 22,
+          "nus_module_code": "BT4013",
+          "pu_module_id": 110,
+          "source_order": 21,
+          "source_nus_title": "Analytics for Capital Marke",
+          "source_nus_units": null,
+          "source_partner_title": "Capital Markets Research",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 23,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 111,
+          "source_order": 22,
+          "source_nus_title": "Geospatial Analytics",
+          "source_nus_units": null,
+          "source_partner_title": "Geographic Information Systems",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 24,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 112,
+          "source_order": 23,
+          "source_nus_title": "Geospatial Analytics",
+          "source_nus_units": null,
+          "source_partner_title": "Advanced Spatial Analysis",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 25,
+          "nus_module_code": "IS4241",
+          "pu_module_id": 113,
+          "source_order": 24,
+          "source_nus_title": "Social Media Network Ana",
+          "source_nus_units": null,
+          "source_partner_title": "Network Science",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 26,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 114,
+          "source_order": 25,
+          "source_nus_title": "Data-Driven Marketing",
+          "source_nus_units": null,
+          "source_partner_title": "Marketing Research",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 27,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 115,
+          "source_order": 26,
+          "source_nus_title": "Data-Driven Marketing",
+          "source_nus_units": null,
+          "source_partner_title": "Digital Marketing",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 28,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 116,
+          "source_order": 27,
+          "source_nus_title": "Data-Driven Marketing",
+          "source_nus_units": null,
+          "source_partner_title": "Marketing Analytics",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 29,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 117,
+          "source_order": 28,
+          "source_nus_title": "Data-Driven Marketing",
+          "source_nus_units": null,
+          "source_partner_title": "Big Data in Marketing",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 3,
+          "nus_module_code": "CS2040",
+          "pu_module_id": 94,
+          "source_order": 2,
+          "source_nus_title": "Data Structures and Algor",
+          "source_nus_units": null,
+          "source_partner_title": "Data Structures and Algorithms",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 30,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 118,
+          "source_order": 29,
+          "source_nus_title": "Geospatial Analytics",
+          "source_nus_units": null,
+          "source_partner_title": "Spatial Statistics and Modeling",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 31,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 119,
+          "source_order": 30,
+          "source_nus_title": "Machine Learning for Pred",
+          "source_nus_units": null,
+          "source_partner_title": "Applied Statistics and Data Visualisation",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 32,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 120,
+          "source_order": 31,
+          "source_nus_title": "Machine Learning for Pred",
+          "source_nus_units": null,
+          "source_partner_title": "Applied Predictive Modeling",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 33,
+          "nus_module_code": "CS2106",
+          "pu_module_id": 79,
+          "source_order": 32,
+          "source_nus_title": "Introduction to Operating",
+          "source_nus_units": null,
+          "source_partner_title": "Operating Systems",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 34,
+          "nus_module_code": "CS2103",
+          "pu_module_id": 71,
+          "source_order": 33,
+          "source_nus_title": "Software Engineering",
+          "source_nus_units": null,
+          "source_partner_title": "Software Engineering",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 35,
+          "nus_module_code": "CS2104",
+          "pu_module_id": 53,
+          "source_order": 34,
+          "source_nus_title": "Programming Language C",
+          "source_nus_units": null,
+          "source_partner_title": "Programming Languages",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 36,
+          "nus_module_code": "CS3247",
+          "pu_module_id": 63,
+          "source_order": 35,
+          "source_nus_title": "Game Development",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Video Game Design",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 37,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 90,
+          "source_order": 36,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Learning from Data",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 38,
+          "nus_module_code": "CS4249",
+          "pu_module_id": 69,
+          "source_order": 37,
+          "source_nus_title": "Quantitative Methods of H",
+          "source_nus_units": null,
+          "source_partner_title": "Human-Computer Interaction",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 39,
+          "nus_module_code": "CS4243",
+          "pu_module_id": 68,
+          "source_order": 38,
+          "source_nus_title": "Computer Vision and Patte",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Image Understanding",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 4,
+          "nus_module_code": "BT4014",
+          "pu_module_id": 95,
+          "source_order": 3,
+          "source_nus_title": "Analytics Driven Design of",
+          "source_nus_units": null,
+          "source_partner_title": "Algorithms, Agents and Artificial Intelligence",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 40,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 67,
+          "source_order": 39,
+          "source_nus_title": "Neural Networks and Deep",
+          "source_nus_units": null,
+          "source_partner_title": "\" Neural Networks and Deep Learning\"",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 41,
+          "nus_module_code": "BT3103",
+          "pu_module_id": 48,
+          "source_order": 40,
+          "source_nus_title": "Application Systems Deve",
+          "source_nus_units": null,
+          "source_partner_title": "Programming on the Web",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 42,
+          "nus_module_code": "BT3102",
+          "pu_module_id": 66,
+          "source_order": 41,
+          "source_nus_title": "Computational Methods fo",
+          "source_nus_units": null,
+          "source_partner_title": "Probabilistic Learning and Reasoning",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 43,
+          "nus_module_code": "IS3107",
+          "pu_module_id": 70,
+          "source_order": 42,
+          "source_nus_title": "Data Engineering",
+          "source_nus_units": null,
+          "source_partner_title": "Database System Technology",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 44,
+          "nus_module_code": "CS3264",
+          "pu_module_id": 49,
+          "source_order": 43,
+          "source_nus_title": "Foundations of Machine Le",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Machine Learning",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 45,
+          "nus_module_code": "CS4248",
+          "pu_module_id": 62,
+          "source_order": 44,
+          "source_nus_title": "Introduction to Large Lang",
+          "source_nus_units": null,
+          "source_partner_title": "Natural Language Computing",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 46,
+          "nus_module_code": "CS3213",
+          "pu_module_id": 47,
+          "source_order": 45,
+          "source_nus_title": "Software Requirements Sp",
+          "source_nus_units": null,
+          "source_partner_title": "Engineering Large Software Systems",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 47,
+          "nus_module_code": "CS3263",
+          "pu_module_id": 61,
+          "source_order": 46,
+          "source_nus_title": "Foundations of Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Artificial Intelligence",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 48,
+          "nus_module_code": "CS4211",
+          "pu_module_id": 55,
+          "source_order": 47,
+          "source_nus_title": "Formal Methods for Softwa",
+          "source_nus_units": null,
+          "source_partner_title": "Formal Methods in Software Design",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 49,
+          "nus_module_code": "CS2106",
+          "pu_module_id": 58,
+          "source_order": 48,
+          "source_nus_title": "Introduction to Operating",
+          "source_nus_units": null,
+          "source_partner_title": "Operating Systems",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 5,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 95,
+          "source_order": 4,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Algorithms, Agents and Artificial Intelligence",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 50,
+          "nus_module_code": "BT2101",
+          "pu_module_id": 85,
+          "source_order": 49,
+          "source_nus_title": "Econometrics Modeling for",
+          "source_nus_units": null,
+          "source_partner_title": "Foundations of Econometrics",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 51,
+          "nus_module_code": "CS4220",
+          "pu_module_id": 45,
+          "source_order": 50,
+          "source_nus_title": "Knowledge Discovery Meth",
+          "source_nus_units": null,
+          "source_partner_title": "Computational Systems Biology",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 52,
+          "nus_module_code": "CS2100",
+          "pu_module_id": 80,
+          "source_order": 51,
+          "source_nus_title": "Computer Organisation",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Organization",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 53,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 81,
+          "source_order": 52,
+          "source_nus_title": "Design and Analysis of Alg",
+          "source_nus_units": null,
+          "source_partner_title": "Foundations of Computing",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 54,
+          "nus_module_code": "CS4236",
+          "pu_module_id": 51,
+          "source_order": 53,
+          "source_nus_title": "Cryptography in Practice:",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Algebraic Cryptography",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 55,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 56,
+          "source_order": 54,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "Principles of Computer Networks",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 56,
+          "nus_module_code": "CS3235",
+          "pu_module_id": 84,
+          "source_order": 55,
+          "source_nus_title": "Computer Security",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Security",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 57,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 49,
+          "source_order": 56,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Machine Learning",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 58,
+          "nus_module_code": "CS4218",
+          "pu_module_id": 64,
+          "source_order": 57,
+          "source_nus_title": "Software Testing",
+          "source_nus_units": null,
+          "source_partner_title": "Software Verification and Testing",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 59,
+          "nus_module_code": "CS4212",
+          "pu_module_id": 76,
+          "source_order": 58,
+          "source_nus_title": "Compiler Design",
+          "source_nus_units": null,
+          "source_partner_title": "Compilers and Interpreters",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 6,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 96,
+          "source_order": 5,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Networks",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 60,
+          "nus_module_code": "CS3221",
+          "pu_module_id": 74,
+          "source_order": 59,
+          "source_nus_title": "Operating Systems Design",
+          "source_nus_units": null,
+          "source_partner_title": "Operating Systems Design and Implementation",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 61,
+          "nus_module_code": "CS3210",
+          "pu_module_id": 57,
+          "source_order": 60,
+          "source_nus_title": "Parallel Computing",
+          "source_nus_units": null,
+          "source_partner_title": "Parallel Programming",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 62,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 86,
+          "source_order": 61,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Artificial Intelligence",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 63,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 89,
+          "source_order": 62,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intellgence",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 64,
+          "nus_module_code": "IS4226",
+          "pu_module_id": 91,
+          "source_order": 63,
+          "source_nus_title": "Systematic Trading Strate",
+          "source_nus_units": null,
+          "source_partner_title": "Financial Trading Strategies",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 65,
+          "nus_module_code": "BT3102",
+          "pu_module_id": 43,
+          "source_order": 64,
+          "source_nus_title": "Computational Methods fo",
+          "source_nus_units": null,
+          "source_partner_title": "Applied Probability for Actuarial Science",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 66,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 60,
+          "source_order": 65,
+          "source_nus_title": "Design and Analysis of Alg",
+          "source_nus_units": null,
+          "source_partner_title": "Algorithm Design, Analysis & Complexity",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 67,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 61,
+          "source_order": 66,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Artificial Intelligence",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 68,
+          "nus_module_code": "CS2102",
+          "pu_module_id": 54,
+          "source_order": 67,
+          "source_nus_title": "Database Systems",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Databases",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 69,
+          "nus_module_code": "CS2104",
+          "pu_module_id": 52,
+          "source_order": 68,
+          "source_nus_title": "Programming Language C",
+          "source_nus_units": null,
+          "source_partner_title": "Principles of Programming Languages",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 7,
+          "nus_module_code": "CS3235",
+          "pu_module_id": 97,
+          "source_order": 6,
+          "source_nus_title": "Computer Security",
+          "source_nus_units": null,
+          "source_partner_title": "Cybersecurity",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 70,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 59,
+          "source_order": 69,
+          "source_nus_title": "Design and Analysis of Alg",
+          "source_nus_units": null,
+          "source_partner_title": "Algorithm Design and Analysis",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 71,
+          "nus_module_code": "CS3241",
+          "pu_module_id": 50,
+          "source_order": 70,
+          "source_nus_title": "Computer Graphics",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Graphics",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 72,
+          "nus_module_code": "CS4248",
+          "pu_module_id": 75,
+          "source_order": 71,
+          "source_nus_title": "Introduction to Large Lang",
+          "source_nus_units": null,
+          "source_partner_title": "Computational Linguistics",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 73,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 44,
+          "source_order": 72,
+          "source_nus_title": "Machine Learning for Pred",
+          "source_nus_units": null,
+          "source_partner_title": "Applied Fundamentals of Deep Learning",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 74,
+          "nus_module_code": "CS4211",
+          "pu_module_id": 73,
+          "source_order": 73,
+          "source_nus_title": "Formal Methods for Softwa",
+          "source_nus_units": null,
+          "source_partner_title": "Formal Methods in Software Design",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 75,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 72,
+          "source_order": 74,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "Principles of Computer Networks",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 76,
+          "nus_module_code": "CS2103",
+          "pu_module_id": 46,
+          "source_order": 75,
+          "source_nus_title": "Software Engineering",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Software Engineering",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 77,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 65,
+          "source_order": 76,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Machine Learning and Data Mining",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 78,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 82,
+          "source_order": 77,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Machine Learning",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 79,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 88,
+          "source_order": 78,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 8,
+          "nus_module_code": "IFS4103",
+          "pu_module_id": 98,
+          "source_order": 7,
+          "source_nus_title": "Penetration Testing Practic",
+          "source_nus_units": null,
+          "source_partner_title": "Penetration Testing",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 80,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 83,
+          "source_order": 79,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Inference Algorithms and Machine Learning",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 81,
+          "nus_module_code": "CS3264",
+          "pu_module_id": 77,
+          "source_order": 82,
+          "source_nus_title": "Foundations of Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Machine Learning and Data Mining",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 2
+        },
+        {
+          "id": 82,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 87,
+          "source_order": 83,
+          "source_nus_title": "Machine Learning for Predictive Data Analytics",
+          "source_nus_units": null,
+          "source_partner_title": "Data Sciences and Analytics for Materials Engineers",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 2
+        },
+        {
+          "id": 83,
+          "nus_module_code": "IT2002",
+          "pu_module_id": 54,
+          "source_order": 84,
+          "source_nus_title": "Database Technology and Management",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Databases",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 2
+        },
+        {
+          "id": 84,
+          "nus_module_code": "CS2100",
+          "pu_module_id": 78,
+          "source_order": 86,
+          "source_nus_title": "Computer Organisation",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Organization",
+          "source_partner_units": "0.50",
+          "source_faculty": "School of Computing",
+          "source_page": 2
+        },
+        {
+          "id": 85,
+          "nus_module_code": "CS2102",
+          "pu_module_id": 36,
+          "source_order": 87,
+          "source_nus_title": "Database Systems",
+          "source_nus_units": null,
+          "source_partner_title": "Databases",
+          "source_partner_units": "2.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 86,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 37,
+          "source_order": 88,
+          "source_nus_title": "Introduction to Artificial In",
+          "source_nus_units": null,
+          "source_partner_title": "Artificial Intelligence",
+          "source_partner_units": "2.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 87,
+          "nus_module_code": "CS4215",
+          "pu_module_id": 38,
+          "source_order": 89,
+          "source_nus_title": "Programming Language Im",
+          "source_nus_units": null,
+          "source_partner_title": "Implementation of Programming Languages",
+          "source_partner_units": "2.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 88,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 39,
+          "source_order": 90,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "Information Network-E2",
+          "source_partner_units": "2.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 89,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 40,
+          "source_order": 91,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Fundamentals of Artificial Intelligence- E2",
+          "source_partner_units": "2.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 9,
+          "nus_module_code": "CS4239",
+          "pu_module_id": 99,
+          "source_order": 8,
+          "source_nus_title": "Software Security",
+          "source_nus_units": null,
+          "source_partner_title": "Secure Coding",
+          "source_partner_units": "6.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 90,
+          "nus_module_code": "CS2109S",
+          "pu_module_id": 41,
+          "source_order": 92,
+          "source_nus_title": "Introduction to AI and Mac",
+          "source_nus_units": null,
+          "source_partner_title": "Fundamentals of Artificial Intelligence- E2",
+          "source_partner_units": "2.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 91,
+          "nus_module_code": "CS3231",
+          "pu_module_id": 42,
+          "source_order": 93,
+          "source_nus_title": "Theory of Computation",
+          "source_nus_units": null,
+          "source_partner_title": "Introduction to Formal Languages-E2",
+          "source_partner_units": "2.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 92,
+          "nus_module_code": "CS1010E",
+          "pu_module_id": 13,
+          "source_order": 94,
+          "source_nus_title": "Programming Methodology",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Programming I",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 93,
+          "nus_module_code": "BT1101",
+          "pu_module_id": 2,
+          "source_order": 95,
+          "source_nus_title": "Introduction to Business A",
+          "source_nus_units": null,
+          "source_partner_title": "Business Analytics I (English)",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 94,
+          "nus_module_code": "CS1231",
+          "pu_module_id": 14,
+          "source_order": 96,
+          "source_nus_title": "Discrete Structures",
+          "source_nus_units": null,
+          "source_partner_title": "Discrete Mathematics",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 95,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 11,
+          "source_order": 97,
+          "source_nus_title": "Introduction to Computer",
+          "source_nus_units": null,
+          "source_partner_title": "Computer Network",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 96,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 12,
+          "source_order": 98,
+          "source_nus_title": "Machine Learning",
+          "source_nus_units": null,
+          "source_partner_title": "Machine Learning",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 97,
+          "nus_module_code": "CS2030",
+          "pu_module_id": 31,
+          "source_order": 99,
+          "source_nus_title": "Programming Methodology",
+          "source_nus_units": null,
+          "source_partner_title": "Object-Oriented Programming and Laboratory",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 98,
+          "nus_module_code": "CS2040C",
+          "pu_module_id": 10,
+          "source_order": 100,
+          "source_nus_title": "Data Structures and Algor",
+          "source_nus_units": null,
+          "source_partner_title": "Data Structures",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        },
+        {
+          "id": 99,
+          "nus_module_code": "CS2106",
+          "pu_module_id": 19,
+          "source_order": 101,
+          "source_nus_title": "Introduction to Operating",
+          "source_nus_units": null,
+          "source_partner_title": "Operating Systems",
+          "source_partner_units": "3.00",
+          "source_faculty": "School of Computing",
+          "source_page": 1
+        }
+      ]
+    }
+  },
+  "sequences": {
+    "degrees_id_seq": {
+      "last_value": 6,
+      "start_value": 1,
+      "increment_by": 1,
+      "min_value": 1,
+      "max_value": 9223372036854775807,
+      "cycle": false
+    },
+    "module_mappings_id_seq": {
+      "last_value": 152,
+      "start_value": 1,
+      "increment_by": 1,
+      "min_value": 1,
+      "max_value": 9223372036854775807,
+      "cycle": false
+    },
+    "partner_universities_id_seq": {
+      "last_value": 5,
+      "start_value": 1,
+      "increment_by": 1,
+      "min_value": 1,
+      "max_value": 9223372036854775807,
+      "cycle": false
+    },
+    "pu_modules_id_seq": {
+      "last_value": 142,
+      "start_value": 1,
+      "increment_by": 1,
+      "min_value": 1,
+      "max_value": 9223372036854775807,
+      "cycle": false
+    },
+    "specializations_id_seq": {
+      "last_value": 19,
+      "start_value": 1,
+      "increment_by": 1,
+      "min_value": 1,
+      "max_value": 9223372036854775807,
+      "cycle": false
+    }
+  },
+  "mapping_multiplicity": {
+    "rows": 152,
+    "distinct_course_pairs": 151,
+    "duplicate_course_pair_rows": 1,
+    "max_rows_per_course_pair": 2,
+    "duplicate_samples": [
+      {
+        "university": "University of Western Australia",
+        "nus_module_code": "CS3213",
+        "partner_module_code": "CITS3301",
+        "count": 2
+      }
+    ]
+  },
+  "fixture": {
+    "kind": "core_dataset",
+    "migration_ceiling": "20261022000300",
+    "source_checksum_sha256": "b393cd0f6b34adb506a23ba810d65c083238339fab0b76a236167fdbef6901b9",
+    "repair_checksum_sha256": "61268be6b39c1effc644d72c8cc4787287cdbcafc86d32fb3c48814d48064a3e",
+    "production_mapping_rows": 151,
+    "fixture_mapping_rows": 152,
+    "api_visible_pair_counts_match_baseline": true,
+    "api_visible_duplicate": false,
+    "intentional_duplicate": {
+      "original_mapping_id": 10,
+      "new_mapping_id": 152,
+      "new_source_row_id": 155,
+      "nus_module_code": "CS3213",
+      "mapping_index": 32
+    },
+    "notes": [
+      "Generated from a disposable pre-removal database populated by the importer.",
+      "The extra duplicate mapping intentionally has no degree membership.",
+      "The SQL fixture includes all eight core and five metadata tables."
+    ]
+  }
+}
