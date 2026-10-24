@@ -1,22 +1,28 @@
 """Seed a disposable database from the deterministic import preview.
 
 This is validation tooling only. It must never run against the production
-Supabase project; the importer in Phase 3 owns real publication.
+Supabase project; it seeds the eight core catalog tables and writes nothing to
+the retired metadata tables, so the same routine works on the old and the final
+post-removal schema.
 """
 
 from typing import Any
 
 import psycopg
-from psycopg.types.json import Jsonb
 
-from scripts.postgres_validation import DatabaseTarget
+from scripts.postgres_validation import DatabaseTarget, require_local_database_url
 
 
 def seed_preview(database: DatabaseTarget, preview: dict[str, Any]) -> None:
-    """Publish the preview's active catalog rows into an empty migrated database."""
+    """Insert the preview's core catalog rows into an empty migrated database."""
 
+    # Refuse any non-local target before opening a write connection: this seeder
+    # is disposable validation tooling and must never touch a remote database.
+    require_local_database_url(database.url, "catalog seed target")
+
+    # One transaction so a partial seed never leaves a half-ready catalog. Parents
+    # are inserted before children, matching the core foreign-key dependencies.
     with psycopg.connect(database.url) as conn, conn.transaction():
-        _insert_batch(conn, preview)
         degree_ids = _insert_degrees(conn, preview["degrees"])
         _insert_nus_modules(conn, preview["nus_modules"])
         _insert_degree_modules(conn, preview["degrees"], degree_ids)
@@ -26,32 +32,6 @@ def seed_preview(database: DatabaseTarget, preview: dict[str, Any]) -> None:
         )
         _insert_mappings(conn, preview["mappings"], partner_ids)
         _insert_specializations(conn, preview["specializations"], degree_ids)
-
-
-def _insert_batch(conn: psycopg.Connection, preview: dict[str, Any]) -> None:
-    snapshot = preview["source_snapshot"]
-    summary = preview["summary"]
-    conn.execute(
-        """
-        insert into public.catalog_import_batches (
-          source_checksum, repair_checksum, status, is_current,
-          source_manifest, source_file_count, raw_row_count,
-          accepted_row_count, repaired_row_count, quarantined_row_count,
-          completed_at, note
-        ) values (%s, %s, 'completed', true, %s, %s, %s, %s, %s, %s, now(), %s)
-        """,
-        (
-            snapshot["source_checksum_sha256"],
-            snapshot["repair_checksum_sha256"],
-            Jsonb({"files": [item["path"] for item in snapshot["files"]]}),
-            len(snapshot["files"]),
-            summary["raw_rows"],
-            summary["accepted_rows"],
-            summary["repaired_rows"],
-            summary["quarantined_rows"],
-            "Disposable validation seed from the import preview.",
-        ),
-    )
 
 
 def _insert_degrees(
