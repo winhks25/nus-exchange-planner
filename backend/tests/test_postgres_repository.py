@@ -4,14 +4,8 @@ from app.repositories.base import CatalogUnavailable, UnknownSelection
 from app.repositories.postgres_catalog import PostgresCatalogRepository
 from scripts.postgres_validation import DatabaseTarget
 
-PUBLISHED_BATCH = """
-insert into public.catalog_import_batches (
-  source_checksum, repair_checksum, status, is_current, completed_at
-) values (repeat('a', 64), repeat('b', 64), 'completed', true, now());
-"""
 
-
-def test_unpublished_database_is_unavailable(repository: PostgresCatalogRepository):
+def test_empty_database_is_unavailable(repository: PostgresCatalogRepository):
     with pytest.raises(CatalogUnavailable):
         repository.catalog()
 
@@ -20,8 +14,7 @@ def test_catalog_uses_source_order_and_full_titles(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
     database.execute(
-        PUBLISHED_BATCH
-        + """
+        """
         insert into public.degrees (name, faculty, full_title, source_order) values
           ('Second', 'School of Computing', 'Bachelor of Second', 1),
           ('First', 'School of Computing', 'Bachelor of First', 0);
@@ -42,20 +35,11 @@ def test_catalog_uses_source_order_and_full_titles(
     ]
 
 
-def test_completed_batch_without_degrees_is_unavailable(
-    repository: PostgresCatalogRepository, database: DatabaseTarget
-):
-    database.execute(PUBLISHED_BATCH)
-    with pytest.raises(CatalogUnavailable):
-        repository.catalog()
-
-
 def test_degree_without_full_title_is_treated_as_incomplete(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
     database.execute(
-        PUBLISHED_BATCH
-        + """
+        """
         insert into public.degrees (name, faculty, full_title, source_order)
         values ('Test', 'School of Computing', null, 0);
         insert into public.partner_universities (name, country, source_order)
@@ -117,7 +101,7 @@ join public.pu_modules pm
 def test_rankings_include_zero_counts_and_order_by_distinct_nus(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
-    database.execute(PUBLISHED_BATCH + RANKING_FIXTURE)
+    database.execute(RANKING_FIXTURE)
 
     ranked = repository.recommendations("Test").recommendations
     assert [
@@ -139,7 +123,7 @@ def test_rankings_include_zero_counts_and_order_by_distinct_nus(
 def test_unknown_degree_is_not_a_server_error(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
-    database.execute(PUBLISHED_BATCH + RANKING_FIXTURE)
+    database.execute(RANKING_FIXTURE)
     with pytest.raises(UnknownSelection, match="Unknown degree$"):
         repository.recommendations("Missing")
 
@@ -202,7 +186,7 @@ join public.pu_modules pm
 def test_mappings_filter_sort_and_preserve_repeated_rows(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
-    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+    database.execute(MAPPING_FIXTURE)
 
     response = repository.mappings("Test", "A University")
     assert response.partner_module_count == 3
@@ -222,7 +206,7 @@ def test_mappings_filter_sort_and_preserve_repeated_rows(
 def test_mapping_optional_fields_and_partner_unit_fallbacks(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
-    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+    database.execute(MAPPING_FIXTURE)
 
     rows = repository.mappings("Test", "A University").mappings
     first, second, third, fourth = rows
@@ -239,7 +223,7 @@ def test_mapping_optional_fields_and_partner_unit_fallbacks(
 def test_valid_empty_pair_returns_zero_counts(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
-    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+    database.execute(MAPPING_FIXTURE)
 
     response = repository.mappings("Test", "Z University")
     assert response.partner_module_count == 0
@@ -250,7 +234,7 @@ def test_valid_empty_pair_returns_zero_counts(
 def test_unknown_mapping_selections_raise_shared_error(
     repository: PostgresCatalogRepository, database: DatabaseTarget
 ):
-    database.execute(PUBLISHED_BATCH + MAPPING_FIXTURE)
+    database.execute(MAPPING_FIXTURE)
 
     with pytest.raises(UnknownSelection, match="Unknown degree or university$"):
         repository.mappings("Missing", "A University")
@@ -261,8 +245,8 @@ def test_unknown_mapping_selections_raise_shared_error(
 # --- T12 [US1]: core-readiness cases for the parameterless readiness contract ---
 # Readiness no longer depends on an import batch: a database is ready when it has
 # at least one degree, at least one university, and no degree with a null
-# full_title. These fixtures seed only core tables and omit PUBLISHED_BATCH so the
-# cases exercise the new core-readiness query rather than the retired batch marker.
+# full_title. These fixtures seed only core tables so the cases exercise the new
+# core-readiness query rather than the retired import-batch marker.
 
 # One degree but no universities: readiness must fail on the missing universities.
 READY_WITHOUT_UNIVERSITIES = """

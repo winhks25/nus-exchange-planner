@@ -6,9 +6,6 @@ from app.settings import PoolSettings, Settings
 from scripts.postgres_validation import DatabaseTarget
 
 APP_FIXTURE = """
-insert into public.catalog_import_batches (
-  source_checksum, repair_checksum, status, is_current, completed_at
-) values (repeat('a', 64), repeat('b', 64), 'completed', true, now());
 insert into public.nus_modules (code) values ('CS2102');
 insert into public.degrees (name, faculty, full_title, source_order)
 values ('Test', 'School of Computing', 'Bachelor of Test', 0);

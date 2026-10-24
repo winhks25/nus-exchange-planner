@@ -276,9 +276,6 @@ def _write_synthetic_json(root: Path) -> Path:
 
 
 SYNTHETIC_FIXTURE = """
-insert into public.catalog_import_batches (
-  source_checksum, repair_checksum, status, is_current, completed_at
-) values (repeat('a', 64), repeat('b', 64), 'completed', true, now());
 insert into public.nus_modules (code) values
   ('CS2102'), ('CS2103'), ('CS2104'), ('CS2105');
 insert into public.degrees (name, faculty, full_title, source_order)
