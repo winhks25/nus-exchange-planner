@@ -1,4 +1,4 @@
-"""Read-only repository adapter backed by the published PostgreSQL catalog."""
+"""Read-only repository adapter backed by the core PostgreSQL catalog tables."""
 
 import logging
 
@@ -129,14 +129,16 @@ class PostgresCatalogRepository:
         except DatabaseError:
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE) from None
 
-        # A completed batch with no options is an incomplete import, not an empty catalog.
+        # Defensive re-check of the readiness invariant against the fetched rows,
+        # guarding the gap between the readiness query and these reads: a catalog
+        # with no degrees or universities is not ready to serve.
         if not degrees or not universities:
-            LOG.error("Published catalog has no degrees or universities")
+            LOG.error("Catalog core tables have no degrees or universities")
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE)
 
-        # Full titles are persisted by the importer; a null title means the import is incomplete.
+        # A null full_title means the core catalog is incomplete and not ready.
         if any(full_title is None for _, full_title in degrees):
-            LOG.error("Published catalog has a degree without a full title")
+            LOG.error("Catalog core tables have a degree without a full title")
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE)
 
         return CatalogResponse(
