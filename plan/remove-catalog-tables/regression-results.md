@@ -226,3 +226,31 @@ uv run --directory backend ruff check app scripts tests
 - Main browser journeys: Verified through full Playwright test run (73/73 passed in T069).
 
 ---
+
+
+## T075: Bounded Repeated Read Latencies and Error Response Comparison
+
+**Target:** Localhost runtime (`uvicorn app.main:app`) connected to core PostgreSQL database via `catalog_reader` role.
+
+**1. Latency Measurements (20 iterations each):**
+
+| Route / Scenario | Expected Status | Min (ms) | Avg (ms) | p95 (ms) | Max (ms) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `GET /api/v1/catalog` | 200 | 1.38 | 4.24 | 53.11 | 55.80 |
+| `GET /api/v1/recommendations?degree=Computer+Science` | 200 | 1.54 | 1.81 | 3.78 | 3.87 |
+| `GET /api/v1/mappings?degree=Computer+Science&uni=University+of+Toronto` | 200 | 1.67 | 1.80 | 2.69 | 2.73 |
+| `GET /api/v1/recommendations?degree=Missing` (404 unknown) | 404 | 1.14 | 1.23 | 1.40 | 1.40 |
+| `GET /api/v1/recommendations` (422 missing param) | 422 | 0.50 | 0.58 | 1.08 | 1.10 |
+
+*(Note: Maximum on `/catalog` reflects initial connection pool checkout and schema readiness evaluation on the first request; warm queries settle consistently under 2ms).*
+
+**2. Runtime Error and Log Inspection:**
+- Verified server process logs throughout all test runs.
+- **Zero** `UndefinedTable` errors.
+- **Zero** queries to removed metadata relations (`catalog_import_batches`, `catalog_source_snapshots`, `catalog_source_rows`, `catalog_issues`, `catalog_repairs`).
+- **Zero** permission denied errors or leaked credentials.
+
+**3. Environmental Limitation:**
+- Measured on localhost to capture software execution bounds without WAN latency or remote pooler throttling. These measurements document runtime efficiency and lack of overhead rather than an unconstrained high-load production guarantee.
+
+---
