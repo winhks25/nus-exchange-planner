@@ -94,3 +94,12 @@ All coverage gaps identified in the T003 draft have been closed:
 | JSON fallback after removal and return (T046/T072) | `test_database_failures::test_manual_json_rollback_*`; Phase 5 recovery-validation |
 
 **No remaining coverage gaps identified.** All requirements have executable tests or explicit production observations.
+
+---
+
+## Final migration and operational limitations audit (T077)
+
+- **Applied Removal Migration:** `supabase/migrations/20261024034234_remove_catalog_metadata.sql` (recorded remotely in linked Supabase project `wydziozsjibkvpgphpia` as `20261024054553`).
+- **Genuinely Skipped Task:** T035 was skipped by operator decision; a partial data-only capture of `source_row_id` mapping and sequence state was taken under `PRIVATE_BACKUP_DIR` instead of a full `pg_dump`. Task T035 remains unchecked in `tasks.md`.
+- **Application Deployment Scope:** Per the 2026-10-24 specification revision, no Vercel deployment was executed autonomously. Verification of the compatible core runtime, absence checks, and browser journeys was performed locally against localhost runtimes. Production backend redeployment or switching to `CATALOG_BACKEND=json` is operator-managed.
+- **Historical Audit Trail:** Historical planning and evidence documents in `plan/supabase-migration/` and migration files `20261022000100`, `20261022000200`, and `20261022000300` are preserved as immutable audit records and not rewritten as if metadata tables never existed.
