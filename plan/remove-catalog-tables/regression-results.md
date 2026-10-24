@@ -109,3 +109,43 @@ Assertions verified:
 - Reader role write denial and metadata table absence confirmed.
 
 ---
+
+
+## T068: Frontend Playwright Tests — JSON Mode
+
+**Command:**
+```bash
+cd frontend && TEST_CATALOG_BACKEND=json npx playwright test --reporter=list
+```
+
+**Result:** 65 passed, 0 failed, 0 skipped in 41.9s.
+
+- `database-regression.spec.ts` correctly excluded via `testIgnore` in JSON mode.
+- Frozen JSON app starts without database credentials.
+- All navigation, picker, card, hero, shell, theme, flow, and visual tests pass.
+- No screenshots/traces generated (all tests passed).
+
+---
+
+## T069: Frontend Playwright Tests — PostgreSQL Mode
+
+**Command:**
+```bash
+cd frontend && TEST_CATALOG_BACKEND=postgres npx playwright test --reporter=list
+```
+
+**Result:** 73 passed, 0 failed, 0 skipped in 52.7s.
+
+- `database-regression.spec.ts` included (8 additional tests over JSON mode).
+- Fresh final-schema core-seeded disposable database used by `serve_catalog_api`.
+- Catalog-table absence verified by the harness before serving.
+
+PostgreSQL-specific tests verified:
+- `direct mapping entry loads repaired PostgreSQL rows`
+- `degree selection navigates to core-seeded Toronto recommendations`
+- `mapping selectors update URL state and counts`
+- `browser back and forward restore PostgreSQL pages`
+- `mobile layout keeps nineteen PostgreSQL mappings readable`
+- Navigation, URL state, selectors, mappings, loading/error/empty states, browser history all pass.
+
+---
