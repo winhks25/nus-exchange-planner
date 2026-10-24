@@ -141,3 +141,28 @@ dependency, and caller to its retained purpose, establishing the keep/move/delet
 
 
 
+
+
+---
+
+## 8. Security, Secret Sanitization, and Artifact Cleanup Audit (T078)
+
+### A. Private Backup and Recovery Verification
+- **Backup Location:** `/Users/winhtutkhaungsoe/Backups/nus-exchange-planner/catalog-removal-20261023`
+  - Located strictly outside the repository worktree (`Desktop/nus-exchange-planner`).
+  - Directory permissions: `0700` (`drwx------`).
+  - Files present: `mapping-source-row-ids.csv`, `sequence-state.csv`, `partial-manifest.json`.
+  - Content contains the 151 `source_row_id` mapping links and sequence values captured prior to deletion.
+- **Restore Procedures:** Retained and reachable in `plan/remove-catalog-tables/recovery.md` and `plan/remove-catalog-tables/quickstart.md`.
+
+### B. Secret and Credential Sanitization Audit
+- Verified git status and full commit history across all Phase 6 and Phase 7 changes:
+  - **Zero** production passwords, connection strings, or service tokens committed.
+  - Runtime credentials (`DATABASE_URL`) references use redacted placeholders (`...`).
+  - Importer credentials (`IMPORT_DATABASE_URL`) completely removed from environment examples and application settings.
+  - Zero database dump files (`.dump`, `.sql` data dumps) tracked in git.
+
+### C. Process and Disposable Cluster Cleanup
+- Checked running processes for orphaned testing servers or clusters (`uvicorn`, test `postgres`).
+- Confirmed only system and user services remain running; all task-owned disposable test clusters created during pytest and Playwright runs were terminated and unlinked cleanly.
+- Intentional evidence files in `plan/remove-catalog-tables/` remain intact for auditable verification.
