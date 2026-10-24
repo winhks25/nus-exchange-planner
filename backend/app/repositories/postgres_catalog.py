@@ -20,11 +20,15 @@ from .base import CATALOG_UNAVAILABLE_MESSAGE, CatalogUnavailable, UnknownSelect
 
 LOG = logging.getLogger(__name__)
 
-PUBLISHED_BATCH_SQL = """
-select 1
-from public.catalog_import_batches
-where status = 'completed' and is_current
-limit 1
+# Parameterless core-readiness check: a catalog is ready when it has at least one
+# degree, at least one university, and no degree with a null full_title. It reads
+# only core tables (no metadata relation) and takes no parameters, so it can run
+# inside every read transaction without per-request schema introspection.
+CORE_READINESS_SQL = """
+select
+  exists (select 1 from public.degrees) as has_degrees,
+  exists (select 1 from public.partner_universities) as has_universities,
+  exists (select 1 from public.degrees where full_title is null) as has_null_full_title
 """
 
 CATALOG_DEGREES_SQL = """
@@ -96,7 +100,7 @@ order by mm.nus_module_code collate "C" asc, mm.source_order nulls last, mm.id a
 
 
 class PostgresCatalogRepository:
-    """Serve catalog responses from a completed, current import batch."""
+    """Serve catalog responses from the core tables when the catalog is ready."""
 
     def __init__(self, settings: Settings) -> None:
         self._database = CatalogDatabase(settings)
@@ -119,7 +123,7 @@ class PostgresCatalogRepository:
 
         try:
             with self._database.read_transaction("catalog") as conn:
-                _require_published_batch(conn)
+                _require_ready_catalog(conn)
                 degrees = conn.execute(CATALOG_DEGREES_SQL).fetchall()
                 universities = conn.execute(CATALOG_UNIVERSITIES_SQL).fetchall()
         except DatabaseError:
@@ -150,7 +154,7 @@ class PostgresCatalogRepository:
 
         try:
             with self._database.read_transaction("recommendations") as conn:
-                _require_published_batch(conn)
+                _require_ready_catalog(conn)
                 degree_id = _require_degree(conn, degree)
                 rows = conn.execute(RANKINGS_SQL, (degree_id,)).fetchall()
         except DatabaseError:
@@ -175,7 +179,7 @@ class PostgresCatalogRepository:
 
         try:
             with self._database.read_transaction("mappings") as conn:
-                _require_published_batch(conn)
+                _require_ready_catalog(conn)
                 selected = conn.execute(
                     DEGREE_UNIVERSITY_IDS_SQL, (degree, university)
                 ).fetchone()
@@ -211,11 +215,18 @@ class PostgresCatalogRepository:
         )
 
 
-def _require_published_batch(conn: psycopg.Connection) -> None:
-    """Reject an unpopulated or unpublished database with a sanitized error."""
+def _require_ready_catalog(conn: psycopg.Connection) -> None:
+    """Reject an unready core catalog with a sanitized error.
 
-    if conn.execute(PUBLISHED_BATCH_SQL).fetchone() is None:
-        LOG.error("Catalog database has no completed current import batch")
+    The catalog is ready only when it holds at least one degree, at least one
+    university, and no degree with a null full_title. The check reads only core
+    tables and runs inside the caller's read transaction.
+    """
+
+    row = conn.execute(CORE_READINESS_SQL).fetchone()
+    has_degrees, has_universities, has_null_full_title = row
+    if not has_degrees or not has_universities or has_null_full_title:
+        LOG.error("Catalog core tables are not ready to serve")
         raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE)
 
 
