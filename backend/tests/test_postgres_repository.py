@@ -256,3 +256,134 @@ def test_unknown_mapping_selections_raise_shared_error(
         repository.mappings("Missing", "A University")
     with pytest.raises(UnknownSelection, match="Unknown degree or university$"):
         repository.mappings("Test", "Missing University")
+
+
+# --- T12 [US1]: core-readiness cases for the parameterless readiness contract ---
+# Readiness no longer depends on an import batch: a database is ready when it has
+# at least one degree, at least one university, and no degree with a null
+# full_title. These fixtures seed only core tables and omit PUBLISHED_BATCH so the
+# cases exercise the new core-readiness query rather than the retired batch marker.
+
+# One degree but no universities: readiness must fail on the missing universities.
+READY_WITHOUT_UNIVERSITIES = """
+insert into public.degrees (name, faculty, full_title, source_order)
+values ('Test', 'School of Computing', 'Bachelor of Test', 0);
+"""
+
+# One university but no degrees: readiness must fail on the missing degrees.
+READY_WITHOUT_DEGREES = """
+insert into public.partner_universities (name, country, source_order)
+values ('One University', 'Japan', 0);
+"""
+
+# Both degrees and universities exist, but no mappings join them. This is a ready
+# catalog with legitimately empty results, not an unavailable one.
+READY_WITHOUT_MAPPINGS = """
+insert into public.nus_modules (code) values ('CS2102');
+insert into public.degrees (name, faculty, full_title, source_order)
+values ('Test', 'School of Computing', 'Bachelor of Test', 0);
+insert into public.degree_modules (degree_id, module_code, requirement_type)
+select d.id, 'CS2102', null from public.degrees d where d.name = 'Test';
+insert into public.partner_universities (name, country, source_order)
+values ('One University', 'Japan', 0);
+"""
+
+# A degree that belongs to no modules at all: still ready, with zero results.
+READY_WITH_EMPTY_DEGREE_MEMBERSHIP = """
+insert into public.degrees (name, faculty, full_title, source_order)
+values ('Test', 'School of Computing', 'Bachelor of Test', 0);
+insert into public.partner_universities (name, country, source_order)
+values ('One University', 'Japan', 0);
+"""
+
+
+def test_empty_degrees_make_every_operation_unavailable(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(READY_WITHOUT_DEGREES)
+
+    # No degrees means the catalog is not ready, so all three operations 503.
+    with pytest.raises(CatalogUnavailable):
+        repository.catalog()
+    with pytest.raises(CatalogUnavailable):
+        repository.recommendations("Test")
+    with pytest.raises(CatalogUnavailable):
+        repository.mappings("Test", "One University")
+
+
+def test_empty_universities_make_every_operation_unavailable(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(READY_WITHOUT_UNIVERSITIES)
+
+    # No universities means the catalog is not ready, so all three operations 503.
+    with pytest.raises(CatalogUnavailable):
+        repository.catalog()
+    with pytest.raises(CatalogUnavailable):
+        repository.recommendations("Test")
+    with pytest.raises(CatalogUnavailable):
+        repository.mappings("Test", "One University")
+
+
+def test_null_degree_full_title_makes_every_operation_unavailable(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    # A degree with a null full_title keeps the schema-level check
+    # `check (full_title is null or btrim(full_title) <> '')` satisfied, but the
+    # runtime treats a missing full title as an incomplete, unavailable catalog.
+    database.execute(
+        """
+        insert into public.degrees (name, faculty, full_title, source_order)
+        values ('Test', 'School of Computing', null, 0);
+        insert into public.partner_universities (name, country, source_order)
+        values ('One University', 'Japan', 0);
+        """
+    )
+
+    with pytest.raises(CatalogUnavailable):
+        repository.catalog()
+    with pytest.raises(CatalogUnavailable):
+        repository.recommendations("Test")
+    with pytest.raises(CatalogUnavailable):
+        repository.mappings("Test", "One University")
+
+
+def test_complete_choices_without_mappings_return_ready_empty_results(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(READY_WITHOUT_MAPPINGS)
+
+    # Catalog lists the seeded degree and university.
+    catalog = repository.catalog()
+    assert [item.name for item in catalog.degrees] == ["Test"]
+    assert [item.name for item in catalog.universities] == ["One University"]
+
+    # Recommendations return the university with zero counts rather than 503.
+    recommendations = repository.recommendations("Test").recommendations
+    assert [
+        (item.university, item.distinct_nus_module_count, item.mapping_count)
+        for item in recommendations
+    ] == [("One University", 0, 0)]
+
+    # A known pair with no mappings is a valid empty result, not unavailable.
+    mapped = repository.mappings("Test", "One University")
+    assert mapped.mappings == []
+    assert mapped.partner_module_count == 0
+    assert mapped.distinct_nus_module_count == 0
+
+
+def test_complete_choices_with_empty_degree_membership_return_ready_empty_results(
+    repository: PostgresCatalogRepository, database: DatabaseTarget
+):
+    database.execute(READY_WITH_EMPTY_DEGREE_MEMBERSHIP)
+
+    # A degree with no module memberships is still a ready catalog.
+    recommendations = repository.recommendations("Test").recommendations
+    assert [
+        (item.university, item.distinct_nus_module_count) for item in recommendations
+    ] == [("One University", 0)]
+
+    mapped = repository.mappings("Test", "One University")
+    assert mapped.mappings == []
+    assert mapped.partner_module_count == 0
+    assert mapped.distinct_nus_module_count == 0
