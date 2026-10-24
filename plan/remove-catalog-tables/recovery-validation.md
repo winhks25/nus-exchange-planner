@@ -79,3 +79,52 @@ Because the full export was skipped, the "verify the export can restore
 mapping (done) rather than a full restore rehearsal (not done). Any future
 production restore must first capture a new full export at a controlled boundary,
 per `recovery.md`, and reconcile post-export edits.
+
+## T046 — explicit JSON fallback and switch back (post-deletion)
+
+Date: 2026-10-24 (Asia/Singapore). Both modes were exercised locally after the
+metadata deletion; neither requires the retired importer or the removed tables.
+
+### JSON mode with no database connection
+
+```bash
+env -u DATABASE_URL CATALOG_BACKEND=json \
+  uv run uvicorn app.main:app --host 127.0.0.1 --port 18772
+```
+
+- `DATABASE_URL` was explicitly unset, so no connection string existed at all.
+- `/api/v1/catalog` and `/api/v1/recommendations` returned `200`.
+- `backend/tests/test_json_repository.py`: 3 passed.
+
+Frozen-snapshot mapping counts (rows), matching the documented repaired-vs-frozen
+deltas:
+
+| Degree / University | JSON (frozen) | PostgreSQL (repaired) |
+| --- | ---: | ---: |
+| Artificial Intelligence / Toronto | 9 | 10 |
+| Business Analytics / Toronto | 18 | 19 |
+| Computer Science / Toronto | 6 | 7 |
+| Information Security / Toronto | 7 | 8 |
+
+The frozen snapshot has 147 mapping rows in total; the PostgreSQL branch has 151.
+These differences are intentional reviewed repairs, not drift, and JSON mode
+does not undo database changes or restore deleted metadata.
+
+### Switching back to the core-only PostgreSQL database
+
+The JSON server was stopped, then a fresh core-only PostgreSQL runtime was started
+with the same configuration path used for recovery:
+
+```bash
+LC_ALL=C LANG=C uv run python -m scripts.serve_catalog_api \
+  --host 127.0.0.1 --port 18765
+```
+
+- `/api/v1/catalog` and `/api/v1/recommendations` returned `200`.
+- The same four Toronto pairs returned 10, 19, 7, and 8 rows, confirming the
+  repaired PostgreSQL data and that no metadata table or importer is required.
+- The switch is purely configuration: `CATALOG_BACKEND` plus `DATABASE_URL`.
+  Returning to a database runtime does not need the retired importer.
+
+Both servers were stopped after the checks; no process or credential was left
+behind.
