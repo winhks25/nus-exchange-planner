@@ -5,11 +5,6 @@ the eight retained tables, and assert the end state: no `catalog_`-prefixed
 table in `public`, no `module_mappings.source_row_id` column, no archive-guard
 function, the eight core tables intact, and the reader role still able to SELECT
 core data while removed relations cannot be resolved by operational SQL.
-
-The five-table and archive-function drops are implemented in T029. Until that
-task lands, the migration only performs the T028 core unlink, so those specific
-absence assertions are expected to fail; they are marked xfail with that reason
-and will flip to passing (and must stay passing) once T029 completes the file.
 """
 
 import psycopg
@@ -45,12 +40,6 @@ CORE_TABLES = (
     "partner_universities",
     "pu_modules",
     "module_mappings",
-)
-
-T029_PENDING = pytest.mark.xfail(
-    reason="T029 drops the five metadata tables and reject_catalog_archive_mutation(); "
-    "only the T028 core unlink is implemented so far.",
-    strict=False,
 )
 
 
@@ -113,7 +102,6 @@ def test_core_tables_remain(removed_catalog: DatabaseTarget) -> None:
     assert sorted(name for (name,) in present) == sorted(CORE_TABLES)
 
 
-@T029_PENDING
 def test_no_catalog_prefixed_tables_remain(removed_catalog: DatabaseTarget) -> None:
     """T029: no literal `catalog_`-prefixed relation remains in public."""
 
@@ -129,7 +117,6 @@ def test_no_catalog_prefixed_tables_remain(removed_catalog: DatabaseTarget) -> N
     assert remaining == []
 
 
-@T029_PENDING
 def test_named_metadata_tables_are_absent(removed_catalog: DatabaseTarget) -> None:
     """T029: each of the five named metadata tables cannot be resolved."""
 
@@ -141,7 +128,6 @@ def test_named_metadata_tables_are_absent(removed_catalog: DatabaseTarget) -> No
             ).fetchone()[0] is None
 
 
-@T029_PENDING
 def test_archive_guard_function_is_absent(removed_catalog: DatabaseTarget) -> None:
     """T029: the unused archive-guard trigger function is removed."""
 
@@ -168,7 +154,6 @@ def test_reader_role_reads_core_after_seeding(removed_catalog: DatabaseTarget) -
         )
 
 
-@T029_PENDING
 def test_operational_sql_cannot_query_removed_relations(
     removed_catalog: DatabaseTarget,
 ) -> None:

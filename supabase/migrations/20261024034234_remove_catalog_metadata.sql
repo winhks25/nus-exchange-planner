@@ -30,8 +30,20 @@ alter table public.module_mappings
 alter table public.module_mappings
   drop column source_row_id;
 
--- T029 — metadata-table and archive-guard removal is appended here before
--- commit (child archive tables first, then parents, then the trigger
--- function once its dependencies are gone).
+-- T029 — metadata-table and archive-guard removal. Drop order follows the
+-- foreign-key dependency graph so plain DROP (RESTRICT) succeeds without CASCADE:
+-- the two leaf child tables first, then source_rows, then snapshots, then the
+-- import_batches root. Each DROP TABLE removes that table's own triggers, RLS
+-- policies, indexes, and owned sequences by ownership. The archive-guard
+-- function is used only by triggers on catalog_source_snapshots and
+-- catalog_source_rows, so it has no remaining dependents once those two tables
+-- are dropped and is removed last.
+drop table public.catalog_issues;
+drop table public.catalog_repairs;
+drop table public.catalog_source_rows;
+drop table public.catalog_source_snapshots;
+drop table public.catalog_import_batches;
+
+drop function public.reject_catalog_archive_mutation();
 
 commit;
