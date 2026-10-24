@@ -254,3 +254,21 @@ uv run --directory backend ruff check app scripts tests
 - Measured on localhost to capture software execution bounds without WAN latency or remote pooler throttling. These measurements document runtime efficiency and lack of overhead rather than an unconstrained high-load production guarantee.
 
 ---
+
+
+## T076: Final Release Gate Sign-Off (Phase 7 / US5)
+
+**Gate Evaluation Summary:**
+
+| Gate Criterion | Verification Evidence | Status |
+| --- | --- | --- |
+| **All Required Test Suites Green** | 83 backend pytest tests (T065), 21 migration/absence tests (T064), 65 JSON Playwright tests (T068), 73 PostgreSQL Playwright tests (T069) | ✅ Passed (100%) |
+| **Clean Codebase Quality** | Ruff: 0 errors; ESLint: 0 errors; TypeScript: 0 errors; Next.js Build: Succeeded (T070) | ✅ Passed |
+| **Single-Command Automated Gate** | `scripts/check-regressions.sh` passed end-to-end (T071) | ✅ Passed |
+| **Response Parity & Deltas** | Replayed 41 requests with 0 differences against golden baseline; only reviewed Toronto deltas differ between JSON and PG (T066, T074) | ✅ Passed |
+| **Runtime Independence** | Zero runtime queries or schema references to the 5 dropped metadata tables or `source_row_id` (T064, T074, T075) | ✅ Verified |
+| **Importer Retirement** | `backend/scripts/import_catalog.py` permanently deleted; `catalog_seed.py` restricted to local targets (T052, T055) | ✅ Verified |
+| **Dual Backend Operation** | Explicit JSON fallback and PostgreSQL mode verified on localhost with exact CORS (T072, T073) | ✅ Verified |
+| **Performance & Latency** | Warm read latencies average <2ms; zero `UndefinedTable` or permission errors (T075) | ✅ Verified |
+
+**Release Gate Decision:** **PASSED**. Phase 7 (US5) is fully complete with zero remaining defects or open regressions. Proceed to Phase 8 closure.
