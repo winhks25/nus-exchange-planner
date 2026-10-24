@@ -117,6 +117,42 @@ def test_unready_core_catalog_returns_503_without_json_fallback(
             assert "postgresql://" not in response.text
 
 
+def test_denied_required_table_read_returns_sanitized_503(
+    database: DatabaseTarget, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A role without core-table SELECT must fail closed, never fall back."""
+
+    role = "catalog_denied_reader"
+    password = "catalog-denied-local"
+
+    # Create a disposable login role with no core-table SELECT privilege.
+    with psycopg.connect(database.owner_url, autocommit=True) as connection:
+        connection.execute(f"drop role if exists {role}")
+        connection.execute(f"create role {role} login password '{password}'")
+
+    try:
+        url = (
+            f"postgresql://{role}:{password}"
+            f"@127.0.0.1:{database.cluster.port}/{database.name}"
+        )
+
+        # Any attempt to build the JSON adapter fails the test.
+        def forbidden_json(*args, **kwargs):
+            raise AssertionError("denied reads must never construct the JSON adapter")
+
+        monkeypatch.setattr(main_module, "JsonCatalogRepository", forbidden_json)
+
+        with TestClient(create_app(settings=_settings(url))) as client:
+            response = client.get("/api/v1/catalog")
+            assert response.status_code == 503
+            assert response.json() == {"detail": UNAVAILABLE}
+            assert "postgresql://" not in response.text
+            assert "permission denied" not in response.text.lower()
+    finally:
+        with psycopg.connect(database.owner_url, autocommit=True) as connection:
+            connection.execute(f"drop role if exists {role}")
+
+
 # Each fragment seeds a core catalog that fails exactly one readiness condition.
 UNREADY_CORE_FRAGMENTS = {
     "empty-degrees": """
