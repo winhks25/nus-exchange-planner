@@ -153,3 +153,71 @@ duplicate (`CS3213` / `CITS3301`), not data loss.
   `specializations_id_seq`=19.
 
 No retained row, column, identifier, or sequence state changed.
+
+## T044 — browser journeys against the remote-backed runtime
+
+Date: 2026-10-24 (Asia/Singapore). The frontend dev server ran on
+`http://127.0.0.1:18766` with `NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:18770`,
+pointing at the same localhost runtime connected to the post-deletion Supabase
+project. Playwright used the installed Chromium from `frontend/playwright.config.ts`.
+
+### Journey coverage
+
+The existing suites ran against the remote-backed runtime with
+`TEST_CATALOG_BACKEND=postgres`:
+
+```bash
+npx playwright test tests/flows.spec.ts tests/database-regression.spec.ts \
+  tests/app-shell.spec.ts tests/recommend-picker.spec.ts --workers=1
+# -> 37 passed, 2 failed
+```
+
+| Journey | Result |
+| --- | --- |
+| Initial catalog load, degree search and selection, five ranked cards | PASS |
+| AI Toronto card: #1, 6 NUS modules, 10 partner modules, deep link to 10 rows | PASS |
+| CS Toronto mappings: 7 rows, 3 distinct NUS, 7 mappable partner modules | PASS |
+| Mapping selectors update URL state and counts | PASS |
+| Browser back/forward restore mapping pairs | PASS |
+| Valid empty pair (AI / UWA) and 503 error state | PASS |
+| Loading state, late-response discard, mobile 390×844 mapping layout | PASS |
+| App shell, theme, picker keyboard behaviour, Compare redirects | PASS |
+
+Two failures were environmental, not data or UI regressions:
+
+1. `database-regression › degree selection navigates to imported Toronto recommendations`
+   timed out waiting for 10 rows on the first cold run. The page snapshot already
+   showed all 10 rows and the correct counts; re-running the test alone passed in
+   8.4 s. The remote transaction pooler adds the cold-request latency that the
+   default 5 s assertion does not budget for.
+2. `flows › warmed Recommend result renders within one second` measured
+   1881.8 ms against the 1000 ms local-database budget. This is a latency
+   threshold from the local runtime design, not an API/data difference; the same
+   page served identical content. Bounded latency measurements are revisited in
+   T075, and the threshold was not weakened.
+
+### Targeted evidence run
+
+A temporary evidence spec (removed after the run) exercised the same journeys and
+captured screenshots under `plan/remove-catalog-tables/evidence/`:
+
+| Check | Result |
+| --- | --- |
+| AI recommendations render 5 cards with Toronto first | PASS |
+| Toronto mapping deep link renders 10 rows and the 10/6/10 counts | PASS |
+| Both selectors update the URL, and history restores Toronto then Kyoto | PASS |
+| CS / UWA shows the explicit "No qualifying mappings" empty state | PASS |
+| CORS on `/catalog`, `/recommendations`, `/mappings` | exact origin `http://127.0.0.1:18766` |
+| Browser console errors | none |
+| Failed requests (excluding client aborts from superseded navigations) | none |
+| Mobile 390×844 CS/Toronto renders 7 rows with no horizontal overflow | PASS |
+
+| Screenshot | Content |
+| --- | --- |
+| `evidence/recommend-desktop.png` | AI recommendations, five ranked cards |
+| `evidence/mappings-desktop.png` | AI / Toronto, 10 mapping rows |
+| `evidence/empty-pair-desktop.png` | CS / UWA valid-empty state |
+| `evidence/mappings-mobile.png` | CS / Toronto at 390×844 |
+
+The production Vercel frontend was not used; it still cannot load catalog data
+because its backend is the pre-T014 deployment behind the known 503 outage.
