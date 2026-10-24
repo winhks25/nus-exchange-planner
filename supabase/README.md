@@ -4,18 +4,18 @@ Target Supabase project: `wydziozsjibkvpgphpia` (region `ap-southeast-2`).
 
 ## Deployment status
 
-The database is deployed and current. All three reviewed migrations are applied,
-the reviewed catalog is published as import batch `1` (`completed`,
-`is_current=true`), and the production backend reads it through the read-only
-`catalog_reader` role. The deployed frontend is unchanged apart from its API
-origin. Deployment evidence and URLs are in
-`plan/supabase-migration/deployment-results.md`.
+The database is deployed and current. All four reviewed migrations are applied,
+the catalog operates directly on the eight core tables, and the production
+backend reads it through the read-only `catalog_reader` role. The deployed
+frontend is unchanged apart from its API origin. Deployment evidence and URLs
+are in `plan/supabase-migration/deployment-results.md` and `plan/remove-catalog-tables/cleanup-results.md`.
 
 | Version | Migration | Purpose |
 | --- | --- | --- |
 | `20261022000100` | `create_exchange_catalog` | Initial eight-table catalog schema |
 | `20261022000200` | `prepare_catalog_import` | Source provenance, issues, repairs and presentation |
 | `20261022000300` | `catalog_reader` | Least-privilege runtime role and SELECT policies |
+| `20261024034234` | `remove_catalog_metadata` | Drop metadata/archive/provenance tables and source_row_id column |
 
 The initial migration was applied manually through the SQL Editor on 2026-10-22.
 It did not register CLI history, so version `20261022000100` was later recorded
@@ -27,6 +27,10 @@ statements against the existing schema; apply future migrations with
 
 ## Schema layout
 
+The catalog consists exclusively of eight core application tables:
+`degrees`, `degree_modules`, `nus_modules`, `partner_universities`, `pu_modules`,
+`module_mappings`, `specializations`, and `specialization_modules`.
+
 Degrees and NUS modules have a many-to-many relationship through `degree_modules`.
 A module's offering faculty does not restrict which degrees can include it.
 Specializations belong to a degree and have their own module membership; those
@@ -35,82 +39,72 @@ degree including specialization options must explicitly combine both sets.
 
 Partner course codes are unique within each university, not globally. Mappings
 represent individual NUS/partner course pairs. Repeated mapping pairs remain
-allowed to preserve the current application's source-row semantics. Bundled
+allowed to preserve the application's source-row semantics. Bundled
 equivalencies and curriculum-year versioning are outside this schema.
 
 City, continent, offering faculty, and requirement type may be unknown rather
-than inferred. Module names may be null in the source and are not invented during
-import. The import also stores verified units, degree full titles and source
-order, specialization kind, raw source snapshots, import batches, source-addressed
-issues and repairs, source-row identity, and row-specific presentation.
+than inferred. Module names may be null in the source and are not invented.
+The operational importer and its metadata tables (`catalog_import_batches`,
+`catalog_source_snapshots`, `catalog_source_rows`, `catalog_issues`,
+`catalog_repairs`) and the `source_row_id` column have been permanently removed.
 
 All tables enable row level security without browser policies. Anonymous and
 ordinary authenticated Data API clients cannot read or write rows. Foreign keys
 use PostgreSQL's default NO ACTION behavior to prevent accidental deletion of
 referenced catalog records.
 
-## Catalog data lifecycle
+## Catalog data maintenance
 
-The checked-in JSON in `data/` plus reviewed repairs in
-`data/repairs/catalog_repairs.json` are imported with the separate writer
-credential `IMPORT_DATABASE_URL`. The operator runbook is
-`plan/supabase-migration/quickstart.md`.
+Production catalog maintenance is performed directly against the eight core tables
+using standard SQL transactions. The operator runbook is
+[maintenance guide](../plan/remove-catalog-tables/quickstart.md).
+
+For local test databases, disposable targets can be seeded from the reviewed
+preview using:
 
 ```bash
-# Inspect without writing; the default mode is a dry run.
-uv run --directory backend python -m scripts.import_catalog \
-  --dry-run --target-project-ref wydziozsjibkvpgphpia
+# Seed a local test database from the reviewed preview:
+uv run --directory backend python -m scripts.catalog_seed \
+  --database-url postgresql://postgres:postgres@localhost:54322/postgres
 
-# Publish explicitly; remote targets require an exact confirmation value.
-uv run --directory backend python -m scripts.import_catalog \
-  --apply --target-project-ref wydziozsjibkvpgphpia \
-  --confirm-project-ref wydziozsjibkvpgphpia
-
-# Reconcile the completed batch read-only.
+# Reconcile a database read-only against the reviewed preview:
 uv run --directory backend python -m scripts.verify_catalog \
   --reconcile --target-project-ref wydziozsjibkvpgphpia
 ```
 
-The importer takes an advisory transaction lock, writes the batch marker,
-archives, source rows, entities, mappings, issues and repairs in one transaction,
-and commits the completed marker with them. A matching source and repair checksum
-is a no-op. A different published snapshot is refused rather than overwritten;
-refreshing the data requires a separately reviewed workflow. No table is truncated.
+`scripts.catalog_seed` is restricted to local development targets and will reject
+remote database URLs.
 
-The current batch archives 8 files and 154 raw mapping rows: 146 accepted, 5
-repaired, and 3 quarantined. It publishes 6 degrees, 5 universities, 151 active
-mappings, 152 NUS modules, 142 partner modules and 19 specializations. The
-reconciliation passes 19/19 checks; see `plan/supabase-migration/import-results.md`
-and `plan/supabase-migration/data-deltas.md`.
+The current published core catalog contains 6 degrees, 5 universities, 151 active
+mappings, 152 NUS modules, 142 partner modules, and 19 specializations. Missing
+NUS titles remain null and are never invented.
 
-## Unresolved data
+## Unresolved data and historical provenance
 
-Unresolved source rows are retained and reported, not silently dropped. The
-current batch has 16 open, 9 resolved and 9 quarantined issues, plus 44 repair
-records (24 verified and 20 unresolved). Three Toronto rows (source indexes 48,
-49 and 53) remain quarantined because their NUS code field contains a course
-title that cannot be resolved to one official code without inference. Missing NUS
-titles remain null. These rows stay in `catalog_source_rows` and are excluded from
-`module_mappings`. Canonical details are `plan/supabase-migration/repair-report.md`,
-`data-deltas.md` and `import-results.md`.
+The 3 quarantined Toronto rows that lacked official NUS codes remain excluded from
+`module_mappings`. Historical provenance and audit trails are preserved in
+repository planning documentation (`plan/supabase-migration/repair-report.md`
+and `data-deltas.md`). The database itself stores only clean, normalized core entities.
 
 ## Runtime source and mode switches
 
 The production backend uses `CATALOG_BACKEND=postgres` with a server-only
-`DATABASE_URL` for `catalog_reader`. A database failure returns a sanitized 503;
-it never loads JSON. To roll back, set `CATALOG_BACKEND=json`, remove
-`DATABASE_URL`, and redeploy the backend. JSON mode serves the frozen snapshot and
-does not undo database changes, so PostgreSQL mode can be restored later without
-re-importing. Detailed rollback and roll-forward steps are in
-`plan/supabase-migration/quickstart.md`.
+`DATABASE_URL` for `catalog_reader`. On startup or first query, the backend
+verifies core readiness: at least one degree, at least one university, and no
+null `full_title` in degrees.
+
+A database failure or readiness failure returns a sanitized 503; it never falls
+back to JSON automatically. To roll back, set `CATALOG_BACKEND=json`, remove
+`DATABASE_URL`, and redeploy the backend. JSON mode serves the frozen snapshot
+in `data/`. Detailed rollback and recovery procedures are in
+[recovery guide](../plan/remove-catalog-tables/recovery.md).
 
 ## Runtime role credentials
 
 The reader migration creates `catalog_reader` with `NOLOGIN`, `NOSUPERUSER`,
 and `NOBYPASSRLS`, plus fixed statement and idle-transaction timeouts. It grants
-`USAGE` on `public` and `SELECT` only on the catalog and import-batch tables. The
-role cannot mutate data, read raw source snapshots, source rows, issues, or
-repairs, and it has no browser-facing policies.
+`USAGE` on `public` and `SELECT` only on the eight core catalog tables. The
+role cannot mutate data and has no browser-facing policies.
 
 Provision a login password outside the repository and outside migrations:
 
@@ -130,21 +124,20 @@ Store that URL only in the backend deployment's server-side `DATABASE_URL`.
 The application pool also forces `sslmode=require` and disables prepared
 statements for transaction-pooler compatibility.
 
-## Import credentials
+## Administrative and maintenance credentials
 
-Imports and migrations must not use `catalog_reader` or its password. Set a
-separate `IMPORT_DATABASE_URL` for the project owner or a dedicated writer role,
-prefer a direct connection (port `5432`) or session pooler, and keep it out of
-the runtime deployment. The importer needs write access to the catalog, batch,
-archive, issue, and repair tables; the reader intentionally does not.
+Direct maintenance, schema changes, and migrations must not use `catalog_reader`.
+Use project owner or admin credentials via a direct connection (port `5432`)
+or session pooler (port `5432`), and keep them out of runtime deployments.
 
 Passwords are never committed to migrations or planning files. After
-provisioning, verify the split with queries such as:
+provisioning, verify the privileges with queries such as:
 
 ```sql
 select has_table_privilege('catalog_reader', 'public.module_mappings', 'select');
-select has_table_privilege('catalog_reader', 'public.catalog_source_snapshots', 'select');
+select has_table_privilege('catalog_reader', 'public.degrees', 'select');
 select has_table_privilege('catalog_reader', 'public.module_mappings', 'insert');
 ```
 
-The expected results are `true`, `false`, and `false`.
+The expected results are `true`, `true`, and `false`. All dropped metadata tables
+(`catalog_import_batches`, etc.) no longer exist.

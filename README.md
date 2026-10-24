@@ -2,7 +2,7 @@
 
 A read-only tool for NUS School of Computing students to find exchange partners with module mappings. **Recommend** (`/`) ranks every partner by the number of distinct degree modules with a mapping. **Mappings** (`/mappings`) shows every qualifying mapping row for a degree and partner, including repeated NUS codes.
 
-Production serves the catalog from Supabase PostgreSQL through the read-only `catalog_reader` role. Local development defaults to the checked-in JSON snapshot in `data/`, which is also the frozen manual-rollback release. The source is selected explicitly with `CATALOG_BACKEND=json|postgres`; a database failure returns a sanitized 503 and never falls back to JSON.
+Production serves the catalog from Supabase PostgreSQL through the read-only `catalog_reader` role. Local development defaults to the checked-in JSON snapshot in `data/`, which is also the frozen manual-rollback release. The source is selected explicitly with `CATALOG_BACKEND=json|postgres`; a database failure returns a sanitized 503 and never falls back to JSON automatically. In PostgreSQL mode, the backend checks core readiness (at least one degree, one university, and no null degree full_title) before serving requests.
 
 The reviewed PostgreSQL batch contains 154 raw source rows: 146 accepted, 5 repaired and 3 quarantined because their NUS code field contains a course title. It publishes 151 active mappings, including one verified unit repair. The frozen JSON snapshot still contains the original 147 accepted mappings and missing titles. Both are documented in [data deltas](plan/supabase-migration/data-deltas.md); unresolved names remain null and are never invented.
 
@@ -43,26 +43,19 @@ Run the complete release gate, which covers backend tests plus the browser suite
 
 It never contacts Supabase or a developer database. Expected baseline and the latest evidence are in [regression results](plan/supabase-migration/regression-results.md).
 
-## Catalog data lifecycle
+## Catalog data and direct maintenance
 
-The checked-in JSON in `data/` and the reviewed repairs in `data/repairs/catalog_repairs.json` are the inputs. Imports are deterministic and use separate writer credentials (`IMPORT_DATABASE_URL`); the API runtime never receives them.
+Production catalog data resides in eight core tables in Supabase (`degrees`, `degree_modules`, `nus_modules`, `partner_universities`, `pu_modules`, `module_mappings`, `specializations`, `specialization_modules`). The previous operational importer and its metadata tables (`catalog_import_batches`, `catalog_source_snapshots`, `catalog_source_rows`, `catalog_issues`, `catalog_repairs`) have been permanently retired.
+
+Updates are applied directly via SQL transactions against Supabase adhering to foreign-key constraints and core invariants (see [maintenance guide](plan/remove-catalog-tables/quickstart.md)). For local testing, disposable databases are seeded using `scripts.catalog_seed.seed_preview` from the reviewed preview.
 
 ```sh
-# Inspect the target, source checksum and reviewed counts without writing.
-uv run --directory backend python -m scripts.import_catalog \
-  --dry-run --target-project-ref wydziozsjibkvpgphpia
-
-# Publish only after confirming the checksums and target project.
-uv run --directory backend python -m scripts.import_catalog \
-  --apply --target-project-ref wydziozsjibkvpgphpia \
-  --confirm-project-ref wydziozsjibkvpgphpia
-
-# Reconcile the published batch read-only.
+# Reconcile a database against the reviewed preview (read-only):
 uv run --directory backend python -m scripts.verify_catalog \
   --reconcile --target-project-ref wydziozsjibkvpgphpia
 ```
 
-The importer uses one transaction and an advisory lock, writes the completed batch marker with all catalog rows, and is a no-op when the source and repair checksums match. It refuses to overwrite a different published snapshot, so a future data refresh needs its own reviewed workflow. Import details and unresolved records are recorded in [import results](plan/supabase-migration/import-results.md); the operator runbook is the [migration quickstart](plan/supabase-migration/quickstart.md).
+For disaster recovery, data snapshots, or manual rollback to the frozen JSON mode, refer to the [recovery runbook](plan/remove-catalog-tables/recovery.md).
 
 Supabase migration history is maintained with the CLI:
 
@@ -70,13 +63,13 @@ Supabase migration history is maintained with the CLI:
 npx supabase@latest migration list
 ```
 
-The applied versions are `20261022000100` (initial catalog), `20261022000200` (import provenance) and `20261022000300` (read-only runtime role). The initial migration was applied manually through the SQL Editor and later recorded with `migration repair` after a full schema comparison; never replay its `CREATE TABLE` statements. See [schema audit](plan/supabase-migration/schema-audit.md).
+The applied versions are `20261022000100` (initial catalog), `20261022000200` (import provenance), `20261022000300` (read-only runtime role), and `20261024034234` (`remove_catalog_metadata`). The initial migration was applied manually through the SQL Editor and later recorded with `migration repair` after a full schema comparison; never replay its `CREATE TABLE` statements. See [schema audit](plan/supabase-migration/schema-audit.md).
 
 ## Deploy on Vercel
 
 Production is deployed as two Vercel projects: backend `nus-exchange-planner-api` (project root = repository root) and frontend `nus-exchange-planner-web` (project root = `frontend/`). The frontend uses `https://nus-exchange-planner-api.vercel.app` as its public API origin.
 
-Deploy the backend first. The recognized FastAPI entry point is root `index.py` (with `api/index.py` also exporting the app); root `requirements.txt` supplies production dependencies and `.python-version` selects Python 3.12. Set the server-only `CATALOG_BACKEND=postgres`, `DATABASE_URL` for the `catalog_reader` transaction-pooler role and `CORS_ORIGINS` to the exact frontend origin. Keep `IMPORT_DATABASE_URL` out of the runtime project. SQL migrations and imports use their own writer connection. See [Vercel's FastAPI deployment guide](https://vercel.com/docs/frameworks/backend/fastapi) for project setup and [deployment results](plan/supabase-migration/deployment-results.md) for the recorded rollout.
+Deploy the backend first. The recognized FastAPI entry point is root `index.py` (with `api/index.py` also exporting the app); root `requirements.txt` supplies production dependencies and `.python-version` selects Python 3.12. Set the server-only `CATALOG_BACKEND=postgres`, `DATABASE_URL` for the `catalog_reader` transaction-pooler role and `CORS_ORIGINS` to the exact frontend origin. SQL migrations and direct administrative maintenance use separate admin credentials, never shared with the runtime. See [Vercel's FastAPI deployment guide](https://vercel.com/docs/frameworks/backend/fastapi) for project setup and [deployment results](plan/supabase-migration/deployment-results.md) for the recorded rollout.
 
 Create the frontend project with root directory **`frontend/`** and the Next.js framework preset. Set `NEXT_PUBLIC_API_BASE_URL` to the stable backend production origin, then deploy. For previews, use a stable staging backend and set the frontend preview origin in that backend's `CORS_ORIGINS`; the backend does not use a wildcard CORS rule. Environment changes require redeployment.
 
