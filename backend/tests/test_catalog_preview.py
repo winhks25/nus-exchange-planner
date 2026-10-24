@@ -120,3 +120,57 @@ def test_preview_is_deterministic_and_addresses_its_sources():
         "data/mapping/korea/yonsei.json",
         "data/repairs/catalog_repairs.json",
     }
+
+
+def test_repaired_rows_keep_raw_display_and_corrected_identity():
+    """Repaired rows keep raw values in source fields and corrected values in normalized fields."""
+    preview = build_preview()
+    mappings_by_file_idx = {
+        (row["source_file"], row["mapping_index"]): row for row in preview["mappings"]
+    }
+    key = ("data/mapping/canada/toronto.json", 50)
+    mapping = mappings_by_file_idx[key]
+
+    assert mapping["source_nus_code"] == "Foundations of Machine Le"
+    assert mapping["outcome"] == "repaired"
+    assert mapping["nus_module_code"] == "CS3264"
+    assert mapping["mapping_nus_title"] == "Foundations of Machine Learning"
+
+
+def test_unresolved_membership_notes_are_retained_in_issue_messages():
+    """Issues retain contextual notes from curriculum sources."""
+    preview = build_preview()
+    notes = [
+        item["context"]["note"]
+        for item in preview["issues"]
+        if item["code"] == "specialization_memberships_missing"
+        and item.get("context", {}).get("note")
+    ]
+
+    assert len(notes) == 6
+    assert any(
+        "See official curriculum page for prescribed course list." in note
+        for note in notes
+    )
+    assert any(
+        "Optional; consult official specialisation list." in note
+        for note in notes
+    )
+
+
+def test_focus_areas_keep_their_kind_and_external_membership_note():
+    """Focus areas are distinct from specializations and keep their membership note."""
+    preview = build_preview()
+    focus_areas = {
+        (item["degree"], item["name"]): item
+        for item in preview["specializations"]
+        if item["kind"] == "focus_area"
+    }
+
+    algorithms = focus_areas[("Computer Science", "Algorithms & Theory")]
+    assert algorithms["source_order"] == 0
+    assert (
+        algorithms["membership_note"]
+        == "Focus-area membership catalog is linked externally."
+    )
+    assert algorithms["memberships"] == []
