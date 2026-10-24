@@ -304,9 +304,9 @@ def test_manual_json_rollback_serves_the_frozen_catalog_without_database() -> No
 
 
 def test_reader_role_cannot_write_or_read_protected_archives(
-    published_catalog: DatabaseTarget,
+    legacy_published_catalog: DatabaseTarget,
 ) -> None:
-    with psycopg.connect(published_catalog.reader_url) as connection:
+    with psycopg.connect(legacy_published_catalog.reader_url) as connection:
         with pytest.raises(psycopg.errors.ReadOnlySqlTransaction):
             connection.execute(
                 "insert into public.catalog_import_batches "

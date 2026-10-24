@@ -46,14 +46,14 @@ def _catalog_counts_from(database: DatabaseTarget) -> dict[str, int]:
 
 
 def test_import_accounts_for_every_raw_source_byte_and_row(
-    published_catalog: DatabaseTarget, import_plan: ImportPlan
+    legacy_published_catalog: DatabaseTarget, import_plan: ImportPlan
 ) -> None:
     expected_files = {
         item["path"]: item for item in import_plan.preview["source_snapshot"]["files"]
     }
 
     # Every archive keeps exact source text, checksum and parsed content.
-    with _connect(published_catalog.owner_url) as connection:
+    with _connect(legacy_published_catalog.owner_url) as connection:
         connection.read_only = True
         with connection.transaction():
             snapshots = connection.execute(
@@ -130,9 +130,9 @@ def test_import_accounts_for_every_raw_source_byte_and_row(
 
 
 def test_persisted_repairs_issues_and_unknown_values_match_reviewed_sources(
-    published_catalog: DatabaseTarget, import_plan: ImportPlan
+    legacy_published_catalog: DatabaseTarget, import_plan: ImportPlan
 ) -> None:
-    with _connect(published_catalog.owner_url) as connection:
+    with _connect(legacy_published_catalog.owner_url) as connection:
         connection.read_only = True
         with connection.transaction():
             repairs = connection.execute(
@@ -255,9 +255,9 @@ def test_persisted_repairs_issues_and_unknown_values_match_reviewed_sources(
     assert float(repaired_mapping[3]) == 0.5
 
 def test_shared_memberships_and_repeated_identities_do_not_multiply_rows(
-    published_catalog: DatabaseTarget, import_plan: ImportPlan
+    legacy_published_catalog: DatabaseTarget, import_plan: ImportPlan
 ) -> None:
-    with _connect(published_catalog.owner_url) as connection:
+    with _connect(legacy_published_catalog.owner_url) as connection:
         connection.read_only = True
         with connection.transaction():
             degree_counts = connection.execute(

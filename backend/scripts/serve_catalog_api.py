@@ -1,7 +1,8 @@
 """Start a disposable PostgreSQL catalog and serve the real API for browser tests.
 
-The importer publishes the reviewed source snapshot into a temporary database,
-then the read-only runtime role backs uvicorn. Nothing here can target Supabase.
+The reviewed source preview seeds the core catalog tables into a temporary
+database, then the read-only runtime role backs uvicorn. Nothing here can target
+Supabase; the seeder refuses any non-local target.
 """
 
 import argparse
@@ -11,7 +12,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from scripts.import_catalog import apply_plan, build_import_plan
+from scripts.catalog_preview import build_preview
+from scripts.catalog_seed import seed_preview
 from scripts.postgres_validation import PostgresCluster
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
@@ -28,9 +30,9 @@ def main() -> None:
     child: subprocess.Popen[bytes] | None = None
     try:
         database = cluster.create_database()
-        apply_plan(build_import_plan(), database.importer_url)
+        seed_preview(database, build_preview())
 
-        # The API inherits only runtime credentials; importer access stays in this process.
+        # The API inherits only runtime credentials; the owner URL never leaves this process.
         env = {
             **os.environ,
             "CATALOG_BACKEND": "postgres",

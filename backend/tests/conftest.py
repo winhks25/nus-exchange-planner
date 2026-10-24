@@ -8,8 +8,11 @@ import pytest
 os.environ["CATALOG_BACKEND"] = "json"
 os.environ.pop("DATABASE_URL", None)
 
+from scripts.catalog_preview import build_preview
+from scripts.catalog_seed import seed_preview
 from scripts.import_catalog import ImportPlan, apply_plan, build_import_plan
 from scripts.postgres_validation import (
+    LEGACY_MIGRATION_CEILING,
     DatabaseTarget,
     PostgresCluster,
     require_local_database_url,
@@ -56,11 +59,33 @@ def import_plan() -> ImportPlan:
 
 @pytest.fixture(scope="session")
 def published_catalog(
-    postgres_cluster: PostgresCluster, import_plan: ImportPlan
+    postgres_cluster: PostgresCluster,
 ) -> Iterator[DatabaseTarget]:
-    """A real importer publication that read-only tests share without mutation."""
+    """A core-seeded catalog that read-only tests share without mutation.
+
+    Readiness and API behavior depend only on the eight core tables, so ordinary
+    fixtures seed them directly from the reviewed preview on the full (final)
+    migration chain. The retired metadata tables are never written here.
+    """
 
     test_database = postgres_cluster.create_database()
+    seed_preview(test_database, build_preview())
+    yield test_database
+    postgres_cluster.drop_database(test_database)
+
+
+@pytest.fixture(scope="session")
+def legacy_published_catalog(
+    postgres_cluster: PostgresCluster, import_plan: ImportPlan
+) -> Iterator[DatabaseTarget]:
+    """A real importer publication on the pre-removal migration ceiling.
+
+    The retained import/provenance regression tests still exercise the metadata
+    tables and source_row_id links, so they run against the legacy schema until
+    those tables are removed in US2 and the tests are migrated in US4.
+    """
+
+    test_database = postgres_cluster.create_database(through=LEGACY_MIGRATION_CEILING)
     apply_plan(import_plan, test_database.importer_url)
     yield test_database
     postgres_cluster.drop_database(test_database)
