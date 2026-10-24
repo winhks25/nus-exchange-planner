@@ -161,19 +161,23 @@ tables before their later deletion. There is no deployed artifact to recheck.
 ## T034–T038 — production deletion boundary
 
 Date: 2026-10-24 (Asia/Singapore). The local US2 rehearsal (T029–T033) is
-complete and green. T034 (read-only change-boundary recheck) is complete below;
-T035 (export), T037 (apply), and T038 (post-apply verification) remain
-operator-run.
+complete and green. T034 (read-only change-boundary recheck), T037 (the single
+apply), and T038 (post-apply verification) are complete; T035 (full `pg_dump`
+export) was skipped by operator decision in favour of a partial recovery capture.
 
-### Why not executed here (T035/T037)
+### Execution path (operator decision)
 
-1. **No authenticated path.** `supabase migration list --linked` returns
-   `Access token not provided` and `SUPABASE_ACCESS_TOKEN` is unset. The real
-   export (T035) and the apply (T037) require an operator login this environment
-   does not have.
-2. **No-autonomous-prod-deploy rule.** Production DDL and the consistent export
-   are user-run by standing policy. This session rechecks read-only; it does not
-   apply or export.
+The operator selected the Supabase MCP path over the CLI (`supabase db push`) and
+the full `pg_dump` export:
+
+1. **T035 export skipped.** The full `pg_dump` export + local restore rehearsal
+   was skipped by operator decision. A minimal recovery capture (the
+   `module_mappings.id → source_row_id` mapping, sequence state, and a manifest)
+   was written to `PRIVATE_BACKUP_DIR` instead — see `recovery-validation.md`.
+2. **T037 applied via MCP.** The reviewed DDL was applied through the Supabase
+   MCP `apply_migration` tool (the CLI `db push --linked` path was not used). The
+   MCP records migration history with its own generated version, which differs
+   from the local file's `20261024034234` (recorded in T037 below).
 
 ### T034 — change-boundary recheck (read-only, completed)
 
@@ -209,58 +213,80 @@ pause direct data edits / import jobs before the export and keep them paused
 through T038. The export and apply remain operator-run under the
 no-autonomous-prod-deploy rule and are not authorized by this record.
 
-### T035 — consistent export (operator)
+### T035 — consistent export (skipped by operator decision)
 
-Execute the export defined in `recovery.md` into `PRIVATE_BACKUP_DIR`: full
-application schema/data, the `source_row_id` recovery mapping, sequence state, and
-a redacted manifest (timestamps, counts, digests). Verify by restoring into an
-isolated local database and comparing core/archive fingerprints. A file that
-merely exists does not pass — the restore comparison is the gate.
+The full `pg_dump` export and local restore rehearsal were **skipped**. The
+operator chose to apply via the Supabase MCP without the recoverable-backup
+prerequisite. As a minimal safety net, the irrecoverable recovery data was
+captured read-only before the apply and written to `PRIVATE_BACKUP_DIR`
+(`/Users/winhtutkhaungsoe/Backups/nus-exchange-planner/catalog-removal-20261023`):
+
+| File | Contents |
+| --- | --- |
+| `mapping-source-row-ids.csv` | `module_mappings.id → source_row_id` for all 151 mappings (skipped source rows 81, 82, 86) |
+| `sequence-state.csv` | `last_value` for all 10 public sequences at the boundary |
+| `partial-manifest.json` | capture timestamp, project ref, row counts, skipped-row note |
+
+This is a data-only capture, not a restorable schema dump. The schema
+(constraints, policies, triggers) and the five metadata tables' full contents are
+not recoverable from it, so a restore rehearsal was not possible. This limitation
+is recorded in `recovery-validation.md`.
 
 ### T036 — reviewed migration artifact
 
 Reviewed SQL: `supabase/migrations/20261024034234_remove_catalog_metadata.sql`.
+The reviewed DDL is byte-identical to the statements applied via MCP (only the
+recorded history version differs — see T037).
 
 | Property | Value |
 | --- | --- |
 | Reviewed against | `schema-inventory.md` (object list) + live dependency graph |
 | Drop order | source_row_id unlink; issues, repairs; source_rows; snapshots; import_batches; reject function |
-| Transaction | single `begin/commit`, `lock_timeout = '5s'`, RESTRICT (no CASCADE) |
+| Transaction | single transaction, `lock_timeout = '5s'`, RESTRICT (no CASCADE) |
 | Historical migrations | three applied files byte-for-byte unchanged |
-| Pending set | exactly one migration (confirm with `db push --linked --dry-run`) |
 | Localhost runtime verified | T022/T023 PASS at `af4d30e` |
 
-SQL digest (sha256 of the migration file), for the operator to match before
-apply:
+SQL digest (sha256 of the migration file):
 
 ```
 sha256: d917d39c52fc28641253c131c6bde674a470f6bfeae053eb3fb61dbafec1c32d
 ```
 
-(Recompute before apply: `shasum -a 256 supabase/migrations/20261024034234_remove_catalog_metadata.sql`.)
+### T037 — apply (completed via Supabase MCP)
 
-Execution prerequisite: operator authenticated (`supabase login` or
-`SUPABASE_ACCESS_TOKEN`). If an approval mechanism blocks execution, report its
-exact reason and preserve this reviewed artifact; do not bypass it or substitute
-ad hoc destructive SQL.
+| Item | Value |
+| --- | --- |
+| Applied | 2026-10-24 (Asia/Singapore), ~13:45 SGT (05:45 UTC) |
+| Path | Supabase MCP `apply_migration` (not CLI `db push`) |
+| Result | success — single transaction, no lock or dependency error |
+| Recorded migration version | `20261024054553` (name `remove_catalog_metadata`) |
 
-### T037 — apply (operator runs)
+The MCP records migration history with its own generated version `20261024054553`,
+which differs from the local file's `20261024034234`. The applied DDL is identical
+to the reviewed migration file; only the bookkeeping version differs.
 
-```bash
-npx --yes supabase@latest db push --linked --dry-run   # expect exactly 1 pending
-npx --yes supabase@latest db push --linked             # apply once
-npx --yes supabase@latest migration list --linked      # confirm recorded
-```
+**Implication and remediation:** the local file
+`20261024034234_remove_catalog_metadata.sql` no longer matches the remote
+`supabase_migrations.schema_migrations` history, so a future
+`supabase db push --linked` would treat `20261024034234` as pending and attempt to
+re-apply it. Before any future CLI push, either mark it applied
+(`supabase migration repair --status applied 20261024034234 --linked`) or rename
+the local file to `20261024054553_remove_catalog_metadata.sql` to match the remote
+history. Do not re-apply the DDL.
 
-Capture migration version, transaction result, timestamp, and redacted output
-here. On a lock/dependency error, confirm rollback and investigate — do not retry
-with CASCADE or overwrite migration history.
+### T038 — immediate post-apply verification (completed)
 
-### T038 — immediate post-apply verification (operator)
+Verified read-only immediately after the apply; the full record is in
+`schema-validation.md`:
 
-Verify: migration history shows the one new version; the five named tables and
-all unexpected `catalog_` tables are absent; `source_row_id` and the archive
-function are gone; RLS/policies retained; core fingerprints/counts/IDs/sequence
-state unchanged (compare to the T035 export). Record in `schema-validation.md`.
-Keep writes paused until the data comparison and initial endpoint checks confirm
-no retained data changed.
+| Check | Result |
+| --- | --- |
+| Migration history | 4 versions; new version `20261024054553` recorded once |
+| Five named tables absent | PASS |
+| Unexpected `catalog_` tables | none (only the 8 retained `catalog_reader_select_*` policies remain) |
+| `module_mappings.source_row_id` + FK + unique key | absent |
+| `reject_catalog_archive_mutation()` | absent |
+| 8 core tables present, RLS + one reader policy each | PASS |
+| Core counts (6/152/226/19/30/5/142/151) | unchanged |
+| Core sequences (degrees 6, module_mappings 151, partner_universities 5, pu_modules 142, specializations 19) | unchanged |
+| Retained check constraints | all present (semantic) |

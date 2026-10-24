@@ -172,3 +172,51 @@ unexpected dependency or lock contention — no partial state, no forced retry.
 
 Automated by `test_migration_aborts_on_unexpected_dependency` and
 `test_migration_aborts_on_conflicting_lock_then_normal_path`.
+
+## T038 — production post-apply verification (live Supabase)
+
+Date: 2026-10-24 (Asia/Singapore). Applied via Supabase MCP `apply_migration`
+(recorded as version `20261024054553`). Verified read-only through the MCP
+connection immediately after the apply; no mutation beyond the removal itself.
+
+### Migration history
+
+`supabase_migrations.schema_migrations` now holds four versions:
+
+`20261022000100`, `20261022000200`, `20261022000300`, `20261024054553`
+(`remove_catalog_metadata`). The MCP-generated version `20261024054553` differs
+from the local file `20261024034234_remove_catalog_metadata.sql`; the applied DDL
+is identical to the reviewed file. See `deployment-results.md` for the remediation
+note.
+
+### Object absence
+
+| Object | Expected | Observed |
+| --- | --- | --- |
+| `catalog_`-prefixed tables in `public` | 0 | 0 |
+| `public.catalog_import_batches` | absent | absent |
+| `public.catalog_source_snapshots` | absent | absent |
+| `public.catalog_source_rows` | absent | absent |
+| `public.catalog_issues` | absent | absent |
+| `public.catalog_repairs` | absent | absent |
+| `public.module_mappings.source_row_id` | absent | absent (10 columns remain) |
+| `module_mappings_source_row_id_fkey` / `_key` | absent | absent |
+| `public.reject_catalog_archive_mutation()` | absent | absent |
+| Public relations | 8 tables, 5 owned sequences | 8 tables, 5 sequences |
+
+The only `catalog_`-prefixed objects left are the eight retained
+`catalog_reader_select_*` RLS policies (one per core table), which are reader
+policies, not removal targets.
+
+### Retained core data and structure
+
+| Check | Observed |
+| --- | --- |
+| Core counts (degrees, nus_modules, degree_modules, specializations, specialization_modules, partner_universities, pu_modules, module_mappings) | 6, 152, 226, 19, 30, 5, 142, 151 — unchanged |
+| `module_mappings` columns | id, nus_module_code, pu_module_id, source_order, source_nus_title, source_nus_units, source_partner_title, source_partner_units, source_faculty, source_page |
+| `module_mappings` indexes | 4 (pkey, nus_module_code_idx, pu_module_id_idx, nus_code_source_order_idx) |
+| `module_mappings` foreign keys | 2 (nus_module_code, pu_module_id) |
+| `module_mappings` unique constraints | 0 (source_row_id_key removed) |
+| Core sequences | degrees 6, module_mappings 151, partner_universities 5, pu_modules 142, specializations 19 — unchanged |
+| RLS policies | one `catalog_reader_select_*` policy on each of the 8 core tables |
+| Retained check constraints | all present (semantic comparison), including `verified_units > 0`, `kind in ('specialization','focus_area')`, `source_order >= 0`, `code = upper(btrim(code))`, and the six `module_mappings.source_*` checks |

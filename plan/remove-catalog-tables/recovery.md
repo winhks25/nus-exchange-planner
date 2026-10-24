@@ -385,3 +385,13 @@ The export is bound to a quiesced timestamp. Before any real restore:
 - Table-count comparison, mapping-pair diff, sequence comparison.
 - Metadata/core object existence and reader privilege checks.
 - The chosen post-removal recovery path and any limitation found.
+
+## Execution status (2026-10-24)
+
+The full export and restore rehearsal were **not** executed: the operator chose
+the Supabase MCP apply path, skipping the recoverable-backup prerequisite. A
+minimal data-only capture (the `source_row_id` mapping, sequence state, and a
+manifest) was written to `PRIVATE_BACKUP_DIR` before the apply. The post-removal
+recovery choice is **choice 1 (keep the compatible core-readiness runtime)** — no
+restore or redeploy is required. See `recovery-validation.md` for the capture
+digests and the resulting limitations.
