@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// These assertions require the importer-backed PostgreSQL server.
+// These assertions require the core-seeded PostgreSQL server.
 test.skip(
   process.env.TEST_CATALOG_BACKEND !== "postgres",
   "database regression suite runs with TEST_CATALOG_BACKEND=postgres",
@@ -45,7 +45,7 @@ test("direct mapping entry loads repaired PostgreSQL rows", async ({ page }) => 
   await expect(page.locator(".mapping-row")).toHaveCount(CS_TORONTO.mappings);
 });
 
-test("degree selection navigates to imported Toronto recommendations", async ({ page }) => {
+test("degree selection navigates to core-seeded Toronto recommendations", async ({ page }) => {
   await page.goto("/");
   const picker = page.getByRole("combobox", { name: "Degree Programme" });
   await expect(picker).toBeVisible();
