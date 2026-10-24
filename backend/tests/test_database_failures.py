@@ -92,7 +92,7 @@ def test_configuration_failures_are_explicit_and_never_echo_secrets() -> None:
         CatalogDatabase(Settings(catalog_backend="postgres"))
 
 
-def test_unpublished_catalog_returns_503_without_json_fallback(
+def test_unready_core_catalog_returns_503_without_json_fallback(
     database: DatabaseTarget, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     def forbidden_json(*args, **kwargs):
@@ -115,6 +115,45 @@ def test_unpublished_catalog_returns_503_without_json_fallback(
             assert response.json() == {"detail": UNAVAILABLE}
             assert database.reader_url not in response.text
             assert "postgresql://" not in response.text
+
+
+# Each fragment seeds a core catalog that fails exactly one readiness condition.
+UNREADY_CORE_FRAGMENTS = {
+    "empty-degrees": """
+        insert into public.partner_universities (name, country, source_order)
+        values ('One University', 'Japan', 0);
+    """,
+    "empty-universities": """
+        insert into public.degrees (name, faculty, full_title, source_order)
+        values ('Test', 'School of Computing', 'Bachelor of Test', 0);
+    """,
+    "null-full-title": """
+        insert into public.degrees (name, faculty, full_title, source_order)
+        values ('Test', 'School of Computing', null, 0);
+        insert into public.partner_universities (name, country, source_order)
+        values ('One University', 'Japan', 0);
+    """,
+}
+
+
+@pytest.mark.parametrize("fragment", sorted(UNREADY_CORE_FRAGMENTS))
+def test_each_unready_core_condition_returns_sanitized_503(
+    database: DatabaseTarget, monkeypatch: pytest.MonkeyPatch, fragment: str
+) -> None:
+    def forbidden_json(*args, **kwargs):
+        raise AssertionError("an unready core catalog must never build the JSON adapter")
+
+    monkeypatch.setattr(main_module, "JsonCatalogRepository", forbidden_json)
+    database.execute(UNREADY_CORE_FRAGMENTS[fragment])
+
+    with TestClient(create_app(settings=_settings(database.reader_url))) as client:
+        response = client.get("/api/v1/catalog")
+        assert response.status_code == 503
+        assert response.json() == {"detail": UNAVAILABLE}
+        # The sanitized error must not leak the connection string or SQL.
+        assert database.reader_url not in response.text
+        assert "postgresql://" not in response.text
+        assert "select" not in response.text.lower()
 
 
 def test_unknown_selections_and_missing_parameters(
