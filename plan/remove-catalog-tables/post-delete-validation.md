@@ -221,3 +221,20 @@ captured screenshots under `plan/remove-catalog-tables/evidence/`:
 
 The production Vercel frontend was not used; it still cannot load catalog data
 because its backend is the pre-T014 deployment behind the known 503 outage.
+
+## T047 — mismatch resolution
+
+No API or core-data mismatch was introduced by the deletion. The comparator
+reported zero differences across all 41 requests, and the core snapshot matched
+the reviewed preview across all eight retained tables.
+
+Two browser-run failures were investigated rather than accepted:
+
+| Finding | Root cause | Resolution |
+| --- | --- | --- |
+| AI/Toronto mapping count timed out on the first cold run | Transaction-pooler cold latency exceeded the default 5 s assertion while the page already showed the 10 correct rows | Re-ran the single test; it passed in 8.4 s. No assertion, data, or code change. |
+| Warmed recommendation render measured 1881.8 ms | The 1000 ms budget was designed for a local database; the remote pooler plus dev build adds latency | Left the threshold unchanged. Bounded latency against the remote runtime is measured and documented in T075. |
+
+No runtime query, schema, migration, or fixture change was required. The
+deletion-related correctness boundary is therefore clear, and the temporary
+verification role can be removed before closing the gate.
