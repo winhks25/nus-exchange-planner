@@ -75,10 +75,47 @@ the final removal migration (`REMOVAL_MIGRATION`, T027) does not exist yet, so
 `apply_next_migration` has no pending migration to apply. This is expected US2
 work, not a US1 runtime regression.
 
+## T021 — PostgreSQL browser flows
+
+Date: 2026-10-24 (Asia/Singapore). Host memory was TIGHT (~2.2 GB free), so only
+the PostgreSQL DB-regression spec was run (single worker, line reporter), not the
+full JSON+PostgreSQL matrix (that is T068/T069 in US5).
+
+Command (run from `frontend/`):
+
+```bash
+LC_ALL=C LANG=C TEST_CATALOG_BACKEND=postgres \
+  npx playwright test tests/database-regression.spec.ts --workers=1 --reporter=line
+# -> 8 passed (24.9s)
+```
+
+The backend server was `scripts.serve_catalog_api` (the Playwright `webServer`
+command for postgres mode), which starts a disposable `PostgresCluster`, seeds it
+with `seed_preview(build_preview())` — the **core-only seeder** (T018/T019) — and
+backs uvicorn with the read-only `reader_url`. No importer, no metadata tables.
+
+| Flow | Result | Asserted |
+| --- | --- | --- |
+| direct mapping entry loads repaired rows | pass | Toronto 7 mappings / 3 distinct NUS / 7 mappable partner. |
+| degree selection → Toronto recommendations | pass | AI degree: 5 cards, #1 Toronto, 6 NUS / 10 partner, deep link → 10 mapping rows. |
+| mapping selectors update URL state and counts | pass | Business Analytics × Toronto = 19; × Kyoto = 2 distinct. |
+| browser back/forward restore pages | pass | Toronto 7 ↔ Kyoto 1 via history. |
+| valid empty pair and unavailable service | pass | UWA valid-empty (0 mappable, "No qualifying mappings"); mocked 503 → alert. |
+| loading state stays visible | pass | Loading spinner during delayed response → 7 rows. |
+| rapid selection ignores late response | pass | Superseded Toronto request discarded; Kyoto 1 distinct holds. |
+| mobile layout keeps 19 mappings readable | pass | 390×844 viewport, no horizontal overflow, 19 rows. |
+
+Key finding: every exact count the spec asserts (Toronto=7, AI=10, Business
+Analytics=19, Kyoto, zero-count UWA) reproduced from the **core seeder**, so the
+core-seeded server is behaviorally identical to the importer-backed server for the
+browser suite — the parity goal of US1. No selector, loading/error/empty-state, or
+count regression. The SWC `next-swc-darwin-arm64` warnings are pre-existing
+environment noise (a `package-lock.json` outside the repo), not test failures.
+
 ## Not run here (deferred)
 
 - `test_json_repository.py` and the contract suite: unaffected by US1 runtime
   changes; covered by the final gate (T065).
-- Full backend suite, lint/typecheck/build, and Playwright browser flows: the
-  host is memory-critical. T021 (browser) and T065/T070 (full gate) must run when
-  memory frees.
+- JSON-mode Playwright flows and the full backend suite / lint / typecheck /
+  build: covered by the US5 final gate (T065/T068/T069/T070) and not required by
+  T021, which scopes only the PostgreSQL browser flows.
