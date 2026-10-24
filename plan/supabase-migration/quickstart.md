@@ -1,5 +1,13 @@
 # Catalog Migration Quickstart
 
+> [!NOTE]
+> **Historical Runbook:** This document describes the initial JSON-to-PostgreSQL migration
+> with provenance and metadata tables. In Phase 6, the catalog metadata tables
+> (`catalog_import_batches`, `catalog_source_snapshots`, `catalog_source_rows`, `catalog_issues`,
+> `catalog_repairs`) and operational importer were permanently retired.
+> For current direct maintenance instructions and core schema operations, refer to the
+> [Direct Supabase Maintenance Guide](../remove-catalog-tables/quickstart.md).
+
 This page is the operator guide for the JSON-to-PostgreSQL catalog migration. It
 covers local JSON and PostgreSQL runs, Supabase migrations and imports, runtime
 configuration, checksum gates, failure diagnostics and manual rollback. The

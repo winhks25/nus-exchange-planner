@@ -122,20 +122,11 @@ where pm.code = 'P1' and pm.partner_university_id = (
 );
 """
 
-# Revoke the reader's access to the metadata tables. catalog_import_batches is the
-# only metadata table currently granted to catalog_reader, so revoking it is what
-# proves the runtime no longer depends on the publication marker.
-REVOKE_METADATA_ACCESS = """
-revoke select on table public.catalog_import_batches from catalog_reader;
-drop policy if exists catalog_reader_select_import_batches
-  on public.catalog_import_batches;
-"""
-
-
+# In the final schema, all metadata tables have been dropped. The PostgreSQL runtime
+# serves catalog requests entirely from the 8 core tables with no publication marker.
 def test_postgres_runtime_is_independent_of_metadata_tables(database: DatabaseTarget):
-    # Seed core data and strip metadata access as the database owner.
+    # Seed core data as the database owner on the final schema.
     database.execute(CORE_ONLY_FIXTURE)
-    database.execute(REVOKE_METADATA_ACCESS)
 
     # Start the API with the least-privilege reader role, exactly as deployed.
     settings = Settings(catalog_backend="postgres", database_url=database.reader_url)

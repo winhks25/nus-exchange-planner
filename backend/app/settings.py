@@ -37,7 +37,6 @@ class Settings:
 
     catalog_backend: CatalogBackend = "json"
     database_url: str | None = field(default=None, repr=False)
-    import_database_url: str | None = field(default=None, repr=False)
     pool: PoolSettings = field(default_factory=PoolSettings)
 
     @classmethod
@@ -54,9 +53,6 @@ class Settings:
 
         # Validate URLs when provided and require the runtime URL only in postgres mode.
         database_url = _optional_url(values.get("DATABASE_URL"), "DATABASE_URL")
-        import_database_url = _optional_url(
-            values.get("IMPORT_DATABASE_URL"), "IMPORT_DATABASE_URL"
-        )
         if catalog_backend == "postgres" and database_url is None:
             raise SettingsError("DATABASE_URL is required when CATALOG_BACKEND=postgres")
 
@@ -83,7 +79,6 @@ class Settings:
         return cls(
             catalog_backend=catalog_backend,
             database_url=database_url,
-            import_database_url=import_database_url,
             pool=pool,
         )
 

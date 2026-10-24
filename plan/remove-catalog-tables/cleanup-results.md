@@ -87,3 +87,31 @@ dependency, and caller to its retained purpose, establishing the keep/move/delet
 - Zero broken imports planned; rewiring precedes deletion.
 - Retired assertions documented with justification.
 
+---
+
+## 6. Credential Audit and Stale Reference Cleanup (T061)
+
+### A. Credential Audit and Redacted Changes
+- **`IMPORT_DATABASE_URL`**:
+  - Removed from `backend/.env.example`.
+  - Removed from `backend/app/settings.py` (`Settings.import_database_url` and env parsing removed).
+  - Explicitly popped from runtime subprocess environments in `backend/scripts/serve_catalog_api.py`.
+  - Unset in `scripts/check-regressions.sh` along with testing credentials to guarantee sandbox isolation.
+- **Runtime Credentials (`DATABASE_URL`)**:
+  - Unchanged: Bound to the least-privilege `catalog_reader` role. Requires core readiness (1 degree, 1 uni, non-null degree full_title).
+- **Administrative / Writer Credentials**:
+  - Kept strictly out of repository configurations and runtime deployments.
+  - Direct SQL maintenance uses owner credentials via direct connection (5432) or session pooler as documented in `quickstart.md`.
+
+### B. Stale Removed-Table Audit
+- **Application Runtime (`backend/app/`)**:
+  - Zero executable references to the 5 deleted metadata tables (`catalog_import_batches`, `catalog_source_snapshots`, `catalog_source_rows`, `catalog_issues`, `catalog_repairs`) or `source_row_id`.
+  - `backend/tests/test_app_repository.py`: Removed obsolete `REVOKE_METADATA_ACCESS` fixture referencing dropped `catalog_import_batches`.
+- **Validation and Test Tooling (`backend/scripts/`, `backend/tests/`)**:
+  - `verify_catalog.py` reconciled directly against `build_preview()` on core entities without batch/archive joins.
+  - `test_database_failures.py` updated to verify `UndefinedTable` on dropped metadata tables under `catalog_reader`.
+- **Historical Runbooks and Planning Docs**:
+  - Historical `plan/supabase-migration/quickstart.md` annotated with an alert pointing to `plan/remove-catalog-tables/quickstart.md`.
+  - Historical migration SQL files and planning logs preserved as immutable audit history.
+
+
