@@ -128,3 +128,32 @@ LC_ALL=C LANG=C uv run python -m scripts.serve_catalog_api \
 
 Both servers were stopped after the checks; no process or credential was left
 behind.
+
+
+---
+
+## T072 — Post-Cleanup Fallback and Return Rehearsal
+
+Date: 2026-10-24. Scope: Rehearsal of explicit JSON fallback and return to PostgreSQL on the final post-cleanup codebase following the guidance in `plan/remove-catalog-tables/quickstart.md`.
+
+### 1. JSON Fallback Verification
+- Configuration: `CATALOG_BACKEND=json`, `DATABASE_URL=None`.
+- Verification:
+  - Initial catalog loads without database credentials (`6` degrees, `5` partner universities).
+  - Recommendations for `Computer Science` return all 5 universities.
+  - Mappings for `Computer Science / University of Toronto` return exactly `6` mapping rows (frozen baseline).
+  - No database connection is attempted; no database logs or errors produced.
+
+### 2. Switch Back to PostgreSQL Verification
+- Configuration: `CATALOG_BACKEND=postgres`, `DATABASE_URL=<disposable_reader_url>`.
+- Verification:
+  - Database contains exclusively the 8 core tables (no `catalog_*` metadata tables).
+  - Runtime verifies core readiness (6 degrees, 5 universities, non-null full titles) on startup.
+  - Recommendations for `Computer Science` return all 5 universities.
+  - Mappings for `Computer Science / University of Toronto` return exactly `7` mapping rows (reviewed repairs applied).
+  - Repaired-vs-frozen difference (+1 mapping row for Toronto) is verified intact.
+  - Operation succeeded with zero executable references to the retired importer (`scripts.import_catalog`).
+
+### 3. Old-Runtime Limitation Confirmation
+- Legacy runtimes that execute `PUBLISHED_BATCH_SQL` against `catalog_import_batches` fail with `UndefinedTable` and return `503`.
+- The final-schema database requires the compatible core-readiness runtime (or JSON mode fallback); metadata restoration is neither required nor supported.
