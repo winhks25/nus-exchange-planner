@@ -149,3 +149,22 @@ PostgreSQL-specific tests verified:
 - Navigation, URL state, selectors, mappings, loading/error/empty states, browser history all pass.
 
 ---
+
+
+## T070: Frontend Quality Commands and Backend Ruff Linter
+
+**Commands:**
+```bash
+npm --prefix frontend run lint
+npm --prefix frontend run typecheck
+npm --prefix frontend run build
+uv run --directory backend ruff check app scripts tests
+```
+
+**Results:**
+- `eslint .`: Passed with 0 errors, 0 warnings. Matches T005 clean baseline.
+- `tsc --noEmit`: Passed with 0 errors.
+- `next build --webpack`: Compiled successfully in 1584ms; static prerendering for `/`, `/_not-found`, `/mappings`.
+- `ruff check app scripts tests`: All checks passed! 0 linting or formatting issues.
+
+---
