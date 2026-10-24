@@ -238,3 +238,73 @@ Two browser-run failures were investigated rather than accepted:
 No runtime query, schema, migration, or fixture change was required. The
 deletion-related correctness boundary is therefore clear, and the temporary
 verification role can be removed before closing the gate.
+
+## T048 — immediate post-deletion gate: CLOSED
+
+Date: 2026-10-24 (Asia/Singapore). Verified against the applied removal migration
+`20261024054553 remove_catalog_metadata` (local file
+`20261024034234_remove_catalog_metadata.sql`) using a localhost runtime at commit
+`c8e740b` connected to project `wydziozsjibkvpgphpia` through a read-only role.
+
+### Passed requests
+
+| Group | Requests | Result |
+| --- | ---: | --- |
+| Catalog | 1 | exact body match |
+| Recommendations | 6 | exact body match |
+| Mappings (all degree/university pairs) | 30 | exact body match, including 3 valid-empty pairs |
+| Error cases (`422` ×2, `404` ×2) | 4 | exact status and body match |
+| **Total** | **41** | **0 differences, 0 failures** |
+
+### Passed journeys
+
+- Initial catalog load and degree search/selection.
+- Ranked recommendations and Toronto #1 card with 6 NUS / 10 partner modules.
+- Mapping deep links (AI/Toronto 10 rows; CS/Toronto 7 rows).
+- Both selectors update URL state and counts.
+- Browser back/forward restore mapping pairs.
+- Valid-empty pair (AI or CS / UWA) and the 503 error state.
+- Loading indicator, late-response discard, app shell/navigation.
+- Desktop and 390×844 mobile layouts; no console errors, no non-abort request
+  failures, and exact CORS origin on all three API paths.
+
+### Fingerprints and continuity
+
+| Check | Result |
+| --- | --- |
+| Eight core tables, natural-key comparison to reviewed preview | 8/8 PASS, 0 missing, 0 extra |
+| Rows: 6 / 152 / 226 / 5 / 142 / 19 / 30 / 151 | unchanged |
+| `module_mappings.id` | contiguous 1..151, matches recovery capture |
+| Core sequences | 6 / 151 / 5 / 142 / 19, unchanged |
+| Removed relations | all five resolve as `UndefinedTable` |
+| Runtime references to removed tables | none in `backend/app/` |
+
+### Limitations (observed, not hidden)
+
+1. **Production API still returns 503.** The live Vercel backend is the pre-T014
+   deployment that queries the deleted `catalog_import_batches`. The compatible
+   runtime verified here must be redeployed, or the backend switched to
+   `CATALOG_BACKEND=json`, by the operator. This gate validates the runtime, not
+   the still-stale deployment.
+2. **No full recovery dump.** T035 was skipped by operator decision; recovery is
+   limited to the mapping/sequence capture in `recovery-validation.md`. A fresh
+   full export is required before any future destructive change.
+3. **Migration-version bookkeeping.** The MCP recorded `20261024054553` while the
+   local file is `20261024034234`; repair or rename before any future
+   `supabase db push`.
+4. **Reader credential.** The real `catalog_reader` password is held only in
+   Vercel. Verification used an operator-approved temporary role with exactly
+   that role's grants and RLS policies. It has been revoked and dropped; no
+   `catalog_verify_%` role remains and `catalog_reader` was not modified.
+5. **Latency.** Remote-pooler latency exceeds the local 1 s render budget; this
+   is measured separately in T075 and the threshold was not relaxed.
+6. **Coverage scope.** This is observed coverage of the immediate deletion
+   boundary. The complete regression matrix remains US5 (T063–T076).
+
+### Boundary decision
+
+The controlled post-deletion comparison is complete: no request, row, column,
+identifier, sequence, or permission difference was observed. Normal direct data
+edits may resume. No data edit occurred during this verification window; the
+counts above match the T034/T038 boundary exactly. All temporary servers and the
+temporary database role have been stopped or removed.
