@@ -339,10 +339,12 @@ def test_manual_json_rollback_serves_the_frozen_catalog_without_database() -> No
         )
 
 
-def test_reader_role_cannot_write_or_read_protected_archives(
+def test_reader_role_cannot_write_core_tables_and_metadata_tables_are_absent(
     published_catalog: DatabaseTarget,
 ) -> None:
+    """Reader role cannot write core tables, and metadata tables/columns are absent."""
     with psycopg.connect(published_catalog.reader_url) as connection:
+        # Runtime reader role cannot perform writes on core tables
         with pytest.raises(psycopg.errors.ReadOnlySqlTransaction):
             connection.execute(
                 "insert into public.degrees (name, faculty, full_title, source_order) "
@@ -350,6 +352,11 @@ def test_reader_role_cannot_write_or_read_protected_archives(
             )
         connection.rollback()
 
+        with pytest.raises(psycopg.errors.ReadOnlySqlTransaction):
+            connection.execute("delete from public.module_mappings")
+        connection.rollback()
+
+        # All five deleted metadata tables must be absent
         for table in (
             "catalog_import_batches",
             "catalog_source_snapshots",
@@ -360,3 +367,14 @@ def test_reader_role_cannot_write_or_read_protected_archives(
             with pytest.raises(psycopg.errors.UndefinedTable):
                 connection.execute(f"select count(*) from public.{table}")
             connection.rollback()
+
+        # The source_row_id column must be absent on module_mappings
+        with pytest.raises(psycopg.errors.UndefinedColumn):
+            connection.execute("select source_row_id from public.module_mappings")
+        connection.rollback()
+
+        # The archive mutation reject function must be absent
+        result = connection.execute(
+            "select proname from pg_proc where proname = 'reject_catalog_archive_mutation'"
+        ).fetchall()
+        assert len(result) == 0
