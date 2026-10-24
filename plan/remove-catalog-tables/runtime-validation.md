@@ -119,3 +119,55 @@ environment noise (a `package-lock.json` outside the repo), not test failures.
 - JSON-mode Playwright flows and the full backend suite / lint / typecheck /
   build: covered by the US5 final gate (T065/T068/T069/T070) and not required by
   T021, which scopes only the PostgreSQL browser flows.
+
+
+## T023 — Compatible localhost runtime vs captured API baseline
+
+Date: 2026-10-24 (Asia/Singapore). Source commit: `af4d30e`, on `master`. Host
+memory critically low; this is a backend-only comparison (no frontend dev server).
+
+The core-seeded disposable database stands in for production locally while the
+metadata tables still exist remotely. The separate read-only check that the *real*
+Supabase data is unchanged happens at the deletion boundary (T034/T038), not here.
+
+### Command
+
+```bash
+# backend server (separate process): core-seeded disposable PostgreSQL, reader role
+LC_ALL=C LANG=C uv run python -m scripts.serve_catalog_api --host 127.0.0.1 --port 18765
+
+# comparison (run from backend/)
+LC_ALL=C LANG=C uv run python -m scripts.compare_api_baseline compare \
+  --base-url http://127.0.0.1:18765 \
+  --baseline ../plan/remove-catalog-tables/baseline-responses.json \
+  --report <scratch>/t023-compare-report.md
+# -> Compared 41 requests ...: 0 differences, 0 failures   (exit 0)
+```
+
+`--base-url` overrides the baseline's recorded `endpoint_origin`
+(`https://nus-exchange-planner-api.vercel.app`) so the T008 production baseline is
+replayed against the local compatible runtime.
+
+### Result: PASS — 0 differences, 0 failures across 41 requests
+
+The comparator derives its request set from the original captured catalog (6
+degrees × 5 universities) and replays, in baseline order:
+
+- `catalog` (1)
+- `recommendations` for every discovered degree (6)
+- `mappings` for every degree/university pair (30)
+- representative error cases: missing degree 422, missing uni 422, unknown degree
+  404, unknown uni 404 (4)
+
+Every response matched the production baseline on **exact status and full JSON
+body**, so array order, repeated mapping rows, null omission, partner-unit
+fallback, NUS units=4, tie order, full degree titles, university order, and
+zero-count universities are all unchanged. Authenticated database access was
+through the reader role (the server backs uvicorn with `reader_url`).
+
+### Conclusion
+
+The compatible core-readiness runtime (commit `af4d30e`) produces byte-identical
+public API responses to the pre-change production baseline for all 41 captured
+requests, confirming unchanged public behaviour. US1 localhost verification
+(T022 + T023) is complete.
