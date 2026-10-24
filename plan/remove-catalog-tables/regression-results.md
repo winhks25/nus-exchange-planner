@@ -195,3 +195,34 @@ uv run --directory backend ruff check app scripts tests
 - Final gate output: `Regression gate passed successfully.`
 
 ---
+
+
+## T074: Read-Only API Comparison and Table Absence Verification
+
+**1. Baseline Comparator Execution:**
+- Command:
+  ```bash
+  uv run --directory backend python -m scripts.compare_api_baseline compare \
+    --base-url http://127.0.0.1:18780 \
+    --expected-origin http://127.0.0.1:18780 \
+    --timeout 10
+  ```
+- Result: 41 requests compared against `plan/remove-catalog-tables/baseline-responses.json`.
+- Outcome: **0 differences, 0 failures**.
+- Confirmed: All degree/university combinations, rankings, ties, partner counts, and repeated mapping rows match expected golden responses.
+
+**2. Full Catalog Verifier Execution:**
+- Command:
+  ```bash
+  uv run --directory backend python -m scripts.verify_catalog --seed
+  ```
+- Result: **97/97 checks passed**.
+- Confirmed: Reconciles core entities directly against `scripts.catalog_preview.build_preview()`.
+- Metadata tables absent: Zero queries to `catalog_import_batches`, `catalog_source_*`, `catalog_issues`, or `catalog_repairs`.
+
+**3. Permissions and Absence Verification:**
+- Core permissions: `catalog_reader` verified with SELECT-only on the 8 core tables.
+- Table absence: Dropped relations produce `UndefinedTable` under PostgreSQL queries.
+- Main browser journeys: Verified through full Playwright test run (73/73 passed in T069).
+
+---
