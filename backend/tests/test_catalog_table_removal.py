@@ -1,14 +1,18 @@
 """Migration-harness checks for the catalog-table removal fixture workflow."""
 
 import subprocess
+import time
 from pathlib import Path
 
 import psycopg
 import pytest
 
+from scripts.catalog_preview import build_preview
+from scripts.catalog_seed import seed_preview
 from scripts.postgres_validation import (
     LEGACY_MIGRATION_CEILING,
     MIGRATIONS,
+    DatabaseTarget,
     PostgresCluster,
     migration_version,
     require_local_database_url,
@@ -348,5 +352,319 @@ def test_removal_migration_preserves_core_data_and_only_drops_source_row_id(
 
         # Every retained column, row, ID, and sequence is byte-for-byte identical.
         assert after == before
+    finally:
+        postgres_cluster.drop_database(database)
+
+
+# --- T030 / T031: retained constraints, RLS, and reader permissions --------
+
+CORE_RLS_TABLES: tuple[str, ...] = (
+    "degrees",
+    "nus_modules",
+    "degree_modules",
+    "specializations",
+    "specialization_modules",
+    "partner_universities",
+    "pu_modules",
+    "module_mappings",
+)
+
+
+def _normalize_check(definition: str) -> str:
+    """Collapse PostgreSQL's rendered CHECK text for semantic comparison.
+
+    PostgreSQL re-renders a CHECK clause with its own spacing, casts, and
+    parentheses, so a literal string match is brittle. Lowercasing and removing
+    spaces/parentheses/`::type` casts compares the predicate's meaning, not its
+    exact printed form.
+    """
+
+    import re
+
+    text = definition.lower()
+    text = re.sub(r"::[a-z0-9_ ]+", "", text)  # drop type casts e.g. ::numeric, ::text
+    text = re.sub(r"[()\[\]\s]", "", text)  # drop parentheses, brackets, and whitespace
+    return text
+
+
+def _check_defs(connection: psycopg.Connection) -> dict[str, str]:
+    """Return {constraint_name: normalized CHECK definition} for public checks."""
+
+    rows = connection.execute(
+        """
+        select conname, pg_get_constraintdef(oid)
+        from pg_constraint
+        where contype = 'c' and connamespace = 'public'::regnamespace
+        """
+    ).fetchall()
+    return {name: _normalize_check(defn) for name, defn in rows}
+
+
+@pytest.fixture(scope="module")
+def _final_schema(postgres_cluster: PostgresCluster):
+    """A core-seeded database with the removal migration applied (module-scoped)."""
+
+    database = postgres_cluster.create_database(through=LEGACY_MIGRATION_CEILING)
+    advanced = postgres_cluster.apply_next_migration(database)
+    assert migration_version(advanced.applied_migrations[-1]) == REMOVAL_VERSION
+    seed_preview(advanced, build_preview())
+    yield advanced
+    postgres_cluster.drop_database(advanced)
+
+
+def test_retained_core_check_constraints_present(_final_schema) -> None:
+    """T030: the four named core check constraints survive with their meaning."""
+
+    expected = {
+        "nus_modules_verified_units_check": "check verified_units is null or verified_units > 0",
+        "specializations_kind_check": "check kind = any array'specialization','focus_area'",
+        "degrees_source_order_check": "check source_order is null or source_order >= 0",
+        "nus_modules_code_check": "check btrim(code) <> '' and code = upper(btrim(code))",
+    }
+    with psycopg.connect(_final_schema.owner_url) as connection:
+        connection.read_only = True
+        defs = _check_defs(connection)
+    for name, raw in expected.items():
+        assert name in defs, f"missing check constraint {name}"
+        assert defs[name] == _normalize_check(raw), (name, defs[name])
+
+
+def test_retained_keys_and_rls_policies(_final_schema) -> None:
+    """T030: RLS stays enabled on every core table with its reader SELECT policy."""
+
+    with psycopg.connect(_final_schema.owner_url) as connection:
+        connection.read_only = True
+        rls = dict(
+            connection.execute(
+                """
+                select relname, relrowsecurity from pg_class
+                where relnamespace = 'public'::regnamespace and relkind = 'r'
+                  and relname = any(%s)
+                """,
+                (list(CORE_RLS_TABLES),),
+            ).fetchall()
+        )
+        policies = connection.execute(
+            """
+            select tablename, policyname, cmd, roles::text
+            from pg_policies where schemaname = 'public'
+            order by tablename
+            """
+        ).fetchall()
+        primary_keys = connection.execute(
+            """
+            select conrelid::regclass::text
+            from pg_constraint
+            where contype = 'p' and connamespace = 'public'::regnamespace
+            """
+        ).fetchall()
+    for table in CORE_RLS_TABLES:
+        assert rls.get(table) is True, f"RLS not enabled on {table}"
+    reader_tables = {
+        table for table, _name, cmd, roles in policies
+        if cmd == "SELECT" and "catalog_reader" in roles
+    }
+    assert reader_tables == set(CORE_RLS_TABLES)
+    # Every core table that has a primary key kept it (the removal touched none).
+    pk_tables = {name for (name,) in primary_keys}
+    for table in ("degrees", "nus_modules", "module_mappings"):
+        assert f"public.{table}" in pk_tables or table in {
+            name.split(".")[-1] for name in pk_tables
+        }
+
+
+def test_reader_role_has_only_select_on_core_tables(_final_schema) -> None:
+    """T030: no browser/write privilege was introduced; reader is SELECT-only."""
+
+    with psycopg.connect(_final_schema.owner_url) as connection:
+        connection.read_only = True
+        grants = connection.execute(
+            """
+            select table_name, privilege_type
+            from information_schema.role_table_grants
+            where grantee = 'catalog_reader'
+            order by table_name, privilege_type
+            """
+        ).fetchall()
+    tables = {table for table, _priv in grants}
+    privileges = {priv for _table, priv in grants}
+    # Reader can SELECT exactly the eight core tables and nothing else remains
+    # grantable (the metadata-table grants vanished with the tables).
+    assert tables == set(CORE_RLS_TABLES)
+    assert privileges == {"SELECT"}
+
+
+def test_retained_mapping_check_constraints_present(_final_schema) -> None:
+    """T031: the six retained module_mappings source_* checks survive."""
+
+    expected = {
+        "module_mappings_source_nus_title_check": "check source_nus_title is null or btrim(source_nus_title) <> ''",
+        "module_mappings_source_partner_title_check": "check source_partner_title is null or btrim(source_partner_title) <> ''",
+        "module_mappings_source_nus_units_check": "check source_nus_units is null or source_nus_units > 0",
+        "module_mappings_source_partner_units_check": "check source_partner_units is null or source_partner_units > 0",
+        "module_mappings_source_faculty_check": "check source_faculty is null or btrim(source_faculty) <> ''",
+        "module_mappings_source_page_check": "check source_page is null or source_page > 0",
+    }
+    with psycopg.connect(_final_schema.owner_url) as connection:
+        connection.read_only = True
+        defs = _check_defs(connection)
+    for name, raw in expected.items():
+        assert name in defs, f"missing check constraint {name}"
+        assert defs[name] == _normalize_check(raw), (name, defs[name])
+
+
+def test_mapping_nullable_unknowns_and_duplicates_remain_valid(_final_schema) -> None:
+    """T031: nullable source_* unknowns and intentional repeated pairs insert fine.
+
+    Writes go through the owner connection into a disposable database; the core
+    seeder left the table populated, so this proves the retained checks admit
+    nulls and that no unique constraint blocks a repeated (nus, pu) pair.
+    """
+
+    with psycopg.connect(_final_schema.owner_url) as connection:
+        nus = connection.execute(
+            "select code from public.nus_modules limit 1"
+        ).fetchone()[0]
+        pu = connection.execute(
+            "select id from public.pu_modules limit 1"
+        ).fetchone()[0]
+        # Two rows for the SAME (nus, pu) pair, all source_* columns NULL.
+        connection.execute(
+            """
+            insert into public.module_mappings (nus_module_code, pu_module_id)
+            values (%s, %s), (%s, %s)
+            """,
+            (nus, pu, nus, pu),
+        )
+        count = connection.execute(
+            """
+            select count(*) from public.module_mappings
+            where nus_module_code = %s and pu_module_id = %s
+            """,
+            (nus, pu),
+        ).fetchone()[0]
+        connection.rollback()
+    assert count >= 2
+
+
+# --- T033: migration abort behavior ----------------------------------------
+
+REMOVAL_MIGRATION_PATH = (
+    Path(__file__).resolve().parents[1].parent
+    / "supabase"
+    / "migrations"
+    / f"{REMOVAL_VERSION}_remove_catalog_metadata.sql"
+)
+
+
+def _apply_migration_file(database: DatabaseTarget) -> subprocess.CompletedProcess:
+    """Apply the real removal migration as owner, returning the psql result.
+
+    Uses ON_ERROR_STOP so any statement error returns a nonzero exit code; the
+    migration's own BEGIN/COMMIT means a failure rolls the whole thing back.
+    """
+
+    return subprocess.run(
+        [
+            database.cluster.psql,
+            "-X",
+            "-v",
+            "ON_ERROR_STOP=1",
+            "-d",
+            database.owner_url,
+            "-f",
+            str(REMOVAL_MIGRATION_PATH),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+
+def _metadata_state(database: DatabaseTarget) -> tuple[int, bool]:
+    """Return (count of catalog_ tables, whether source_row_id still exists)."""
+
+    with psycopg.connect(database.owner_url) as connection:
+        connection.read_only = True
+        present = connection.execute(
+            r"""
+            select count(*) from pg_tables
+            where schemaname = 'public' and tablename like 'catalog\_%'
+            """
+        ).fetchone()[0]
+        has_column = connection.execute(
+            """
+            select 1 from information_schema.columns
+            where table_schema = 'public'
+              and table_name = 'module_mappings'
+              and column_name = 'source_row_id'
+            """
+        ).fetchone() is not None
+    return present, has_column
+
+
+def test_migration_aborts_on_unexpected_dependency(
+    postgres_cluster: PostgresCluster,
+) -> None:
+    """An unexpected dependent object makes a RESTRICT drop fail and roll back."""
+
+    database = postgres_cluster.create_database(through=LEGACY_MIGRATION_CEILING)
+    try:
+        # An unexpected view on a metadata table — not part of schema-inventory.
+        database.execute(
+            "create view public.unexpected_dep as "
+            "select id from public.catalog_import_batches;"
+        )
+        result = _apply_migration_file(database)
+
+        assert result.returncode != 0
+        assert "depend" in result.stderr.lower()
+        # Nothing was applied: all five tables and source_row_id remain.
+        present, has_column = _metadata_state(database)
+        assert present == 5
+        assert has_column is True
+        # The migration is not recorded as applied in the harness state.
+        assert migration_version(database.applied_migrations[-1]) == LEGACY_MIGRATION_CEILING
+    finally:
+        postgres_cluster.drop_database(database)
+
+
+def test_migration_aborts_on_conflicting_lock_then_normal_path(
+    postgres_cluster: PostgresCluster,
+) -> None:
+    """A held conflicting lock aborts the migration within lock_timeout; the
+    normal path then succeeds once the lock is released."""
+
+    database = postgres_cluster.create_database(through=LEGACY_MIGRATION_CEILING)
+    try:
+        holder = psycopg.connect(database.owner_url)
+        holder.autocommit = False
+        try:
+            holder.execute("begin")
+            holder.execute(
+                "lock table public.module_mappings in access exclusive mode"
+            )
+
+            started = time.monotonic()
+            result = _apply_migration_file(database)
+            waited = time.monotonic() - started
+
+            assert result.returncode != 0
+            assert "lock timeout" in result.stderr.lower()
+            # Bounded waiting: the 5s lock_timeout fired, not an unbounded block.
+            assert waited < 20
+            present, has_column = _metadata_state(database)
+            assert present == 5
+            assert has_column is True
+        finally:
+            holder.rollback()
+            holder.close()
+
+        # With the lock released, the migration applies cleanly end to end.
+        normal = _apply_migration_file(database)
+        assert normal.returncode == 0
+        present, has_column = _metadata_state(database)
+        assert present == 0
+        assert has_column is False
     finally:
         postgres_cluster.drop_database(database)
