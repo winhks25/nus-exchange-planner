@@ -158,39 +158,56 @@ satisfies the T034 precondition that no active caller depends on the metadata
 tables before their later deletion. There is no deployed artifact to recheck.
 
 
-## T034–T038 — production deletion boundary (BLOCKED on operator)
+## T034–T038 — production deletion boundary
 
-Date: 2026-10-24 (Asia/Singapore). Source commit after US2 local work:
-`949e506`. The local US2 rehearsal (T029–T033) is complete and green; the
-production steps below are prepared but NOT executed from this session.
+Date: 2026-10-24 (Asia/Singapore). The local US2 rehearsal (T029–T033) is
+complete and green. T034 (read-only change-boundary recheck) is complete below;
+T035 (export), T037 (apply), and T038 (post-apply verification) remain
+operator-run.
 
-### Why not executed here
+### Why not executed here (T035/T037)
 
 1. **No authenticated path.** `supabase migration list --linked` returns
    `Access token not provided` and `SUPABASE_ACCESS_TOKEN` is unset. The real
    export (T035) and the apply (T037) require an operator login this environment
    does not have.
 2. **No-autonomous-prod-deploy rule.** Production DDL and the consistent export
-   are user-run by standing policy. This session prepares and reviews; it does
-   not apply.
+   are user-run by standing policy. This session rechecks read-only; it does not
+   apply or export.
 
-### T034 — change-boundary recheck (to be run by operator)
+### T034 — change-boundary recheck (read-only, completed)
 
-Preconditions already satisfied locally:
+Date: 2026-10-24 (Asia/Singapore). Recheck performed read-only through the
+Supabase MCP connection. No production mutation was performed.
 
-- Compatible core-readiness runtime (commit `af4d30e`) passed localhost
-  verification in T022/T023 — no active caller depends on the metadata tables.
-  There is no deployed artifact to recheck.
+| Check | Expected | Observed | Result |
+| --- | --- | --- | --- |
+| Linked target | `wydziozsjibkvpgphpia` | `wydziozsjibkvpgphpia` | PASS |
+| Applied migrations | `20261022000100`, `20261022000200`, `20261022000300` | exactly those three, in order | PASS |
+| Pending migration | only `20261024034234_remove_catalog_metadata` | file present locally, not applied remotely | PASS |
+| FKs into removal targets | 9 named constraints (per `schema-inventory.md`) | exactly those 9, none outside `public` | PASS |
+| Archive-guard dependents | 4 triggers on `catalog_source_rows` / `catalog_source_snapshots` | exactly those 4, enabled | PASS |
+| Public relations | 13 tables + 10 owned sequences; no view / MV / foreign / partitioned table | matches exactly | PASS |
+| `module_mappings.source_row_id` | present, nullable `bigint`, FK + unique key | present | PASS |
+| Baseline freshness (T008) | 13 table counts unchanged | all 13 match exactly | PASS |
+| Active writers at boundary | none | none | PASS |
+| T022/T023 localhost verification | PASS at `af4d30e` | recorded above | PASS |
 
-Still to confirm against the live target at the boundary, per the runbook:
+All thirteen table counts match the T008 capture boundary exactly:
+`catalog_import_batches`=1, `catalog_source_snapshots`=8,
+`catalog_source_rows`=154, `catalog_issues`=34, `catalog_repairs`=44, `degrees`=6,
+`nus_modules`=152, `degree_modules`=226, `specializations`=19,
+`specialization_modules`=30, `partner_universities`=5, `pu_modules`=142,
+`module_mappings`=151. No data changed since T008, so no new baseline version is
+required.
 
-- Pause direct data edits / import jobs.
-- Re-verify the linked target is `wydziozsjibkvpgphpia` and the pending-migration
-  list contains exactly `20261024034234_remove_catalog_metadata`.
-- Re-check schema dependencies against `schema-inventory.md` (no object outside
-  the expected set depends on the five tables / the archive function).
-- Confirm the T008 baseline is still fresh, or capture a new versioned baseline
-  before deletion if data changed since.
+**Go/no-go: GO.** The target, pending migration set, schema dependencies, and
+baseline freshness all match the runbook's expectations, and the compatible
+core-readiness runtime passed localhost verification (T022/T023). The operator
+may proceed to T035 (consistent export) and T037 (apply). The operator must still
+pause direct data edits / import jobs before the export and keep them paused
+through T038. The export and apply remain operator-run under the
+no-autonomous-prod-deploy rule and are not authorized by this record.
 
 ### T035 — consistent export (operator)
 
