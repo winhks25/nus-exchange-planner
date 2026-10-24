@@ -309,3 +309,43 @@ core-readiness runtime (commit `af4d30e` or later), or switch the backend to
 not available in this session. The frontend shell still serves (HTTP 200) but
 cannot load catalog data until the backend is redeployed. See
 `recovery-validation.md`.
+
+
+---
+
+## T073 — Localhost Runtime Verification (PostgreSQL and JSON Modes)
+
+Date: 2026-10-24. Scope: Localhost execution of the tested cleanup version (commit `bf1b465`) across both supported backend modes. Per the 2026-10-24 revision, production redeployment to Vercel is out of scope.
+
+### 1. PostgreSQL Mode Execution
+- **Tested Commit:** `bf1b465`
+- **Command:**
+  ```bash
+  CATALOG_BACKEND=postgres \
+  DATABASE_URL="postgresql://catalog_reader:...@127.0.0.1:.../postgres" \
+  CORS_ORIGINS="http://localhost:3000" \
+  uv run --directory backend uvicorn app.main:app --host 127.0.0.1 --port 18880
+  ```
+- **Observations:**
+  - Status: HTTP 200 on `/api/v1/catalog`.
+  - Content: All 6 degrees and 5 partner universities returned.
+  - CORS Header: `access-control-allow-origin: http://localhost:3000` (exact origin match).
+  - Reader Role: Runtime operates under `catalog_reader` permissions without write access.
+  - Target: Fresh final-schema core-seeded disposable database.
+  - Absence of Importer: `IMPORT_DATABASE_URL` absent; zero metadata table queries made.
+
+### 2. JSON Fallback Mode Execution
+- **Command:**
+  ```bash
+  CATALOG_BACKEND=json \
+  CORS_ORIGINS="http://localhost:3000" \
+  uv run --directory backend uvicorn app.main:app --host 127.0.0.1 --port 18880
+  ```
+- **Observations:**
+  - Status: HTTP 200 on `/api/v1/catalog`.
+  - Content: Frozen catalog returned from `data/` snapshot.
+  - Database Credentials: None provided or needed (`DATABASE_URL` absent).
+  - CORS Header: `access-control-allow-origin: http://localhost:3000`.
+
+### 3. Verification Conclusion
+Both PostgreSQL and JSON runtime modes operate correctly on localhost with proper CORS handling, reader role least privilege, and zero dependency on the retired operational importer or dropped metadata tables.
