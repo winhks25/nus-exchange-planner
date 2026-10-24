@@ -65,7 +65,25 @@ dependency, and caller to its retained purpose, establishing the keep/move/delet
 
 ---
 
-## 4. Verification Checkpoint for T049
+## 4. Retired Import Regression Assertions and Replacement Mapping (T053)
+
+`backend/tests/test_import_regression.py` has been replaced by `backend/tests/test_core_seed.py` and `backend/tests/test_catalog_table_removal.py`. Below is the audit of each test and the reason for removal/relocation:
+
+| Test in `test_import_regression.py` | Disposition | Reason / Retained Coverage |
+| --- | --- | --- |
+| `test_import_accounts_for_every_raw_source_byte_and_row` | **Retired** | Verified storage in `catalog_source_snapshots` and `catalog_source_rows`. Both tables were deleted in migration `20261024034234_remove_catalog_metadata`. File integrity checks retained in `test_source_files_remain_unchanged`. |
+| `test_persisted_repairs_issues_and_unknown_values_match_reviewed_sources` | **Retired** | Verified storage in `catalog_repairs` and `catalog_issues` linked via `source_row_id`. Both tables and column were dropped in the migration. Offline repair validation is tested in `test_catalog_preview.py`. |
+| `test_shared_memberships_and_repeated_identities_do_not_multiply_rows` | **Moved to `test_core_seed.py`** | Preserves core invariant: repeated mappings, degree-module links, specialization memberships, and BT4240 requirements must not multiply rows. |
+| `test_identical_import_is_noop_and_changed_snapshot_is_refused` | **Retired** | Production importing with batch tracking and hash locking is retired. Database maintenance is performed directly on Supabase. |
+| `test_concurrent_importers_serialize_on_the_advisory_lock` | **Retired** | Importer CLI concurrency locking is obsolete since the importer is retired. |
+| `test_injected_failure_rolls_back_every_table` | **Moved to `test_core_seed.py`** | Verifies transactional atomicity: a seed failure in `seed_preview` rolls back all 8 core tables completely. |
+| `test_source_files_remain_unchanged_by_the_import` | **Moved to `test_core_seed.py`** | Verifies that source files on disk in `data/` and `data/repairs/` match expected sha256 digests. |
+
+---
+
+## 5. Verification Checkpoint for T049 & T053
 - All symbols in `backend/scripts/import_catalog.py` accounted for.
 - Every dependent caller identified and mapped to a specific Phase 6 task (T050-T062).
 - Zero broken imports planned; rewiring precedes deletion.
+- Retired assertions documented with justification.
+
