@@ -10,9 +10,7 @@ os.environ.pop("DATABASE_URL", None)
 
 from scripts.catalog_preview import build_preview
 from scripts.catalog_seed import seed_preview
-from scripts.import_catalog import ImportPlan, apply_plan, build_import_plan
 from scripts.postgres_validation import (
-    LEGACY_MIGRATION_CEILING,
     DatabaseTarget,
     PostgresCluster,
     require_local_database_url,
@@ -51,13 +49,6 @@ def database(postgres_cluster: PostgresCluster) -> Iterator[DatabaseTarget]:
 
 
 @pytest.fixture(scope="session")
-def import_plan() -> ImportPlan:
-    """Build the reviewed source plan once for every database regression test."""
-
-    return build_import_plan()
-
-
-@pytest.fixture(scope="session")
 def published_catalog(
     postgres_cluster: PostgresCluster,
 ) -> Iterator[DatabaseTarget]:
@@ -70,23 +61,6 @@ def published_catalog(
 
     test_database = postgres_cluster.create_database()
     seed_preview(test_database, build_preview())
-    yield test_database
-    postgres_cluster.drop_database(test_database)
-
-
-@pytest.fixture(scope="session")
-def legacy_published_catalog(
-    postgres_cluster: PostgresCluster, import_plan: ImportPlan
-) -> Iterator[DatabaseTarget]:
-    """A real importer publication on the pre-removal migration ceiling.
-
-    The retained import/provenance regression tests still exercise the metadata
-    tables and source_row_id links, so they run against the legacy schema until
-    those tables are removed in US2 and the tests are migrated in US4.
-    """
-
-    test_database = postgres_cluster.create_database(through=LEGACY_MIGRATION_CEILING)
-    apply_plan(import_plan, test_database.importer_url)
     yield test_database
     postgres_cluster.drop_database(test_database)
 
@@ -110,14 +84,6 @@ def owner_connection(database: DatabaseTarget) -> Iterator[psycopg.Connection]:
     """Owner access for fixtures that must create catalog rows directly."""
 
     with psycopg.connect(database.owner_url) as connection:
-        yield connection
-
-
-@pytest.fixture
-def importer_connection(database: DatabaseTarget) -> Iterator[psycopg.Connection]:
-    """Privileged import access, separate from the runtime reader role."""
-
-    with psycopg.connect(database.importer_url) as connection:
         yield connection
 
 

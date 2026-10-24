@@ -33,6 +33,7 @@ def main() -> None:
         seed_preview(database, build_preview())
 
         # The API inherits only runtime credentials; the owner URL never leaves this process.
+        # Exclude importer credentials from the spawned subprocess environment.
         env = {
             **os.environ,
             "CATALOG_BACKEND": "postgres",
@@ -43,6 +44,7 @@ def main() -> None:
             "DB_CONNECT_TIMEOUT": "2",
             "DB_STATEMENT_TIMEOUT_MS": "5000",
         }
+        env.pop("IMPORT_DATABASE_URL", None)
         child = subprocess.Popen(
             [
                 sys.executable,

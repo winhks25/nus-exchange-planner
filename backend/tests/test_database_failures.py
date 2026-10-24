@@ -340,25 +340,23 @@ def test_manual_json_rollback_serves_the_frozen_catalog_without_database() -> No
 
 
 def test_reader_role_cannot_write_or_read_protected_archives(
-    legacy_published_catalog: DatabaseTarget,
+    published_catalog: DatabaseTarget,
 ) -> None:
-    with psycopg.connect(legacy_published_catalog.reader_url) as connection:
+    with psycopg.connect(published_catalog.reader_url) as connection:
         with pytest.raises(psycopg.errors.ReadOnlySqlTransaction):
             connection.execute(
-                "insert into public.catalog_import_batches "
-                "(source_checksum, repair_checksum, status, is_current) "
-                "values (repeat('a', 64), repeat('b', 64), 'completed', true)"
+                "insert into public.degrees (name, faculty, full_title, source_order) "
+                "values ('Test', 'Faculty', 'Title', 99)"
             )
         connection.rollback()
 
-        with pytest.raises(psycopg.errors.InsufficientPrivilege):
-            connection.execute("select count(*) from public.catalog_source_snapshots")
-        connection.rollback()
-
-        with pytest.raises(psycopg.errors.InsufficientPrivilege):
-            connection.execute("select count(*) from public.catalog_source_rows")
-        connection.rollback()
-
-        assert connection.execute(
-            "select count(*) from public.catalog_import_batches"
-        ).fetchone()[0] == 1
+        for table in (
+            "catalog_import_batches",
+            "catalog_source_snapshots",
+            "catalog_source_rows",
+            "catalog_issues",
+            "catalog_repairs",
+        ):
+            with pytest.raises(psycopg.errors.UndefinedTable):
+                connection.execute(f"select count(*) from public.{table}")
+            connection.rollback()

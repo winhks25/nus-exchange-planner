@@ -19,10 +19,10 @@ pytestmark = pytest.mark.regression
 
 
 def test_snapshot_captures_retained_rows_and_mapping_links(
-    legacy_published_catalog: DatabaseTarget,
+    published_catalog: DatabaseTarget,
 ) -> None:
     snapshot, source_rows = read_snapshot(
-        legacy_published_catalog.owner_url, include_source_row_ids=True
+        published_catalog.owner_url, include_source_row_ids=False
     )
 
     # Every allowlisted table records its columns, exact rows, and fingerprint.
@@ -45,15 +45,15 @@ def test_snapshot_captures_retained_rows_and_mapping_links(
         for detail in snapshot["tables"].values()
     )
 
-    # The optional recovery export keeps every mapping ID paired with its source row.
-    assert source_rows is not None
-    assert len(source_rows) == 151
-    assert all(source_row_id is not None for _, source_row_id in source_rows)
+    # On final schema without source_row_id column, requesting source_rows raises SnapshotError
+    assert source_rows is None
+    with pytest.raises(SnapshotError, match="source_row_id is absent"):
+        read_snapshot(published_catalog.owner_url, include_source_row_ids=True)
 
 
-def test_identical_snapshots_match_in_ids_mode(legacy_published_catalog: DatabaseTarget) -> None:
-    baseline, _ = read_snapshot(legacy_published_catalog.owner_url)
-    candidate, _ = read_snapshot(legacy_published_catalog.owner_url)
+def test_identical_snapshots_match_in_ids_mode(published_catalog: DatabaseTarget) -> None:
+    baseline, _ = read_snapshot(published_catalog.owner_url)
+    candidate, _ = read_snapshot(published_catalog.owner_url)
 
     result = _compare_snapshots(baseline, candidate, "ids")
 
@@ -63,8 +63,8 @@ def test_identical_snapshots_match_in_ids_mode(legacy_published_catalog: Databas
     assert result["tables"]["module_mappings"]["baseline_count"] == 151
 
 
-def test_natural_key_mode_ignores_generated_ids(legacy_published_catalog: DatabaseTarget) -> None:
-    baseline, _ = read_snapshot(legacy_published_catalog.owner_url)
+def test_natural_key_mode_ignores_generated_ids(published_catalog: DatabaseTarget) -> None:
+    baseline, _ = read_snapshot(published_catalog.owner_url)
     shifted = copy.deepcopy(baseline)
 
     # Offset every generated key and its foreign-key reference consistently.

@@ -18,10 +18,31 @@ from scripts.import_catalog import (
     SimulatedImportFailure,
     _catalog_counts,
     apply_plan,
+    build_import_plan,
 )
-from scripts.postgres_validation import REPO_ROOT, DatabaseTarget
+from scripts.postgres_validation import (
+    LEGACY_MIGRATION_CEILING,
+    REPO_ROOT,
+    DatabaseTarget,
+    PostgresCluster,
+)
 
 pytestmark = pytest.mark.regression
+
+
+@pytest.fixture(scope="session")
+def import_plan() -> ImportPlan:
+    return build_import_plan()
+
+
+@pytest.fixture(scope="session")
+def legacy_published_catalog(
+    postgres_cluster: PostgresCluster, import_plan: ImportPlan
+):
+    test_database = postgres_cluster.create_database(through=LEGACY_MIGRATION_CEILING)
+    apply_plan(import_plan, test_database.importer_url)
+    yield test_database
+    postgres_cluster.drop_database(test_database)
 
 
 def _connect(url: str) -> psycopg.Connection:
