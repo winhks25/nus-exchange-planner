@@ -168,3 +168,30 @@ uv run --directory backend ruff check app scripts tests
 - `ruff check app scripts tests`: All checks passed! 0 linting or formatting issues.
 
 ---
+
+
+## T071: End-to-End Regression Gate Execution
+
+**Source Commit:** `5703be2`
+
+**1. Prerequisite Isolation & Fail-Fast Test:**
+- Command: `PATH=/usr/bin:/bin ./scripts/check-regressions.sh`
+- Output: `Missing required command: uv; Exit code: 1`
+- Confirms fast non-zero exit when required tooling is missing.
+
+**2. Full End-to-End Gate Execution:**
+- Command: `./scripts/check-regressions.sh`
+- Exit status: `0` (Success)
+- Suite totals:
+  - Backend Ruff check: All checks passed!
+  - Frontend ESLint: 0 errors.
+  - Frontend TypeScript (`tsc --noEmit`): 0 errors.
+  - Frontend Next.js build: Compiled successfully, prerendered static routes.
+  - Backend pytest suite: 83 passed in 28.75s.
+  - Schema absence and upgrade suite: 21 passed in 12.84s.
+  - Playwright browser suite (JSON mode): 65 passed in 39.8s.
+  - Playwright browser suite (PostgreSQL mode): 73 passed in 47.8s.
+- Environment variables cleared: `CATALOG_BACKEND`, `DATABASE_URL`, `IMPORT_DATABASE_URL`, `TEST_DATABASE_URL`, `TEST_CATALOG_BACKEND` to enforce test isolation.
+- Final gate output: `Regression gate passed successfully.`
+
+---
