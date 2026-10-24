@@ -290,3 +290,22 @@ Verified read-only immediately after the apply; the full record is in
 | Core counts (6/152/226/19/30/5/142/151) | unchanged |
 | Core sequences (degrees 6, module_mappings 151, partner_universities 5, pu_modules 142, specializations 19) | unchanged |
 | Retained check constraints | all present (semantic) |
+
+## Production outage after the apply (critical)
+
+Immediately after the removal, the production backend
+(`https://nus-exchange-planner-api.vercel.app`) returns
+`503 {"detail":"Catalog data is unavailable. Please try again later."}` for
+`/api/v1/catalog` and `/api/v1/recommendations`. The live Vercel backend is still
+running the **pre-T014** code whose `_require_published_batch` query reads
+`catalog_import_batches`, which is now dropped. The compatible core-readiness
+runtime (T014) was verified only on localhost (T022/T023) and was never deployed,
+so the "no app redeploy" assumption in the plan revision does not hold for the
+live backend.
+
+**Required fix (operator-run):** redeploy the backend with the compatible
+core-readiness runtime (commit `af4d30e` or later), or switch the backend to
+`CATALOG_BACKEND=json` with `DATABASE_URL` removed. Vercel CLI and credentials are
+not available in this session. The frontend shell still serves (HTTP 200) but
+cannot load catalog data until the backend is redeployed. See
+`recovery-validation.md`.

@@ -392,6 +392,8 @@ The full export and restore rehearsal were **not** executed: the operator chose
 the Supabase MCP apply path, skipping the recoverable-backup prerequisite. A
 minimal data-only capture (the `source_row_id` mapping, sequence state, and a
 manifest) was written to `PRIVATE_BACKUP_DIR` before the apply. The post-removal
-recovery choice is **choice 1 (keep the compatible core-readiness runtime)** — no
-restore or redeploy is required. See `recovery-validation.md` for the capture
-digests and the resulting limitations.
+recovery choice is **choice 1 (redeploy the compatible core-readiness runtime)**:
+the live Vercel backend still runs pre-T014 code and returns 503 after the
+deletion, so a redeploy (or a JSON-fallback switch) is required to restore
+service. See `recovery-validation.md` for the capture digests and the resulting
+limitations.

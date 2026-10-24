@@ -39,16 +39,21 @@ reference for any future controlled export; it was not executed for this change.
 
 ## T039 — post-removal recovery choices
 
-The three recovery choices are documented in `recovery.md`. The chosen path after
-removal is **choice 1 (keep the compatible core-readiness runtime)** — no
-database restore and no redeploy are required, because the runtime no longer
-queries any metadata table.
+The three recovery choices are documented in `recovery.md`. The required path
+after removal is **choice 1 (redeploy the compatible core-readiness runtime)**:
+the production Vercel backend is still running the pre-T014 code that queries
+`catalog_import_batches`, so after the deletion it returns
+`503 Catalog data is unavailable`. The compatible runtime was verified only on
+localhost (T022/T023) and was never deployed — the plan's "no app redeploy"
+assumption does not hold for the live backend. A redeploy of the compatible
+runtime (or an explicit JSON-fallback switch) is required to restore service.
 
-### Local verification of the chosen path
+### Verification of the recovery paths
 
-- **Compatible runtime (no redeploy):** verified on localhost in T022/T023 — the
-  core-readiness runtime serves the full public contract through the reader role
-  with no metadata tables. This remains valid after the production removal.
+- **Compatible runtime:** verified on localhost in T022/T023 — the core-readiness
+  runtime serves the full public contract through the reader role with no
+  metadata tables. This is the target deployment; it is not yet live in
+  production.
 - **Explicit JSON fallback:** exercised locally during the earlier
   `plan/supabase-migration` outage rehearsal; the frozen snapshot starts without
   database credentials and serves the documented repaired-vs-frozen differences.
@@ -57,6 +62,15 @@ queries any metadata table.
   export, which was skipped. This path is documented in `recovery.md` but was not
   testable for this change. The `source_row_id` mapping captured above is the key
   that would backfill restored mappings by ID; it cannot recreate the schema.
+
+### Production state after the apply
+
+The production API (`https://nus-exchange-planner-api.vercel.app`) returns
+`503 Catalog data is unavailable` immediately after the removal, confirming the
+live backend still queries the deleted `catalog_import_batches`. The fix is to
+redeploy the backend with the compatible core-readiness runtime (commit `af4d30e`
+or later) or switch to `CATALOG_BACKEND=json`. This is operator-run (Vercel CLI +
+credentials are not available in this session).
 
 ### Limitation
 
