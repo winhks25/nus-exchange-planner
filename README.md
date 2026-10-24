@@ -38,7 +38,7 @@ Backend tests include import, repository-parity and failure suites that create d
 Run the complete release gate, which covers backend tests plus the browser suites in both JSON and imported PostgreSQL modes:
 
 ```sh
-./scripts/check-migration-regressions.sh
+./scripts/check-regressions.sh
 ```
 
 It never contacts Supabase or a developer database. Expected baseline and the latest evidence are in [regression results](plan/supabase-migration/regression-results.md).
