@@ -114,4 +114,30 @@ dependency, and caller to its retained purpose, establishing the keep/move/delet
   - Historical `plan/supabase-migration/quickstart.md` annotated with an alert pointing to `plan/remove-catalog-tables/quickstart.md`.
   - Historical migration SQL files and planning logs preserved as immutable audit history.
 
+---
+
+## 7. Targeted Verification and Tooling Validation (T062)
+
+### A. Test Execution Summary
+- **Backend Pytest Suite**: 83/83 passed in 30.93s (`uv run --directory backend pytest -q`).
+- **Python Import Collection**: 83 tests successfully collected across 12 test modules with 0 errors (`python -m pytest --collect-only`).
+- **Command CLI Interface (`--help`)**:
+  - `scripts.catalog_seed --help`: Pass.
+  - `scripts.verify_catalog --help`: Pass.
+  - `scripts.snapshot_core_data --help`: Pass.
+  - `scripts.catalog_preview --help`: Pass.
+  - `scripts.compare_api_baseline --help`: Pass.
+- **Frontend Quality Gates**:
+  - ESLint: 0 errors (`npm --prefix frontend run lint`).
+  - TypeScript Compiler: 0 errors (`npm --prefix frontend run typecheck`).
+- **Backend Linter**:
+  - Ruff: All checks passed (`uv run --directory backend ruff check app scripts tests`).
+
+### B. Core Invariant & Regression Checks
+- **Source Data Digests**: `test_source_files_remain_unchanged` confirmed that source files in `data/` and `data/repairs/` match expected sha256 digests.
+- **Core Entity Seed & Persistence**: `test_seed_preview_populates_core_tables`, `test_shared_memberships_and_repeated_identities_do_not_multiply_rows`, and `test_seed_failure_rolls_back_every_core_table` confirmed single-transaction insertion, duplicate handling, and rollback integrity.
+- **JSON Fallback & Baseline Agreement**: Contract tests (`test_contract.py`), JSON repository tests (`test_json_repository.py`), and baseline comparison tests confirmed that explicit JSON fallback and expected baseline responses remain unaltered.
+- **Absence Assertions**: `test_catalog_absence.py` confirmed `source_row_id` is absent, core tables remain, no `catalog_`-prefixed metadata tables remain, and the archive guard trigger function is absent.
+
+
 
