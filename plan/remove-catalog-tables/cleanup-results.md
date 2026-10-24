@@ -166,3 +166,23 @@ dependency, and caller to its retained purpose, establishing the keep/move/delet
 - Checked running processes for orphaned testing servers or clusters (`uvicorn`, test `postgres`).
 - Confirmed only system and user services remain running; all task-owned disposable test clusters created during pytest and Playwright runs were terminated and unlinked cleanly.
 - Intentional evidence files in `plan/remove-catalog-tables/` remain intact for auditable verification.
+
+
+---
+
+## 9. Final Scope and Diff Inspection (T079)
+
+### A. Integrity of Frozen and Historical Artifacts
+- **`data/` Directory:** **0 lines changed**. Source input files in `data/` and `data/repairs/` match pre-change digests bit-for-bit.
+- **OpenAPI Contract (`plan/contracts/openapi.yaml`):** **0 lines changed**. Public REST API contract unchanged.
+- **Historical Migration Files (`supabase/migrations/`):**
+  - `20261022000100_create_exchange_catalog.sql`: **0 lines changed**.
+  - `20261022000200_prepare_catalog_import.sql`: **0 lines changed**.
+  - `20261022000300_catalog_reader.sql`: **0 lines changed**.
+  - Only the new removal migration `20261024034234_remove_catalog_metadata.sql` was added.
+
+### B. Verification of Operational Imports and SQL Queries
+- **`scripts.import_catalog`:** Zero executable imports remain. File permanently deleted.
+- **Removed Tables:** Zero runtime queries to the five dropped tables (`catalog_import_batches`, `catalog_source_snapshots`, `catalog_source_rows`, `catalog_issues`, `catalog_repairs`) exist in `backend/app/`.
+- **`source_row_id` Column:** Dropped from `module_mappings`. Zero runtime dependencies exist.
+- **No Unrelated Edits:** Diff review confirmed all changes are strictly bounded to the catalog table removal plan. No further code or schema corrections required.
