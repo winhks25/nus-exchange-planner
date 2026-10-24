@@ -1,9 +1,8 @@
-"""Seed a disposable database from the deterministic import preview.
+"""Seed a disposable local database from the deterministic import preview.
 
-This is validation tooling only. It must never run against the production
-Supabase project; it seeds the eight core catalog tables and writes nothing to
-the retired metadata tables, so the same routine works on the old and the final
-post-removal schema.
+This is disposable validation tooling only. It must never run against the
+production Supabase project; it seeds only the eight core catalog tables
+and writes nothing to metadata tables.
 """
 
 from typing import Any
@@ -14,29 +13,41 @@ from scripts.postgres_validation import DatabaseTarget, require_local_database_u
 
 
 def seed_preview(database: DatabaseTarget, preview: dict[str, Any]) -> None:
-    """Insert the preview's core catalog rows into an empty migrated database."""
+    """Insert preview core rows into an empty migrated local database."""
 
-    # Refuse any non-local target before opening a write connection: this seeder
-    # is disposable validation tooling and must never touch a remote database.
+    # Reject any non-local target before connecting
     require_local_database_url(database.url, "catalog seed target")
 
-    # One transaction so a partial seed never leaves a half-ready catalog. Parents
-    # are inserted before children, matching the core foreign-key dependencies.
+    # Run in a single transaction in dependency order (parents before children)
     with psycopg.connect(database.url) as conn, conn.transaction():
+        # Insert degree records and resolve primary keys
         degree_ids = _insert_degrees(conn, preview["degrees"])
+
+        # Insert NUS modules
         _insert_nus_modules(conn, preview["nus_modules"])
+
+        # Insert degree-module memberships linking degrees to NUS modules
         _insert_degree_modules(conn, preview["degrees"], degree_ids)
+
+        # Insert partner universities and resolve primary keys
         university_ids = _insert_universities(conn, preview["universities"])
+
+        # Insert partner university modules linking to partner universities
         partner_ids = _insert_partner_modules(
             conn, preview["partner_modules"], university_ids
         )
+
+        # Insert active course mappings preserving multiplicity and source order
         _insert_mappings(conn, preview["mappings"], partner_ids)
+
+        # Insert specializations and their module memberships
         _insert_specializations(conn, preview["specializations"], degree_ids)
 
 
 def _insert_degrees(
     conn: psycopg.Connection, degrees: list[dict[str, Any]]
 ) -> dict[str, int]:
+    """Insert degrees and return a mapping from degree name to generated ID."""
     ids: dict[str, int] = {}
     for degree in degrees:
         row = conn.execute(
@@ -59,6 +70,7 @@ def _insert_degrees(
 def _insert_nus_modules(
     conn: psycopg.Connection, modules: list[dict[str, Any]]
 ) -> None:
+    """Insert NUS modules with offering faculty and verified units."""
     conn.cursor().executemany(
         """
         insert into public.nus_modules (code, name, offering_faculty, verified_units)
@@ -76,6 +88,7 @@ def _insert_degree_modules(
     degrees: list[dict[str, Any]],
     degree_ids: dict[str, int],
 ) -> None:
+    """Insert degree requirements linking degrees to NUS module codes."""
     rows = []
     for degree in degrees:
         for module in degree["degree_modules"]:
@@ -95,6 +108,7 @@ def _insert_degree_modules(
 def _insert_universities(
     conn: psycopg.Connection, universities: list[dict[str, Any]]
 ) -> dict[str, int]:
+    """Insert partner universities and return a mapping from name to generated ID."""
     ids: dict[str, int] = {}
     for university in universities:
         row = conn.execute(
@@ -121,6 +135,7 @@ def _insert_partner_modules(
     modules: list[dict[str, Any]],
     university_ids: dict[str, int],
 ) -> dict[tuple[str, str], int]:
+    """Insert partner university modules and map (university, code) to generated ID."""
     ids: dict[tuple[str, str], int] = {}
     for module in modules:
         row = conn.execute(
@@ -146,9 +161,10 @@ def _insert_mappings(
     mappings: list[dict[str, Any]],
     partner_ids: dict[tuple[str, str], int],
 ) -> None:
+    """Insert module mappings preserving duplicate course pairs and presentation details."""
     rows = []
     for row in mappings:
-        # Active mappings always have normalized codes after verified repairs.
+        # Check normalized codes
         if row["nus_module_code"] is None or row["partner_module_code"] is None:
             raise ValueError(f"Active mapping {row['mapping_index']} has no normalized code")
         rows.append(
@@ -182,7 +198,9 @@ def _insert_specializations(
     specializations: list[dict[str, Any]],
     degree_ids: dict[str, int],
 ) -> None:
+    """Insert degree specializations/focus areas and their module memberships."""
     for specialization in specializations:
+        # Insert specialization header
         row = conn.execute(
             """
             insert into public.specializations (degree_id, name, kind, source_order)
@@ -197,6 +215,8 @@ def _insert_specializations(
             ),
         ).fetchone()
         specialization_id = int(row[0])
+
+        # Insert specialization module memberships
         conn.cursor().executemany(
             """
             insert into public.specialization_modules (specialization_id, module_code)
