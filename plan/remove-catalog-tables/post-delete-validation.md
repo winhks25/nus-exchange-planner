@@ -91,3 +91,65 @@ Representative values matched `baseline-responses.json` exactly:
 
 No expectation was regenerated from the implementation under test; the baseline
 file was read-only throughout.
+
+## T043 — retained core-data fingerprint after deletion
+
+Date: 2026-10-24 (Asia/Singapore). The snapshot ran read-only under the temporary
+verifier role (`catalog_verify_e14185b8`) through the transaction pooler.
+
+### Reader-role capability checks
+
+| Check | Result |
+| --- | --- |
+| SELECT on all eight retained tables | PASS — 6 degrees, 152 NUS modules, 226 degree modules, 5 universities, 142 partner modules, 19 specializations, 30 specialization modules, 151 mappings |
+| `public.catalog_source_rows` | `UndefinedTable` — relation removed |
+| `public.catalog_source_snapshots` | `UndefinedTable` — relation removed |
+| `public.catalog_import_batches` | `UndefinedTable` — relation removed |
+| `public.catalog_issues` | `UndefinedTable` — relation removed |
+| `public.catalog_repairs` | `UndefinedTable` — relation removed |
+| Migration history visible to the reader | No (no `supabase_migrations` usage). A temporary read grant on `schema_migrations` was issued only for the snapshot tool and removed with the role. |
+
+No code path attempted to resolve a removed relation; each probe failed at the
+catalog with `UndefinedTable` rather than returning data or falling back.
+
+### Snapshot comparison
+
+| Item | Value |
+| --- | --- |
+| Remote snapshot | `/tmp/remote_core_snapshot.json`, SHA-256 `9f48f627085168baded992e12d16ed34aa54d340f298331478225e5ff6112e88` |
+| Rows read | 731 across the eight core tables |
+| Target | `aws-0-ap-southeast-2.pooler.supabase.com/postgres`, project `wydziozsjibkvpgphpia`, PostgreSQL 17.11 |
+| Migrations recorded | `20261022000100`, `20261022000200`, `20261022000300`, `20261024054553` |
+
+**Against the reviewed core-seeded preview (production-equivalent, 151 mappings)**
+— natural-key mode, all retained columns including specializations:
+
+| Table | Rows | Missing | Extra | Result |
+| --- | ---: | ---: | ---: | --- |
+| `degrees` | 6 | 0 | 0 | PASS |
+| `nus_modules` | 152 | 0 | 0 | PASS |
+| `degree_modules` | 226 | 0 | 0 | PASS |
+| `partner_universities` | 5 | 0 | 0 | PASS |
+| `pu_modules` | 142 | 0 | 0 | PASS |
+| `specializations` | 19 | 0 | 0 | PASS |
+| `specialization_modules` | 30 | 0 | 0 | PASS |
+| `module_mappings` | 151 | 0 | 0 | PASS |
+
+**Against the frozen `backend/tests/fixtures/core_dataset.json`** the only
+difference is the documented intentional duplicate: the fixture has 152 mapping
+rows and the live database has the 151 production rows, so the fixture shows one
+missing baseline row and zero extra rows. This is the expected fixture-only
+duplicate (`CS3213` / `CITS3301`), not data loss.
+
+### Identifier and sequence continuity
+
+- `module_mappings.id` values remain contiguous `1..151`, matching the
+  pre-removal `mapping-source-row-ids.csv` recovery capture (151 IDs, no gaps).
+- The temporary reader cannot read sequence state (`pg_sequences.last_value` is
+  null without sequence privilege), so sequences were checked read-only through
+  the MCP connection as the owner. They are unchanged from T038:
+  `degrees_id_seq`=6, `module_mappings_id_seq`=151,
+  `partner_universities_id_seq`=5, `pu_modules_id_seq`=142,
+  `specializations_id_seq`=19.
+
+No retained row, column, identifier, or sequence state changed.
