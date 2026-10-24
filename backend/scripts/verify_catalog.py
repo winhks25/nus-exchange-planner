@@ -1,9 +1,9 @@
-"""Verify catalog API responses or reconcile a published database.
+"""Verify catalog API responses or reconcile a database against core entities.
 
 API mode seeds a disposable local database from the deterministic import
 preview, exercises both repositories through the real API, and writes a
 human-readable report. Reconcile mode is a read-only comparison between a
-published catalog and the checked-in import plan, with a JSON report.
+PostgreSQL database and the source preview, with a JSON report.
 """
 
 import argparse
@@ -31,16 +31,6 @@ from app.repositories.base import CATALOG_UNAVAILABLE_MESSAGE
 from app.settings import PoolSettings, Settings
 from scripts.catalog_preview import build_preview
 from scripts.catalog_seed import seed_preview
-from scripts.import_catalog import (
-    CatalogImportError,
-    ImportPlan,
-    _connect,
-    _database_error_message,
-    _expected_target_label,
-    _target_summary,
-    _validate_target,
-    build_import_plan,
-)
 from scripts.measure_catalog_performance import (
     collect_evidence,
     enlarge,
@@ -49,6 +39,14 @@ from scripts.measure_catalog_performance import (
     write_report as write_performance_report,
 )
 from scripts.postgres_validation import PostgresCluster
+from scripts.snapshot_core_data import (
+    SnapshotError,
+    _connect,
+    _database_error_message,
+    _expected_target_label,
+    _target_summary,
+    _validate_target,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BASELINE_PATH = REPO_ROOT / "plan" / "supabase-migration" / "baseline-responses.json"
@@ -490,9 +488,6 @@ def verify_outage_and_recovery(
 
 
 EDGE_CASE_SQL = """
-insert into public.catalog_import_batches (
-  source_checksum, repair_checksum, status, is_current, completed_at
-) values (repeat('c', 64), repeat('d', 64), 'completed', true, now());
 insert into public.nus_modules (code, name) values
   ('CS2102', null),
   ('CS2103', 'Verified Module');
@@ -661,13 +656,15 @@ def _count_summary(counts: Counter[Any]) -> dict[str, int]:
 
 
 class Reconciler:
-    """Read-only comparison between the published catalog and the import plan."""
+    """Read-only comparison between a PostgreSQL database and the source preview."""
 
-    def __init__(self, connection: psycopg.Connection, plan: ImportPlan) -> None:
+    def __init__(self, connection: psycopg.Connection, preview_or_plan: Any) -> None:
         self.connection = connection
-        self.plan = plan
+        if hasattr(preview_or_plan, "preview"):
+            self.preview = preview_or_plan.preview
+        else:
+            self.preview = preview_or_plan
         self.checks: list[dict[str, Any]] = []
-        self.batch_id: int | None = None
 
     def _record(
         self,
@@ -766,192 +763,8 @@ class Reconciler:
             {"mismatches": mismatches[:50]},
         )
 
-    def _check_batch(self) -> None:
-        """Verify the completed publication marker and its source accounting."""
-
-        rows = self.connection.execute(
-            """
-            select
-              id,
-              source_checksum,
-              repair_checksum,
-              status,
-              is_current,
-              source_file_count,
-              raw_row_count,
-              accepted_row_count,
-              repaired_row_count,
-              quarantined_row_count,
-              source_manifest,
-              completed_at
-            from public.catalog_import_batches
-            order by id
-            """
-        ).fetchall()
-        self.batch_id = int(rows[0][0]) if len(rows) == 1 else None
-        self._record("published batch count", len(rows) == 1, 1, len(rows))
-        if len(rows) != 1:
-            return
-        row = rows[0]
-        expected_manifest = {
-            "files": [
-                {
-                    "path": archive.path,
-                    "kind": archive.kind,
-                    "sha256": archive.sha256,
-                    "byte_size": archive.byte_size,
-                }
-                for archive in self.plan.archives
-            ],
-            "source_checksum_sha256": self.plan.source_checksum,
-            "repair_checksum_sha256": self.plan.repair_checksum,
-            "academic_year": self.plan.academic_year,
-            "prepared_on": self.plan.prepared_on,
-            "repair_file": self.plan.repair_file,
-        }
-        actual = {
-            "source_checksum": row[1],
-            "repair_checksum": row[2],
-            "status": row[3],
-            "is_current": row[4],
-            "source_file_count": row[5],
-            "raw_row_count": row[6],
-            "accepted_row_count": row[7],
-            "repaired_row_count": row[8],
-            "quarantined_row_count": row[9],
-            "source_manifest": row[10],
-            "completed_at_present": row[11] is not None,
-        }
-        expected = {
-            "source_checksum": self.plan.source_checksum,
-            "repair_checksum": self.plan.repair_checksum,
-            "status": "completed",
-            "is_current": True,
-            "source_file_count": len(self.plan.archives),
-            "raw_row_count": self.plan.summary["raw_rows"],
-            "accepted_row_count": self.plan.summary["accepted_rows"],
-            "repaired_row_count": self.plan.summary["repaired_rows"],
-            "quarantined_row_count": self.plan.summary["quarantined_rows"],
-            "source_manifest": expected_manifest,
-            "completed_at_present": True,
-        }
-        self._record(
-            "published batch fields",
-            actual == expected,
-            expected,
-            actual,
-            {
-                "changed_fields": sorted(
-                    field for field in expected if expected[field] != actual[field]
-                )
-            },
-        )
-
-    def _check_snapshots(self) -> None:
-        """Compare archived text, parsed JSON, checksums and source kinds."""
-
-        rows = self.connection.execute(
-            """
-            select file_path, source_kind, raw_text, parsed_json, sha256, byte_size, batch_id
-            from public.catalog_source_snapshots
-            order by file_path
-            """
-        ).fetchall()
-        actual = [
-            {
-                "path": row[0],
-                "kind": row[1],
-                "raw_text": row[2],
-                "parsed": row[3],
-                "sha256": row[4],
-                "byte_size": row[5],
-                "batch_id": row[6],
-            }
-            for row in rows
-        ]
-        expected = [
-            {
-                "path": archive.path,
-                "kind": archive.kind,
-                "raw_text": archive.raw_text,
-                "parsed": archive.parsed,
-                "sha256": archive.sha256,
-                "byte_size": archive.byte_size,
-                "batch_id": self.batch_id,
-            }
-            for archive in self.plan.archives
-        ]
-        self._compare_map("archived source snapshots", expected, actual, ("path",))
-
-    def _check_source_rows(self) -> None:
-        """Compare every raw row, including quarantined and repaired outcomes."""
-
-        rows = self.connection.execute(
-            """
-            select
-              s.file_path,
-              r.mapping_index,
-              r.raw_json,
-              r.source_nus_code,
-              r.source_partner_code,
-              r.source_nus_title,
-              r.source_partner_title,
-              r.source_nus_units,
-              r.source_partner_units,
-              r.source_faculty,
-              r.source_page,
-              r.outcome
-            from public.catalog_source_rows r
-            join public.catalog_source_snapshots s on s.id = r.snapshot_id
-            order by s.file_path, r.mapping_index
-            """
-        ).fetchall()
-        actual = [
-            {
-                "file": row[0],
-                "index": row[1],
-                "raw_json": row[2],
-                "nus_code": row[3],
-                "partner_code": row[4],
-                "nus_title": row[5],
-                "partner_title": row[6],
-                "nus_units": _number(row[7]),
-                "partner_units": _number(row[8]),
-                "faculty": row[9],
-                "page": row[10],
-                "outcome": row[11],
-            }
-            for row in rows
-        ]
-        expected = [
-            {
-                "file": item.source_file,
-                "index": item.mapping_index,
-                "raw_json": item.raw_row,
-                "nus_code": item.source_nus_code,
-                "partner_code": item.source_partner_code,
-                "nus_title": item.source_nus_title,
-                "partner_title": item.source_partner_title,
-                "nus_units": item.source_nus_units,
-                "partner_units": item.source_partner_units,
-                "faculty": item.source_faculty,
-                "page": item.source_page,
-                "outcome": item.outcome,
-            }
-            for item in self.plan.source_rows
-        ]
-        self._compare_map("catalog source rows", expected, actual, ("file", "index"))
-        expected_outcomes = Counter(item["outcome"] for item in expected)
-        actual_outcomes = Counter(item["outcome"] for item in actual)
-        self._record(
-            "source row outcome counts",
-            expected_outcomes == actual_outcomes,
-            dict(expected_outcomes),
-            dict(actual_outcomes),
-        )
-
     def _check_entities(self) -> None:
-        """Compare normalized entities and links, independent of row presentation."""
+        """Compare normalized entities and links from core tables."""
 
         queries = {
             "degrees": (
@@ -959,12 +772,12 @@ class Reconciler:
                 ("name",),
                 [
                     {
-                        "name": item.name,
-                        "faculty": item.faculty,
-                        "full_title": item.full_title,
-                        "source_order": item.source_order,
+                        "name": item["name"],
+                        "faculty": item["faculty"],
+                        "full_title": item["full_title"],
+                        "source_order": item["source_order"],
                     }
-                    for item in self.plan.entities.degrees
+                    for item in self.preview["degrees"]
                 ],
             ),
             "NUS modules": (
@@ -972,12 +785,12 @@ class Reconciler:
                 ("code",),
                 [
                     {
-                        "code": item.code,
-                        "name": item.name,
-                        "offering_faculty": item.offering_faculty,
-                        "verified_units": item.verified_units,
+                        "code": item["code"],
+                        "name": item["name"],
+                        "offering_faculty": item["offering_faculty"],
+                        "verified_units": item["verified_units"],
                     }
-                    for item in self.plan.entities.nus_modules
+                    for item in self.preview["nus_modules"]
                 ],
             ),
             "degree memberships": (
@@ -989,11 +802,12 @@ class Reconciler:
                 ("degree", "module_code"),
                 [
                     {
-                        "degree": item.degree,
-                        "module_code": item.module_code,
-                        "requirement_type": item.requirement_type,
+                        "degree": degree["name"],
+                        "module_code": item["code"],
+                        "requirement_type": item["requirement_type"],
                     }
-                    for item in self.plan.entities.degree_modules
+                    for degree in self.preview["degrees"]
+                    for item in degree["degree_modules"]
                 ],
             ),
             "partner universities": (
@@ -1004,13 +818,13 @@ class Reconciler:
                 ("name",),
                 [
                     {
-                        "name": item.name,
-                        "country": item.country,
-                        "city": item.city,
-                        "continent": item.continent,
-                        "source_order": item.source_order,
+                        "name": item["name"],
+                        "country": item["country"],
+                        "city": item["city"],
+                        "continent": item["continent"],
+                        "source_order": item["source_order"],
                     }
-                    for item in self.plan.entities.universities
+                    for item in self.preview["universities"]
                 ],
             ),
             "partner modules": (
@@ -1022,12 +836,12 @@ class Reconciler:
                 ("university", "code"),
                 [
                     {
-                        "university": item.university,
-                        "code": item.code,
-                        "name": item.name,
-                        "verified_units": item.verified_units,
+                        "university": item["university"],
+                        "code": item["code"],
+                        "name": item["name"],
+                        "verified_units": item["verified_units"],
                     }
-                    for item in self.plan.entities.partner_modules
+                    for item in self.preview["partner_modules"]
                 ],
             ),
             "specializations": (
@@ -1039,12 +853,12 @@ class Reconciler:
                 ("degree", "specialization"),
                 [
                     {
-                        "degree": item.degree,
-                        "specialization": item.name,
-                        "kind": item.kind,
-                        "source_order": item.source_order,
+                        "degree": item["degree"],
+                        "specialization": item["name"],
+                        "kind": item["kind"],
+                        "source_order": item["source_order"],
                     }
-                    for item in self.plan.entities.specializations
+                    for item in self.preview["specializations"]
                 ],
             ),
             "specialization memberships": (
@@ -1057,11 +871,12 @@ class Reconciler:
                 ("degree", "specialization", "module_code"),
                 [
                     {
-                        "degree": item.degree,
-                        "specialization": item.specialization,
-                        "module_code": item.module_code,
+                        "degree": item["degree"],
+                        "specialization": item["name"],
+                        "module_code": code,
                     }
-                    for item in self.plan.entities.specialization_modules
+                    for item in self.preview["specializations"]
+                    for code in item["memberships"]
                 ],
             ),
         }
@@ -1079,13 +894,11 @@ class Reconciler:
             self._compare_map(label, expected, actual, key_fields)
 
     def _check_mappings(self) -> None:
-        """Compare each active mapping with its source row and presentation fields."""
+        """Compare each active mapping with its core presentation fields."""
 
         rows = self.connection.execute(
             """
             select
-              s.file_path,
-              r.mapping_index,
               u.name,
               m.nus_module_code,
               pm.code,
@@ -1097,203 +910,110 @@ class Reconciler:
               m.source_faculty,
               m.source_page
             from public.module_mappings m
-            join public.catalog_source_rows r on r.id = m.source_row_id
-            join public.catalog_source_snapshots s on s.id = r.snapshot_id
             join public.pu_modules pm on pm.id = m.pu_module_id
             join public.partner_universities u on u.id = pm.partner_university_id
-            order by s.file_path, r.mapping_index
+            order by u.name, m.source_order, m.nus_module_code, pm.code
             """
         ).fetchall()
         actual = [
             {
-                "file": row[0],
-                "index": row[1],
-                "university": row[2],
-                "nus_module_code": row[3],
-                "partner_module_code": row[4],
-                "source_order": row[5],
-                "source_nus_title": row[6],
-                "source_nus_units": _number(row[7]),
-                "source_partner_title": row[8],
-                "source_partner_units": _number(row[9]),
-                "source_faculty": row[10],
-                "source_page": row[11],
+                "university": row[0],
+                "nus_module_code": row[1],
+                "partner_module_code": row[2],
+                "source_order": row[3],
+                "source_nus_title": row[4],
+                "source_nus_units": _number(row[5]),
+                "source_partner_title": row[6],
+                "source_partner_units": _number(row[7]),
+                "source_faculty": row[8],
+                "source_page": row[9],
             }
             for row in rows
         ]
         expected = [
             {
-                "file": item.source_file,
-                "index": item.mapping_index,
-                "university": item.university,
-                "nus_module_code": item.nus_module_code,
-                "partner_module_code": item.partner_module_code,
-                "source_order": item.source_order,
-                "source_nus_title": item.source_nus_title,
-                "source_nus_units": item.source_nus_units,
-                "source_partner_title": item.source_partner_title,
-                "source_partner_units": item.source_partner_units,
-                "source_faculty": item.source_faculty,
-                "source_page": item.source_page,
+                "university": item["university"],
+                "nus_module_code": item["nus_module_code"],
+                "partner_module_code": item["partner_module_code"],
+                "source_order": item["source_order"],
+                "source_nus_title": item["mapping_nus_title"],
+                "source_nus_units": item["mapping_nus_units"],
+                "source_partner_title": item["mapping_partner_title"],
+                "source_partner_units": item["mapping_partner_units"],
+                "source_faculty": item["mapping_faculty"],
+                "source_page": item["mapping_page"],
             }
-            for item in self.plan.mappings
-        ]
-        self._compare_map("module mappings", expected, actual, ("file", "index"))
-
-    def _check_issues(self) -> None:
-        """Compare every issue with its source address, severity and status."""
-
-        rows = self.connection.execute(
-            """
-            select
-              s.file_path,
-              r.mapping_index,
-              i.json_pointer,
-              i.issue_code,
-              i.severity,
-              i.message,
-              i.status
-            from public.catalog_issues i
-            join public.catalog_source_snapshots s on s.id = i.snapshot_id
-            left join public.catalog_source_rows r on r.id = i.source_row_id
-            """
-        ).fetchall()
-        actual = [
-            {
-                "file": row[0],
-                "index": row[1],
-                "pointer": row[2],
-                "code": row[3],
-                "severity": row[4],
-                "message": row[5],
-                "status": row[6],
-            }
-            for row in rows
-        ]
-        expected = [
-            {
-                "file": item.source_file,
-                "index": item.mapping_index,
-                "pointer": item.json_pointer,
-                "code": item.code,
-                "severity": item.severity,
-                "message": item.message,
-                "status": item.status,
-            }
-            for item in self.plan.issues
-        ]
-        self._compare_map("catalog issues", expected, actual, ("file", "index", "pointer", "code"))
-
-    def _check_repairs(self) -> None:
-        """Compare repair values, citations, dates and resolved status."""
-
-        rows = self.connection.execute(
-            """
-            select
-              s.file_path,
-              r.mapping_index,
-              p.json_pointer,
-              p.before_value,
-              p.after_value,
-              p.source_url,
-              p.source_title,
-              to_char(p.accessed_on, 'YYYY-MM-DD'),
-              p.academic_year,
-              p.evidence,
-              p.status
-            from public.catalog_repairs p
-            join public.catalog_source_snapshots s on s.id = p.snapshot_id
-            left join public.catalog_source_rows r on r.id = p.source_row_id
-            """
-        ).fetchall()
-        actual = [
-            {
-                "file": row[0],
-                "index": row[1],
-                "pointer": row[2],
-                "before": _json_value(row[3]),
-                "after": _json_value(row[4]),
-                "source_url": row[5],
-                "source_title": row[6],
-                "accessed_on": row[7],
-                "academic_year": row[8],
-                "evidence": row[9],
-                "status": row[10],
-            }
-            for row in rows
-        ]
-        expected = [
-            {
-                "file": item.source_file,
-                "index": item.mapping_index,
-                "pointer": item.json_pointer,
-                "before": _json_value(item.before_value),
-                "after": _json_value(item.after_value),
-                "source_url": item.source_url,
-                "source_title": item.source_title,
-                "accessed_on": item.accessed_on.isoformat(),
-                "academic_year": item.academic_year,
-                "evidence": item.evidence,
-                "status": item.status,
-            }
-            for item in self.plan.repairs
+            for item in self.preview["mappings"]
         ]
         self._compare_map(
-            "catalog repairs",
+            "module mappings",
             expected,
             actual,
-            ("file", "index", "pointer", "source_url"),
+            ("university", "source_order", "nus_module_code", "partner_module_code"),
         )
 
     def _scalar(self, query: str, params: tuple[Any, ...] = ()) -> int:
         return int(self.connection.execute(query, params).fetchone()[0])
 
-    def _check_orphans(self) -> None:
-        """Prove that every active row, issue and repair is linked to its source."""
+    def _check_referential_integrity(self) -> None:
+        """Prove that every core child row is linked to a valid parent."""
 
-        batch_id = self.batch_id if self.batch_id is not None else -1
         checks = {
-            "mappings without a source row": self._scalar(
-                "select count(*) from public.module_mappings where source_row_id is null"
-            ),
-            "active source rows without a mapping": self._scalar(
+            "degree_modules without valid degree": self._scalar(
                 """
-                select count(*)
-                from public.catalog_source_rows r
-                left join public.module_mappings m on m.source_row_id = r.id
-                where r.outcome <> 'quarantined' and m.id is null
+                select count(*) from public.degree_modules dm
+                left join public.degrees d on d.id = dm.degree_id
+                where d.id is null
                 """
             ),
-            "quarantined source rows with a mapping": self._scalar(
+            "degree_modules without valid nus_module": self._scalar(
                 """
-                select count(*)
-                from public.catalog_source_rows r
-                join public.module_mappings m on m.source_row_id = r.id
-                where r.outcome = 'quarantined'
-                """
-            ),
-            "row issues without a source row": self._scalar(
-                """
-                select count(*)
-                from public.catalog_issues
-                where json_pointer like '/mappings/%%' and source_row_id is null
+                select count(*) from public.degree_modules dm
+                left join public.nus_modules nm on nm.code = dm.module_code
+                where nm.code is null
                 """
             ),
-            "repairs without a source row": self._scalar(
-                "select count(*) from public.catalog_repairs where source_row_id is null"
-            ),
-            "source rows outside the current batch": self._scalar(
+            "pu_modules without valid partner university": self._scalar(
                 """
-                select count(*)
-                from public.catalog_source_rows r
-                join public.catalog_source_snapshots s on s.id = r.snapshot_id
-                where s.batch_id <> %s
-                """,
-                (batch_id,),
+                select count(*) from public.pu_modules pm
+                left join public.partner_universities u on u.id = pm.partner_university_id
+                where u.id is null
+                """
             ),
-            "snapshots outside the current batch": self._scalar(
-                "select count(*) from public.catalog_source_snapshots where batch_id <> %s",
-                (batch_id,),
+            "mappings without valid nus_module": self._scalar(
+                """
+                select count(*) from public.module_mappings m
+                left join public.nus_modules nm on nm.code = m.nus_module_code
+                where nm.code is null
+                """
+            ),
+            "mappings without valid pu_module": self._scalar(
+                """
+                select count(*) from public.module_mappings m
+                left join public.pu_modules pm on pm.id = m.pu_module_id
+                where pm.id is null
+                """
+            ),
+            "specializations without valid degree": self._scalar(
+                """
+                select count(*) from public.specializations s
+                left join public.degrees d on d.id = s.degree_id
+                where d.id is null
+                """
+            ),
+            "specialization_modules without valid specialization": self._scalar(
+                """
+                select count(*) from public.specialization_modules sm
+                left join public.specializations s on s.id = sm.specialization_id
+                where s.id is null
+                """
+            ),
+            "specialization_modules without valid nus_module": self._scalar(
+                """
+                select count(*) from public.specialization_modules sm
+                left join public.nus_modules nm on nm.code = sm.module_code
+                where nm.code is null
+                """
             ),
         }
         expected = {name: 0 for name in checks}
@@ -1336,45 +1056,47 @@ class Reconciler:
         ).fetchall()
         self._compare_counts(
             "partner-code multiplicity",
-            Counter((item.university, item.partner_module_code) for item in self.plan.mappings),
-            Counter((row[0], row[1]) for row in partner_rows) | Counter()
-            if False
-            else Counter({(row[0], row[1]): row[2] for row in partner_rows}),
+            Counter(
+                (item["university"], item["partner_module_code"])
+                for item in self.preview["mappings"]
+            ),
+            Counter({(row[0], row[1]): row[2] for row in partner_rows}),
         )
         self._compare_counts(
             "NUS-code multiplicity",
-            Counter((item.university, item.nus_module_code) for item in self.plan.mappings),
+            Counter(
+                (item["university"], item["nus_module_code"])
+                for item in self.preview["mappings"]
+            ),
             Counter({(row[0], row[1]): row[2] for row in nus_rows}),
         )
         self._compare_counts(
             "exact-pair multiplicity",
             Counter(
-                (item.university, item.nus_module_code, item.partner_module_code)
-                for item in self.plan.mappings
+                (item["university"], item["nus_module_code"], item["partner_module_code"])
+                for item in self.preview["mappings"]
             ),
             Counter({(row[0], row[1], row[2]): row[3] for row in pair_rows}),
         )
 
     def run(self) -> dict[str, Any]:
-        """Run every reconciliation check and return a sanitized report."""
+        """Run every core reconciliation check and return a report."""
 
-        self._check_batch()
-        self._check_snapshots()
-        self._check_source_rows()
         self._check_entities()
         self._check_mappings()
-        self._check_issues()
-        self._check_repairs()
-        self._check_orphans()
         self._check_duplicates()
+        self._check_referential_integrity()
         failed = [check for check in self.checks if not check["ok"]]
         return {
             "generated_at": datetime.now(UTC).isoformat(),
             "mode": "reconcile",
             "ok": not failed,
-            "source_checksum": self.plan.source_checksum,
-            "repair_checksum": self.plan.repair_checksum,
-            "batch_id": self.batch_id,
+            "source_checksum": self.preview.get("source_snapshot", {}).get(
+                "source_checksum_sha256"
+            ),
+            "repair_checksum": self.preview.get("source_snapshot", {}).get(
+                "repair_checksum_sha256"
+            ),
             "summary": {
                 "checks": len(self.checks),
                 "passed": len(self.checks) - len(failed),
@@ -1385,11 +1107,15 @@ class Reconciler:
 
 
 def _run_reconcile(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
-    """Reconcile a published database without seeding or writing catalog data."""
+    """Reconcile a database against preview without seeding or writing catalog data."""
 
-    database_url = args.database_url or os.environ.get("IMPORT_DATABASE_URL")
+    database_url = (
+        args.database_url
+        or os.environ.get("DATABASE_URL")
+        or os.environ.get("IMPORT_DATABASE_URL")
+    )
     if not database_url:
-        parser.error("--reconcile requires --database-url or IMPORT_DATABASE_URL")
+        parser.error("--reconcile requires --database-url, DATABASE_URL, or IMPORT_DATABASE_URL")
     target = args.target_project_ref
     if not target:
         target = _expected_target_label(database_url)
@@ -1397,12 +1123,12 @@ def _run_reconcile(args: argparse.Namespace, parser: argparse.ArgumentParser) ->
             parser.error("remote reconciliation requires --target-project-ref")
     try:
         _validate_target(database_url, target)
-        plan = build_import_plan()
+        preview = build_preview()
         with _connect(database_url) as connection:
             connection.read_only = True
             with connection.transaction():
-                report = Reconciler(connection, plan).run()
-    except CatalogImportError as exc:
+                report = Reconciler(connection, preview).run()
+    except SnapshotError as exc:
         LOG.error("%s", exc)
         return 2
     except psycopg.Error as exc:
@@ -1434,7 +1160,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--reconcile",
         action="store_true",
-        help="Compare a published database with the checked-in import plan; read-only.",
+        help="Compare a PostgreSQL database with the checked-in source preview; read-only.",
     )
     parser.add_argument(
         "--target-project-ref",
