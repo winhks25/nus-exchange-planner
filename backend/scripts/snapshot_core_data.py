@@ -231,7 +231,25 @@ def _read_tables(connection: psycopg.Connection) -> dict[str, Any]:
     """Read every allowlisted table using explicit columns and stable row order."""
 
     tables: dict[str, Any] = {}
-    for table, columns in CORE_TABLES.items():
+    optional_columns = {
+        "nus_modules": ("faculty", "units"),
+        "pu_modules": ("pu_units",),
+        "degree_modules": ("module_type",),
+    }
+    existing = {}
+    for table, column in connection.execute(
+        "select table_name, column_name from information_schema.columns "
+        "where table_schema = 'public' and table_name = any(%s)",
+        (list(CORE_TABLES),),
+    ):
+        existing.setdefault(table, set()).add(column)
+    for table, legacy_columns in CORE_TABLES.items():
+        if table not in existing:
+            raise SnapshotError(f"Missing core table: {table}")
+        columns = tuple(
+            column for column in (*legacy_columns, *optional_columns.get(table, ()))
+            if column in existing[table]
+        )
         # Column and table names come only from the local allowlist.
         query = sql.SQL("select {} from public.{}").format(
             sql.SQL(", ").join(sql.Identifier(column) for column in columns),
@@ -436,6 +454,7 @@ def _natural_rows(
                     "degree": context["degrees"][row["degree_id"]],
                     "module_code": row["module_code"],
                     "requirement_type": row["requirement_type"],
+                    **({"module_type": row["module_type"]} if "module_type" in row else {}),
                 }
                 for row in tables[table]["rows"]
             ]

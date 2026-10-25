@@ -31,16 +31,18 @@ select
   exists (select 1 from public.degrees where full_title is null) as has_null_full_title
 """
 
+# JSON field access supports both the archived fixture schema and the cleaned live schema.
+# Missing legacy keys become NULL instead of producing UndefinedColumn errors.
 CATALOG_DEGREES_SQL = """
 select name, full_title
-from public.degrees
-order by source_order nulls last, id
+from public.degrees d
+order by (to_jsonb(d)->>'source_order')::integer nulls last, id
 """
 
 CATALOG_UNIVERSITIES_SQL = """
 select name, country
-from public.partner_universities
-order by source_order nulls last, id
+from public.partner_universities u
+order by (to_jsonb(u)->>'source_order')::integer nulls last, id
 """
 
 DEGREE_ID_SQL = """
@@ -82,10 +84,16 @@ where d.name = %s and u.name = %s
 MAPPINGS_SQL = """
 select
   mm.nus_module_code,
-  coalesce(mm.source_nus_title, nm.name),
+  coalesce(to_jsonb(mm)->>'source_nus_title', nm.name),
   pm.code,
-  coalesce(mm.source_partner_title, pm.name),
-  coalesce(mm.source_partner_units, pm.verified_units)
+  coalesce(to_jsonb(mm)->>'source_partner_title', pm.name),
+  coalesce(
+    (to_jsonb(mm)->>'source_partner_units')::numeric,
+    (to_jsonb(pm)->>'pu_units')::numeric,
+    (to_jsonb(pm)->>'verified_units')::numeric
+  ),
+  case when to_jsonb(nm) ? 'units' then (to_jsonb(nm)->>'units')::numeric
+       else 4 end
 from public.module_mappings mm
 join public.nus_modules nm on nm.code = mm.nus_module_code
 join public.pu_modules pm on pm.id = mm.pu_module_id
@@ -95,7 +103,7 @@ where pm.partner_university_id = %s
     from public.degree_modules dm
     where dm.degree_id = %s
   )
-order by mm.nus_module_code collate "C" asc, mm.source_order nulls last, mm.id asc
+order by mm.nus_module_code collate "C" asc, (to_jsonb(mm)->>'source_order')::integer nulls last, mm.id asc
 """
 
 
@@ -142,12 +150,9 @@ class PostgresCatalogRepository:
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE)
 
         return CatalogResponse(
-            degrees=[
-                DegreeOption(name=name, degree=full_title) for name, full_title in degrees
-            ],
+            degrees=[DegreeOption(name=name, degree=full_title) for name, full_title in degrees],
             universities=[
-                UniversityOption(name=name, country=country)
-                for name, country in universities
+                UniversityOption(name=name, country=country) for name, country in universities
             ],
         )
 
@@ -182,9 +187,7 @@ class PostgresCatalogRepository:
         try:
             with self._database.read_transaction("mappings") as conn:
                 _require_ready_catalog(conn)
-                selected = conn.execute(
-                    DEGREE_UNIVERSITY_IDS_SQL, (degree, university)
-                ).fetchone()
+                selected = conn.execute(DEGREE_UNIVERSITY_IDS_SQL, (degree, university)).fetchone()
                 if selected is None:
                     raise UnknownSelection("Unknown degree or university")
                 degree_id, university_id = selected
@@ -192,27 +195,23 @@ class PostgresCatalogRepository:
         except DatabaseError:
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE) from None
 
-        # Build courses from row-level presentation, with verified module data as a fallback.
+        # Read canonical module values after cleanup; preserve the archived schema during rollout.
         mappings = [
             Mapping(
-                nus_course=Course(code=nus_code, title=nus_title, units=4),
+                nus_course=Course(code=nus_code, title=nus_title, units=_optional_float(nus_units)),
                 partner_course=Course(
                     code=partner_code,
                     title=partner_title,
                     units=_optional_float(partner_units),
                 ),
             )
-            for nus_code, nus_title, partner_code, partner_title, partner_units in rows
+            for nus_code, nus_title, partner_code, partner_title, partner_units, nus_units in rows
         ]
         return MappingResponse(
             degree=degree,
             university=university,
-            partner_module_count=len(
-                {row.partner_course.code.upper() for row in mappings}
-            ),
-            distinct_nus_module_count=len(
-                {row.nus_course.code.upper() for row in mappings}
-            ),
+            partner_module_count=len({row.partner_course.code.upper() for row in mappings}),
+            distinct_nus_module_count=len({row.nus_course.code.upper() for row in mappings}),
             mappings=mappings,
         )
 

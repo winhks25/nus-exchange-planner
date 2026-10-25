@@ -1,0 +1,4330 @@
+[
+  {
+    "snapshot": {
+      "degrees": [
+        {
+          "id": 1,
+          "name": "Artificial Intelligence",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Artificial Intelligence)"
+        },
+        {
+          "id": 2,
+          "name": "Business Analytics",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Science (Business Analytics)"
+        },
+        {
+          "id": 3,
+          "name": "Business Artificial Intelligence Systems",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Business Artificial Intelligence Systems)"
+        },
+        {
+          "id": 4,
+          "name": "Computer Science",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Computer Science)"
+        },
+        {
+          "id": 5,
+          "name": "Information Systems",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Information Systems)"
+        },
+        {
+          "id": 6,
+          "name": "Information Security",
+          "faculty": "School of Computing",
+          "full_title": "Bachelor of Computing (Information Security)"
+        }
+      ],
+      "nus_modules": [
+        {
+          "code": "BT1101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT2101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT2102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3017",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT3104",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4012",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4013",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4014",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4015",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4016",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4211",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4212",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4221",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4222",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4240",
+          "name": "Machine Learning for Predictive Data Analytics",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4241",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "BT4301",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3100",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3107",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3110",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3200",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3202",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP3880",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CP4101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS1010E",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS1231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS1231S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2030",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2030S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2040",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2040C",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2040S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2100",
+          "name": "Computer Organisation",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2103T",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2104",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2105",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2106",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2107",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2109S",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS2251",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3210",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3213",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3221",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3230",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3235",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3236",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3237",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3240",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3241",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3243",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3244",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3247",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3263",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3264",
+          "name": "Foundations of Machine Learning",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS3268",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4211",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4212",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4215",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4218",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4220",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4222",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4225",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4230",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4236",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4238",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4239",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4240",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4243",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4244",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4246",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4248",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4249",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4257",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4261",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4262",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4268",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4276",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4277",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4278",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS4347",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5224",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5242",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5321",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5322",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5331",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "CS5332",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "DBA4811",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IE3120",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IFS4205",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2101",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2102",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2108",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS2109",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3106",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3107",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3108",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3109",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3150",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3221",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3240",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS3251",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4010",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4100",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4103",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4108",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4151",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4152",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4204",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4226",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4228",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4231",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4233",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4234",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4236",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4238",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4241",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4242",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4243",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4246",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4248",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4250",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4261",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4262",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4301",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4302",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4303",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4400",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4401",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4402",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IS4403",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IT1244",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "IT2002",
+          "name": "Database Technology and Management",
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "MA1521",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "MA1522",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "MA4261",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "ST2334",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "ST4245",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        },
+        {
+          "code": "TR3202",
+          "name": null,
+          "offering_faculty": null,
+          "verified_units": null
+        }
+      ],
+      "degree_modules": [
+        {
+          "degree_id": 3,
+          "module_code": "IS3108",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3109",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3150",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3221",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3240",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3251",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4100",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4108",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4151",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4152",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4226",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4228",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4231",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4233",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4234",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4236",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4238",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4241",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4243",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4246",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4248",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4250",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4261",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4262",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4301",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4302",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4303",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4400",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4401",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4402",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS4403",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "MA1521",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "MA1522",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS1231S",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2030S",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2040S",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2100",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2103T",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2106",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS2109S",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "CS3230",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "MA1521",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "MA1522",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 4,
+          "module_code": "ST2334",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "BT2102",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "BT3017",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "BT4014",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CP4101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2030",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2040",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2102",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2105",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS2107",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS3240",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "CS3243",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IFS4101",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS2101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS2102",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS2103",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3103",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3106",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3107",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3150",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3221",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3240",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS3251",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4100",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4103",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4151",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4152",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4226",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4228",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4231",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4233",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4234",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4236",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4238",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4241",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4242",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4243",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4246",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4248",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4250",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4261",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4262",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4301",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4302",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "IS4303",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "MA1521",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 5,
+          "module_code": "ST2334",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3107",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3110",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3200",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "MA1522",
+          "requirement_type": "required",
+          "module_type": "Maths Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "ST2334",
+          "requirement_type": "required",
+          "module_type": "Maths Foundations"
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT2101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT2102",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3017",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3102",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3103",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT3104",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4012",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4013",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4014",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4015",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4016",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4103",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4211",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4212",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4221",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4222",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4240",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4241",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "BT4301",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CP3100",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS2030",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS2040",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS3243",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS3244",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "CS4248",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "DBA4811",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IE3120",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS2101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3103",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3107",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3150",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3221",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS3240",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "ST2334",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4226",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4228",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4234",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4241",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4242",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4246",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4250",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4262",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4302",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "IS4303",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "MA1521",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "MA1522",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "ST2334",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 2,
+          "module_code": "ST4245",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT2102",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT3017",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT4014",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT4221",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "BT4301",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CP3100",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CP4101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2030",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2040",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2105",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "CS2107",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IFS4101",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2102",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2108",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS2109",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3103",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 3,
+          "module_code": "IS3107",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3202",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CP3880",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS1231S",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2030",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS1231S",
+          "requirement_type": "required",
+          "module_type": "Maths Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2030S",
+          "requirement_type": "required",
+          "module_type": "Computing Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2040S",
+          "requirement_type": "required",
+          "module_type": "Computing Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2101",
+          "requirement_type": "required",
+          "module_type": "Computing Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2103T",
+          "requirement_type": "required",
+          "module_type": "Computing Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2109S",
+          "requirement_type": "required",
+          "module_type": "AI Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS2251",
+          "requirement_type": "required",
+          "module_type": "Maths Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3230",
+          "requirement_type": "required",
+          "module_type": "Computing Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3263",
+          "requirement_type": "required",
+          "module_type": "AI Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3264",
+          "requirement_type": "required",
+          "module_type": "AI Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS3268",
+          "requirement_type": "required",
+          "module_type": "AI Foundations"
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4220",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4225",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4240",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4243",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4244",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4246",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4248",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4261",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4262",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4277",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4278",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "CS4347",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 1,
+          "module_code": "MA1521",
+          "requirement_type": "required",
+          "module_type": "Maths Foundations"
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2040C",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2100",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2101",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2103T",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2105",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2106",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS2107",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS3235",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4230",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4236",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4238",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4239",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4257",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS4276",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5231",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5321",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5322",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5331",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "CS5332",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4101",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4102",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4103",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IFS4205",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4010",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4204",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4231",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4233",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4234",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4238",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "IS4302",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "MA1521",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "MA1522",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "MA4261",
+          "requirement_type": "electives",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "ST2334",
+          "requirement_type": "required",
+          "module_type": null
+        },
+        {
+          "degree_id": 6,
+          "module_code": "TR3202",
+          "requirement_type": "electives",
+          "module_type": null
+        }
+      ],
+      "partner_universities": [
+        {
+          "id": 1,
+          "name": "University of Western Australia",
+          "country": "Australia",
+          "city": null,
+          "continent": null,
+          "source_order": 0
+        },
+        {
+          "id": 2,
+          "name": "University of Toronto",
+          "country": "Canada",
+          "city": null,
+          "continent": null,
+          "source_order": 1
+        },
+        {
+          "id": 3,
+          "name": "Kyoto University",
+          "country": "Japan",
+          "city": null,
+          "continent": null,
+          "source_order": 2
+        },
+        {
+          "id": 4,
+          "name": "Korea University",
+          "country": "South Korea",
+          "city": null,
+          "continent": null,
+          "source_order": 3
+        },
+        {
+          "id": 5,
+          "name": "Yonsei University",
+          "country": "South Korea",
+          "city": null,
+          "continent": null,
+          "source_order": 4
+        }
+      ],
+      "pu_modules": [
+        {
+          "id": 92,
+          "code": "BUSN5001",
+          "name": "Blockchain And Distributed Ledger Technologies In Business",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 93,
+          "code": "CITS1402",
+          "name": "Relational Database Management Systems",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 94,
+          "code": "CITS2200",
+          "name": "Data Structures And Algorithms",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 95,
+          "code": "CITS3001",
+          "name": "Algorithms, Agents And Artificial Intelligence",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 96,
+          "code": "CITS3002",
+          "name": "Computer Networks",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 97,
+          "code": "CITS3004",
+          "name": "Cybersecurity",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 98,
+          "code": "CITS3006",
+          "name": "Penetration Testing",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 99,
+          "code": "CITS3007",
+          "name": "Secure Coding",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 100,
+          "code": "CITS3301",
+          "name": "Software Requirements And Design",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 101,
+          "code": "CITS4009",
+          "name": "Computational Data Analysis",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 102,
+          "code": "CITS4404",
+          "name": "Artificial Intelligence And Adaptive Systems",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 103,
+          "code": "CITS4419",
+          "name": "Mobile And Wireless Computing",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 104,
+          "code": "CITS5503",
+          "name": "Cloud Computing",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 105,
+          "code": "CITS5506",
+          "name": "The Internet Of Things",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 106,
+          "code": "CITS5507",
+          "name": "High Performance Computing",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 107,
+          "code": "CTIS2005",
+          "name": "Object Oriented Programming",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 108,
+          "code": "ENVT4411",
+          "name": "Geographic Information Systems Applications",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 109,
+          "code": "ENVT5566",
+          "name": "Advanced Spatial And Environmental Modelling",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 110,
+          "code": "FINA4491",
+          "name": "Capital Markets Research",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 111,
+          "code": "GEOG2201",
+          "name": "Geographic Information Systems",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 112,
+          "code": "GEOG3300",
+          "name": "Advanced Spatial Analysis",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 113,
+          "code": "MATH3002",
+          "name": "Network Science",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 114,
+          "code": "MKTG2305",
+          "name": "Marketing Research",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 115,
+          "code": "MKTG3307",
+          "name": "Digital Marketing",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 116,
+          "code": "MKTG3308",
+          "name": "Marketing Analytics",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 117,
+          "code": "MKTG5504",
+          "name": "Big Data In Marketing",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 118,
+          "code": "STAT3063",
+          "name": "Spatial Statistics And Modeling",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 119,
+          "code": "STAT3406",
+          "name": "Applied Statistics And Data Visualisation",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 120,
+          "code": "STAT4064",
+          "name": "Applied Predictive Modeling",
+          "partner_university_id": 1,
+          "pu_units": 6
+        },
+        {
+          "id": 79,
+          "code": "ECE344H1",
+          "name": "Operating Systems",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 71,
+          "code": "CSC444H1",
+          "name": "Software Engineering",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 53,
+          "code": "CSC326H1",
+          "name": "Programming Languages",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 63,
+          "code": "CSC404H1",
+          "name": "Introduction To Video Game Design",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 90,
+          "code": "ROB313H1",
+          "name": "Introduction To Learning From Data",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 69,
+          "code": "CSC428H1-S",
+          "name": "Human-Computer Interaction",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 68,
+          "code": "CSC420H1",
+          "name": "Introduction To Image Understanding",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 67,
+          "code": "CSC413H1",
+          "name": "\" Neural Networks And Deep Learning\"",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 48,
+          "code": "CSC309H1",
+          "name": "Programming On The Web",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 66,
+          "code": "CSC412",
+          "name": "Probabilistic Learning And Reasoning",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 70,
+          "code": "CSC443H1",
+          "name": "Database System Technology",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 49,
+          "code": "CSC311H1",
+          "name": "Introduction To Machine Learning",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 62,
+          "code": "CSC401H1",
+          "name": "Natural Language Computing",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 47,
+          "code": "CSC302H1",
+          "name": "Engineering Large Software Systems",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 61,
+          "code": "CSC384H1",
+          "name": "Introduction To Artificial Intelligence",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 55,
+          "code": "CSC3465H1",
+          "name": "Formal Methods In Software Design",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 58,
+          "code": "CSC369H1",
+          "name": "Operating Systems",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 85,
+          "code": "ECO375H1",
+          "name": "Foundations Of Econometrics",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 45,
+          "code": "BCB420H1",
+          "name": "Computational Systems Biology",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 80,
+          "code": "ECE352",
+          "name": "Computer Organization",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 81,
+          "code": "ECE358",
+          "name": "Foundations Of Computing",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 51,
+          "code": "CSC322H5",
+          "name": "Introduction To Algebraic Cryptography",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 56,
+          "code": "CSC358H1",
+          "name": "Principles Of Computer Networks",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 84,
+          "code": "ECE568H1",
+          "name": "Computer Security",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 64,
+          "code": "CSC410",
+          "name": "Software Verification And Testing",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 76,
+          "code": "CSC488",
+          "name": "Compilers And Interpreters",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 74,
+          "code": "CSC469",
+          "name": "Operating Systems Design And Implementation",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 57,
+          "code": "CSC367H1",
+          "name": "Parallel Programming",
+          "partner_university_id": 2,
+          "pu_units": 3
+        },
+        {
+          "id": 86,
+          "code": "MIE369H1",
+          "name": "Introduction To Artificial Intelligence",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 89,
+          "code": "ROB311H1",
+          "name": "Artificial Intellgence",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 91,
+          "code": "RSM434",
+          "name": "Financial Trading Strategies",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 43,
+          "code": "ACT350",
+          "name": "Applied Probability For Actuarial Science",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 60,
+          "code": "CSC373H1",
+          "name": "Algorithm Design, Analysis & Complexity",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 54,
+          "code": "CSC343H1",
+          "name": "Introduction To Databases",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 52,
+          "code": "CSC324H1",
+          "name": "Principles Of Programming Languages",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 59,
+          "code": "CSC373H",
+          "name": "Algorithm Design And Analysis",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 50,
+          "code": "CSC317H1",
+          "name": "Computer Graphics",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 75,
+          "code": "CSC485H1",
+          "name": "Computational Linguistics",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 44,
+          "code": "APS360H1",
+          "name": "Applied Fundamentals Of Deep Learning",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 73,
+          "code": "CSC465",
+          "name": "Formal Methods In Software Design",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 72,
+          "code": "CSC457H1",
+          "name": "Principles Of Computer Networks",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 46,
+          "code": "CSC301H1",
+          "name": "Introduction To Software Engineering",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 65,
+          "code": "CSC411H1",
+          "name": "Machine Learning And Data Mining",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 82,
+          "code": "ECE421",
+          "name": "Introduction To Machine Learning",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 88,
+          "code": "ROB311",
+          "name": "Artificial Intelligence",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 83,
+          "code": "ECE521",
+          "name": "Inference Algorithms And Machine Learning",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 77,
+          "code": "CSCC11H3",
+          "name": "Introduction To Machine Learning And Data Mining",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 87,
+          "code": "MSE403H1",
+          "name": "Data Sciences And Analytics For Materials Engineers",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 78,
+          "code": "ECE243H1",
+          "name": "Computer Organization",
+          "partner_university_id": 2,
+          "pu_units": 0.5
+        },
+        {
+          "id": 36,
+          "code": "ENG39098",
+          "name": "Databases",
+          "partner_university_id": 3,
+          "pu_units": 2
+        },
+        {
+          "id": 37,
+          "code": "ENG39116",
+          "name": "Artificial Intelligence",
+          "partner_university_id": 3,
+          "pu_units": 2
+        },
+        {
+          "id": 38,
+          "code": "ENG39128",
+          "name": "Implementation Of Programming Languages",
+          "partner_university_id": 3,
+          "pu_units": 2
+        },
+        {
+          "id": 39,
+          "code": "T019001",
+          "name": "Information Network-E2",
+          "partner_university_id": 3,
+          "pu_units": 2
+        },
+        {
+          "id": 40,
+          "code": "T057001",
+          "name": "Fundamentals Of Artificial Intelligence- E2",
+          "partner_university_id": 3,
+          "pu_units": 2
+        },
+        {
+          "id": 41,
+          "code": "T57002",
+          "name": "Fundamentals Of Artificial Intelligence- E2",
+          "partner_university_id": 3,
+          "pu_units": 2
+        },
+        {
+          "id": 42,
+          "code": "U-LAS30 20044 LE10",
+          "name": "Introduction To Formal Languages-E2",
+          "partner_university_id": 3,
+          "pu_units": 2
+        },
+        {
+          "id": 13,
+          "code": "COSE101",
+          "name": "Computer Programming I",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 2,
+          "code": "BUSS 216",
+          "name": "Business Analytics I (English)",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 14,
+          "code": "COSE211",
+          "name": "Discrete Mathematics",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 11,
+          "code": "COSE 342",
+          "name": "Computer Network",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 12,
+          "code": "COSE 362",
+          "name": "Machine Learning",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 31,
+          "code": "KECE443",
+          "name": "Object-Oriented Programming And Laboratory",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 10,
+          "code": "COSE 213",
+          "name": "Data Structures",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 19,
+          "code": "COSE341",
+          "name": "Operating Systems",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 21,
+          "code": "COSE361",
+          "name": "Artificial Intelligence (English)",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 22,
+          "code": "COSE371",
+          "name": "Databases",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 28,
+          "code": "COSE474",
+          "name": "Deep Learning",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 29,
+          "code": "KECE345",
+          "name": "\" Machine Learning And Intelligence For Electrical Engineers(English)\"",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 4,
+          "code": "BUSS217",
+          "name": "Business Analytics Ii",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 30,
+          "code": "KECE421",
+          "name": "Information And Coding Theory",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 16,
+          "code": "COSE214",
+          "name": "Alorithms",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 9,
+          "code": "BUSS475",
+          "name": "Internet Marketing",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 23,
+          "code": "COSE389",
+          "name": "Entrepreneurship & Leadership",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 27,
+          "code": "COSE461",
+          "name": "Natural Language Processing",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 17,
+          "code": "COSE215",
+          "name": "Theory Of Computation",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 18,
+          "code": "COSE331",
+          "name": "Computer Graphics",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 15,
+          "code": "COSE212",
+          "name": "Programming Languages",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 1,
+          "code": "BNCS411",
+          "name": "Introduction To Brain And Machine Learning",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 6,
+          "code": "BUSS316",
+          "name": "Operations Analytics (English)",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 34,
+          "code": "SMRT336",
+          "name": "Ai Security Ii (English)",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 35,
+          "code": "STAT346",
+          "name": "Statistical Data Science I (English)\"",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 5,
+          "code": "BUSS305",
+          "name": "Artificial Intelligence For Business (English)\"",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 33,
+          "code": "KHPM410",
+          "name": "Data Science In Healthcare",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 24,
+          "code": "COSE432",
+          "name": "Human Computer Interaction",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 20,
+          "code": "COSE342",
+          "name": "Computer Network",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 7,
+          "code": "BUSS317",
+          "name": "Social Media Analytics",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 8,
+          "code": "BUSS410",
+          "name": "Technological Innovation Management: A Pre-Requisite For Successful Entrepreneurship",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 26,
+          "code": "COSE442",
+          "name": "Wireless Communications",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 25,
+          "code": "COSE436",
+          "name": "Interactive Visualization",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 32,
+          "code": "KECE470",
+          "name": "Pattern Recognition",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 3,
+          "code": "BUSS215",
+          "name": "Introduction To Management Information Systems(English)",
+          "partner_university_id": 4,
+          "pu_units": 3
+        },
+        {
+          "id": 131,
+          "code": "CSI4120",
+          "name": "Machine Learning",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 121,
+          "code": "AIC2120",
+          "name": "Introduction To Ai And Its Applications",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 130,
+          "code": "CSI4116",
+          "name": "Computer Vision",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 137,
+          "code": "MAT2106",
+          "name": "Discrete Mathematics",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 128,
+          "code": "CSI4108",
+          "name": "Artificial Intelligence",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 123,
+          "code": "CAS3116",
+          "name": "Computer Vision",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 141,
+          "code": "STA4123",
+          "name": "Introduction To Optimization For Data Science",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 124,
+          "code": "CAS3120-01",
+          "name": "Machine Learning",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 126,
+          "code": "CSI3109",
+          "name": "Automata And Formal Languages",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 122,
+          "code": "BIZ3189-04",
+          "name": "Management Information Systems",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 135,
+          "code": "EEE7501",
+          "name": "Neural Network",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 136,
+          "code": "ISM6011",
+          "name": "Global It Management",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 127,
+          "code": "CSI4106",
+          "name": "Computer Networks",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 134,
+          "code": "EEE3450",
+          "name": "Communication Networks",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 133,
+          "code": "EEE3314",
+          "name": "Introduction Artificial Intelligence",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 139,
+          "code": "STA3141",
+          "name": "Mathematics For Machine Learning",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 140,
+          "code": "STA3142",
+          "name": "Statistical Machine Learning",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 132,
+          "code": "EE4624",
+          "name": "Wireless And Mobile Networks",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 138,
+          "code": "PHY4125",
+          "name": "Quantum Computer",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 125,
+          "code": "CSI2103",
+          "name": "Data Structures",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 129,
+          "code": "CSI4109",
+          "name": "Information Security",
+          "partner_university_id": 5,
+          "pu_units": 3
+        },
+        {
+          "id": 142,
+          "code": "STA9131",
+          "name": "Deep Learning For Visual Recognition",
+          "partner_university_id": 5,
+          "pu_units": 3
+        }
+      ],
+      "specializations": [
+        {
+          "id": 1,
+          "degree_id": 2,
+          "name": "Financial Analytics"
+        },
+        {
+          "id": 2,
+          "degree_id": 2,
+          "name": "Machine Learning-based Analytics"
+        },
+        {
+          "id": 3,
+          "degree_id": 2,
+          "name": "Marketing Analytics"
+        },
+        {
+          "id": 4,
+          "degree_id": 3,
+          "name": "AI Governance and Management"
+        },
+        {
+          "id": 5,
+          "degree_id": 3,
+          "name": "Digital Product and Platform Management"
+        },
+        {
+          "id": 6,
+          "degree_id": 3,
+          "name": "Financial Technology"
+        },
+        {
+          "id": 7,
+          "degree_id": 4,
+          "name": "Algorithms & Theory"
+        },
+        {
+          "id": 8,
+          "degree_id": 4,
+          "name": "Artificial Intelligence"
+        },
+        {
+          "id": 9,
+          "degree_id": 4,
+          "name": "Computer Graphics and Games"
+        },
+        {
+          "id": 10,
+          "degree_id": 4,
+          "name": "Computer Security"
+        },
+        {
+          "id": 11,
+          "degree_id": 4,
+          "name": "Database Systems"
+        },
+        {
+          "id": 12,
+          "degree_id": 4,
+          "name": "Multimedia Information Retrieval"
+        },
+        {
+          "id": 13,
+          "degree_id": 4,
+          "name": "Networking and Distributed Systems"
+        },
+        {
+          "id": 14,
+          "degree_id": 4,
+          "name": "Parallel Computing"
+        },
+        {
+          "id": 15,
+          "degree_id": 4,
+          "name": "Programming Languages"
+        },
+        {
+          "id": 16,
+          "degree_id": 4,
+          "name": "Software Engineering"
+        },
+        {
+          "id": 17,
+          "degree_id": 5,
+          "name": "Digital Product and Platform Management"
+        },
+        {
+          "id": 18,
+          "degree_id": 5,
+          "name": "Financial Technology"
+        },
+        {
+          "id": 19,
+          "degree_id": 5,
+          "name": "Intelligent Systems Solutioning"
+        }
+      ],
+      "specialization_modules": [
+        {
+          "specialization_id": 1,
+          "module_code": "BT3102"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4012"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4013"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4016"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "BT4221"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4226"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4228"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4234"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4302"
+        },
+        {
+          "specialization_id": 1,
+          "module_code": "IS4303"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT3017"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4012"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4014"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4221"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4222"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4240"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4241"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "BT4301"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "CS3243"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "CS4248"
+        },
+        {
+          "specialization_id": 2,
+          "module_code": "IS4246"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT3017"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4014"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4015"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4211"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4212"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "BT4222"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "IS3150"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "IS4241"
+        },
+        {
+          "specialization_id": 3,
+          "module_code": "IS4262"
+        }
+      ],
+      "module_mappings": [
+        {
+          "id": 1,
+          "nus_module_code": "IS4302",
+          "pu_module_id": 92
+        },
+        {
+          "id": 2,
+          "nus_module_code": "CS2102",
+          "pu_module_id": 93
+        },
+        {
+          "id": 3,
+          "nus_module_code": "CS2040",
+          "pu_module_id": 94
+        },
+        {
+          "id": 4,
+          "nus_module_code": "BT4014",
+          "pu_module_id": 95
+        },
+        {
+          "id": 5,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 95
+        },
+        {
+          "id": 6,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 96
+        },
+        {
+          "id": 7,
+          "nus_module_code": "CS3235",
+          "pu_module_id": 97
+        },
+        {
+          "id": 8,
+          "nus_module_code": "IFS4103",
+          "pu_module_id": 98
+        },
+        {
+          "id": 9,
+          "nus_module_code": "CS4239",
+          "pu_module_id": 99
+        },
+        {
+          "id": 10,
+          "nus_module_code": "CS3213",
+          "pu_module_id": 100
+        },
+        {
+          "id": 11,
+          "nus_module_code": "BT4014",
+          "pu_module_id": 101
+        },
+        {
+          "id": 12,
+          "nus_module_code": "BT4014",
+          "pu_module_id": 102
+        },
+        {
+          "id": 13,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 102
+        },
+        {
+          "id": 14,
+          "nus_module_code": "IS4242",
+          "pu_module_id": 102
+        },
+        {
+          "id": 15,
+          "nus_module_code": "CS4222",
+          "pu_module_id": 103
+        },
+        {
+          "id": 16,
+          "nus_module_code": "CS5224",
+          "pu_module_id": 104
+        },
+        {
+          "id": 17,
+          "nus_module_code": "CS3237",
+          "pu_module_id": 105
+        },
+        {
+          "id": 18,
+          "nus_module_code": "CS3210",
+          "pu_module_id": 106
+        },
+        {
+          "id": 19,
+          "nus_module_code": "CS2030",
+          "pu_module_id": 107
+        },
+        {
+          "id": 20,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 108
+        },
+        {
+          "id": 21,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 109
+        },
+        {
+          "id": 22,
+          "nus_module_code": "BT4013",
+          "pu_module_id": 110
+        },
+        {
+          "id": 23,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 111
+        },
+        {
+          "id": 24,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 112
+        },
+        {
+          "id": 25,
+          "nus_module_code": "IS4241",
+          "pu_module_id": 113
+        },
+        {
+          "id": 26,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 114
+        },
+        {
+          "id": 27,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 115
+        },
+        {
+          "id": 28,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 116
+        },
+        {
+          "id": 29,
+          "nus_module_code": "BT4211",
+          "pu_module_id": 117
+        },
+        {
+          "id": 30,
+          "nus_module_code": "BT4015",
+          "pu_module_id": 118
+        },
+        {
+          "id": 31,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 119
+        },
+        {
+          "id": 32,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 120
+        },
+        {
+          "id": 33,
+          "nus_module_code": "CS2106",
+          "pu_module_id": 79
+        },
+        {
+          "id": 34,
+          "nus_module_code": "CS2103",
+          "pu_module_id": 71
+        },
+        {
+          "id": 35,
+          "nus_module_code": "CS2104",
+          "pu_module_id": 53
+        },
+        {
+          "id": 36,
+          "nus_module_code": "CS3247",
+          "pu_module_id": 63
+        },
+        {
+          "id": 37,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 90
+        },
+        {
+          "id": 38,
+          "nus_module_code": "CS4249",
+          "pu_module_id": 69
+        },
+        {
+          "id": 39,
+          "nus_module_code": "CS4243",
+          "pu_module_id": 68
+        },
+        {
+          "id": 40,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 67
+        },
+        {
+          "id": 41,
+          "nus_module_code": "BT3103",
+          "pu_module_id": 48
+        },
+        {
+          "id": 42,
+          "nus_module_code": "BT3102",
+          "pu_module_id": 66
+        },
+        {
+          "id": 43,
+          "nus_module_code": "IS3107",
+          "pu_module_id": 70
+        },
+        {
+          "id": 44,
+          "nus_module_code": "CS3264",
+          "pu_module_id": 49
+        },
+        {
+          "id": 45,
+          "nus_module_code": "CS4248",
+          "pu_module_id": 62
+        },
+        {
+          "id": 46,
+          "nus_module_code": "CS3213",
+          "pu_module_id": 47
+        },
+        {
+          "id": 47,
+          "nus_module_code": "CS3263",
+          "pu_module_id": 61
+        },
+        {
+          "id": 48,
+          "nus_module_code": "CS4211",
+          "pu_module_id": 55
+        },
+        {
+          "id": 49,
+          "nus_module_code": "CS2106",
+          "pu_module_id": 58
+        },
+        {
+          "id": 50,
+          "nus_module_code": "BT2101",
+          "pu_module_id": 85
+        },
+        {
+          "id": 51,
+          "nus_module_code": "CS4220",
+          "pu_module_id": 45
+        },
+        {
+          "id": 52,
+          "nus_module_code": "CS2100",
+          "pu_module_id": 80
+        },
+        {
+          "id": 53,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 81
+        },
+        {
+          "id": 54,
+          "nus_module_code": "CS4236",
+          "pu_module_id": 51
+        },
+        {
+          "id": 55,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 56
+        },
+        {
+          "id": 56,
+          "nus_module_code": "CS3235",
+          "pu_module_id": 84
+        },
+        {
+          "id": 57,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 49
+        },
+        {
+          "id": 58,
+          "nus_module_code": "CS4218",
+          "pu_module_id": 64
+        },
+        {
+          "id": 59,
+          "nus_module_code": "CS4212",
+          "pu_module_id": 76
+        },
+        {
+          "id": 60,
+          "nus_module_code": "CS3221",
+          "pu_module_id": 74
+        },
+        {
+          "id": 61,
+          "nus_module_code": "CS3210",
+          "pu_module_id": 57
+        },
+        {
+          "id": 62,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 86
+        },
+        {
+          "id": 63,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 89
+        },
+        {
+          "id": 64,
+          "nus_module_code": "IS4226",
+          "pu_module_id": 91
+        },
+        {
+          "id": 65,
+          "nus_module_code": "BT3102",
+          "pu_module_id": 43
+        },
+        {
+          "id": 66,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 60
+        },
+        {
+          "id": 67,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 61
+        },
+        {
+          "id": 68,
+          "nus_module_code": "CS2102",
+          "pu_module_id": 54
+        },
+        {
+          "id": 69,
+          "nus_module_code": "CS2104",
+          "pu_module_id": 52
+        },
+        {
+          "id": 70,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 59
+        },
+        {
+          "id": 71,
+          "nus_module_code": "CS3241",
+          "pu_module_id": 50
+        },
+        {
+          "id": 72,
+          "nus_module_code": "CS4248",
+          "pu_module_id": 75
+        },
+        {
+          "id": 73,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 44
+        },
+        {
+          "id": 74,
+          "nus_module_code": "CS4211",
+          "pu_module_id": 73
+        },
+        {
+          "id": 75,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 72
+        },
+        {
+          "id": 76,
+          "nus_module_code": "CS2103",
+          "pu_module_id": 46
+        },
+        {
+          "id": 77,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 65
+        },
+        {
+          "id": 78,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 82
+        },
+        {
+          "id": 79,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 88
+        },
+        {
+          "id": 80,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 83
+        },
+        {
+          "id": 81,
+          "nus_module_code": "CS3264",
+          "pu_module_id": 77
+        },
+        {
+          "id": 82,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 87
+        },
+        {
+          "id": 83,
+          "nus_module_code": "IT2002",
+          "pu_module_id": 54
+        },
+        {
+          "id": 84,
+          "nus_module_code": "CS2100",
+          "pu_module_id": 78
+        },
+        {
+          "id": 85,
+          "nus_module_code": "CS2102",
+          "pu_module_id": 36
+        },
+        {
+          "id": 86,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 37
+        },
+        {
+          "id": 87,
+          "nus_module_code": "CS4215",
+          "pu_module_id": 38
+        },
+        {
+          "id": 88,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 39
+        },
+        {
+          "id": 89,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 40
+        },
+        {
+          "id": 90,
+          "nus_module_code": "CS2109S",
+          "pu_module_id": 41
+        },
+        {
+          "id": 91,
+          "nus_module_code": "CS3231",
+          "pu_module_id": 42
+        },
+        {
+          "id": 92,
+          "nus_module_code": "CS1010E",
+          "pu_module_id": 13
+        },
+        {
+          "id": 93,
+          "nus_module_code": "BT1101",
+          "pu_module_id": 2
+        },
+        {
+          "id": 94,
+          "nus_module_code": "CS1231",
+          "pu_module_id": 14
+        },
+        {
+          "id": 95,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 11
+        },
+        {
+          "id": 96,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 12
+        },
+        {
+          "id": 97,
+          "nus_module_code": "CS2030",
+          "pu_module_id": 31
+        },
+        {
+          "id": 98,
+          "nus_module_code": "CS2040C",
+          "pu_module_id": 10
+        },
+        {
+          "id": 99,
+          "nus_module_code": "CS2106",
+          "pu_module_id": 19
+        },
+        {
+          "id": 100,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 21
+        },
+        {
+          "id": 101,
+          "nus_module_code": "IT2002",
+          "pu_module_id": 22
+        },
+        {
+          "id": 102,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 28
+        },
+        {
+          "id": 103,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 29
+        },
+        {
+          "id": 104,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 4
+        },
+        {
+          "id": 105,
+          "nus_module_code": "CS3236",
+          "pu_module_id": 30
+        },
+        {
+          "id": 106,
+          "nus_module_code": "CS3230",
+          "pu_module_id": 16
+        },
+        {
+          "id": 107,
+          "nus_module_code": "IS3150",
+          "pu_module_id": 9
+        },
+        {
+          "id": 108,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 23
+        },
+        {
+          "id": 109,
+          "nus_module_code": "CS4248",
+          "pu_module_id": 27
+        },
+        {
+          "id": 110,
+          "nus_module_code": "CS3231",
+          "pu_module_id": 17
+        },
+        {
+          "id": 111,
+          "nus_module_code": "CS3241",
+          "pu_module_id": 18
+        },
+        {
+          "id": 112,
+          "nus_module_code": "CS2104",
+          "pu_module_id": 15
+        },
+        {
+          "id": 113,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 1
+        },
+        {
+          "id": 114,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 6
+        },
+        {
+          "id": 115,
+          "nus_module_code": "IS4246",
+          "pu_module_id": 34
+        },
+        {
+          "id": 116,
+          "nus_module_code": "BT4221",
+          "pu_module_id": 35
+        },
+        {
+          "id": 117,
+          "nus_module_code": "IS4246",
+          "pu_module_id": 5
+        },
+        {
+          "id": 118,
+          "nus_module_code": "BT4222",
+          "pu_module_id": 33
+        },
+        {
+          "id": 119,
+          "nus_module_code": "CS3240",
+          "pu_module_id": 24
+        },
+        {
+          "id": 120,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 20
+        },
+        {
+          "id": 121,
+          "nus_module_code": "BT4222",
+          "pu_module_id": 7
+        },
+        {
+          "id": 122,
+          "nus_module_code": "IS4261",
+          "pu_module_id": 8
+        },
+        {
+          "id": 123,
+          "nus_module_code": "CS4222",
+          "pu_module_id": 26
+        },
+        {
+          "id": 124,
+          "nus_module_code": "CS3241",
+          "pu_module_id": 25
+        },
+        {
+          "id": 125,
+          "nus_module_code": "BT4240",
+          "pu_module_id": 32
+        },
+        {
+          "id": 126,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 3
+        },
+        {
+          "id": 127,
+          "nus_module_code": "IS4241",
+          "pu_module_id": 7
+        },
+        {
+          "id": 128,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 131
+        },
+        {
+          "id": 129,
+          "nus_module_code": "IT1244",
+          "pu_module_id": 121
+        },
+        {
+          "id": 130,
+          "nus_module_code": "CS4243",
+          "pu_module_id": 130
+        },
+        {
+          "id": 131,
+          "nus_module_code": "CS1231",
+          "pu_module_id": 137
+        },
+        {
+          "id": 132,
+          "nus_module_code": "CS3243",
+          "pu_module_id": 128
+        },
+        {
+          "id": 133,
+          "nus_module_code": "CS4243",
+          "pu_module_id": 123
+        },
+        {
+          "id": 134,
+          "nus_module_code": "BT3104",
+          "pu_module_id": 141
+        },
+        {
+          "id": 135,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 124
+        },
+        {
+          "id": 136,
+          "nus_module_code": "CS3231",
+          "pu_module_id": 126
+        },
+        {
+          "id": 137,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 122
+        },
+        {
+          "id": 138,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 135
+        },
+        {
+          "id": 139,
+          "nus_module_code": "IS3103",
+          "pu_module_id": 136
+        },
+        {
+          "id": 140,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 127
+        },
+        {
+          "id": 141,
+          "nus_module_code": "CS2105",
+          "pu_module_id": 134
+        },
+        {
+          "id": 142,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 133
+        },
+        {
+          "id": 143,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 139
+        },
+        {
+          "id": 144,
+          "nus_module_code": "CS3244",
+          "pu_module_id": 140
+        },
+        {
+          "id": 145,
+          "nus_module_code": "CS4222",
+          "pu_module_id": 132
+        },
+        {
+          "id": 146,
+          "nus_module_code": "CS3263",
+          "pu_module_id": 133
+        },
+        {
+          "id": 147,
+          "nus_module_code": "CS4268",
+          "pu_module_id": 138
+        },
+        {
+          "id": 148,
+          "nus_module_code": "CS2040",
+          "pu_module_id": 125
+        },
+        {
+          "id": 149,
+          "nus_module_code": "CS2107",
+          "pu_module_id": 129
+        },
+        {
+          "id": 150,
+          "nus_module_code": "CS3264",
+          "pu_module_id": 140
+        },
+        {
+          "id": 151,
+          "nus_module_code": "CS5242",
+          "pu_module_id": 142
+        }
+      ]
+    }
+  }
+]

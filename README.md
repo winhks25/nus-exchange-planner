@@ -55,6 +55,8 @@ uv run --directory backend python -m scripts.verify_catalog \
   --reconcile --target-project-ref wydziozsjibkvpgphpia
 ```
 
+The October 25 cleanup supersedes the original source-preview reconciliation for live data: official titles, units and geography intentionally differ from that historical preview. See [cleanup results](plan/supabase-cleanup/results.md) for current evidence and the applied SQL. The `verify_catalog --reconcile`, seed and performance fixture tools target the archived pre-cleanup schema; do not run them as live maintenance tools. `snapshot_core_data` supports both schema versions.
+
 For disaster recovery, data snapshots, or manual rollback to the frozen JSON mode, refer to the [recovery runbook](plan/remove-catalog-tables/recovery.md).
 
 Supabase migration history is maintained with the CLI:
@@ -79,4 +81,4 @@ Production runs PostgreSQL. To roll back, set `CATALOG_BACKEND=json` in the back
 
 ## Scope and limitations
 
-See the [migration specification](plan/supabase-migration/spec.md), [implementation plan](plan/supabase-migration/plan.md), and [API contract](plan/contracts/openapi.yaml). The catalog has six SoC majors and five partners. The UI does not invent missing text: unresolved PostgreSQL titles stay null and three Toronto rows remain quarantined in the raw source archive rather than becoming mappings. Partner units are displayed only when present; NUS units display as 4 for compatibility. The hobby-plan deployment cannot select a function region near `ap-southeast-2`, and live cold-start/load behavior was not stress-tested.
+See the [migration specification](plan/supabase-migration/spec.md), [implementation plan](plan/supabase-migration/plan.md), and [API contract](plan/contracts/openapi.yaml). The catalog has six SoC majors and five partners. The UI does not invent missing text: unresolved PostgreSQL titles stay null and three Toronto rows remain quarantined in the raw source archive rather than becoming mappings. Partner units are displayed only when present; cleaned PostgreSQL catalogs display verified NUS units, while the frozen JSON and legacy fixture schema retain the original 4-unit behavior. The hobby-plan deployment cannot select a function region near `ap-southeast-2`, and live cold-start/load behavior was not stress-tested.

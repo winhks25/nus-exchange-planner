@@ -1,0 +1,42 @@
+[
+  {
+    "name": "University of Western Australia",
+    "city": "Perth",
+    "country": "Australia",
+    "continent": "Oceania",
+    "campus": "Crawley",
+    "source": "https://www.uwa.edu.au/contact-us"
+  },
+  {
+    "name": "University of Toronto",
+    "city": "Toronto",
+    "country": "Canada",
+    "continent": "North America",
+    "campus": "St. George",
+    "source": "https://www.utoronto.ca/contacts"
+  },
+  {
+    "name": "Kyoto University",
+    "city": "Kyoto",
+    "country": "Japan",
+    "continent": "Asia",
+    "campus": "Yoshida",
+    "source": "https://www.kyoto-u.ac.jp/ja/access/campus"
+  },
+  {
+    "name": "Korea University",
+    "city": "Seoul",
+    "country": "South Korea",
+    "continent": "Asia",
+    "campus": "Anam",
+    "source": "https://edu.korea.edu/temp_g/info/map.do"
+  },
+  {
+    "name": "Yonsei University",
+    "city": "Seoul",
+    "country": "South Korea",
+    "continent": "Asia",
+    "campus": "Sinchon",
+    "source": "https://www.yonsei.ac.kr/en_sc/1834/subview.do"
+  }
+]
