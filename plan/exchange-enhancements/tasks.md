@@ -46,7 +46,7 @@ P1. Search faculty, filter degrees, derive faculty from direct degree selection,
 P1. Apply dependent multi-select geography immediately; validate on Recommend independently of the directory.
 
 - [X] T020 [P] [US2] Implement `frontend/lib/geography.ts` with continent/country/city option derivation from the full catalog, country-qualified city keys, OR within categories, AND across categories, empty-as-unrestricted semantics and deterministic sorting.
-- [ ] T021 [P] [US2] Build accessible `frontend/components/GeographicFilters.tsx` with three multi-select controls, visible selected values and clear actions; expose controlled selection callbacks and keyboard/focus behavior without an Apply button.
+- [X] T021 [P] [US2] Build accessible `frontend/components/GeographicFilters.tsx` with three multi-select controls, visible selected values and clear actions; expose controlled selection callbacks and keyboard/focus behavior without an Apply button.
 - [ ] T022 [US2] Add parent-change reconciliation in `frontend/lib/geography.ts`: restrict countries by selected continents, cities by both parents, remove only invalid dependent selections and preserve still-valid choices in one state transition.
 - [ ] T023 [US2] Integrate `frontend/components/GeographicFilters.tsx` in `frontend/app/page.tsx`; match recommendation university names to catalog metadata, filter immediately without refetching or reordering rankings, and keep counts unmodified.
 - [ ] T024 [US2] Add filtered-empty feedback and reset controls in `frontend/app/page.tsx` and scoped layout styles in `frontend/components/recommend/recommend.module.css`; distinguish no selected degree, service failure and no geography matches.
