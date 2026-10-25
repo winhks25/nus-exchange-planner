@@ -1,16 +1,30 @@
 export type PageState = "loading-catalog" | "idle" | "loading" | "error";
 
+export type Faculty = {
+  id: number;
+  name: string;
+};
+
 export type Degree = {
   name: string;
   degree: string;
+  faculty_ids: number[];
 };
 
 export type University = {
+  id: number | null;
   name: string;
   country: string;
+  city: string | null;
+  continent: string | null;
+  faculty_ids: number[];
+  image: string | null;
+  website: string | null;
+  image_attribution: string | null;
 };
 
 export type Catalog = {
+  faculties: Faculty[];
   degrees: Degree[];
   universities: University[];
 };

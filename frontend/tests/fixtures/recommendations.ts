@@ -3,24 +3,40 @@ import type { Catalog, Degree, Recommendation, Recommendations, University } fro
 export const fixtureDegree: Degree = {
   name: "Computer Science",
   degree: "Bachelor of Computing (Computer Science)",
+  faculty_ids: [],
 };
 
 export const alternateFixtureDegree: Degree = {
   name: "Business Analytics",
   degree: "Bachelor of Business Analytics",
+  faculty_ids: [],
 };
 
 export const fixtureDegrees: Degree[] = [fixtureDegree, alternateFixtureDegree];
 
+// The JSON snapshot has no stable ids, geography, or faculty availability, so
+// every university carries the additive null/empty defaults.
+export const university = (name: string, country: string): University => ({
+  id: null,
+  name,
+  country,
+  city: null,
+  continent: null,
+  faculty_ids: [],
+  image: null,
+  website: null,
+  image_attribution: null,
+});
+
 const apiUniversities: University[] = [
-  { name: "University of Aurora Bay", country: "Canada" },
-  { name: "Northwind Institute of Technology", country: "Canada" },
-  { name: "Yonsei Metropolitan University", country: "South Korea" },
-  { name: "Seoul Advanced Studies University", country: "South Korea" },
-  { name: "University of Western Coast, The", country: "Australia" },
-  { name: "Kyoto International University", country: "Japan" },
-  { name: "Osaka Collaborative University", country: "Japan" },
-  { name: "Melbourne Coastal University", country: "Australia" },
+  university("University of Aurora Bay", "Canada"),
+  university("Northwind Institute of Technology", "Canada"),
+  university("Yonsei Metropolitan University", "South Korea"),
+  university("Seoul Advanced Studies University", "South Korea"),
+  university("University of Western Coast, The", "Australia"),
+  university("Kyoto International University", "Japan"),
+  university("Osaka Collaborative University", "Japan"),
+  university("Melbourne Coastal University", "Australia"),
 ];
 
 export const apiRecommendations: Recommendation[] = [
@@ -110,12 +126,13 @@ export const recommendationResultVariants = {
 } satisfies Record<string, Recommendation[]>;
 
 export const fixtureCatalog: Catalog = {
+  faculties: [],
   degrees: fixtureDegrees,
   universities: apiUniversities,
 };
 
 export function catalogWith(universities: University[] = apiUniversities): Catalog {
-  return { degrees: fixtureDegrees, universities };
+  return { faculties: [], degrees: fixtureDegrees, universities };
 }
 
 export function recommendationsFor(

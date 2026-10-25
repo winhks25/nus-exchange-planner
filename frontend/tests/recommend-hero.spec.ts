@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import type { MappingResult } from "../lib/types";
-import { catalogWith } from "./fixtures/recommendations";
+import { catalogWith, university } from "./fixtures/recommendations";
 import { mockCatalog } from "./helpers/recommendation-fixtures";
 
 // Exact hero copy from the UI contract.
@@ -82,7 +82,7 @@ for (const width of [320, 390, 768, 1024, 1888]) {
 test("Mappings keeps its own hero copy when the Recommend hero ships", async ({ page }) => {
   await mockCatalog(
     page,
-    catalogWith([{ name: "University of Toronto", country: "Canada" }]),
+    catalogWith([university("University of Toronto", "Canada")]),
   );
   await page.route("**/api/v1/mappings?**", route =>
     route.fulfill({

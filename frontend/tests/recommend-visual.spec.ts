@@ -360,6 +360,7 @@ test.describe("responsive collection", () => {
     const aiDegree = {
       name: "Artificial Intelligence",
       degree: "Bachelor of Computing (Artificial Intelligence)",
+      faculty_ids: [],
     };
     const slow: Recommendation = {
       university: "Slow University",
@@ -377,6 +378,7 @@ test.describe("responsive collection", () => {
     };
 
     await mockCatalog(page, {
+      faculties: [],
       degrees: [fixtureDegree, aiDegree],
       universities: [],
     });

@@ -19,6 +19,7 @@ const COMPARE_PLACEHOLDER = "Search degree programmes";
 const artificialIntelligenceDegree = {
   name: "Artificial Intelligence",
   degree: "Bachelor of Computing (Artificial Intelligence)",
+  faculty_ids: [],
 };
 
 const slowRecommendation: Recommendation = {
@@ -146,6 +147,7 @@ test("clearing the degree removes results immediately", async ({ page }) => {
 
 test("a delayed old recommendation response cannot replace the new degree", async ({ page }) => {
   await mockCatalog(page, {
+    faculties: [],
     degrees: [fixtureDegree, artificialIntelligenceDegree],
     universities: [],
   });

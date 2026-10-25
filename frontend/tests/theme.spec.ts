@@ -4,6 +4,7 @@ import {
   catalogWith,
   fixtureDegree,
   recommendationResultVariants,
+  university as universityFixture,
 } from "./fixtures/recommendations";
 import { mockCatalog, openRecommendWithFixtures } from "./helpers/recommendation-fixtures";
 
@@ -283,7 +284,7 @@ test("picker and dropdown expose source placeholder, focus and hover states", as
 test("Mappings keeps its controls and content with the same theme tokens", async ({ page }) => {
   await mockCatalog(
     page,
-    catalogWith([{ name: "University of Toronto", country: "Canada" }]),
+    catalogWith([universityFixture("University of Toronto", "Canada")]),
   );
   await page.route("**/api/v1/mappings?**", route =>
     route.fulfill({
