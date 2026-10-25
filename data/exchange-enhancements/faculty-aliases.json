@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "generated": "2026-10-25",
+  "source": "plan/exchange-enhancements/data-audit.md (dry-run audit of the live core tables, 2026-10-25)",
+  "faculties": [
+    {
+      "name": "School of Computing",
+      "aliases": []
+    }
+  ],
+  "flags": {
+    "ambiguous_labels": [],
+    "missing_labels": [],
+    "notes": [
+      "The audit found exactly one distinct legacy label, 'School of Computing' (6 degrees.faculty rows, 152 nus_modules.faculty rows), with 0 null labels and 0 casefold collisions, so no aliases are recorded.",
+      "Unknown labels appearing in future data must be added here after review; they stay null in nus_modules.faculty_id and keep their legacy text until then (decisions.md, decisions 4 and 7).",
+      "Degree faculty membership is never derived from module offerings (decisions.md, decision 2)."
+    ]
+  }
+}
