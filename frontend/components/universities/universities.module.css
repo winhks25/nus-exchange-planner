@@ -1,3 +1,87 @@
+/* Centred frame for the faculty and geographic controls. */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
+.controls :global(.combo-wrap) {
+  max-width: none;
+}
+
+/* One column on mobile; the breakpoints below widen the row. */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: min(1200px, 100%);
+  margin: clamp(24px, 2.81vw, 44px) auto 0;
+}
+
+/* Tablets keep two cards per row. */
+@media (min-width: 650px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Ordinary desktops show three cards per row. */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Wide desktops show four cards per row. */
+@media (min-width: 1440px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Service failure: message plus the retry control. */
+.errorState,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(24px, 2.81vw, 44px);
+  text-align: center;
+}
+
+.errorState p,
+.emptyState p {
+  margin: 0;
+}
+
+.retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: .375rem .75rem;
+  color: var(--primary);
+  background: var(--card);
+  border: 1px solid var(--primary);
+  border-radius: .25rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+
+.retry:hover {
+  background: var(--muted);
+}
+
+.empty {
+  margin-top: clamp(24px, 2.81vw, 44px);
+  text-align: center;
+}
+
 /* Shared directory card shell; US4 adds the media block above the name.
    No fixed height: long names wrap instead of truncating. */
 .card {
