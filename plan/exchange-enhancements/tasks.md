@@ -50,7 +50,7 @@ P1. Apply dependent multi-select geography immediately; validate on Recommend in
 - [X] T022 [US2] Add parent-change reconciliation in `frontend/lib/geography.ts`: restrict countries by selected continents, cities by both parents, remove only invalid dependent selections and preserve still-valid choices in one state transition.
 - [X] T023 [US2] Integrate `frontend/components/GeographicFilters.tsx` in `frontend/app/page.tsx`; match recommendation university names to catalog metadata, filter immediately without refetching or reordering rankings, and keep counts unmodified.
 - [X] T024 [US2] Add filtered-empty feedback and reset controls in `frontend/app/page.tsx` and scoped layout styles in `frontend/components/recommend/recommend.module.css`; distinguish no selected degree, service failure and no geography matches.
-- [ ] T025 [US2] Record US2 acceptance in `plan/exchange-enhancements/validation.md`: multiple continents/countries/cities, duplicate city names, invalid-child pruning, null geography, AND/OR behavior, immediate updates and restoration of original recommendation order on reset.
+- [X] T025 [US2] Record US2 acceptance in `plan/exchange-enhancements/validation.md`: multiple continents/countries/cities, duplicate city names, invalid-child pruning, null geography, AND/OR behavior, immediate updates and restoration of original recommendation order on reset.
 
 ## Phase 5: US3 — Universities directory
 

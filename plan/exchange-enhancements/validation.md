@@ -70,3 +70,70 @@ Date: 2026-10-25. Status: PASS.
 - `.selectors` switched from `1fr 1fr` to `repeat(auto-fit, minmax(280px,
   1fr))`: with two controls the track geometry is identical to before; with
   three it adds the faculty column on desktop widths.
+
+## US2 — Geographic filtering (Phase 4, T025)
+
+Date: 2026-10-25. Status: PASS.
+
+### Environment and method
+
+- Local stack exactly as the Playwright config provisions it: Next dev
+  server (127.0.0.1:18766), FastAPI catalog backend in JSON mode
+  (127.0.0.1:18765), preview harness (127.0.0.1:18767).
+- A throwaway Playwright spec (`frontend/tests/us2-verification.spec.ts`,
+  12 tests) drove the Recommend page against a mocked geography-rich catalog:
+  seven universities covering a duplicate city name (Springfield in two
+  countries), a null-geography university, a city (Sapporo) that belongs only
+  to a university absent from the recommendations, and two Toronto
+  universities sharing one (city, country) pair — plus seven recommendations
+  including "Ghost University", a name absent from the catalog. Recommendation
+  requests were intercepted with a counter so the no-refetch behavior could be
+  asserted, not just rendered output. The spec was deleted after the run; per
+  the plan no new tests are committed.
+- The pure module logic (option derivation, matching, reconciliation) was also
+  checked with a 24-case node harness against the same scenario data.
+- The existing Playwright suite (65 tests) was also run unmodified.
+
+### Acceptance checks
+
+| # | Criterion (T025) | Result | Evidence |
+| --- | --- | --- | --- |
+| 1 | Multiple continents/countries/cities (OR within a category) | PASS | Asia + Europe → 3 cards in original relative order; both Springfields selected → 2 cards; Canada country alone → the 3 Canada recommendations. |
+| 2 | Duplicate city names | PASS | With no parents the city panel offers "Springfield, France" and "Springfield, Korea" (unique names stay plain); selecting only the France key matches only Springfield Tech; under an Asia-only constraint the label reverts to the plain "Springfield". |
+| 3 | Invalid child pruning on parent change | PASS | Asia+Europe + France+Japan + both visible cities selected; unchecking Europe pruned France from the country chips and the orphaned Springfield from the city chips while keeping Kyoto, leaving exactly the Kyoto Institute card. Clearing the country kept the still-valid city; previously pruned values were never re-added. |
+| 4 | Null geography | PASS | The null-city/null-continent university drops out under an active continent or city category but stays visible with none active. The catalog-unknown recommendation matches the country category (country travels with the recommendation) but never the continent or city categories. |
+| 5 | AND across categories | PASS | Asia+Europe then Country Korea → exactly the one Korea card; Asia then City Sapporo → zero matches (only a non-recommended university has that city). |
+| 6 | Immediate update | PASS | Across continent → country → city changes and the reset, the recommendation request counter stayed at 1; no refetch, no reordering. |
+| 7 | Original recommendation order restored on reset | PASS | From the filtered-empty state, "Reset filters" restored all 7 cards in exact API order with the placeholders ("Any continent" / "Any city") back and the counter still at 1. |
+| 8 | Filtered-empty feedback | PASS | Zero matches renders "No universities match the selected geography." (role=status) with the Reset control; distinct from the no-degree hint and the service-failure alert, and from a degree with zero results. |
+| 9 | Dependent option constraints | PASS | Asia → country options exactly Japan/Korea (no France/Canada); city options constrained by continents and countries alike. |
+| 10 | No geography in catalog | PASS | A catalog with no recorded city/continent renders no filter row and unchanged results (regression guard for all existing fixtures). |
+
+### Regression evidence
+
+- Full Playwright suite after the change: 77/77 passed (65 existing + 12 US2
+  verification tests).
+- The filter row renders only when the catalog records a non-null city or
+  continent on at least one university, so faculty-less/geography-less
+  catalogs (all existing fixtures and the JSON-mode backend) render
+  byte-identical layouts: the pixel-pinned Recommend anchors (picker at
+  726/405, card rows at 512/839/1095) are asserted by the unmodified specs
+  and pass.
+- `npm run typecheck`, `npm run lint`, and `npm run build` all pass after the
+  change; the e2e suite ran against the dev server.
+
+### Behavior decisions recorded during verification
+
+- The filter row's visibility trigger is a non-null `city` or `continent`
+  (country is always present and would make the row unconditional).
+- Visible card ranks are numbered by visible position (the existing card
+  contract); filtering keeps the API relative order and the reset restores
+  it, which is what "no reordering of the ranking" guarantees.
+- Duplicate-city disambiguation is computed over the *visible* option set, so
+  labels switch between "Springfield" and "Springfield, Country" as parent
+  constraints change; the selection key is always the (city, country) pair.
+- Parent reconciliation only ever prunes: clearing a parent widens the valid
+  set, so still-valid dependent selections survive, and values pruned by an
+  earlier narrowing are not re-added.
+- A filtered-empty state requires at least one loaded result; a degree with
+  zero recommendations keeps the normal empty-results rendering.
