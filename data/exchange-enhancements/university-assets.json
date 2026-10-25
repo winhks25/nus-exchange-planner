@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "generated": "2026-10-26",
+  "source": "Official university websites and Wikimedia Commons file pages (license and author metadata as published on each file page), researched 2026-10-26",
+  "policy": [
+    "An image is approved only when its Commons file page publishes a license that permits redistribution with attribution (CC0, CC BY, CC BY-SA) and a verifiable author; otherwise the image stays null and the card uses the local fallback.",
+    "download_url is the exact resource the uploader may fetch; width/height and byte size were verified by request on the research date. The original file (description_page) is the provenance of record.",
+    "Website URLs are the universities' own domains, verified by fetching the homepage on the research date. Korea University and Yonsei University roots issue JavaScript language redirects; the domains themselves are official.",
+    "When a faculty is added or a partner changes, re-verify this manifest; stale download URLs fail the uploader's checksum/size gates rather than uploading wrong bytes."
+  ],
+  "universities": [
+    {
+      "partner_university": "Korea University",
+      "partner_university_id": 4,
+      "website": {
+        "url": "https://www.korea.ac.kr",
+        "verified": "2026-10-26",
+        "note": "Root issues a JavaScript redirect to the language-specific home (/sites/ko/ or /sites/en/); both verified reachable."
+      },
+      "image": {
+        "status": "approved",
+        "source_system": "Wikimedia Commons",
+        "file": "File:Aegineung Park in Science Campus of Korea University - panoramio.jpg",
+        "description_page": "https://commons.wikimedia.org/wiki/File:Aegineung_Park_in_Science_Campus_of_Korea_University_-_panoramio.jpg",
+        "download_url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Aegineung_Park_in_Science_Campus_of_Korea_University_-_panoramio.jpg",
+        "width": 1600,
+        "height": 1200,
+        "author": "Cho's (via panoramio)",
+        "license": "CC BY-SA 3.0",
+        "attribution_required": true,
+        "attribution": "Photo: Cho's, CC BY-SA 3.0, via Wikimedia Commons"
+      }
+    },
+    {
+      "partner_university": "Kyoto University",
+      "partner_university_id": 3,
+      "website": {
+        "url": "https://www.kyoto-u.ac.jp",
+        "verified": "2026-10-26",
+        "note": "Japanese home page verified; the English home lives at /en on the same domain."
+      },
+      "image": {
+        "status": "approved",
+        "source_system": "Wikimedia Commons",
+        "file": "File:Kyoto University - Yoshida campus entrance.jpg",
+        "description_page": "https://commons.wikimedia.org/wiki/File:Kyoto_University_-_Yoshida_campus_entrance.jpg",
+        "download_url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Kyoto_University_-_Yoshida_campus_entrance.jpg",
+        "width": 1280,
+        "height": 960,
+        "author": "枼述 / ポーハン / POHAN (Flickr)",
+        "license": "CC BY 2.0",
+        "attribution_required": true,
+        "attribution": "Photo: POHAN, CC BY 2.0, via Wikimedia Commons"
+      }
+    },
+    {
+      "partner_university": "University of Toronto",
+      "partner_university_id": 2,
+      "website": {
+        "url": "https://www.utoronto.ca",
+        "verified": "2026-10-26",
+        "note": "Official University of Toronto home page verified."
+      },
+      "image": {
+        "status": "approved",
+        "source_system": "Wikimedia Commons",
+        "file": "File:Sir Daniel Wilson Quadrangle - St. George Campus, Toronto, Canada.jpg",
+        "description_page": "https://commons.wikimedia.org/wiki/File:Sir_Daniel_Wilson_Quadrangle_-_St._George_Campus,_Toronto,_Canada.jpg",
+        "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Sir_Daniel_Wilson_Quadrangle_-_St._George_Campus%2C_Toronto%2C_Canada.jpg/1920px-Sir_Daniel_Wilson_Quadrangle_-_St._George_Campus%2C_Toronto%2C_Canada.jpg",
+        "width": 1600,
+        "height": 1067,
+        "author": "Victoria Heath (Unsplash @vheath)",
+        "license": "CC0 1.0",
+        "attribution_required": false,
+        "attribution": "Photo: Victoria Heath, CC0, via Wikimedia Commons"
+      }
+    },
+    {
+      "partner_university": "University of Western Australia",
+      "partner_university_id": 1,
+      "website": {
+        "url": "https://www.uwa.edu.au",
+        "verified": "2026-10-26",
+        "note": "Official UWA home page verified."
+      },
+      "image": {
+        "status": "approved",
+        "source_system": "Wikimedia Commons",
+        "file": "File:AUS Perth, Central Business District, University of Western Australia 0008.jpg",
+        "description_page": "https://commons.wikimedia.org/wiki/File:AUS_Perth,_Central_Business_District,_University_of_Western_Australia_0008.jpg",
+        "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/AUS_Perth%2C_Central_Business_District%2C_University_of_Western_Australia_0008.jpg/1920px-AUS_Perth%2C_Central_Business_District%2C_University_of_Western_Australia_0008.jpg",
+        "width": 1600,
+        "height": 1200,
+        "author": "-wuppertaler (Wikimedia Commons)",
+        "license": "CC BY 4.0",
+        "attribution_required": true,
+        "attribution": "Photo: -wuppertaler, CC BY 4.0, via Wikimedia Commons"
+      }
+    },
+    {
+      "partner_university": "Yonsei University",
+      "partner_university_id": 5,
+      "website": {
+        "url": "https://www.yonsei.ac.kr",
+        "verified": "2026-10-26",
+        "note": "Root issues a geo/JavaScript redirect to the campus language home (/sc/ or /en_sc/); both verified reachable."
+      },
+      "image": {
+        "status": "approved",
+        "source_system": "Wikimedia Commons",
+        "file": "File:South Korea, Seoul, Sinchon-dong, 연세대학교 연화관 - panoramio.jpg",
+        "description_page": "https://commons.wikimedia.org/wiki/File:South_Korea,_Seoul,_Sinchon-dong,_%EC%97%B0%EC%84%B8%EB%8C%80%ED%95%99%EA%B5%90_%EC%97%B0%ED%9D%AC%EA%B4%80_-_panoramio.jpg",
+        "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/South_Korea%2C_Seoul%2C_Sinchon-dong%2C_%EC%97%B0%EC%84%B8%EB%8C%80%ED%95%99%EA%B5%90_%EC%97%B0%ED%9D%AC%EA%B4%80_-_panoramio.jpg/1920px-South_Korea%2C_Seoul%2C_Sinchon-dong%2C_%EC%97%B0%EC%84%B8%EB%8C%80%ED%95%99%EA%B5%90_%EC%97%B0%ED%9D%AC%EA%B4%80_-_panoramio.jpg",
+        "width": 1600,
+        "height": 1066,
+        "author": "Fumihiko Ueno (via panoramio)",
+        "license": "CC BY 3.0",
+        "attribution_required": true,
+        "attribution": "Photo: Fumihiko Ueno, CC BY 3.0, via Wikimedia Commons"
+      }
+    }
+  ],
+  "coverage": {
+    "websites": "5/5 official domains verified by fetch on 2026-10-26",
+    "images": "5/5 approved with published permissive licenses and verifiable authors; 0 left null",
+    "notes": [
+      "All five approved photographs are campus views from Wikimedia Commons; no university-website image was used because those carry no redistribution permission.",
+      "Thumbnail variants (thumb.wikimedia.org, 1920px render of a 1600px request) are used for the three large originals to keep storage objects under ~1.1MB; the two smaller originals are fetched directly.",
+      "CC BY-SA 3.0 (Korea University) requires the same attribution and share-alike terms for derivative uses of the image itself; the card displays the attribution line as recorded."
+    ]
+  }
+}
