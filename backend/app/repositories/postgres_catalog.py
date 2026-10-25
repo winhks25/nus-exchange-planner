@@ -9,6 +9,7 @@ from ..models import (
     CatalogResponse,
     Course,
     DegreeOption,
+    FacultyOption,
     Mapping,
     MappingResponse,
     Recommendation,
@@ -34,15 +35,38 @@ select
 # JSON field access supports both the archived fixture schema and the cleaned live schema.
 # Missing legacy keys become NULL instead of producing UndefinedColumn errors.
 CATALOG_DEGREES_SQL = """
-select name, full_title
+select d.id, d.name, d.full_title
 from public.degrees d
-order by (to_jsonb(d)->>'source_order')::integer nulls last, id
+order by (to_jsonb(d)->>'source_order')::integer nulls last, d.id
 """
 
 CATALOG_UNIVERSITIES_SQL = """
-select name, country
+select u.id, u.name, u.country, u.city, u.continent, u.image, u.website, u.image_attribution
 from public.partner_universities u
-order by (to_jsonb(u)->>'source_order')::integer nulls last, id
+order by (to_jsonb(u)->>'source_order')::integer nulls last, u.id
+"""
+
+# Faculties have no source order; the contract fixes name then id.
+CATALOG_FACULTIES_SQL = """
+select id, name
+from public.faculties
+order by name collate "C", id
+"""
+
+# Membership queries fetch parent-ordered rows so Python grouping preserves the
+# faculty name/id sort within each parent; no per-row round trips.
+DEGREE_FACULTY_IDS_SQL = """
+select df.degree_id, f.id
+from public.degree_faculties df
+join public.faculties f on f.id = df.faculty_id
+order by df.degree_id, f.name collate "C", f.id
+"""
+
+UNIVERSITY_FACULTY_IDS_SQL = """
+select fpu.partner_university_id, f.id
+from public.faculty_partner_universities fpu
+join public.faculties f on f.id = fpu.faculty_id
+order by fpu.partner_university_id, f.name collate "C", f.id
 """
 
 DEGREE_ID_SQL = """
@@ -127,13 +151,16 @@ class PostgresCatalogRepository:
         self._database.close()
 
     def catalog(self) -> CatalogResponse:
-        """Return degree and university options in their persisted source order."""
+        """Return faculties, degree and university options in persisted source order."""
 
         try:
             with self._database.read_transaction("catalog") as conn:
                 _require_ready_catalog(conn)
                 degrees = conn.execute(CATALOG_DEGREES_SQL).fetchall()
                 universities = conn.execute(CATALOG_UNIVERSITIES_SQL).fetchall()
+                faculties = conn.execute(CATALOG_FACULTIES_SQL).fetchall()
+                degree_memberships = conn.execute(DEGREE_FACULTY_IDS_SQL).fetchall()
+                university_memberships = conn.execute(UNIVERSITY_FACULTY_IDS_SQL).fetchall()
         except DatabaseError:
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE) from None
 
@@ -145,14 +172,33 @@ class PostgresCatalogRepository:
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE)
 
         # A null full_title means the core catalog is incomplete and not ready.
-        if any(full_title is None for _, full_title in degrees):
+        if any(full_title is None for _, _, full_title in degrees):
             LOG.error("Catalog core tables have a degree without a full title")
             raise CatalogUnavailable(CATALOG_UNAVAILABLE_MESSAGE)
 
+        # Group ordered membership rows by parent id; the ordered fetch keeps
+        # the faculty name/id sort within each parent list.
+        degree_faculty_ids: dict[int, list[int]] = {}
+        for degree_id, faculty_id in degree_memberships:
+            degree_faculty_ids.setdefault(int(degree_id), []).append(int(faculty_id))
+        university_faculty_ids: dict[int, list[int]] = {}
+        for university_id, faculty_id in university_memberships:
+            university_faculty_ids.setdefault(int(university_id), []).append(int(faculty_id))
+
         return CatalogResponse(
-            degrees=[DegreeOption(name=name, degree=full_title) for name, full_title in degrees],
+            faculties=[
+                FacultyOption(id=int(faculty_id), name=name) for faculty_id, name in faculties
+            ],
+            degrees=[
+                DegreeOption(
+                    name=name,
+                    degree=full_title,
+                    faculty_ids=degree_faculty_ids.get(int(degree_id), []),
+                )
+                for degree_id, name, full_title in degrees
+            ],
             universities=[
-                UniversityOption(name=name, country=country) for name, country in universities
+                _university_option(row, university_faculty_ids) for row in universities
             ],
         )
 
@@ -244,3 +290,20 @@ def _optional_float(value) -> float | None:
     """Convert a numeric database value while preserving unknown units as null."""
 
     return float(value) if value is not None else None
+
+
+def _university_option(row, memberships: dict[int, list[int]]) -> UniversityOption:
+    """Build one university option with its explicit faculty availability links."""
+
+    university_id, name, country, city, continent, image, website, attribution = row
+    return UniversityOption(
+        id=int(university_id),
+        name=name,
+        country=country,
+        city=city,
+        continent=continent,
+        faculty_ids=memberships.get(int(university_id), []),
+        image=image,
+        website=website,
+        image_attribution=attribution,
+    )

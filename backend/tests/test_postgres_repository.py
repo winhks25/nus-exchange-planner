@@ -31,7 +31,7 @@ def test_catalog_uses_source_order_and_full_titles(
     ]
     assert [item.model_dump() for item in catalog.universities] == [
         {
-            "id": None,
+            "id": 2,
             "name": "Earlier University",
             "country": "Canada",
             "city": None,
@@ -42,7 +42,7 @@ def test_catalog_uses_source_order_and_full_titles(
             "image_attribution": None,
         },
         {
-            "id": None,
+            "id": 1,
             "name": "Later University",
             "country": "Japan",
             "city": None,

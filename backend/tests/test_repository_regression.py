@@ -116,8 +116,18 @@ def test_catalog_responses_match_source_order_and_frozen_baseline(
 
     assert legacy_view(json_catalog) == baseline["catalog"]["body"]
     assert legacy_view(postgres_catalog) == legacy_view(expected_catalog.catalog())
-    # Both adapters emit the same additive shape, new fields included.
-    assert postgres_catalog == json_catalog
+    # JSON mode cannot assign stable ids; compare with the id field projected
+    # out of both, then assert the postgres ids are stable integers.
+    json_without_ids = {
+        **json_catalog,
+        "universities": [{**u, "id": None} for u in json_catalog["universities"]],
+    }
+    postgres_without_ids = {
+        **postgres_catalog,
+        "universities": [{**u, "id": None} for u in postgres_catalog["universities"]],
+    }
+    assert postgres_without_ids == json_without_ids
+    assert all(isinstance(u["id"], int) for u in postgres_catalog["universities"])
 
 
 def test_all_six_recommendations_match_baseline_except_reviewed_deltas(
@@ -421,8 +431,15 @@ def test_synthetic_adapters_agree_on_ties_repeats_nulls_and_units(
         },
     ]
 
+    # JSON mode cannot assign stable ids; the postgres adapter must.
     assert json_repository.catalog().model_dump() == expected_catalog
-    assert repository.catalog().model_dump() == expected_catalog
+    postgres_catalog = repository.catalog().model_dump()
+    postgres_without_ids = {
+        **postgres_catalog,
+        "universities": [{**u, "id": None} for u in postgres_catalog["universities"]],
+    }
+    assert postgres_without_ids == expected_catalog
+    assert [u["id"] for u in postgres_catalog["universities"]] == [1, 2, 3, 4]
     assert json_repository.recommendations("Test").model_dump()["recommendations"] == (
         expected_recommendations
     )

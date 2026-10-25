@@ -36,7 +36,7 @@ def test_postgres_mode_serves_routes_from_the_repository(database: DatabaseTarge
             ],
             "universities": [
                 {
-                    "id": None,
+                    "id": 1,
                     "name": "One University",
                     "country": "Japan",
                     "city": None,
@@ -156,7 +156,7 @@ def test_postgres_runtime_is_independent_of_metadata_tables(database: DatabaseTa
             ],
             "universities": [
                 {
-                    "id": None,
+                    "id": 1,
                     "name": "One University",
                     "country": "Japan",
                     "city": None,
