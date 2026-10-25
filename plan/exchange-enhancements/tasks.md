@@ -70,7 +70,7 @@ P1. Browse every partner by default and combine faculty and geographic restricti
 P1. Populate official websites and reusable photos; render resilient cards matching the supplied wireframe.
 
 - [X] T034 [P] [US4] Create `data/exchange-enhancements/university-assets.json` by researching each partner: record official website, image source, author, license/permission, required attribution and acquisition status; leave unsupported assets null and report coverage rather than claiming arbitrary images are reusable.
-- [ ] T035 [P] [US4] Add `frontend/public/images/university-fallback.svg` as a locally created neutral university illustration, with no third-party licensing dependency.
+- [X] T035 [P] [US4] Add `frontend/public/images/university-fallback.svg` as a locally created neutral university illustration, with no third-party licensing dependency.
 - [ ] T036 [US4] Create `backend/scripts/upload_university_assets.py` with dry-run/resume modes, HTTPS URL validation, image MIME/size checks, deterministic object names and checksum-based reuse; download only manifest-approved photographs and upload using server-only credentials.
 - [ ] T037 [US4] Document/create the photograph bucket and read/write policy setup in `supabase/README.md`; allow intended public image reads, restrict writes to the administrative uploader, document allowed types/size limits and verify current Supabase docs before execution.
 - [ ] T038 [US4] Use `backend/scripts/upload_university_assets.py` to populate partner_universities.image/website only after successful upload/verification; retain existing valid metadata on failure, write per-university outcomes and runtime attribution data to `data/exchange-enhancements/university-assets.json`.

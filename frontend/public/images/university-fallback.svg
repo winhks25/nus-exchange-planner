@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Illustration of a university building">
+  <title>University</title>
+  <rect width="800" height="450" fill="#e3ebf2"/>
+  <rect y="330" width="800" height="120" fill="#cdd8d2"/>
+  <circle cx="688" cy="86" r="34" fill="#f4d894" opacity=".85"/>
+  <g fill="#ffffff" opacity=".7">
+    <ellipse cx="150" cy="84" rx="64" ry="18"/>
+    <ellipse cx="208" cy="98" rx="48" ry="14"/>
+    <ellipse cx="560" cy="66" rx="56" ry="16"/>
+  </g>
+  <g>
+    <rect x="96" y="240" width="120" height="110" fill="#f1ece2"/>
+    <rect x="584" y="240" width="120" height="110" fill="#f1ece2"/>
+    <rect x="96" y="228" width="120" height="14" fill="#8b99a7"/>
+    <rect x="584" y="228" width="120" height="14" fill="#8b99a7"/>
+    <g fill="#aebccb">
+      <rect x="112" y="262" width="26" height="34"/>
+      <rect x="157" y="262" width="26" height="34"/>
+      <rect x="600" y="262" width="26" height="34"/>
+      <rect x="645" y="262" width="26" height="34"/>
+    </g>
+    <rect x="216" y="196" width="368" height="154" fill="#f7f3ea"/>
+    <polygon points="204,196 400,118 596,196" fill="#5b6b7c"/>
+    <rect x="204" y="190" width="392" height="12" fill="#4c5a68"/>
+    <circle cx="400" cy="164" r="22" fill="#ffffff"/>
+    <circle cx="400" cy="164" r="18" fill="#dfe7ee"/>
+    <path d="M400 164V151M400 164l9 7" stroke="#5b6b7c" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <g fill="#e3ded4" stroke="#c9c2b4" stroke-width="2">
+      <rect x="252" y="216" width="24" height="118"/>
+      <rect x="316" y="216" width="24" height="118"/>
+      <rect x="460" y="216" width="24" height="118"/>
+      <rect x="524" y="216" width="24" height="118"/>
+    </g>
+    <rect x="244" y="208" width="40" height="10" fill="#d9d2c4"/>
+    <rect x="308" y="208" width="40" height="10" fill="#d9d2c4"/>
+    <rect x="452" y="208" width="40" height="10" fill="#d9d2c4"/>
+    <rect x="516" y="208" width="40" height="10" fill="#d9d2c4"/>
+    <rect x="352" y="244" width="96" height="106" fill="#5b6b7c"/>
+    <rect x="364" y="256" width="72" height="94" fill="#4c5a68"/>
+    <rect x="398" y="256" width="4" height="94" fill="#5b6b7c"/>
+    <rect x="188" y="350" width="424" height="14" fill="#c2ccd6"/>
+    <rect x="168" y="364" width="464" height="14" fill="#b4c0cb"/>
+    <rect x="148" y="378" width="504" height="14" fill="#a7b5c2"/>
+  </g>
+  <g>
+    <circle cx="70" cy="286" r="44" fill="#7fa388"/>
+    <rect x="64" y="300" width="12" height="52" fill="#7a6a55"/>
+    <circle cx="732" cy="282" r="50" fill="#74987e"/>
+    <rect x="726" y="298" width="12" height="56" fill="#7a6a55"/>
+  </g>
+</svg>
