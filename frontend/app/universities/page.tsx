@@ -135,8 +135,8 @@ export default function UniversitiesPage() {
           {catalog.universities.length === 0 ? (
             <p className={styles.empty}>No partner universities are recorded yet.</p>
           ) : filteredEmpty ? (
-            <div className={styles.emptyState} role="status">
-              <p>No universities match the selected filters.</p>
+            <div className={styles.emptyState}>
+              <p role="status">No universities match the selected filters.</p>
               <button type="button" className={styles.retry} onClick={resetFilters}>
                 Reset filters
               </button>

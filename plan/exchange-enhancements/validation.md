@@ -137,3 +137,76 @@ Date: 2026-10-25. Status: PASS.
   earlier narrowing are not re-added.
 - A filtered-empty state requires at least one loaded result; a degree with
   zero recommendations keeps the normal empty-results rendering.
+
+## US3 — Universities directory (Phase 5, T033)
+
+### Environment and method
+
+- macOS, Node.js 22 (frontend), Python 3.12 (backend), PostgreSQL 15/16
+  (Homebrew). The e2e suite ran through `npx playwright test` against the dev
+  servers; the availability seed ran through a disposable local replica of
+  the live core rows (the Supabase pooler remains unreachable from this
+  machine, so live application stays pending on the Phase 2 migration).
+- The 9-test throwaway spec drove the directory against a mocked catalog of
+  seven universities: two "Toronto" partners (one with both faculties, one
+  with both), a duplicate city "Springfield" in two countries (one
+  Computing-linked, one Engineering-linked), an Asia partner with no recorded
+  availability, a null-geography partner, and a Sapporo partner linked to
+  both faculties. Two faculties ("School of Computing", "School of
+  Engineering") made the explicit-link exclusion observable.
+- The seed rehearsal (T027) ran against a migrated disposable replica: dry
+  run, apply, idempotent re-run, a hand-added link absent from the file, and
+  four negative variants (duplicate pair, unknown partner, drifted partner
+  id, unreviewed faculty).
+
+### Acceptance checks
+
+| # | Check | Result | Evidence |
+| ---: | --- | --- | --- |
+| 1 | Initial total equals all database partners | PASS | No filters render every catalog university, including partners with no mappings or availability (7/7). |
+| 2 | Selected faculty includes only explicit links | PASS | Computing shows its 4 explicit partners; the unlinked Asia partner, the null-geography partner, and the Engineering-only partner are excluded. |
+| 3 | Combined faculty + geography works | PASS | Computing + Asia = the 2 Computing partners in Asia; the same geography alone yields 3, proving AND across restrictions. |
+| 4 | Clearing restores defaults | PASS | Clearing the continent widens back to the faculty's 4 links; clearing the faculty restores all 7 partners. |
+| 5 | Desktop rows contain three/four cards | PASS | Computed grid tracks: 3 at 1280px, 4 at 1600px, 2 at 800px, 1 at 400px. |
+| 6 | Filtered-empty feedback + reset | PASS | Engineering + Asia + Kyoto (only the unlinked partner sits there) shows the status message and "Reset filters"; reset restores all 7 without a refetch. |
+| 7 | Catalog failure + retry | PASS | A 500 catalog shows the unavailable message with a Retry control; retry recovers the full directory. |
+| 8 | No catalog refetch on filtering | PASS | The request counter, baselined after the initial load, is unchanged through selection, geo changes, and reset. |
+| 9 | Sidebar route-aware active state | PASS | `/universities` marks only the Universities link `aria-current="page"`; Recommend and Mappings links are preserved. |
+| 10 | Faculties-less catalog | PASS | No faculty control renders; geography still filters (Asia = 3); all 7 partners stay listed. |
+| 11 | Seed idempotency and safety | PASS | Re-run reports 0 to add / 5 present; a hand-added link not in the file survives; duplicate, unknown-partner, drifted-id, and unreviewed-faculty variants all abort before writing. |
+| 12 | Card mapping link | PASS | Each card's "View Mappings -->" anchor targets `/mappings?uni=<name>` (URL-encoded). |
+
+### Regression evidence
+
+- Full Playwright suite after the change: 74/74 passed (65 existing + 9 US3
+  verification tests).
+- The sidebar gained a third link without moving the two reference anchors:
+  the app-shell geometry specs (Recommend row y134, Mappings row y208, rail
+  x48–303) are unmodified and pass; the compact row wraps the third link to a
+  second row on phones (`flex-wrap` added in the same change).
+- `npm run typecheck`, `npm run lint`, and `npm run build` all pass; the
+  production route table lists `/universities`.
+
+### Behavior decisions recorded during verification
+
+- **Availability source (T026):** the owner's NUS EduRec Course Mappings
+  Search exports under `data/mapping/` (retrieved 2026-10-14) are the
+  verified source, confirmed by the owner on 2026-10-26. Each export yields
+  one explicit link per faculty it records (all five record only "School of
+  Computing"); provenance (file, edurec_id, retrieved_at, mapped-course
+  count) is stored per link. The DB mapping table is downstream of the same
+  exports and is never used as independent evidence.
+- **Faculty references by name (T026/T027):** the live `faculties` table does
+  not exist yet (Phase 2 migration pending), so links reference the canonical
+  faculty name; the seed resolves it to a stable id in-transaction. Partner
+  references carry the name plus the live id captured 2026-10-26 as a
+  drift check.
+- **Directory empty states are distinct:** catalog failure (alert + Retry),
+  no recorded partners (plain note), and filters-with-no-match (status +
+  Reset) are three separate renderings.
+- **Dev-only fetch baseline:** this app-router build enables React Strict
+  Mode by default, which double-mounts effects in dev; the no-refetch check
+  therefore baselines the counter after the initial load settles rather than
+  asserting a global fetch count of one.
+- Next.js's route announcer carries `role=alert` on every page; alert
+  assertions must be scoped by message text.
