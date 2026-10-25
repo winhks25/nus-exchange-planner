@@ -4,17 +4,32 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MappingsEmptyState from "@/components/MappingsEmptyState";
 import DegreeCombobox from "@/components/DegreeCombobox";
+import FacultyCombobox from "@/components/FacultyCombobox";
 import LoadingState from "@/components/loading/LoadingState";
 import MappingRows from "@/components/MappingRows";
 import UniversityCombobox from "@/components/UniversityCombobox";
 import { getCatalog, getMappings, UNAVAILABLE_MESSAGE } from "@/lib/api";
-import type { Catalog, Degree, MappingResult, PageState, University } from "@/lib/types";
+import {
+  degreeBelongsToFaculty,
+  degreesForFaculty,
+  selectDegree,
+  selectFaculty,
+} from "@/lib/faculty-selection";
+import type {
+  Catalog,
+  Degree,
+  Faculty,
+  MappingResult,
+  PageState,
+  University,
+} from "@/lib/types";
 
 function MappingsContent() {
   const router = useRouter();
   const params = useSearchParams();
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [degree, setDegree] = useState<Degree | null>(null);
+  const [faculty, setFaculty] = useState<Faculty | null>(null);
   const [university, setUniversity] = useState<University | null>(null);
   const [note, setNote] = useState("");
   const [result, setResult] = useState<MappingResult | null>(null);
@@ -43,23 +58,37 @@ function MappingsContent() {
     appliedUrl.current = query;
 
     const degreeValue = params.get("degree");
+    const facultyValue = params.get("faculty");
     const universityValue = params.get("uni");
     const validDegree = catalog.degrees.find(item => item.name === degreeValue) || null;
+    const validFaculty = catalog.faculties.find(item => item.name === facultyValue) || null;
     const validUniversity =
       catalog.universities.find(item => item.name === universityValue) || null;
 
-    // URL navigation updates both selectors together.
+    // Inconsistent deep links keep the degree and drop the faculty so the
+    // mappings for the linked degree can still load.
+    let nextFaculty = validFaculty;
+    if (validDegree && nextFaculty && !degreeBelongsToFaculty(validDegree, nextFaculty)) {
+      nextFaculty = null;
+    }
+
+    // URL navigation updates all selectors together.
     setDegree(validDegree);
+    setFaculty(nextFaculty);
     setUniversity(validUniversity);
     setResult(null);
     setState(validDegree && validUniversity ? "loading" : "idle");
     setNote(
-      (degreeValue && !validDegree) || (universityValue && !validUniversity)
-        ? "This link contains an unknown degree or partner university. Please choose a valid option."
+      (degreeValue && !validDegree) ||
+      (facultyValue && !validFaculty) ||
+      (universityValue && !validUniversity)
+        ? "This link contains an unknown degree, faculty or partner university. Please choose a valid option."
         : ""
     );
   }, [catalog, params]);
 
+  // Mappings track the effective degree/university pair; a compatible faculty
+  // change leaves both references untouched, so nothing refetches.
   useEffect(() => {
     if (!degree || !university) return;
     const controller = new AbortController();
@@ -78,18 +107,43 @@ function MappingsContent() {
     return () => controller.abort();
   }, [degree, university]);
 
-  function update(nextDegree: Degree | null, nextUniversity: University | null) {
+  // All selector writes go through one update so the URL, state and the
+  // request-invalidating pair stay consistent.
+  function update(
+    nextDegree: Degree | null,
+    nextFaculty: Faculty | null,
+    nextUniversity: University | null
+  ) {
+    const requestChanged = nextDegree !== degree || nextUniversity !== university;
+
     setDegree(nextDegree);
+    setFaculty(nextFaculty);
     setUniversity(nextUniversity);
-    setResult(null);
     setNote("");
-    setState(nextDegree && nextUniversity ? "loading" : "idle");
+    // Only the effective pair invalidates the loaded mappings.
+    if (requestChanged) {
+      setResult(null);
+      setState(nextDegree && nextUniversity ? "loading" : "idle");
+    }
 
     const next = new URLSearchParams();
+    if (nextFaculty) next.set("faculty", nextFaculty.name);
     if (nextDegree) next.set("degree", nextDegree.name);
     if (nextUniversity) next.set("uni", nextUniversity.name);
     appliedUrl.current = next.toString();
     router.replace(`/mappings${next.size ? `?${next.toString()}` : ""}`, { scroll: false });
+  }
+
+  // A faculty change reconciles the degree (FR-04) and keeps the university.
+  function changeFaculty(faculty: Faculty | null) {
+    const next = selectFaculty({ degree, faculty }, faculty);
+    update(next.degree, next.faculty, university);
+  }
+
+  // A direct degree selection re-derives the faculty (FR-03) and keeps the university.
+  function changeDegree(degreeValue: Degree | null) {
+    const next = selectDegree({ degree, faculty }, degreeValue, catalog?.faculties ?? []);
+    update(next.degree, next.faculty, university);
   }
 
   return (
@@ -104,15 +158,23 @@ function MappingsContent() {
         <LoadingState label="Loading choices…" />
       ) : catalog && (
         <div className="selectors">
+          {/* Without recorded faculties there is nothing to filter by. */}
+          {catalog.faculties.length > 0 && (
+            <FacultyCombobox
+              faculties={catalog.faculties}
+              selected={faculty}
+              onSelect={changeFaculty}
+            />
+          )}
           <DegreeCombobox
-            degrees={catalog.degrees}
+            degrees={degreesForFaculty(catalog.degrees, faculty)}
             selected={degree}
-            onSelect={value => update(value, university)}
+            onSelect={changeDegree}
           />
           <UniversityCombobox
             universities={catalog.universities}
             selected={university}
-            onSelect={value => update(degree, value)}
+            onSelect={value => update(degree, faculty, value)}
           />
         </div>
       )}

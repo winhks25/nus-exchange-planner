@@ -206,9 +206,13 @@ input:focus,select:focus {
 }
 .selectors {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* auto-fit keeps the two-control row identical to the old 1fr 1fr rule
+     and adds a third column when the faculty picker appears. */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
-  align-items: end;
+  /* Start alignment keeps the inputs level when the faculty cell grows
+     by its clear action. */
+  align-items: start;
 }
 .selectors .combo-wrap {
   max-width: none;
