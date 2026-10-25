@@ -40,9 +40,28 @@ function MappingsIcon() {
   );
 }
 
+function UniversitiesIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M4 21h16" />
+      <path d="M6 21V10l6-5 6 5v11" />
+      <path d="M10 21v-5h4v5" />
+    </svg>
+  );
+}
+
 const NAV_ITEMS = [
   { href: "/", label: "Recommend", Icon: RecommendIcon },
   { href: "/mappings", label: "Mappings", Icon: MappingsIcon },
+  { href: "/universities", label: "Universities", Icon: UniversitiesIcon },
 ];
 
 export default function AppSidebar() {

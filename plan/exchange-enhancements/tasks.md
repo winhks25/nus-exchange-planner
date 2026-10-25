@@ -62,7 +62,7 @@ P1. Browse every partner by default and combine faculty and geographic restricti
 - [X] T029 [P] [US3] Create the initial `frontend/components/universities/UniversityDirectoryCard.tsx` with university name, location and a View Mappings anchor to `/mappings?uni=...`; US4 adds complete media presentation and US5 adds state-preserving navigation.
 - [X] T030 [US3] Create `frontend/app/universities/page.tsx` to fetch the complete catalog with cancellation, render loading/error/retry/empty states, and compose faculty/geographic controls with the filtered card collection; clearing faculty restores unlinked partners.
 - [X] T031 [US3] Create `frontend/components/universities/universities.module.css` with three columns at ordinary desktop widths, four at wide widths, two on tablet and one on mobile; retain shared shell and avoid fixed card heights that truncate names.
-- [ ] T032 [US3] Add Universities to `frontend/components/layout/AppSidebar.tsx` with route-aware active state and keyboard-operable navigation; preserve Recommend and Mappings links.
+- [X] T032 [US3] Add Universities to `frontend/components/layout/AppSidebar.tsx` with route-aware active state and keyboard-operable navigation; preserve Recommend and Mappings links.
 - [ ] T033 [US3] Record US3 acceptance in `plan/exchange-enhancements/validation.md`: initial total equals all database partners, selected faculty includes only explicit links, combined geography works, clearing restores defaults, and desktop rows contain three/four cards.
 
 ## Phase 6: US4 — University metadata and finished cards
