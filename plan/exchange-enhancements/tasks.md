@@ -36,8 +36,8 @@ P1. Search faculty, filter degrees, derive faculty from direct degree selection,
 
 - [X] T014 [P] [US1] Implement pure transitions in `frontend/lib/faculty-selection.ts`: direct degree selection uses English alphabetical faculty-name order with stable-ID tie-break; faculty changes keep compatible degrees and clear incompatible ones; apply documented clear/missing-membership behavior.
 - [X] T015 [P] [US1] Build `frontend/components/FacultyCombobox.tsx` using `frontend/components/ui/typable-dropdown.tsx`; support typing, case-insensitive search, clear, keyboard navigation, accessible name and no-match state.
-- [ ] T016 [US1] Update `frontend/components/DegreeCombobox.tsx` and `frontend/components/recommend/RecommendDegreeField.tsx` to accept faculty-filtered degree options while retaining existing display names, selection callbacks and accessibility.
-- [ ] T017 [US1] Integrate faculty state and helpers in `frontend/app/page.tsx`; change faculty/degree atomically, clear stale results when degree is invalidated, and preserve existing recommendation loading/error/abort behavior.
+- [X] T016 [US1] Update `frontend/components/DegreeCombobox.tsx` and `frontend/components/recommend/RecommendDegreeField.tsx` to accept faculty-filtered degree options while retaining existing display names, selection callbacks and accessibility.
+- [X] T017 [US1] Integrate faculty state and helpers in `frontend/app/page.tsx`; change faculty/degree atomically, clear stale results when degree is invalidated, and preserve existing recommendation loading/error/abort behavior.
 - [ ] T018 [US1] Integrate faculty state and helpers in `frontend/app/mappings/page.tsx`; keep university selected on faculty changes, encode faculty alongside degree/uni, and clear or reload mapping results only when the effective degree changes.
 - [ ] T019 [US1] Record US1 acceptance in `plan/exchange-enhancements/validation.md`: on both pages verify searchable faculty, single/multi-faculty degree auto-selection, compatible retention, incompatible clearing, clear controls and existing result counts.
 

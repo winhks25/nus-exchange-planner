@@ -142,7 +142,9 @@
   transform: rotate(-25deg);
 }
 
-/* Degree picker: reference field 526x60 at x726/y405 on the 1888px canvas. */
+/* Shared centred frame for the faculty and degree pickers. Reference
+   degree field is 526x60 at x726/y405 on the 1888px canvas. */
+.facultyField,
 .degreeField {
   width: min(526px, 100%);
   margin: clamp(24px, 2.81vw, 53px) auto 0;
@@ -150,6 +152,7 @@
 
 /* Wide screens keep the reference's slightly left-of-centre field. */
 @media (min-width: 1600px) {
+  .facultyField,
   .degreeField {
     margin-left: calc(50% - 307px);
     margin-right: auto;
@@ -157,23 +160,32 @@
 }
 
 /* Flatten the shared picker wrapper so the field fills this frame. */
+.facultyField :global(.combo-wrap),
 .degreeField :global(.combo-wrap) {
   max-width: none;
 }
 
 /* Centre the visible label over the field. */
+.facultyField label,
 .degreeField label {
   margin-bottom: 11px;
   text-align: center;
 }
 
 /* Themed surface, 60px control height and centred value/placeholder. */
+.facultyField input,
 .degreeField input {
   height: 60px;
   padding: 0 15px;
   text-align: center;
   background: var(--card);
   border-radius: .25rem;
+}
+
+/* The clear action sits under the centred control. */
+.facultyField :global(.faculty-clear) {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Ordered collection: one featured, a secondary pair, then compact rows. */
