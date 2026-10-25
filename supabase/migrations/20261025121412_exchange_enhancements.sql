@@ -4,7 +4,9 @@
 -- public.faculty_partner_universities link tables, the nullable
 -- public.nus_modules.faculty_id foreign key, and the nullable
 -- public.partner_universities.image, website, and image_attribution columns.
--- No academic year or semester fields are modeled. Every existing column,
+-- No academic year or semester fields are modeled. Enables row level
+-- security on the three new tables and grants the existing catalog_reader
+-- role SELECT access through matching policies. Every existing column,
 -- row, constraint, index, policy, and grant is preserved unchanged.
 --
 -- Safety: one explicit transaction and a bounded lock_timeout so a blocked
@@ -61,5 +63,30 @@ create index degree_faculties_faculty_id_idx on public.degree_faculties (faculty
 create index faculty_partner_universities_partner_university_id_idx
   on public.faculty_partner_universities (partner_university_id);
 create index nus_modules_faculty_id_idx on public.nus_modules (faculty_id);
+
+-- Backend-only access for the new tables, mirroring the core tables. Row
+-- level security is enabled with no policy for the browser roles, so the
+-- default-privilege grants held by anon and authenticated resolve to zero
+-- rows and no writable surface (convention of
+-- 20261022000100_create_exchange_catalog.sql and 20261022000300_catalog_reader.sql).
+alter table public.faculties enable row level security;
+alter table public.degree_faculties enable row level security;
+alter table public.faculty_partner_universities enable row level security;
+
+-- The runtime reader is least-privilege and not BYPASSRLS, so it needs an
+-- explicit SELECT grant plus a matching SELECT policy on each new table.
+grant select on table
+  public.faculties,
+  public.degree_faculties,
+  public.faculty_partner_universities
+to catalog_reader;
+
+create policy catalog_reader_select_faculties on public.faculties
+  for select to catalog_reader using (true);
+create policy catalog_reader_select_degree_faculties on public.degree_faculties
+  for select to catalog_reader using (true);
+create policy catalog_reader_select_faculty_partner_universities
+  on public.faculty_partner_universities
+  for select to catalog_reader using (true);
 
 commit;
