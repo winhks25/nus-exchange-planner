@@ -186,6 +186,24 @@ input:focus,select:focus {
   padding: 10px 14px;
   color: var(--foreground);
 }
+/* Clear action under the faculty picker; hidden until a faculty is chosen. */
+.faculty-clear {
+  display: block;
+  width: fit-content;
+  margin: 10px 0 0;
+  padding: 0;
+  color: var(--muted-foreground);
+  background: none;
+  border: 0;
+  font-size: .875rem;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.faculty-clear:hover {
+  color: var(--card-foreground);
+}
 .selectors {
   display: grid;
   grid-template-columns: 1fr 1fr;
