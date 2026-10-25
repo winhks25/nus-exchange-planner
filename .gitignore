@@ -23,3 +23,7 @@ __pycache__/
 venv/
 *.egg-info/
 .vercel/
+.kiro/
+.agents/
+.ruff_cache/
+plan/
