@@ -28,7 +28,7 @@ Shared API and data preparation required by all stories.
 - [X] T010 Extend `backend/app/repositories/postgres_catalog.py` to fetch faculty memberships and all university metadata without inner-join exclusion or N+1 queries; preserve source order and existing ranking/mapping calculations.
 - [X] T011 [P] Update `backend/app/repositories/json_catalog.py` to emit the additive catalog shape with empty memberships/null metadata where unavailable; preserve the frozen JSON source and existing recommendation/mapping behavior.
 - [X] T012 [P] Mirror the agreed catalog shape in `frontend/lib/types.ts` and `frontend/lib/api.ts`; retain existing endpoint/query compatibility and AbortSignal behavior.
-- [ ] T013 Document and execute local/staging migration rehearsal in `plan/exchange-enhancements/migration-validation.md`: snapshot first, verify foreign keys/unique pairs/reader access, compare existing row counts and mapping outputs, rerun seeding safely and document rollback without deleting existing data.
+- [X] T013 Document and execute local/staging migration rehearsal in `plan/exchange-enhancements/migration-validation.md`: snapshot first, verify foreign keys/unique pairs/reader access, compare existing row counts and mapping outputs, rerun seeding safely and document rollback without deleting existing data.
 
 ## Phase 3: US1 — Faculty-aware degree selection
 
