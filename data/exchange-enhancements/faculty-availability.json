@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "generated": "2026-10-26",
+  "source": "NUS EduRec Course Mappings Search exports under data/mapping/ (retrieved by the owner on 2026-10-14); partner_university ids captured read-only from the live partner_universities table on 2026-10-26",
+  "policy": [
+    "A link means the named NUS faculty can exchange with the partner for that faculty, verified through the EduRec export named in provenance (the owner's copy of NUS's official course-mapping search).",
+    "Availability is never inferred from rows in the mappings table: the database mapping import is downstream of these same exports, so it is not independent evidence.",
+    "University-wide agreements are expanded into one explicit link per faculty; when a new faculty is added, this file must be re-reviewed and the seed re-run so the expansion is repeated (contracts.md, DB-02).",
+    "Availability for any faculty not listed here is unknown and stays unlinked until reviewed."
+  ],
+  "links": [
+    {
+      "faculty": "School of Computing",
+      "partner_university": "Korea University",
+      "partner_university_id": 4,
+      "provenance": {
+        "file": "data/mapping/korea/korea.json",
+        "edurec_id": "E0000000544",
+        "system": "NUS EduRec Course Mappings Search",
+        "retrieved_at": "2026-10-14",
+        "mapped_courses": 36
+      }
+    },
+    {
+      "faculty": "School of Computing",
+      "partner_university": "Kyoto University",
+      "partner_university_id": 3,
+      "provenance": {
+        "file": "data/mapping/japan/kyoto.json",
+        "edurec_id": "E0000000326",
+        "system": "NUS EduRec Course Mappings Search",
+        "retrieved_at": "2026-10-14",
+        "mapped_courses": 7
+      }
+    },
+    {
+      "faculty": "School of Computing",
+      "partner_university": "University of Toronto",
+      "partner_university_id": 2,
+      "provenance": {
+        "file": "data/mapping/canada/toronto.json",
+        "edurec_id": "E0000000684",
+        "system": "NUS EduRec Course Mappings Search",
+        "retrieved_at": "2026-10-14",
+        "mapped_courses": 55
+      }
+    },
+    {
+      "faculty": "School of Computing",
+      "partner_university": "University of Western Australia",
+      "partner_university_id": 1,
+      "provenance": {
+        "file": "data/mapping/australia/west-au.json",
+        "edurec_id": "E0000000618",
+        "system": "NUS EduRec Course Mappings Search",
+        "retrieved_at": "2026-10-14",
+        "mapped_courses": 32
+      }
+    },
+    {
+      "faculty": "School of Computing",
+      "partner_university": "Yonsei University",
+      "partner_university_id": 5,
+      "provenance": {
+        "file": "data/mapping/korea/yonsei.json",
+        "edurec_id": "E0000000548",
+        "system": "NUS EduRec Course Mappings Search",
+        "retrieved_at": "2026-10-14",
+        "mapped_courses": 24
+      }
+    }
+  ],
+  "unverified_coverage": [
+    {
+      "partner_university": "Korea University",
+      "partner_university_id": 4,
+      "note": "No faculty beyond School of Computing exists in the system; availability for any future faculty is unknown."
+    },
+    {
+      "partner_university": "Kyoto University",
+      "partner_university_id": 3,
+      "note": "No faculty beyond School of Computing exists in the system; availability for any future faculty is unknown."
+    },
+    {
+      "partner_university": "University of Toronto",
+      "partner_university_id": 2,
+      "note": "No faculty beyond School of Computing exists in the system; availability for any future faculty is unknown."
+    },
+    {
+      "partner_university": "University of Western Australia",
+      "partner_university_id": 1,
+      "note": "No faculty beyond School of Computing exists in the system; availability for any future faculty is unknown."
+    },
+    {
+      "partner_university": "Yonsei University",
+      "partner_university_id": 5,
+      "note": "No faculty beyond School of Computing exists in the system; availability for any future faculty is unknown."
+    }
+  ],
+  "flags": {
+    "notes": [
+      "All five EduRec exports record exactly one faculty, 'School of Computing', so each partner receives exactly one explicit link.",
+      "Partner names and ids were cross-checked against the live partner_universities table (5 rows, captured read-only 2026-10-26); every export matched exactly one row by name.",
+      "The faculties table does not exist in the live schema yet (Phase 2 migration pending, see migration-validation.md), so links reference the canonical faculty name and the seed script resolves it to a stable id in-transaction."
+    ]
+  }
+}
