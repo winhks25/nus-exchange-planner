@@ -47,14 +47,33 @@ class University(BaseModel):
 class DegreeOption(BaseModel):
     name: str
     degree: str
+    # Stable faculty ids, sorted by faculty name then id; empty when no
+    # membership is recorded.
+    faculty_ids: list[int] = Field(default_factory=list)
 
 
 class UniversityOption(BaseModel):
+    # Stable database identity; null when the source cannot assign one.
+    id: int | None = None
     name: str
     country: str
+    # Nullable metadata: null means unknown, never inferred.
+    city: str | None = None
+    continent: str | None = None
+    # Explicit faculty availability links; empty means none recorded.
+    faculty_ids: list[int] = Field(default_factory=list)
+    image: str | None = None
+    website: str | None = None
+    image_attribution: str | None = None
+
+
+class FacultyOption(BaseModel):
+    id: int
+    name: str
 
 
 class CatalogResponse(BaseModel):
+    faculties: list[FacultyOption] = Field(default_factory=list)
     degrees: list[DegreeOption]
     universities: list[UniversityOption]
 

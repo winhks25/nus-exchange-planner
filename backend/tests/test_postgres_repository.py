@@ -26,12 +26,32 @@ def test_catalog_uses_source_order_and_full_titles(
 
     catalog = repository.catalog()
     assert [item.model_dump() for item in catalog.degrees] == [
-        {"name": "First", "degree": "Bachelor of First"},
-        {"name": "Second", "degree": "Bachelor of Second"},
+        {"name": "First", "degree": "Bachelor of First", "faculty_ids": []},
+        {"name": "Second", "degree": "Bachelor of Second", "faculty_ids": []},
     ]
     assert [item.model_dump() for item in catalog.universities] == [
-        {"name": "Earlier University", "country": "Canada"},
-        {"name": "Later University", "country": "Japan"},
+        {
+            "id": None,
+            "name": "Earlier University",
+            "country": "Canada",
+            "city": None,
+            "continent": None,
+            "faculty_ids": [],
+            "image": None,
+            "website": None,
+            "image_attribution": None,
+        },
+        {
+            "id": None,
+            "name": "Later University",
+            "country": "Japan",
+            "city": None,
+            "continent": None,
+            "faculty_ids": [],
+            "image": None,
+            "website": None,
+            "image_attribution": None,
+        },
     ]
 
 

@@ -97,11 +97,26 @@ def test_catalog_responses_match_source_order_and_frozen_baseline(
     json_client: TestClient,
     postgres_client: TestClient,
 ) -> None:
+    # The catalog response is additive: project it back to the pre-change
+    # shape before comparing with the frozen baseline.
+    def legacy_view(body: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "degrees": [
+                {"name": item["name"], "degree": item["degree"]}
+                for item in body["degrees"]
+            ],
+            "universities": [
+                {"name": item["name"], "country": item["country"]}
+                for item in body["universities"]
+            ],
+        }
+
     json_catalog = json_client.get("/api/v1/catalog").json()
     postgres_catalog = postgres_client.get("/api/v1/catalog").json()
 
-    assert json_catalog == baseline["catalog"]["body"]
-    assert postgres_catalog == expected_catalog.catalog()
+    assert legacy_view(json_catalog) == baseline["catalog"]["body"]
+    assert legacy_view(postgres_catalog) == legacy_view(expected_catalog.catalog())
+    # Both adapters emit the same additive shape, new fields included.
     assert postgres_catalog == json_catalog
 
 
@@ -330,13 +345,27 @@ def test_synthetic_adapters_agree_on_ties_repeats_nulls_and_units(
     database.execute(SYNTHETIC_FIXTURE)
     json_repository = JsonCatalogRepository(tmp_path, manifest)
 
+    def university(name: str) -> dict[str, Any]:
+        return {
+            "id": None,
+            "name": name,
+            "country": "Japan",
+            "city": None,
+            "continent": None,
+            "faculty_ids": [],
+            "image": None,
+            "website": None,
+            "image_attribution": None,
+        }
+
     expected_catalog = {
-        "degrees": [{"name": "Test", "degree": "Bachelor of Test"}],
+        "faculties": [],
+        "degrees": [{"name": "Test", "degree": "Bachelor of Test", "faculty_ids": []}],
         "universities": [
-            {"name": "alpha University", "country": "Japan"},
-            {"name": "Zeta University", "country": "Japan"},
-            {"name": "beta University", "country": "Japan"},
-            {"name": "gamma University", "country": "Japan"},
+            university("alpha University"),
+            university("Zeta University"),
+            university("beta University"),
+            university("gamma University"),
         ],
     }
     expected_recommendations = [

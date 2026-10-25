@@ -30,8 +30,23 @@ def test_postgres_mode_serves_routes_from_the_repository(database: DatabaseTarge
 
     with TestClient(app) as client:
         assert client.get("/api/v1/catalog").json() == {
-            "degrees": [{"name": "Test", "degree": "Bachelor of Test"}],
-            "universities": [{"name": "One University", "country": "Japan"}],
+            "faculties": [],
+            "degrees": [
+                {"name": "Test", "degree": "Bachelor of Test", "faculty_ids": []}
+            ],
+            "universities": [
+                {
+                    "id": None,
+                    "name": "One University",
+                    "country": "Japan",
+                    "city": None,
+                    "continent": None,
+                    "faculty_ids": [],
+                    "image": None,
+                    "website": None,
+                    "image_attribution": None,
+                }
+            ],
         }
         recommendations = client.get(
             "/api/v1/recommendations", params={"degree": "Test"}
@@ -135,8 +150,23 @@ def test_postgres_runtime_is_independent_of_metadata_tables(database: DatabaseTa
     with TestClient(app) as client:
         # Catalog is served entirely from core tables.
         assert client.get("/api/v1/catalog").json() == {
-            "degrees": [{"name": "Test", "degree": "Bachelor of Test"}],
-            "universities": [{"name": "One University", "country": "Japan"}],
+            "faculties": [],
+            "degrees": [
+                {"name": "Test", "degree": "Bachelor of Test", "faculty_ids": []}
+            ],
+            "universities": [
+                {
+                    "id": None,
+                    "name": "One University",
+                    "country": "Japan",
+                    "city": None,
+                    "continent": None,
+                    "faculty_ids": [],
+                    "image": None,
+                    "website": None,
+                    "image_attribution": None,
+                }
+            ],
         }
 
         # Recommendations rank from core data without touching metadata tables.

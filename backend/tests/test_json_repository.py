@@ -38,8 +38,21 @@ def repository(tmp_path: Path) -> JsonCatalogRepository:
 
 def test_catalog_and_rankings_preserve_legacy_semantics(repository: JsonCatalogRepository):
     assert repository.catalog().model_dump() == {
-        "degrees": [{"name": "Test", "degree": "Full title"}],
-        "universities": [{"name": "One", "country": "Japan"}],
+        "faculties": [],
+        "degrees": [{"name": "Test", "degree": "Full title", "faculty_ids": []}],
+        "universities": [
+            {
+                "id": None,
+                "name": "One",
+                "country": "Japan",
+                "city": None,
+                "continent": None,
+                "faculty_ids": [],
+                "image": None,
+                "website": None,
+                "image_attribution": None,
+            }
+        ],
     }
 
     ranked = repository.recommendations("Test").recommendations
