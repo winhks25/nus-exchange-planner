@@ -19,7 +19,7 @@ Capture the baseline and settle data contracts before changing behavior.
 
 Shared API and data preparation required by all stories.
 
-- [ ] T004 Create `backend/scripts/audit_exchange_enhancements.py` to report distinct legacy faculty labels, orphan relations, missing geography and university coverage; produce a dry-run report in `plan/exchange-enhancements/data-audit.md` with row counts and deterministic candidate mappings.
+- [X] T004 Create `backend/scripts/audit_exchange_enhancements.py` to report distinct legacy faculty labels, orphan relations, missing geography and university coverage; produce a dry-run report in `plan/exchange-enhancements/data-audit.md` with row counts and deterministic candidate mappings.
 - [ ] T005 Create `data/exchange-enhancements/faculty-aliases.json` from the audit, using reviewed canonical faculty names and explicit aliases; flag ambiguous/missing labels rather than merging unrelated faculties or deriving degree membership from module offerings.
 - [ ] T006 Use the Supabase CLI to generate `supabase/migrations/<generated>_exchange_enhancements.sql`; add faculties, degree_faculties, faculty_partner_universities, nullable nus_modules.faculty_id and nullable partner_universities.image/website. Use existing ID types, nonblank faculty names, unique relationship pairs, foreign keys and indexes for reverse lookups; no year or semester fields.
 - [ ] T007 In `supabase/migrations/<generated>_exchange_enhancements.sql`, enable RLS on new tables and grant only required SELECT access to the existing backend reader role using matching policies; preserve existing read-only access and avoid anonymous database writes.
