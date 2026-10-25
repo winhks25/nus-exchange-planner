@@ -78,12 +78,16 @@ function MappingsContent() {
     setUniversity(validUniversity);
     setResult(null);
     setState(validDegree && validUniversity ? "loading" : "idle");
+    // Unknown values keep the original note copy; an unknown faculty gets
+    // its own note so existing links read exactly as before.
+    const unknownSelection =
+      (degreeValue && !validDegree) || (universityValue && !validUniversity);
     setNote(
-      (degreeValue && !validDegree) ||
-      (facultyValue && !validFaculty) ||
-      (universityValue && !validUniversity)
-        ? "This link contains an unknown degree, faculty or partner university. Please choose a valid option."
-        : ""
+      unknownSelection
+        ? "This link contains an unknown degree or partner university. Please choose a valid option."
+        : facultyValue && !validFaculty
+          ? "This link contains an unknown faculty. Please choose a valid option."
+          : ""
     );
   }, [catalog, params]);
 
