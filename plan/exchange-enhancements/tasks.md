@@ -11,7 +11,7 @@ Status: planning only; all implementation tasks remain unchecked. Paths are repo
 
 Capture the baseline and settle data contracts before changing behavior.
 
-- [ ] T001 Record current catalog payloads, recommendation order/counts, mappings deep links and schema/data inventory in `plan/exchange-enhancements/baseline.md`; inspect deployed columns and all consumers of degrees.faculty and nus_modules.offering_faculty, without printing credentials.
+- [X] T001 Record current catalog payloads, recommendation order/counts, mappings deep links and schema/data inventory in `plan/exchange-enhancements/baseline.md`; inspect deployed columns and all consumers of degrees.faculty and nus_modules.offering_faculty, without printing credentials.
 - [ ] T002 Write the additive catalog contract and selection rules in `plan/exchange-enhancements/contracts.md`: faculties with stable IDs, degree faculty IDs, university stable ID/name/country/city/continent/faculty IDs/image/website and optional attribution; preserve existing fields and mapping query names.
 - [ ] T003 Record migration/backfill, unknown-data handling and the unresolved no-degree navigation acceptance decision in `plan/exchange-enhancements/decisions.md`; follow the explicit defaults in spec.md and distinguish confirmed source data from assumptions.
 
