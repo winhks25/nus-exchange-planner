@@ -5,12 +5,18 @@ upserts the canonical faculties, records explicit degree membership in
 degree_faculties, and sets nus_modules.faculty_id where the module label
 resolves. A label without a reviewed alias keeps faculty_id null and retains
 its legacy text until an alias is added (decisions.md, decisions 4 and 7).
-The backfill never deletes rows and never changes an already-set faculty_id,
-so re-running the same input is a no-op. Use --dry-run to preview the plan
-without writing.
+It also imports explicit faculty-partner availability from the reviewed
+faculty-availability.json file: verified links only, one row per pair, never
+inferred from mapping existence (decisions.md, decision 9). University-wide
+agreements are stored as one explicit row per faculty; when a new faculty is
+added, re-review the availability file and re-run this script so the
+expansion is repeated. The backfill never deletes rows and never changes an
+already-set faculty_id, so re-running the same input is a no-op. Use
+--dry-run to preview the plan without writing.
 """
 
 import argparse
+import json
 import os
 import sys
 from pathlib import Path
@@ -23,6 +29,7 @@ from scripts.audit_exchange_enhancements import AuditError, _load_aliases
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_ALIASES = REPO_ROOT / "data" / "exchange-enhancements" / "faculty-aliases.json"
+DEFAULT_AVAILABILITY = REPO_ROOT / "data" / "exchange-enhancements" / "faculty-availability.json"
 
 
 class SeedError(RuntimeError):
@@ -44,6 +51,12 @@ def main(argv: list[str] | None = None) -> int:
         help="reviewed faculty alias file; defaults to data/exchange-enhancements/faculty-aliases.json",
     )
     parser.add_argument(
+        "--availability",
+        type=Path,
+        default=None,
+        help="reviewed faculty availability file; defaults to data/exchange-enhancements/faculty-availability.json",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="print the seed plan without writing to the database",
@@ -62,12 +75,19 @@ def main(argv: list[str] | None = None) -> int:
     if aliases_path is None:
         parser.error("no alias file found; pass --aliases")
 
+    availability_path = args.availability
+    if availability_path is None and DEFAULT_AVAILABILITY.is_file():
+        availability_path = DEFAULT_AVAILABILITY
+    if availability_path is None:
+        parser.error("no availability file found; pass --availability")
+
     try:
         aliases = _load_aliases(aliases_path)
+        availability = _load_availability(availability_path)
         with _connect(database_url) as conn, conn.transaction():
             # The plan reads and the writes share one transaction snapshot;
             # any failure rolls the whole backfill back.
-            plan = build_seed_plan(conn, aliases)
+            plan = build_seed_plan(conn, aliases, availability)
             _print_plan(plan, dry_run=args.dry_run)
             if args.dry_run:
                 return 0
@@ -79,6 +99,14 @@ def main(argv: list[str] | None = None) -> int:
                     file=sys.stderr,
                 )
                 return 1
+            # Availability must reference real, undrifted partners before
+            # any row is written.
+            if plan["availability_unknown"] or plan["availability_mismatches"]:
+                print(
+                    "aborted: availability references unknown or drifted partners",
+                    file=sys.stderr,
+                )
+                return 1
             apply_seed_plan(conn, plan)
     except (SeedError, AuditError, psycopg.Error, OSError) as exc:
         print(f"error: {exc}", file=sys.stderr)
@@ -86,7 +114,11 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-def build_seed_plan(conn: psycopg.Connection, aliases: dict[str, str]) -> dict[str, Any]:
+def build_seed_plan(
+    conn: psycopg.Connection,
+    aliases: dict[str, str],
+    availability: list[tuple[str, str, int]],
+) -> dict[str, Any]:
     """Compute everything the backfill would change, without writing.
 
     The plan is derived from the current database state, so re-running it
@@ -150,6 +182,46 @@ def build_seed_plan(conn: psycopg.Connection, aliases: dict[str, str]) -> dict[s
             continue
         module_updates.append((code, faculty_name))
 
+    # Explicit faculty-partner availability from the reviewed file; the DB
+    # mapping table is never consulted (decisions.md, decision 9).
+    partner_ids = {
+        str(row[1]): int(row[0])
+        for row in conn.execute(
+            "select id, name from public.partner_universities order by id"
+        )
+    }
+    existing_link_names = {
+        (faculty_name, partner_name)
+        for faculty_name, partner_name in conn.execute(
+            """
+            select f.name, p.name
+            from public.faculty_partner_universities fpu
+            join public.faculties f on f.id = fpu.faculty_id
+            join public.partner_universities p on p.id = fpu.partner_university_id
+            order by 1, 2
+            """
+        )
+    }
+    canonical_names = set(aliases.values())
+    availability_links: list[tuple[str, str, int, bool]] = []
+    availability_unknown: list[tuple[str, str]] = []
+    availability_mismatches: list[tuple[str, str, int, int]] = []
+    for faculty_name, partner_name, partner_id in availability:
+        # A link to a faculty the alias file does not review cannot be seeded.
+        if faculty_name not in canonical_names:
+            raise SeedError(
+                f"availability faculty {faculty_name!r} is not a reviewed canonical faculty"
+            )
+        resolved_id = partner_ids.get(partner_name)
+        if resolved_id is None:
+            availability_unknown.append((faculty_name, partner_name))
+            continue
+        if partner_id != resolved_id:
+            availability_mismatches.append((faculty_name, partner_name, partner_id, resolved_id))
+            continue
+        already = (faculty_name, partner_name) in existing_link_names
+        availability_links.append((faculty_name, partner_name, resolved_id, already))
+
     return {
         "faculties": faculties,
         "degree_memberships": degree_memberships,
@@ -158,6 +230,9 @@ def build_seed_plan(conn: psycopg.Connection, aliases: dict[str, str]) -> dict[s
         "modules_already_set": already_set,
         "module_conflicts": conflicts,
         "unresolved_modules": unresolved_modules,
+        "availability_links": availability_links,
+        "availability_unknown": availability_unknown,
+        "availability_mismatches": availability_mismatches,
         "degrees_total": len(degree_rows),
         "modules_total": len(module_rows),
     }
@@ -208,6 +283,22 @@ def apply_seed_plan(conn: psycopg.Connection, plan: dict[str, Any]) -> None:
             params,
         )
 
+    # Explicit availability links; a duplicate pair is a no-op on re-run and
+    # every existing link is preserved.
+    availability_to_add = [link for link in plan["availability_links"] if not link[3]]
+    if availability_to_add:
+        conn.cursor().executemany(
+            """
+            insert into public.faculty_partner_universities (faculty_id, partner_university_id)
+            values (%s, %s)
+            on conflict (faculty_id, partner_university_id) do nothing
+            """,
+            [
+                (faculty_ids[faculty_name], partner_id)
+                for faculty_name, _, partner_id, _ in availability_to_add
+            ],
+        )
+
 
 def _resolve(label: str | None, aliases: dict[str, str]) -> str | None:
     """Map a legacy label to its canonical faculty, or None when unresolved."""
@@ -251,6 +342,57 @@ def _print_plan(plan: dict[str, Any], dry_run: bool) -> None:
           f"{len(plan['module_conflicts'])}")
     for code, current, resolved in plan["module_conflicts"]:
         print(f"  {code}: {current!r} -> resolved {resolved!r}")
+
+    avail_to_add = [link for link in plan["availability_links"] if not link[3]]
+    avail_already = len(plan["availability_links"]) - len(avail_to_add)
+    print(f"Availability links to add: {len(avail_to_add)}")
+    for faculty_name, partner_name, _, _ in avail_to_add:
+        print(f"  {faculty_name} -> {partner_name}")
+    print(f"Availability links already present (left untouched): {avail_already}")
+    print(f"Availability links with unknown partner (aborts the run): "
+          f"{len(plan['availability_unknown'])}")
+    for faculty_name, partner_name in plan["availability_unknown"]:
+        print(f"  {faculty_name} -> {partner_name!r}")
+    print(f"Availability links with drifted partner id (aborts the run): "
+          f"{len(plan['availability_mismatches'])}")
+    for faculty_name, partner_name, recorded, resolved in plan["availability_mismatches"]:
+        print(f"  {faculty_name} -> {partner_name}: recorded {recorded}, resolved {resolved}")
+
+
+def _load_availability(path: Path) -> list[tuple[str, str, int]]:
+    """Load reviewed faculty-partner availability links.
+
+    Returns (faculty name, partner name, recorded partner id) tuples sorted
+    deterministically. Malformed entries and duplicate pairs abort the run;
+    provenance fields are recorded for the audit trail but not validated.
+    """
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise SeedError(f"availability file unreadable: {exc}") from None
+    links = payload.get("links")
+    if not isinstance(links, list):
+        raise SeedError("availability file must contain a 'links' list")
+    seen: set[tuple[str, str]] = set()
+    resolved: list[tuple[str, str, int]] = []
+    for entry in links:
+        if not isinstance(entry, dict):
+            raise SeedError(f"malformed availability entry: {entry!r}")
+        faculty = str(entry.get("faculty") or "").strip()
+        partner = str(entry.get("partner_university") or "").strip()
+        partner_id = entry.get("partner_university_id")
+        if not faculty or not partner or not isinstance(partner_id, int):
+            raise SeedError(f"malformed availability entry: {entry!r}")
+        key = (faculty, partner)
+        if key in seen:
+            raise SeedError(f"duplicate availability link: {faculty} -> {partner}")
+        seen.add(key)
+        resolved.append((faculty, partner, partner_id))
+    return sorted(
+        resolved,
+        key=lambda item: (item[0].casefold(), item[0], item[1].casefold(), item[1]),
+    )
 
 
 def _connect(database_url: str) -> psycopg.Connection:
