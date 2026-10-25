@@ -172,6 +172,44 @@
   text-align: center;
 }
 
+/* Centred frame for the geographic multi-select row. */
+.geoFilters {
+  width: min(900px, 100%);
+  margin: clamp(24px, 2.81vw, 53px) auto 0;
+}
+
+/* Feedback for loaded results excluded entirely by the active geography. */
+.geoEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(30px, 2.33vw, 44px);
+  text-align: center;
+}
+
+.geoEmpty p {
+  margin: 0;
+  color: var(--card-foreground);
+}
+
+.geoReset {
+  min-height: 36px;
+  padding: .375rem .75rem;
+  color: var(--primary);
+  background: var(--card);
+  border: 1px solid var(--primary);
+  border-radius: .25rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+
+.geoReset:hover {
+  background: var(--muted);
+}
+
 /* Themed surface, 60px control height and centred value/placeholder. */
 .facultyField input,
 .degreeField input {

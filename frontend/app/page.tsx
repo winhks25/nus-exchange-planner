@@ -169,13 +169,15 @@ export default function RecommendPage() {
           />
           {/* Geographic filters apply to the loaded results immediately. */}
           {geoAvailable && (
-            <GeographicFilters
-              options={deriveGeoOptions(catalog.universities, geo)}
-              selection={geo}
-              onContinentsChange={changeContinents}
-              onCountriesChange={changeCountries}
-              onCitiesChange={changeCities}
-            />
+            <div className={styles.geoFilters}>
+              <GeographicFilters
+                options={deriveGeoOptions(catalog.universities, geo)}
+                selection={geo}
+                onContinentsChange={changeContinents}
+                onCountriesChange={changeCountries}
+                onCitiesChange={changeCities}
+              />
+            </div>
           )}
         </>
       )}
@@ -190,7 +192,16 @@ export default function RecommendPage() {
       {state === "idle" && selection.degree && results && (
         geoFilteredEmpty ? (
           // Distinguish geography-matched-nothing from a degree with no results.
-          <p role="status">No universities match the selected geography.</p>
+          <div className={styles.geoEmpty}>
+            <p role="status">No universities match the selected geography.</p>
+            <button
+              type="button"
+              className={styles.geoReset}
+              onClick={() => setGeo(EMPTY_GEO_SELECTION)}
+            >
+              Reset filters
+            </button>
+          </div>
         ) : (
           <UniversityCards
             degree={selection.degree.name}
