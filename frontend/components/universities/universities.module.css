@@ -1,0 +1,59 @@
+/* Shared directory card shell; US4 adds the media block above the name.
+   No fixed height: long names wrap instead of truncating. */
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 12px;
+  padding: 20px;
+  color: var(--card-foreground);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: .35rem;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.location {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: .125rem .5rem;
+  color: var(--foreground);
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: .25rem;
+  font-size: .75rem;
+  line-height: 1.5;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  margin-top: auto;
+  min-height: 36px;
+  padding: .375rem .75rem;
+  color: var(--primary);
+  background: var(--card);
+  border: 1px solid var(--primary);
+  border-radius: .25rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: background-color .15s ease;
+}
+
+.action:hover {
+  background: var(--muted);
+}
