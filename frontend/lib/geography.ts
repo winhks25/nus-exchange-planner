@@ -122,3 +122,36 @@ export function isGeoSelectionEmpty(selection: GeoSelection): boolean {
     selection.cities.length === 0
   );
 }
+
+// Parent-change reconciliation (FR-07): `changed` carries the new continents
+// and/or countries; dependent selections are pruned to what is still valid
+// under the new constraints and everything still valid is preserved, all in
+// one returned state.
+export function reconcileGeography(
+  universities: University[],
+  selection: GeoSelection,
+  changed: { continents?: string[]; countries?: string[] }
+): GeoSelection {
+  const continents = changed.continents ?? selection.continents;
+  const countries = changed.countries ?? selection.countries;
+
+  // Keep only the selected countries that survive the continent constraint.
+  const validCountries = deriveGeoOptions(universities, {
+    continents,
+    countries: [],
+    cities: [],
+  }).countries;
+  const keptCountries = countries.filter(country => validCountries.includes(country));
+
+  // Keep only the selected cities that survive both parent constraints.
+  const validCityKeys = new Set(
+    deriveGeoOptions(universities, {
+      continents,
+      countries: keptCountries,
+      cities: [],
+    }).cities.map(option => option.key)
+  );
+  const keptCities = selection.cities.filter(key => validCityKeys.has(key));
+
+  return { continents, countries: keptCountries, cities: keptCities };
+}
