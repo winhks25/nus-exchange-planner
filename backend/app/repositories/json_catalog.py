@@ -59,14 +59,32 @@ class JsonCatalogRepository:
 
 
 def _catalog_response(catalog: Catalog) -> CatalogResponse:
-    """Map the in-memory catalog to the public response model."""
+    """Map the in-memory catalog to the public response model.
+
+    The frozen snapshot has no stable ids, geography, or faculty availability:
+    emit the additive shape with null ids/metadata and empty memberships
+    (contracts.md, JSON mode) while keeping recommendation and mapping
+    behavior byte-for-byte unchanged.
+    """
 
     return CatalogResponse(
+        faculties=[],
         degrees=[
-            DegreeOption(name=item.name, degree=item.degree) for item in catalog.degrees
+            DegreeOption(name=item.name, degree=item.degree, faculty_ids=[])
+            for item in catalog.degrees
         ],
         universities=[
-            UniversityOption(name=item.name, country=item.country)
+            UniversityOption(
+                id=None,
+                name=item.name,
+                country=item.country,
+                city=None,
+                continent=None,
+                faculty_ids=[],
+                image=None,
+                website=None,
+                image_attribution=None,
+            )
             for item in catalog.universities
         ],
     )
