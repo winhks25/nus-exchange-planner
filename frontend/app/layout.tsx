@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppShell from "@/components/layout/AppShell";
+import { MappingsSelectionProvider } from "@/components/mappings/MappingsSelectionProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -11,7 +12,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <AppShell>{children}</AppShell>
+        <MappingsSelectionProvider>
+          <AppShell>{children}</AppShell>
+        </MappingsSelectionProvider>
       </body>
     </html>
   );
