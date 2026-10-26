@@ -16,6 +16,7 @@ are in `plan/supabase-migration/deployment-results.md` and `plan/remove-catalog-
 | `20261022000200` | `prepare_catalog_import` | Source provenance, issues, repairs and presentation |
 | `20261022000300` | `catalog_reader` | Least-privilege runtime role and SELECT policies |
 | `20261024034234` | `remove_catalog_metadata` | Drop metadata/archive/provenance tables and source_row_id column |
+| `20261026000000` | `create_university_images_bucket` | Public university photograph bucket with service-role-only upload policies |
 
 The initial migration was applied manually through the SQL Editor on 2026-10-22.
 It did not register CLI history, so version `20261022000100` was later recorded
@@ -78,6 +79,49 @@ remote database URLs.
 The current published core catalog contains 6 degrees, 5 universities, 151 active
 mappings, 152 NUS modules, 142 partner modules, and 19 specializations. Missing
 NUS titles remain null and are never invented.
+
+## University image storage
+
+Partner card photographs live in the public `university-images` bucket
+(migration `20261026000000_create_university_images_bucket`). Objects are
+addressed as `universities/<partner_university_id>.<ext>`.
+
+- **Reads** are open through the public URL
+  (`https://wydziozsjibkvpgphpia.supabase.co/storage/v1/object/public/university-images/...`).
+  No storage policy grants `anon` or `authenticated` Data API access, so the
+  bucket contents cannot be listed or fetched through the API without the public URL.
+- **Writes** are restricted to the service role. The insert/update/select
+  policies on `storage.objects` are scoped to `bucket_id = 'university-images'`
+  and name `service_role` explicitly; the service key bypasses RLS by design, so
+  only the administrative uploader (which holds that key server-side) can write.
+- **Bucket-level upload restrictions** cap objects at 4 MiB and allow only
+  `image/jpeg`, `image/png`, and `image/webp`.
+
+The uploader is `backend/scripts/upload_university_assets.py`. It reads the
+reviewed manifest at `data/exchange-enhancements/university-assets.json`,
+downloads only the manifest-approved Wikimedia URLs, validates magic bytes and
+size, uploads to the deterministic object path, and reuses an existing object
+when its checksum matches (resume). Successful uploads produce per-university
+outcomes in the manifest and a SQL artifact that updates
+`partner_universities.image`, `website`, and `image_attribution`.
+
+```bash
+# Preview without any storage or database writes:
+SUPABASE_ACCESS_TOKEN=<owner-token> \
+  uv run --directory backend python -m scripts.upload_university_assets --dry-run
+
+# Apply uploads and database updates in one reachable environment:
+SUPABASE_ACCESS_TOKEN=<owner-token> \
+  uv run --directory backend python -m scripts.upload_university_assets \
+  --database-url '<server-only-url>'
+```
+
+`SUPABASE_ACCESS_TOKEN` is the owner's management token; the service role key is
+retrieved from the Supabase Management API at runtime, kept in memory, and never
+committed or shipped to the frontend. The live bucket was created on 2026-10-26
+through the MCP channel because the pooler was unreachable from the development
+machine at the time; `supabase db reset` applies the migration in local
+environments.
 
 ## Unresolved data and historical provenance
 
