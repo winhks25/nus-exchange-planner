@@ -332,3 +332,21 @@ Date: 2026-10-25. Status: PASS.
 - **Derive faculty only when needed (T044):** If a degree is selected without a faculty and faculty was not explicitly cleared, faculty is derived using the first canonical faculty; if faculty was explicitly cleared (`?faculty=`), it remains unset.
 - **Unresolved FR-20 no-degree prompt (decisions.md #11):** The backend mappings API requires a degree parameter. When navigating from a card in a fresh session, the partner university is preselected, a polite status prompt requests degree selection, and mappings load automatically as soon as a degree is chosen. This is maintained as an open product decision pending explicit confirmation.
 
+## Phase 8: Cross-cutting regression checks (T048)
+
+### Environment and executed commands
+
+- **Backend Pytest Suite**:
+  `uv run pytest` in `backend/`: 91/91 passed across all 13 test modules (`test_app_repository.py`, `test_catalog.py`, `test_catalog_absence.py`, `test_catalog_preview.py`, `test_catalog_table_removal.py`, `test_contract.py`, `test_core_seed.py`, `test_database_cleanup.py`, `test_database_failures.py`, `test_json_repository.py`, `test_postgres_repository.py`, `test_repository_regression.py`, `test_snapshot_core_data.py`).
+  - *Assertion update in migration setup:* Wrapped Supabase storage bucket and policy creation in `supabase/migrations/20261026000000_create_university_images_bucket.sql` inside a conditional check for the `storage` schema and `service_role` role so that local non-Supabase disposable PostgreSQL test clusters can replay all migrations cleanly without failing on absent Supabase platform schemas.
+- **Frontend Typecheck**:
+  `npm run typecheck` in `frontend/`: 0 errors.
+- **Frontend Lint**:
+  `npm run lint` in `frontend/`: 0 errors (2 pre-existing advisory warnings for plain `<img>` fallback elements).
+- **Frontend Build**:
+  `npm run build` in `frontend/`: static generation of `/`, `/mappings`, `/universities`, and `/_not-found` completed cleanly.
+- **Frontend E2E Flow / Shell Suite (JSON Mode)**:
+  `npx playwright test` in `frontend/`: 65/65 tests passed across `app-shell.spec.ts`, `flows.spec.ts`, `recommend-card.spec.ts`, `recommend-hero.spec.ts`, `recommend-picker.spec.ts`, `recommend-visual.spec.ts`, `theme.spec.ts`.
+- **Frontend Database Regression Suite (PostgreSQL Mode)**:
+  `TEST_CATALOG_BACKEND=postgres npx playwright test tests/database-regression.spec.ts`: 8/8 tests passed, confirming count preservation, direct URL mapping entry, search navigation, and back/forward browser behavior.
+
