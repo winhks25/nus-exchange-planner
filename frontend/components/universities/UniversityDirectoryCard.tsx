@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useMappingsSelection } from "@/components/mappings/MappingsSelectionProvider";
+import { buildMappingsHref } from "@/lib/mappings-navigation";
 import type { University } from "@/lib/types";
 import styles from "./universities.module.css";
 
@@ -16,16 +18,19 @@ function safeWebsite(url: string | null): string | null {
   return url.startsWith("https://") || url.startsWith("http://") ? url : null;
 }
 
-// Directory card (US4): photograph (or local fallback), name, location tags,
-// attribution, official website, and the mappings action. US5 adds
-// state-preserving navigation to the mappings link.
+// Directory card (US4, US5): photograph (or local fallback), name, location tags,
+// attribution, official website, and state-preserving mappings action.
 export default function UniversityDirectoryCard({ university }: Props) {
   // One-way swap: a failed photograph renders the local fallback and never
   // retries, so a broken URL cannot loop between the two sources.
   const [photoFailed, setPhotoFailed] = useState(false);
   const photoSrc = photoFailed ? null : university.image;
   const website = safeWebsite(university.website);
-  const href = `/mappings?uni=${encodeURIComponent(university.name)}`;
+
+  // Preserve remembered Mappings selections while replacing only the university (US5).
+  // Never passes directory faculty filter as replacement.
+  const { selection: rememberedSelection } = useMappingsSelection();
+  const href = buildMappingsHref(university.name, rememberedSelection);
 
   return (
     <article className={styles.card}>
