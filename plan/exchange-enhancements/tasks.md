@@ -87,7 +87,7 @@ P1. Replace only the chosen university and automatically load with retained vali
 - [X] T044 [US5] Refactor URL hydration/update logic in `frontend/app/mappings/page.tsx` to merge the persistent selection state and URL once the catalog is ready; preserve an explicitly selected compatible faculty, derive one only when needed, and report stale/unknown IDs without silently choosing another degree.
 - [X] T045 [US5] Wire `frontend/components/universities/UniversityDirectoryCard.tsx` to the navigation helper and remembered Mappings selections; generate a real href so copied links/new tabs retain known choices and do not pass the directory faculty as a replacement.
 - [X] T046 [US5] Finalize automatic fetching in `frontend/app/mappings/page.tsx` after merged selections settle; reuse the existing abortable request, suppress stale responses, avoid hydration loops and extra Search clicks, and apply the documented no-degree prompt pending resolution of FR-20.
-- [ ] T047 [US5] Record US5 acceptance in `plan/exchange-enhancements/validation.md`: set faculty/degree in Mappings, visit directory, choose a different university and verify retained choices/automatic results; also exercise fresh-session no-degree handling, copied URLs, back/forward, invalid links and rapid card navigation.
+- [X] T047 [US5] Record US5 acceptance in `plan/exchange-enhancements/validation.md`: set faculty/degree in Mappings, visit directory, choose a different university and verify retained choices/automatic results; also exercise fresh-session no-degree handling, copied URLs, back/forward, invalid links and rapid card navigation.
 
 ## Phase 8: Polish and cross-cutting validation
 

@@ -5,7 +5,7 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import type { Catalog, Degree, Faculty, University } from "@/lib/types";
@@ -23,6 +23,48 @@ export const EMPTY_MAPPINGS_SELECTION: MappingsSelectionState = {
   degree: null,
   university: null,
 };
+
+const STORAGE_KEY = "mappings_selection_state";
+
+// In-memory store persistent across route unmounts.
+let inMemorySelection: MappingsSelectionState = EMPTY_MAPPINGS_SELECTION;
+let isInitialized = false;
+const listeners = new Set<() => void>();
+
+function notify() {
+  for (const listener of listeners) {
+    listener();
+  }
+}
+
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  return () => {
+    listeners.delete(callback);
+  };
+}
+
+function initFromStorage() {
+  if (isInitialized || typeof window === "undefined") return;
+  isInitialized = true;
+  try {
+    const stored = window.sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      inMemorySelection = JSON.parse(stored);
+    }
+  } catch {
+    // Ignore storage read errors.
+  }
+}
+
+function getSnapshot(): MappingsSelectionState {
+  initFromStorage();
+  return inMemorySelection;
+}
+
+function getServerSnapshot(): MappingsSelectionState {
+  return EMPTY_MAPPINGS_SELECTION;
+}
 
 // Reconciles remembered selections against a freshly loaded catalog.
 // Drops unknown options and resolves incompatible faculty-degree pairings.
@@ -71,8 +113,8 @@ const MappingsSelectionContext = createContext<MappingsSelectionContextValue | n
 
 // Root provider to preserve Mappings selections across route unmounts.
 export function MappingsSelectionProvider({ children }: { children: ReactNode }) {
-  // Remember selections across route unmounts in root layout state.
-  const [selection, setRawSelection] = useState<MappingsSelectionState>(EMPTY_MAPPINGS_SELECTION);
+  // Synchronize selection using external store semantics to support concurrent mode and SSR.
+  const selection = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   // Update selection partially or with a state updater function.
   const setSelection = useCallback(
@@ -81,24 +123,45 @@ export function MappingsSelectionProvider({ children }: { children: ReactNode })
         | Partial<MappingsSelectionState>
         | ((prev: MappingsSelectionState) => MappingsSelectionState)
     ) => {
-      setRawSelection(prev => {
-        if (typeof updater === "function") {
-          return updater(prev);
+      const next = typeof updater === "function" ? updater(inMemorySelection) : { ...inMemorySelection, ...updater };
+      inMemorySelection = next;
+      try {
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next));
         }
-        return { ...prev, ...updater };
-      });
+      } catch {
+        // Ignore storage write errors.
+      }
+      notify();
     },
     []
   );
 
   // Reset all remembered selections to empty.
   const clearSelection = useCallback(() => {
-    setRawSelection(EMPTY_MAPPINGS_SELECTION);
+    inMemorySelection = EMPTY_MAPPINGS_SELECTION;
+    try {
+      if (typeof window !== "undefined") {
+        window.sessionStorage.removeItem(STORAGE_KEY);
+      }
+    } catch {
+      // Ignore storage write errors.
+    }
+    notify();
   }, []);
 
   // Reconcile current selection against a loaded catalog.
   const reconcile = useCallback((catalog: Catalog) => {
-    setRawSelection(current => reconcileMappingsSelection(current, catalog));
+    const reconciled = reconcileMappingsSelection(inMemorySelection, catalog);
+    inMemorySelection = reconciled;
+    try {
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(reconciled));
+      }
+    } catch {
+      // Ignore storage write errors.
+    }
+    notify();
   }, []);
 
   const value = useMemo(

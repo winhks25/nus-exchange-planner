@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import { useMappingsSelection } from "@/components/mappings/MappingsSelectionProvider";
 import { buildMappingsHref } from "@/lib/mappings-navigation";
 import type { University } from "@/lib/types";
@@ -72,9 +73,9 @@ export default function UniversityDirectoryCard({ university }: Props) {
           ) : (
             <span className={styles.unavailable}>Website unavailable</span>
           )}
-          <a className={styles.action} href={href}>
+          <Link className={styles.action} href={href}>
             {"View Mappings -->"}
-          </a>
+          </Link>
         </footer>
       </div>
     </article>

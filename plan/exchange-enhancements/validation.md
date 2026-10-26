@@ -290,3 +290,45 @@ Date: 2026-10-25. Status: PASS.
   `SUPABASE_ACCESS_TOKEN`; the service role key is fetched from the
   Management API at runtime and never committed, logged, or shipped to the
   frontend.
+
+## US5 — Preserve selections and open mappings (Phase 7, T047)
+
+### Environment and method
+
+- macOS, Node.js 22 (frontend), Python 3.12 (backend).
+- Full Playwright test suite (65 existing tests) executed against Next.js dev server (127.0.0.1:18766) and FastAPI catalog backend (127.0.0.1:18765).
+- A 7-test verification spec exercised the complete US5 user story:
+  1. Preserving faculty and degree selections when navigating between Mappings and Directory cards.
+  2. Isolation of Directory faculty filter from Mappings selections.
+  3. Fresh-session no-degree handling, displaying the documented prompt and fetching automatically once a degree is selected (FR-20).
+  4. Real URL href generation and direct navigation with preselected options.
+  5. Browser back and forward history restoration.
+  6. Reporting unknown deep links without silently falling back to incorrect degrees.
+  7. Request cancellation and rapid navigation settling on the final university.
+- The throwaway verification spec was deleted after execution; no new automated tests were committed per project instructions.
+
+### Acceptance checks
+
+| # | Check | Result | Evidence |
+| ---: | --- | --- | --- |
+| 1 | Retained selections and automatic loading | PASS | Setting School of Computing + Computer Science on Mappings, navigating to Universities, and clicking View Mappings on University of Western Australia preserved faculty and degree, updated only university, and loaded mappings automatically without a Search button click. |
+| 2 | Directory filter isolation | PASS | Selecting an Engineering faculty filter on Universities did not leak into Mappings or replace remembered Mappings faculty. |
+| 3 | Fresh-session no-degree prompt (FR-20) | PASS | Navigating directly to a university card without a pre-existing degree displayed the prompt "Please select a degree programme to view course mappings for this partner university." Selecting a degree immediately cleared the prompt and loaded mappings automatically. |
+| 4 | Real href generation and copied URL support | PASS | Card action contains a fully resolved `/mappings?uni=...&degree=...&faculty=...` href; direct navigation in a new page/context hydrated all selections and loaded results immediately. |
+| 5 | Browser back and forward history restoration | PASS | Browser Back and Forward between different partner mappings correctly restored previous query parameters and corresponding result tables. |
+| 6 | Invalid deep link handling | PASS | A deep link with an invalid degree name displayed "This link contains an unknown degree or partner university. Please choose a valid option." and left the degree empty without silently picking a fallback degree. |
+| 7 | Rapid card navigation | PASS | Rapidly clicking different university mapping links aborted superseded in-flight requests and rendered the final selected university without stale responses or hydration loops. |
+
+### Regression evidence
+
+- Full Playwright suite after the change: 65/65 passed.
+- `npm run typecheck` passed (exit 0).
+- `npm run lint` passed (exit 0; only pre-existing advisory `no-img-element` warnings for plain `<img>` fallback tags).
+- `npm run build` passed (exit 0; `/mappings` and `/universities` compiled and rendered statically).
+
+### Behavior decisions recorded during verification
+
+- **Preserve explicitly selected compatible faculty (T044):** If a user selects a compatible faculty (even if not the alphabetically first faculty for the degree), it is preserved across card clicks and URL hydration rather than re-deriving the default faculty.
+- **Derive faculty only when needed (T044):** If a degree is selected without a faculty and faculty was not explicitly cleared, faculty is derived using the first canonical faculty; if faculty was explicitly cleared (`?faculty=`), it remains unset.
+- **Unresolved FR-20 no-degree prompt (decisions.md #11):** The backend mappings API requires a degree parameter. When navigating from a card in a fresh session, the partner university is preselected, a polite status prompt requests degree selection, and mappings load automatically as soon as a degree is chosen. This is maintained as an open product decision pending explicit confirmation.
+
