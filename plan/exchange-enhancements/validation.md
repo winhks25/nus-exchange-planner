@@ -350,3 +350,36 @@ Date: 2026-10-25. Status: PASS.
 - **Frontend Database Regression Suite (PostgreSQL Mode)**:
   `TEST_CATALOG_BACKEND=postgres npx playwright test tests/database-regression.spec.ts`: 8/8 tests passed, confirming count preservation, direct URL mapping entry, search navigation, and back/forward browser behavior.
 
+## Cross-cutting UX and visual evidence (T049)
+
+### Visual evidence captured
+
+Desktop (1280x800) and mobile (375x667) screenshots were generated and saved under `plan/exchange-enhancements/reference/`:
+- `desktop-recommend.png` & `mobile-recommend.png`: Recommend page showing faculty dropdown, dependent geographic multi-select filters, and ranked cards.
+- `desktop-universities.png` & `mobile-universities.png`: Universities directory with responsive grid (3-4 cards desktop, 1 card mobile), photo fallbacks, and safe website/mapping links.
+- `desktop-mappings.png` & `mobile-mappings.png`: Mappings view with synchronized selectors, mapping summary, and course mapping table.
+
+### Keyboard and focus accessibility
+
+- **Comboboxes & Dropdowns**: Fully navigable via keyboard (`Tab`, `ArrowDown`, `ArrowUp`, `Enter`, `Escape`).
+- **Focus Rings**: All interactive cards, links, and buttons maintain high-contrast focus rings compliant with WCAG 2.1 AA.
+- **Drawer & Overlays**: Mobile filter drawers and menus trap focus appropriately and restore focus to trigger elements upon dismissal.
+
+### Empty, error, and retry handling
+
+- **Recommend**: Shows clear prompts for unselected degrees, distinct zero-match states when filters exclude all partners, and graceful service failure alerts.
+- **Universities**: Defaults to all database partners on initial load; when active filters produce zero results, displays "No universities match the selected filters" with a single-click "Reset filters" button. Network errors render a dedicated error card with a "Retry" button.
+- **Mappings**: Shows initial prompt for unselected pairs; when navigating from a directory card without a preselected degree, displays "Please select a degree programme to view course mappings for this partner university." (FR-20 prompt). Mappings with zero qualifying modules render `MappingsEmptyState` with a link back to Recommend.
+
+### Long-content and responsive layout outcomes
+
+- Long university names (e.g. multi-line institutions) wrap inside card headers without truncating or overlapping adjacent badges.
+- Location badges wrap within flex containers; missing cities omit the city tag while cleanly preserving the country tag.
+- Viewports from 320px to 1920px verified free of horizontal scroll.
+
+### Unresolved FR-20 status
+
+- **Current state**: Implemented with explicit prompt and automatic loading upon degree selection.
+- **Product sign-off status**: Remains flagged as an open decision pending product owner review of whether an unconstrained all-degrees mapping endpoint is required.
+
+
