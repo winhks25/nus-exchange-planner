@@ -210,3 +210,83 @@ Date: 2026-10-25. Status: PASS.
   asserting a global fetch count of one.
 - Next.js's route announcer carries `role=alert` on every page; alert
   assertions must be scoped by message text.
+
+## US4 — University metadata and finished cards (Phase 6, T041)
+
+### Environment and method
+
+- macOS, Node.js 22 (frontend), Python 3.12 (backend). The e2e suite ran
+  through `npx playwright test` against the dev servers; the asset research
+  and upload ran through the Supabase Management API, the Storage API, and
+  the MCP SQL channel (the pooler was unreachable from this machine until
+  the Phase 2 migration was applied through MCP on 2026-10-26, which also
+  added the `image`/`website`/`image_attribution` columns the updates need).
+- The 9-test throwaway spec drove the directory against a mocked catalog of
+  six universities covering: a valid photo + website + attribution, a
+  missing photo, a photo whose URL aborts mid-load, a `javascript:`
+  website, a null city, and an extremely long university name. Valid photo
+  URLs were fulfilled locally with a 1x1 JPEG so the run is network-free.
+- Asset coverage (T034/T038): all five partners researched 2026-10-26 —
+  5/5 official websites verified by fetch; 5/5 photographs approved from
+  Wikimedia Commons with published permissive licenses (CC BY 2.0, CC BY
+  3.0, CC BY-SA 3.0, CC BY 4.0, CC0) and verifiable authors; 0 assets left
+  null. Uploads verified by public read-back (HTTP 200, `image/jpeg`,
+  byte-exact sizes 143,324 / 692,519 / 786,786 / 1,092,874 / 1,208,405) and
+  by a resume re-run that matched all five checksums without re-uploading.
+
+### Acceptance checks
+
+| # | Check | Result | Evidence |
+| ---: | --- | --- | --- |
+| 1 | Valid photo renders with attribution | PASS | Photo `src` is the catalog URL, alt names the university, and the required credit line renders under the photograph. |
+| 2 | Missing photo uses the local fallback | PASS | `image: null` renders `/images/university-fallback.svg` (locally created, no third-party dependency) and no credit line. |
+| 3 | Broken photo falls back without looping | PASS | An aborting photo URL loads at most twice (dev Strict Mode double-mount) and never again after 800ms; the fallback stays. |
+| 4 | Missing website shows explicit unavailable text | PASS | "Website unavailable" renders; no dead link. |
+| 5 | Non-http website is never a link | PASS | A `javascript:` catalog value renders the unavailable text and no `a[href^=javascript:]` exists. |
+| 6 | Website link is safe and external | PASS | `https` URL, `target="_blank"`, `rel` contains `noopener`, label is the hostname. |
+| 7 | Null city omitted, country kept | PASS | The location row holds exactly one tag (the country). |
+| 8 | Long name wraps without overflow | PASS | The name block grows past one line and the document has no horizontal scroll at 1280px. |
+| 9 | Responsive rows 1/2/3/4 | PASS | Computed grid tracks: 1 at 375px, 2 at 768px, 3 at 1280px, 4 at 1530px. |
+| 10 | Links keyboard-operable | PASS | Tabbing from the first focusable element reaches the card website link; the mappings anchor is a plain focusable link. |
+| 11 | Live metadata populated | PASS | All five live `partner_universities` rows carry image, website, and image_attribution; the public Storage URLs serve the exact uploaded bytes. |
+| 12 | Resume and checksum reuse | PASS | A second uploader run reports "checksum matches, keep existing object" for all five and writes no storage or manifest changes beyond the recorded state. |
+
+### Regression evidence
+
+- Full Playwright suite after the change: 74/74 passed (65 existing + 9 US4
+  verification tests).
+- `npm run typecheck`, `npm run lint` (exit 0; two advisory `no-img-element`
+  warnings — the app has no next/image pipeline, and plain `<img>` keeps the
+  one-way fallback logic explicit), and `npm run build` all pass; the
+  production route table lists `/universities`.
+- The existing US3 directory behaviors (combined faculty/geography filters,
+  empty states, sidebar anchors) are unmodified and pass in the same run.
+
+### Behavior decisions recorded during verification
+
+- **Rights-cleared images only (T034):** no university-website photograph was
+  used because those carry no redistribution permission; every approved
+  image is a Wikimedia Commons file whose page publishes the license and the
+  author. The manifest records per link the file, description page, download
+  URL (thumbnail variant for the three large originals), dimensions,
+  author, license, and the attribution line; the upload manifest is the only
+  source the uploader may download from, and only from the two reviewed
+  Wikimedia hosts.
+- **Fallback is one-way (T039):** a failed photograph swaps to the local SVG
+  exactly once via a one-way state flag; the fallback has no `onError`, so a
+  broken URL cannot ping-pong between sources.
+- **Website safety (T039):** the card renders a website only for `http(s)`
+  values; anything else is treated as missing. Live values are all `https`.
+- **Live Phase 2 migration applied via MCP (T038 prerequisite):** the
+  pooler-unreachable blocker was resolved on 2026-10-26 by applying
+  `20261025121412_exchange_enhancements` and
+  `20261026000000_create_university_images_bucket` through the MCP channel;
+  the repo migration files were unchanged. A transcription slip during the
+  manual metadata application put UWA's website URL in its `image` column;
+  it was caught by the post-update verification select and corrected before
+  any browser saw it (the stored artifact in
+  `data/exchange-enhancements/university-assets-updates.sql` was correct).
+- **Uploader credential handling (T036/T037):** the script takes only
+  `SUPABASE_ACCESS_TOKEN`; the service role key is fetched from the
+  Management API at runtime and never committed, logged, or shipped to the
+  frontend.
