@@ -207,6 +207,13 @@ function MappingsContent() {
     update(next.degree, next.faculty, university);
   }
 
+  // Documented prompt when a partner university is chosen without a degree (FR-20).
+  const noDegreePrompt =
+    !note && university && !degree
+      ? "Please select a degree programme to view course mappings for this partner university."
+      : "";
+  const displayNote = note || noDegreePrompt;
+
   return (
     <main>
       <div className="hero">
@@ -239,7 +246,7 @@ function MappingsContent() {
           />
         </div>
       )}
-      {note && <p role="status" className="note">{note}</p>}
+      {displayNote && <p role="status" className="note">{displayNote}</p>}
       {/* Result loading keeps the hero and selectors available. */}
       {state === "loading" && (
         <LoadingState variant="results" label="Loading mappings…" />
