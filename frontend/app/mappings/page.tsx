@@ -8,13 +8,16 @@ import FacultyCombobox from "@/components/FacultyCombobox";
 import LoadingState from "@/components/loading/LoadingState";
 import MappingRows from "@/components/MappingRows";
 import UniversityCombobox from "@/components/UniversityCombobox";
+import { useMappingsSelection } from "@/components/mappings/MappingsSelectionProvider";
 import { getCatalog, getMappings, UNAVAILABLE_MESSAGE } from "@/lib/api";
 import {
   degreeBelongsToFaculty,
   degreesForFaculty,
+  facultyForDegree,
   selectDegree,
   selectFaculty,
 } from "@/lib/faculty-selection";
+import { mergeMappingsParams } from "@/lib/mappings-navigation";
 import type {
   Catalog,
   Degree,
@@ -27,6 +30,8 @@ import type {
 function MappingsContent() {
   const router = useRouter();
   const params = useSearchParams();
+  const { selection: savedSelection, setSelection: setSavedSelection } = useMappingsSelection();
+
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [degree, setDegree] = useState<Degree | null>(null);
   const [faculty, setFaculty] = useState<Faculty | null>(null);
@@ -36,6 +41,7 @@ function MappingsContent() {
   const [state, setState] = useState<PageState>("loading-catalog");
   const appliedUrl = useRef<string | null>(null);
 
+  // Fetch the full catalog on initial mount with cancellation.
   useEffect(() => {
     const controller = new AbortController();
 
@@ -51,45 +57,90 @@ function MappingsContent() {
     return () => controller.abort();
   }, []);
 
+  // Hydrate selections by merging URL search parameters with remembered selections.
   useEffect(() => {
     if (!catalog) return;
     const query = params.toString();
     if (appliedUrl.current === query) return;
     appliedUrl.current = query;
 
-    const degreeValue = params.get("degree");
-    const facultyValue = params.get("faculty");
-    const universityValue = params.get("uni");
-    const validDegree = catalog.degrees.find(item => item.name === degreeValue) || null;
-    const validFaculty = catalog.faculties.find(item => item.name === facultyValue) || null;
-    const validUniversity =
-      catalog.universities.find(item => item.name === universityValue) || null;
+    // Merge URL query with remembered Mappings selections (US5).
+    const merged = mergeMappingsParams(params, {
+      degree: savedSelection.degree,
+      faculty: savedSelection.faculty,
+      university: savedSelection.university,
+    });
 
-    // Inconsistent deep links keep the degree and drop the faculty so the
-    // mappings for the linked degree can still load.
+    // Lookup matching objects in the loaded catalog.
+    const validDegree = merged.degreeName
+      ? catalog.degrees.find(item => item.name === merged.degreeName) || null
+      : null;
+    const validFaculty = merged.facultyName
+      ? catalog.faculties.find(item => item.name === merged.facultyName) || null
+      : null;
+    const validUniversity = merged.universityName
+      ? catalog.universities.find(item => item.name === merged.universityName) || null
+      : null;
+
+    // Preserve an explicitly selected compatible faculty (FR-04).
+    // Derive a faculty only when degree has memberships and faculty was not explicitly set or cleared.
     let nextFaculty = validFaculty;
     if (validDegree && nextFaculty && !degreeBelongsToFaculty(validDegree, nextFaculty)) {
       nextFaculty = null;
+    } else if (validDegree && !nextFaculty && !merged.cleared.faculty && !merged.facultyName) {
+      nextFaculty = facultyForDegree(validDegree, catalog.faculties);
     }
 
-    // URL navigation updates all selectors together.
+    // Apply selections together to avoid partial renders.
     setDegree(validDegree);
     setFaculty(nextFaculty);
     setUniversity(validUniversity);
+    setSavedSelection({
+      degree: validDegree,
+      faculty: nextFaculty,
+      university: validUniversity,
+    });
     setResult(null);
     setState(validDegree && validUniversity ? "loading" : "idle");
-    // Unknown values keep the original note copy; an unknown faculty gets
-    // its own note so existing links read exactly as before.
+
+    // Report stale or unknown selections without silently choosing another degree.
     const unknownSelection =
-      (degreeValue && !validDegree) || (universityValue && !validUniversity);
+      (Boolean(merged.degreeName) && !validDegree) ||
+      (Boolean(merged.universityName) && !validUniversity);
     setNote(
       unknownSelection
         ? "This link contains an unknown degree or partner university. Please choose a valid option."
-        : facultyValue && !validFaculty
+        : Boolean(merged.facultyName) && !validFaculty
           ? "This link contains an unknown faculty. Please choose a valid option."
           : ""
     );
-  }, [catalog, params]);
+
+    // Sync URL if merged parameters expanded beyond the initial query string.
+    const hasUnknownParams =
+      unknownSelection || (Boolean(merged.facultyName) && !validFaculty);
+    if (!hasUnknownParams) {
+      const next = new URLSearchParams();
+      if (nextFaculty) next.set("faculty", nextFaculty.name);
+      if (validDegree) next.set("degree", validDegree.name);
+      if (validUniversity) next.set("uni", validUniversity.name);
+      for (const [key, value] of merged.otherParams.entries()) {
+        next.append(key, value);
+      }
+      const nextQuery = next.toString();
+      if (nextQuery !== query && (merged.degreeName || merged.facultyName || merged.universityName)) {
+        appliedUrl.current = nextQuery;
+        router.replace(`/mappings${nextQuery ? `?${nextQuery}` : ""}`, { scroll: false });
+      }
+    }
+  }, [
+    catalog,
+    params,
+    router,
+    savedSelection.degree,
+    savedSelection.faculty,
+    savedSelection.university,
+    setSavedSelection,
+  ]);
 
   // Mappings track the effective degree/university pair; a compatible faculty
   // change leaves both references untouched, so nothing refetches.
@@ -123,7 +174,13 @@ function MappingsContent() {
     setDegree(nextDegree);
     setFaculty(nextFaculty);
     setUniversity(nextUniversity);
+    setSavedSelection({
+      degree: nextDegree,
+      faculty: nextFaculty,
+      university: nextUniversity,
+    });
     setNote("");
+
     // Only the effective pair invalidates the loaded mappings.
     if (requestChanged) {
       setResult(null);
