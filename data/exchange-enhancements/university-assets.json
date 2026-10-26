@@ -29,6 +29,14 @@
         "license": "CC BY-SA 3.0",
         "attribution_required": true,
         "attribution": "Photo: Cho's, CC BY-SA 3.0, via Wikimedia Commons"
+      },
+      "acquisition": {
+        "status": "reused",
+        "object": "universities/4.jpg",
+        "public_url": "https://wydziozsjibkvpgphpia.supabase.co/storage/v1/object/public/university-images/universities/4.jpg",
+        "sha256": "7da3a33e82293db66127a452c4b5751264b9d3791e2690973189c7415db0f39c",
+        "bytes": 1208405,
+        "recorded_at": "2026-10-26 00:20 UTC"
       }
     },
     {
@@ -51,6 +59,14 @@
         "license": "CC BY 2.0",
         "attribution_required": true,
         "attribution": "Photo: POHAN, CC BY 2.0, via Wikimedia Commons"
+      },
+      "acquisition": {
+        "status": "reused",
+        "object": "universities/3.jpg",
+        "public_url": "https://wydziozsjibkvpgphpia.supabase.co/storage/v1/object/public/university-images/universities/3.jpg",
+        "sha256": "df7f1cf4b90858080393dcb833e415db299b17626383053232e118c8e7a3695a",
+        "bytes": 143324,
+        "recorded_at": "2026-10-26 00:20 UTC"
       }
     },
     {
@@ -73,6 +89,14 @@
         "license": "CC0 1.0",
         "attribution_required": false,
         "attribution": "Photo: Victoria Heath, CC0, via Wikimedia Commons"
+      },
+      "acquisition": {
+        "status": "reused",
+        "object": "universities/2.jpg",
+        "public_url": "https://wydziozsjibkvpgphpia.supabase.co/storage/v1/object/public/university-images/universities/2.jpg",
+        "sha256": "4301b491eb75a23084c36df0ddc0e31ec4a608e94ffc7f6dadbaeb2e33e684d6",
+        "bytes": 1092874,
+        "recorded_at": "2026-10-26 00:20 UTC"
       }
     },
     {
@@ -95,6 +119,14 @@
         "license": "CC BY 4.0",
         "attribution_required": true,
         "attribution": "Photo: -wuppertaler, CC BY 4.0, via Wikimedia Commons"
+      },
+      "acquisition": {
+        "status": "reused",
+        "object": "universities/1.jpg",
+        "public_url": "https://wydziozsjibkvpgphpia.supabase.co/storage/v1/object/public/university-images/universities/1.jpg",
+        "sha256": "3cab60d863ba741615c76b3848d46fe68a7c4bbd7b256eeea90725e259ccb3f4",
+        "bytes": 786786,
+        "recorded_at": "2026-10-26 00:20 UTC"
       }
     },
     {
@@ -117,6 +149,14 @@
         "license": "CC BY 3.0",
         "attribution_required": true,
         "attribution": "Photo: Fumihiko Ueno, CC BY 3.0, via Wikimedia Commons"
+      },
+      "acquisition": {
+        "status": "reused",
+        "object": "universities/5.jpg",
+        "public_url": "https://wydziozsjibkvpgphpia.supabase.co/storage/v1/object/public/university-images/universities/5.jpg",
+        "sha256": "6d0aef451ed2135e79d8900b5435e9674c04069aa3937026d3e91b5a04129b1f",
+        "bytes": 692519,
+        "recorded_at": "2026-10-26 00:20 UTC"
       }
     }
   ],
