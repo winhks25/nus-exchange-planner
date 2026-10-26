@@ -82,18 +82,48 @@
   text-align: center;
 }
 
-/* Shared directory card shell; US4 adds the media block above the name.
-   No fixed height: long names wrap instead of truncating. */
+/* Shared directory card shell. The photograph bleeds to the card edge;
+   everything below it shares the padded body. No fixed card height: long
+   names wrap instead of truncating. */
 .card {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: 12px;
-  padding: 20px;
+  overflow: hidden;
   color: var(--card-foreground);
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: .35rem;
+}
+
+/* Reserved 4:3 media slot so the card height is stable before the image
+   arrives; the photograph and the local fallback share the crop. */
+.media {
+  aspect-ratio: 4 / 3;
+  background: var(--muted);
+}
+
+.mediaImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 12px;
+  padding: 20px;
+}
+
+.credit {
+  margin: 0;
+  font-size: .6875rem;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
 }
 
 .name {
@@ -120,12 +150,41 @@
   line-height: 1.5;
 }
 
+/* Bottom row: official website (or explicit unavailable text) on the left,
+   the mappings action on the right. The action pins to the card bottom so
+   cards in a row align even when names or tags wrap. */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: auto;
+}
+
+.website {
+  min-width: 0;
+  color: var(--primary);
+  font-size: .875rem;
+  line-height: 1.5;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.website:hover {
+  text-decoration: underline;
+}
+
+.unavailable {
+  font-size: .875rem;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
 .action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-end;
-  margin-top: auto;
   min-height: 36px;
   padding: .375rem .75rem;
   color: var(--primary);
