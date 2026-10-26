@@ -16,6 +16,7 @@ are in `plan/supabase-migration/deployment-results.md` and `plan/remove-catalog-
 | `20261022000200` | `prepare_catalog_import` | Source provenance, issues, repairs and presentation |
 | `20261022000300` | `catalog_reader` | Least-privilege runtime role and SELECT policies |
 | `20261024034234` | `remove_catalog_metadata` | Drop metadata/archive/provenance tables and source_row_id column |
+| `20261025121412` | `exchange_enhancements` | Add faculties, degree_faculties, faculty_partner_universities, and partner metadata |
 | `20261026000000` | `create_university_images_bucket` | Public university photograph bucket with service-role-only upload policies |
 
 The initial migration was applied manually through the SQL Editor on 2026-10-22.
@@ -53,6 +54,50 @@ All tables enable row level security without browser policies. Anonymous and
 ordinary authenticated Data API clients cannot read or write rows. Foreign keys
 use PostgreSQL's default NO ACTION behavior to prevent accidental deletion of
 referenced catalog records.
+
+## Exchange enhancements schema and seeding
+
+Migration `20261025121412_exchange_enhancements` extends the database with:
+- `faculties`: Canonical faculty names and IDs.
+- `degree_faculties`: Many-to-many relationship linking degrees to faculties.
+- `faculty_partner_universities`: Many-to-many relationship defining explicit faculty availability agreements.
+- `nus_modules.faculty_id`: Additive foreign key referencing canonical faculties.
+- `partner_universities`: Nullable `image`, `website`, and `image_attribution` columns.
+- RLS read-only SELECT policies granting `catalog_reader` access.
+
+### Seed and upload execution order
+
+```bash
+# 1. Audit legacy labels and orphan relationships:
+uv run --directory backend python -m scripts.audit_exchange_enhancements
+
+# 2. Seed canonical faculties, degree mappings, and availability links:
+uv run --directory backend python -m scripts.seed_exchange_enhancements \
+  --database-url '<server-admin-database-url>'
+
+# 3. Dry-run university media upload:
+SUPABASE_ACCESS_TOKEN=<owner-token> \
+  uv run --directory backend python -m scripts.upload_university_assets --dry-run
+
+# 4. Upload rights-cleared photos to storage and populate metadata:
+SUPABASE_ACCESS_TOKEN=<owner-token> \
+  uv run --directory backend python -m scripts.upload_university_assets \
+  --database-url '<server-admin-database-url>'
+```
+
+### Data provenance and handling of incomplete data
+
+- **Faculties & Degrees**: Seeded from `data/exchange-enhancements/faculty-aliases.json`. Membership is explicit; module offering faculties do not infer degree membership.
+- **Availability Links**: Explicitly defined in `data/exchange-enhancements/faculty-availability.json`. University-wide agreements are expanded into explicit rows per faculty. Unrecorded availability is treated as unknown rather than unavailable; unfiltered directory queries return all partners.
+- **Media and Websites**: Curated in `data/exchange-enhancements/university-assets.json`. All 5 partner photos originate from Wikimedia Commons under verified permissive licenses (CC BY / CC0) with required author attribution. Missing websites or photos remain `null`; the frontend renders a neutral SVG fallback (`/images/university-fallback.svg`) and explicit "Website unavailable" text.
+- **Security**: No administrative tokens (`SUPABASE_ACCESS_TOKEN` or `service_role` keys) are committed, logged, or bundled into frontend code. All client requests access public URLs or query the backend API via the unprivileged `catalog_reader` role.
+
+### Rollback and disaster recovery
+
+The schema enhancements are strictly additive. If roll-forward is blocked:
+1. **Frontend fallback**: The UI renders gracefully with missing metadata (`null` image/website/faculty links).
+2. **Backend fallback**: Set `CATALOG_BACKEND=json` in backend environment variables to revert instantaneously to the frozen JSON snapshot without dropping any database tables.
+3. **Database recovery**: Since no core tables were dropped or modified destructively, existing recommendation calculations and mapping queries remain 100% operational. Detailed recovery steps are in [`plan/exchange-enhancements/migration-validation.md`](../plan/exchange-enhancements/migration-validation.md).
 
 ## Catalog data maintenance
 

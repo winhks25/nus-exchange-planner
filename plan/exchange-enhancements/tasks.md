@@ -95,7 +95,7 @@ Close data, accessibility and regression gaps before shipping.
 
 - [X] T048 Run relevant existing backend pytest suites and frontend lint/typecheck/build plus existing flow/shell checks; record commands, outcomes and any obsolete assertion updates in `plan/exchange-enhancements/validation.md`, preserving count/ranking/deep-link coverage.
 - [X] T049 Execute all story acceptance criteria and capture desktop/mobile evidence under `plan/exchange-enhancements/reference/`; record keyboard/focus, empty/error/retry and long-content outcomes in `plan/exchange-enhancements/validation.md`, including unresolved FR-20 status.
-- [ ] T050 Document migration order, seed/upload commands, data provenance, incomplete availability/assets and recovery steps in `supabase/README.md` and `README.md`; link feature artifacts and ensure no administrative credentials enter frontend bundles.
+- [X] T050 Document migration order, seed/upload commands, data provenance, incomplete availability/assets and recovery steps in `supabase/README.md` and `README.md`; link feature artifacts and ensure no administrative credentials enter frontend bundles.
 - [ ] T051 Complete requirement traceability and release readiness in `plan/exchange-enhancements/completion.md`; map DB-01–03 and FR-01–20 to tasks/evidence, rerun preservation comparisons and leave unmet data/product decisions explicitly open.
 
 ## Independent acceptance checkpoints

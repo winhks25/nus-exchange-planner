@@ -1,8 +1,25 @@
 # NUS Exchange Planner
 
-A read-only tool for NUS School of Computing students to find exchange partners with module mappings. **Recommend** (`/`) ranks every partner by the number of distinct degree modules with a mapping. **Mappings** (`/mappings`) shows every qualifying mapping row for a degree and partner, including repeated NUS codes.
+A read-only tool for NUS students to explore exchange partners and course mappings.
+- **Recommend** (`/`): Ranks partner universities by distinct mapped modules for a chosen degree, filterable by faculty and cascading geographic multi-select options.
+- **Universities** (`/universities`): Comprehensive directory of all exchange partners with photos, location tags, official websites, and direct mapping links.
+- **Mappings** (`/mappings`): Detailed course mappings between NUS and partner institutions with persistent selection state and URL deep linking.
 
 Production serves the catalog from Supabase PostgreSQL through the read-only `catalog_reader` role. Local development defaults to the checked-in JSON snapshot in `data/`, which is also the frozen manual-rollback release. The source is selected explicitly with `CATALOG_BACKEND=json|postgres`; a database failure returns a sanitized 503 and never falls back to JSON automatically. In PostgreSQL mode, the backend checks core readiness (at least one degree, one university, and no null degree full_title) before serving requests.
+
+## Exchange Enhancements Feature Set
+
+1. **Faculty-Aware Degree Selection (US1)**: Searchable faculty combobox on Recommend and Mappings that filters degree options, derives the canonical faculty upon direct degree selection, and preserves compatible choices.
+2. **Geographic Filtering (US2)**: Cascading multi-select filters (Continent, Country, City) with immediate updates and AND/OR matching semantics.
+3. **Universities Directory (US3 & US4)**: Browse all partners with rights-cleared photographs (Wikimedia Commons), verified official website links, and graceful fallback illustrations for missing assets.
+4. **State-Preserving Mappings Navigation (US5)**: Directory cards carry full deep links to Mappings that preserve remembered degree/faculty choices while preselecting the target university and executing automatic queries.
+
+Artifacts and specifications:
+- [Feature Specification](plan/exchange-enhancements/spec.md)
+- [Implementation Plan](plan/exchange-enhancements/plan.md)
+- [Contracts and Rules](plan/exchange-enhancements/contracts.md)
+- [Validation Evidence](plan/exchange-enhancements/validation.md)
+- [Supabase Integration Guide](supabase/README.md)
 
 The reviewed PostgreSQL batch contains 154 raw source rows: 146 accepted, 5 repaired and 3 quarantined because their NUS code field contains a course title. It publishes 151 active mappings, including one verified unit repair. The frozen JSON snapshot still contains the original 147 accepted mappings and missing titles. Both are documented in [data deltas](plan/supabase-migration/data-deltas.md); unresolved names remain null and are never invented.
 
