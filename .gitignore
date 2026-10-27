@@ -27,3 +27,4 @@ venv/
 .agents/
 .ruff_cache/
 plan/
+.specify/

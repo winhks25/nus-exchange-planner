@@ -48,7 +48,7 @@ export function selectDegree(
   degree: Degree | null,
   faculties: Faculty[]
 ): Selection {
-  if (!degree) return EMPTY_SELECTION;
+  if (!degree) return selection.degree ? EMPTY_SELECTION : selection;
   return { degree, faculty: facultyForDegree(degree, faculties) };
 }
 

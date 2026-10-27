@@ -21,6 +21,7 @@ export default function DegreeCombobox({
 }: Props) {
   return (
     <TypableDropdown
+      preserveSelectionWhileSearching
       options={degrees}
       value={selected}
       onSelect={onSelect}

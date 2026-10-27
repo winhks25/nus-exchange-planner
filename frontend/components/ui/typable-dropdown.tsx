@@ -13,6 +13,7 @@ export type TypableDropdownProps<T> = {
   getOptionValue: (option: T) => string;
   renderOption: (option: T) => ReactNode;
   emptyMessage?: string;
+  preserveSelectionWhileSearching?: boolean;
 };
 
 export default function TypableDropdown<T>({
@@ -25,6 +26,7 @@ export default function TypableDropdown<T>({
   getOptionValue,
   renderOption,
   emptyMessage = "No matching options.",
+  preserveSelectionWhileSearching = false,
 }: TypableDropdownProps<T>) {
   const id = useId().replace(/:/g, "");
   const inputId = `${id}-input`;
@@ -34,7 +36,16 @@ export default function TypableDropdown<T>({
   const [input, setInput] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
   const [active, setActive] = useState(-1);
+  const [previousValue, setPreviousValue] = useState(value);
   const committed = useRef<T | null>(value);
+  // A coupled selector can change this value externally. Discard any draft
+  // text so it cannot conceal the new selection or resurrect an old one.
+  if (preserveSelectionWhileSearching && previousValue !== value) {
+    setPreviousValue(value);
+    setInput(null);
+    setFilter("");
+    setActive(-1);
+  }
   const filtered = useMemo(
     () =>
       options.filter(option =>
@@ -58,17 +69,21 @@ export default function TypableDropdown<T>({
     setFilter(next);
     setActive(-1);
     setOpen(true);
-    onSelect(null);
+    if (!preserveSelectionWhileSearching || next === "" || value === null) onSelect(null);
   }
 
   function close() {
     setOpen(false);
     setActive(-1);
+    if (preserveSelectionWhileSearching) {
+      setInput(null);
+      setFilter("");
+    }
   }
 
   function keyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Escape") {
-      if (input !== null) {
+      if (input !== null && !preserveSelectionWhileSearching) {
         onSelect(committed.current);
       }
       setInput(null);

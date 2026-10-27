@@ -27,6 +27,7 @@ export default function FacultyCombobox({
   return (
     <div className="faculty-field">
       <TypableDropdown
+        preserveSelectionWhileSearching
         options={options}
         value={selected}
         onSelect={onSelect}

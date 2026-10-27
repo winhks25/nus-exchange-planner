@@ -83,11 +83,6 @@ export default function RecommendPage() {
     return byName;
   }, [catalog]);
 
-  // The filter row only appears when the catalog records any geography.
-  const geoAvailable =
-    catalog !== null &&
-    catalog.universities.some(university => university.city !== null || university.continent !== null);
-
   // Immediate client-side filter (FR-09/FR-10): the API rank order and the
   // per-university counts are untouched; only non-matching cards are hidden.
   const visibleResults = useMemo(() => {
@@ -168,7 +163,7 @@ export default function RecommendPage() {
             onSelect={changeDegree}
           />
           {/* Geographic filters apply to the loaded results immediately. */}
-          {geoAvailable && (
+          {catalog && (
             <div className={styles.geoFilters}>
               <GeographicFilters
                 options={deriveGeoOptions(catalog.universities, geo)}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { GeoOptions, GeoSelection } from "@/lib/geography";
 
 type Option = { value: string; label: string };
@@ -11,16 +11,17 @@ type GeoMultiSelectProps = {
   options: Option[];
   selected: string[];
   onChange: (values: string[]) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 };
 
 // One dependent multi-select: a toggle button, the visible selected values,
 // and a checkbox panel. Changes apply immediately (FR-09).
-function GeoMultiSelect({ label, placeholder, options, selected, onChange }: GeoMultiSelectProps) {
+function GeoMultiSelect({ label, placeholder, options, selected, onChange, open, setOpen }: GeoMultiSelectProps) {
   const id = useId().replace(/:/g, "");
   const labelId = `${id}-label`;
   const panelId = `${id}-panel`;
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = useState(false);
 
   function toggle(value: string) {
     onChange(
@@ -40,7 +41,7 @@ function GeoMultiSelect({ label, placeholder, options, selected, onChange }: Geo
         aria-labelledby={labelId}
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen(current => !current)}
+        onClick={() => setOpen(!open)}
       >
         {selected.length === 0 ? (
           <span className="geo-placeholder">{placeholder}</span>
@@ -114,9 +115,22 @@ export default function GeographicFilters({
   onCountriesChange,
   onCitiesChange,
 }: Props) {
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function closeOutside(event: PointerEvent) {
+      if (event.target instanceof Node && !root.current?.contains(event.target)) {
+        setOpenCategory(null);
+      }
+    }
+    document.addEventListener("pointerdown", closeOutside);
+    return () => document.removeEventListener("pointerdown", closeOutside);
+  }, []);
   return (
-    <div className="geo-filters" role="group" aria-label="Geographic filters">
+    <div ref={root} className="geo-filters" role="group" aria-label="Geographic filters">
       <GeoMultiSelect
+        open={openCategory === "continent"}
+        setOpen={open => setOpenCategory(open ? "continent" : null)}
         label="Continent"
         placeholder="Any continent"
         options={options.continents.map(value => ({ value, label: value }))}
@@ -124,6 +138,8 @@ export default function GeographicFilters({
         onChange={onContinentsChange}
       />
       <GeoMultiSelect
+        open={openCategory === "country"}
+        setOpen={open => setOpenCategory(open ? "country" : null)}
         label="Country"
         placeholder="Any country"
         options={options.countries.map(value => ({ value, label: value }))}
@@ -131,6 +147,8 @@ export default function GeographicFilters({
         onChange={onCountriesChange}
       />
       <GeoMultiSelect
+        open={openCategory === "city"}
+        setOpen={open => setOpenCategory(open ? "city" : null)}
         label="City"
         placeholder="Any city"
         options={options.cities.map(city => ({ value: city.key, label: city.label }))}

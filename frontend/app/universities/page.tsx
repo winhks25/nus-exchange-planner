@@ -57,11 +57,6 @@ export default function UniversitiesPage() {
     [catalog, faculty, geo]
   );
 
-  // The geographic row only appears when the catalog records any geography.
-  const geoAvailable =
-    catalog !== null &&
-    catalog.universities.some(university => university.city !== null || university.continent !== null);
-
   const filtersActive = faculty !== null || !isGeoSelectionEmpty(geo);
   const filteredEmpty = filtersActive && visibleUniversities.length === 0;
 
@@ -121,7 +116,7 @@ export default function UniversitiesPage() {
                 onSelect={changeFaculty}
               />
             )}
-            {geoAvailable && (
+            {catalog && (
               <GeographicFilters
                 options={deriveGeoOptions(catalog.universities, geo)}
                 selection={geo}

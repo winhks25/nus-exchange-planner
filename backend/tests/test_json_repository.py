@@ -86,3 +86,25 @@ def test_unknown_selections_and_unavailable_sources_raise_shared_errors(
     empty_root.mkdir()
     with pytest.raises(CatalogUnavailable):
         JsonCatalogRepository(empty_root, tmp_path / "missing-manifest.json")
+
+
+def test_reviewed_metadata_exposes_local_filters_without_changing_rankings():
+    repository = JsonCatalogRepository()
+    catalog = repository.catalog()
+    assert [f.name for f in catalog.faculties] == ["School of Computing"]
+    assert all(d.faculty_ids == [1] for d in catalog.degrees)
+    toronto = next(u for u in catalog.universities if u.name == "University of Toronto")
+    assert (toronto.country, toronto.city, toronto.continent) == (
+        "Canada", "Toronto", "North America"
+    )
+    assert toronto.faculty_ids == []  # Degree membership is not partner availability.
+    assert repository.mappings("Computer Science", toronto.name).partner_module_count == 6
+
+
+def test_invalid_metadata_fails_closed(repository, tmp_path):
+    data = tmp_path / "data"
+    (data / "catalog-metadata.json").write_text(json.dumps({
+        "degree_faculty_ids": {"Test": [999]}
+    }))
+    with pytest.raises(CatalogUnavailable):
+        JsonCatalogRepository(data, tmp_path / "manifest.json")

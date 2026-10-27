@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useEffectEvent, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import MappingsEmptyState from "@/components/MappingsEmptyState";
 import DegreeCombobox from "@/components/DegreeCombobox";
@@ -31,6 +31,7 @@ function MappingsContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { selection: savedSelection, setSelection: setSavedSelection } = useMappingsSelection();
+  const readSavedSelection = useEffectEvent(() => savedSelection);
 
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [degree, setDegree] = useState<Degree | null>(null);
@@ -65,11 +66,9 @@ function MappingsContent() {
     appliedUrl.current = query;
 
     // Merge URL query with remembered Mappings selections (US5).
-    const merged = mergeMappingsParams(params, {
-      degree: savedSelection.degree,
-      faculty: savedSelection.faculty,
-      university: savedSelection.university,
-    });
+    // Remembered state is a fallback when a URL changes, not a trigger to
+    // rehydrate the old URL while a selector's router update is pending.
+    const merged = mergeMappingsParams(params, readSavedSelection());
 
     // Lookup matching objects in the loaded catalog.
     const validDegree = merged.degreeName
@@ -121,8 +120,11 @@ function MappingsContent() {
     if (!hasUnknownParams) {
       const next = new URLSearchParams();
       if (nextFaculty) next.set("faculty", nextFaculty.name);
+      else if (merged.cleared.faculty) next.set("faculty", "");
       if (validDegree) next.set("degree", validDegree.name);
+      else if (merged.cleared.degree) next.set("degree", "");
       if (validUniversity) next.set("uni", validUniversity.name);
+      else if (merged.cleared.uni) next.set("uni", "");
       for (const [key, value] of merged.otherParams.entries()) {
         next.append(key, value);
       }
@@ -136,9 +138,6 @@ function MappingsContent() {
     catalog,
     params,
     router,
-    savedSelection.degree,
-    savedSelection.faculty,
-    savedSelection.university,
     setSavedSelection,
   ]);
 
@@ -187,10 +186,10 @@ function MappingsContent() {
       setState(nextDegree && nextUniversity ? "loading" : "idle");
     }
 
-    const next = new URLSearchParams();
-    if (nextFaculty) next.set("faculty", nextFaculty.name);
-    if (nextDegree) next.set("degree", nextDegree.name);
-    if (nextUniversity) next.set("uni", nextUniversity.name);
+    const next = new URLSearchParams(params.toString());
+    next.set("faculty", nextFaculty?.name ?? "");
+    next.set("degree", nextDegree?.name ?? "");
+    next.set("uni", nextUniversity?.name ?? "");
     appliedUrl.current = next.toString();
     router.replace(`/mappings${next.size ? `?${next.toString()}` : ""}`, { scroll: false });
   }

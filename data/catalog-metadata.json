@@ -1,0 +1,64 @@
+{
+  "sources": [
+    "data/majors/nus_soc_majors.json",
+    "Locations copied from the verified .specify/supabase-cleanup/locations.json audit."
+  ],
+  "faculties": [
+    {
+      "id": 1,
+      "name": "School of Computing"
+    }
+  ],
+  "degree_faculty_ids": {
+    "Artificial Intelligence": [
+      1
+    ],
+    "Business Analytics": [
+      1
+    ],
+    "Business Artificial Intelligence Systems": [
+      1
+    ],
+    "Computer Science": [
+      1
+    ],
+    "Information Systems": [
+      1
+    ],
+    "Information Security": [
+      1
+    ]
+  },
+  "university_locations": {
+    "University of Western Australia": {
+      "country": "Australia",
+      "city": "Perth",
+      "continent": "Oceania",
+      "source": "https://www.uwa.edu.au/contact-us"
+    },
+    "University of Toronto": {
+      "country": "Canada",
+      "city": "Toronto",
+      "continent": "North America",
+      "source": "https://www.utoronto.ca/contacts"
+    },
+    "Kyoto University": {
+      "country": "Japan",
+      "city": "Kyoto",
+      "continent": "Asia",
+      "source": "https://www.kyoto-u.ac.jp/ja/access/campus"
+    },
+    "Korea University": {
+      "country": "South Korea",
+      "city": "Seoul",
+      "continent": "Asia",
+      "source": "https://edu.korea.edu/temp_g/info/map.do"
+    },
+    "Yonsei University": {
+      "country": "South Korea",
+      "city": "Seoul",
+      "continent": "Asia",
+      "source": "https://www.yonsei.ac.kr/en_sc/1834/subview.do"
+    }
+  }
+}
